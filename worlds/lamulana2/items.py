@@ -532,11 +532,11 @@ def _build_internal_pools():
                 INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(base_id.value + idx))
                 idx += 1
 
-    # 2. NPC Money / Shops (10 items)
+    # 2. NPC Money / Dialogue (10 items)
     # Distribution: One of each reward (since there are 10 rewards and 10 IDs)
     for i, (name, _) in enumerate(FILLER_DISTRIBUTION):
         ap_id = next(iid for n, iid in AP_FILLER if n == name)
-        key = (LocationType.Shop, ap_id)
+        key = (LocationType.Dialogue, ap_id)
         INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(ItemID.NPCMoney01.value + i))
 
     # 3. Fake Scans / Murals (15 items)

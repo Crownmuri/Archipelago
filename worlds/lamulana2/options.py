@@ -16,7 +16,7 @@ class AutoSkulls(Toggle):
 
 class ItemPlacementOption(Choice):
     option_starting = 0
-    option_random = 1
+    option_shuffled = 1
     # option_available_at_start = 2
     default = 0
 
@@ -27,7 +27,7 @@ class MantraPlacement(Choice):
     display_name = "Mantra Placement"
     option_original = 0
     option_only_murals = 1
-    option_random = 2
+    option_shuffled = 2
     default = 0
 
 class ShopPlacement(Choice):
@@ -37,7 +37,7 @@ class ShopPlacement(Choice):
     display_name = "Shop Placement"
     option_original = 0
     option_at_least_one = 1
-    option_random = 2
+    option_shuffled = 2
     default = 0
 
 class EchidnaDifficulty(Choice):
@@ -46,9 +46,8 @@ class EchidnaDifficulty(Choice):
     option_teenager = 1
     option_young_adult = 2
     option_adult = 3
-    option_random = 4
-    option_normal = 5
-    default = 5
+    option_normal = 4
+    default = 4
 
 class ItemChestColor(Choice):
     display_name = "Item Chest Color"

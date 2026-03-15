@@ -504,7 +504,7 @@ class LM2RandomizerCore:
             if starting_shop1 and starting_shop1.item is None:
                 safe_remove(ItemID.Weights, "Weights")
                 mw.push_item(starting_shop1, create_item(self.world, "Weights"), collect=False)
-                # starting_shop1.locked = True
+                starting_shop1.locked = True
 
             # Place starting subweapon ammo in StartingShop2 (if subweapon start)
             if self.starting_weapon > ItemID.Katana:
@@ -514,7 +514,7 @@ class LM2RandomizerCore:
                     ammo_name = get_item_name_from_id(ammo_item_id)
                     safe_remove(ammo_item_id, ammo_name)
                     mw.push_item(starting_shop2, create_item(self.world, ammo_name, game_id=ammo_item_id), collect=False)
-                    # starting_shop2.locked = True
+                    starting_shop2.locked = True
         
             #starting_shop3 = self.locations.get(LocationID.StartingShop3)
             #if starting_shop3 and starting_shop3.item is None:
@@ -550,7 +550,7 @@ class LM2RandomizerCore:
             if loc.location_type == LocationType.Shop and not loc.locked
         ]
 
-        if placement == self.options.shop_placement.option_random:
+        if placement == self.options.shop_placement.option_shuffled:
             hiner3 = next((l for l in shop_locations if l.game_location_id == LocationID.HinerShop3), None)
             if hiner3:
                 hiner3.locked = True
@@ -989,9 +989,7 @@ class LM2RandomizerCore:
             # 2. Determine the functional category
             category = loc.location_type
         
-            # --- SHOP & DIALOGUE HANDLING ---
-            # Since you're patching the display in BepInEx, we use FakeItem01 as a
-            # consistent carrier. This keeps shops decoupled from NPCMoney pools.
+            # --- Hijack: Use FakeItem for Shops ---
             if category == LocationType.Shop:
                 category = LocationType.FreeStanding
 
