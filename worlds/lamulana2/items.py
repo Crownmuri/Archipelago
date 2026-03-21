@@ -215,6 +215,13 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
 
 def _get_classification(item_def: ItemDef) -> ItemClassification:
     """Get classification for an item definition."""
+
+    # 1. Force endgame/collectathon items to skip balancing so they don't choke sphere 0
+    skip_balancing_items = {"Crystal Skull"}
+    if item_def.name in skip_balancing_items:
+        return ItemClassification.progression_skip_balancing
+
+    # 2. Standard classifications
     if item_def.required:
         return ItemClassification.progression
     elif item_def.game_id in USELESS_ITEM_IDS:

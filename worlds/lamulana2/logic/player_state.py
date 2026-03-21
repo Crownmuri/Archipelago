@@ -747,7 +747,7 @@ class PlayerStateAdapter:
             "Non Random Gates": lambda: not self.options.gate_entrances,
             "Random Soul Gates": lambda: self.options.random_soul_gate_value,
             "Non Random Soul Gates": lambda: not self.options.random_soul_gate_value,
-            "Non Random Unique": lambda: not self.options.include_unique_transitions,
+            "Non Random Unique": lambda: not self.options.unique_transitions,
             "Remove IT Statue": lambda: self.options.remove_icefire_treetop_statue,
             "Not Life for HoM": lambda: not self.options.life_sigil_to_awaken_hom,
             "CostumeClip": lambda: self.options.costume_clip,

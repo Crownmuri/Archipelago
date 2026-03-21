@@ -232,6 +232,42 @@ class RuleNode(LogicNode):
             area_name = args[0] if args else ""
             return _can_reach_compiled(area_name, world)
 
+        if name == "CanSpinCorridor":
+            # Has(Progressive Beherit) and Dissonance(1)
+            return lambda state, p=player: (
+                state.count("Progressive Beherit", p) >= 1
+                and (state.count("Dissonance", p) >= 1
+                     or state.count("Progressive Beherit", p) >= 2)
+            )
+
+        if name == "CanSealCorridor":
+            # C# also checks CanReach(backside area), but that creates a
+            # BFS ordering deadlock: the SpiralGate exit uses this rule, and
+            # when AP's BFS reaches IBBoat it calls state.can_reach(ValhallaMain
+            # / HoM / ...) mid-BFS before those regions are in reachable_regions,
+            # making SpiralHell / Ninth Child permanently unreachable.
+            # Item requirements alone are sufficient for AP fill correctness.
+            if options.random_dissonance:
+                req = int(
+                    options.required_guardians.value
+                    if hasattr(options.required_guardians, "value")
+                    else options.required_guardians
+                )
+                _guardian_rule = _make_adapter_rule("GuardianKills", [str(req)], world)
+                return lambda state, r=_guardian_rule, p=player: (
+                    (state.count("Dissonance", p) >= 6
+                     or state.count("Progressive Beherit", p) >= 7)
+                    and state.count("Progressive Beherit", p) >= 1
+                    and r(state)
+                )
+            else:
+                return lambda state, p=player: (
+                    (state.count("Dissonance", p) >= 6
+                     or state.count("Progressive Beherit", p) >= 7)
+                    and state.count("Progressive Beherit", p) >= 1
+                    and state.has("Anu", p)
+                )
+
         # ── Everything else → cached adapter ─────────────────────────────────
 
         return _make_adapter_rule(name, args, world)
@@ -368,7 +404,7 @@ def _eval_setting(setting_name: str, options) -> bool:
         "Non Random Gates":    lambda: not options.gate_entrances,
         "Random Soul Gates":   lambda: options.random_soul_gate_value,
         "Non Random Soul Gates": lambda: not options.random_soul_gate_value,
-        "Non Random Unique":   lambda: not options.include_unique_transitions,
+        "Non Random Unique":   lambda: not options.unique_transitions,
         "Remove IT Statue":    lambda: options.remove_icefire_treetop_statue,
         "Not Life for HoM":    lambda: not options.life_sigil_to_awaken_hom,
         "CostumeClip":         lambda: options.costume_clip,
@@ -385,13 +421,13 @@ def _eval_setting(setting_name: str, options) -> bool:
         "AutoScan":          "auto_scan",
         "AutoPlaceSkulls":   "auto_skulls",
         "RandomDissonance":  "random_dissonance",
-        "RandomResearch":    "random_research",
+        "RandomResearch":    "include_research_locations",
         "CostumeClip":       "costume_clip",
         "HardBosses":        "logic_difficulty",
         "RemoveITStatue":    "remove_icefire_treetop_statue",
         "LifeForHoM":        "life_sigil_to_awaken_hom",
         "DLCItem":           "dlc_item_logic",
-        "RandomCurses":      "random_cursed_chests",
+        "RandomCurses":      "randomize_cursed_chests",
         "RequiredGuardians": "required_guardians",
         "RequiredSkulls":    "required_skulls",
     }

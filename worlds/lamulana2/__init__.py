@@ -16,7 +16,7 @@ from .items import (
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION
 )
 from .locations import (
-    AreaID, create_locations, LOCATION_DEFS, LocationType,
+    LM2Location, AreaID, create_locations, LOCATION_DEFS, LocationType,
     LOCATION_DEFS_BY_AP_ID, LOCATION_DEFS_BY_NAME, LM2LocationDef,
     AP_LOCATION_DEFS
 )
@@ -84,6 +84,11 @@ class LaMulana2World(World):
         for loc_id, loc_def in LOCATION_DEFS.items()
         if loc_id not in LOGIC_FLAG_LOCATION_IDS
     }
+    location_name_to_id.update({
+        "[RANDO] Starting Shop 1": BASE_LOCATION_ID + LocationID.StartingShop1.value,
+        "[RANDO] Starting Shop 2": BASE_LOCATION_ID + LocationID.StartingShop2.value,
+        "[RANDO] Starting Shop 3": BASE_LOCATION_ID + LocationID.StartingShop3.value,
+    })
 
     # -------------------------------------------------------------------------
     # Lifecycle
@@ -98,10 +103,6 @@ class LaMulana2World(World):
 
         # Resolve starting area
         self.starting_area = self._choose_starting_area()
-
-        # Add starting shop locations if not starting in Village
-        if self.starting_area != AreaID.VoD:
-            self._create_starting_shop_locations()
 
         # Resolve starting weapon
         self.starting_weapon = self._choose_starting_weapon()
@@ -119,6 +120,9 @@ class LaMulana2World(World):
         regions = create_regions(self)
         self.regions_by_area_id = regions
         all_locations = create_locations(self)
+
+        if self.starting_area != AreaID.VoD:
+            all_locations.update(self._get_starting_shop_locations())
 
         included_locations = {}
 
@@ -139,6 +143,8 @@ class LaMulana2World(World):
         Create the item pool.
         Called by AP after create_regions, before setting rules.
         """
+        self._debug_dump_settings()
+
         # Build the base item pool
         pool = build_item_pool(self)
         
@@ -161,6 +167,54 @@ class LaMulana2World(World):
         mw = self.multiworld
         player = self.player
 
+        # ── POST-RULES DIAGNOSTIC ─────────────────────────────────────
+        try:
+            from .entrances import _build_omniscient_state
+            from BaseClasses import CollectionState as CS
+            state = _build_omniscient_state(self)
+            if hasattr(state, 'stale'):
+                state.stale[player] = True
+
+            # Check location-level with omniscient state
+            unreachable = []
+            for loc in mw.get_locations(player):
+                if loc.parent_region is None:
+                    continue
+                try:
+                    if hasattr(loc, 'can_reach') and not loc.can_reach(state):
+                        unreachable.append(loc.name)
+                except Exception:
+                    unreachable.append(loc.name)
+
+            # Count sphere-0 (precollected only) — unfilled slots
+            s0 = CS(mw)
+            for it in mw.precollected_items[player]:
+                s0.collect(it)
+            if hasattr(s0, 'stale'):
+                s0.stale[player] = True
+            sphere0_total = 0
+            sphere0_unfilled = 0
+            for loc in mw.get_locations(player):
+                if loc.parent_region is None:
+                    continue
+                try:
+                    if hasattr(loc, 'can_reach') and loc.can_reach(s0):
+                        sphere0_total += 1
+                        if loc.item is None:
+                            sphere0_unfilled += 1
+                except Exception:
+                    pass
+
+            total = sum(1 for _ in mw.get_locations(player))
+            if unreachable:
+                print(f"[ER-DIAG] POST-RULES: {len(unreachable)} locations FAIL "
+                      f"omniscient check: {unreachable[:10]}")
+            print(f"[ER-DIAG] POST-RULES: {total} locs total, "
+                  f"sphere-0: {sphere0_total} accessible / {sphere0_unfilled} unfilled")
+        except Exception as e:
+            print(f"[ER-DIAG] diagnostic failed: {e}")
+
+        # ── Original pre_fill logic ───────────────────────────────────
         # Count fillable locations for this player
         locations = [
             loc for loc in mw.get_unfilled_locations(player)
@@ -180,6 +234,78 @@ class LaMulana2World(World):
             for _ in range(missing):
                 mw.itempool.append(build_pre_filler(self))
 
+    def connect_entrances(self) -> None:
+        """
+        AP lifecycle hook: called after create_regions/create_items, before set_rules.
+
+        Structural ER and soul gate ER are run together in an outer retry loop.
+        If soul gates cannot find a valid configuration for a given structural
+        layout (some layouts are fundamentally incompatible), the entire
+        structural layout is regenerated and both are retried.
+        """
+        opts = self.options
+        any_structural = (
+            opts.horizontal_entrances
+            or opts.vertical_entrances
+            or opts.gate_entrances
+            or opts.unique_transitions
+            or opts.full_random_entrances
+        )
+        any_er = any_structural or opts.soul_gate_entrances
+
+        if not any_er:
+            return
+
+        OUTER_MAX = 10  # structural layout retries
+
+        for outer in range(OUTER_MAX):
+            # ── Structural ER ─────────────────────────────────────────────
+            if any_structural:
+                from .entrances import custom_structural_er
+                custom_structural_er(self)
+
+            # ── Soul gate ER ──────────────────────────────────────────────
+            if opts.soul_gate_entrances:
+                import random as _random
+                from .entrances import SoulGateRandomizer, _validate_starting_cluster
+
+                seed_val = self.multiworld.seed + outer  # vary RNG per outer attempt
+                rng = _random.Random(seed_val)
+
+                all_entrances = [
+                    e for region in self.multiworld.get_regions(self.player)
+                    for e in region.exits
+                    if hasattr(e, 'game_exit_id')
+                ]
+                sgr = SoulGateRandomizer(rng, all_entrances, self)
+                if sgr.randomize():
+                    # Soul gates inject GuardianKills(N) logic which can shrink
+                    # the reachable sphere-0.  Revalidate the starting cluster
+                    # to ensure it's still viable after soul gate placement.
+                    cluster_ok, cluster_msg = _validate_starting_cluster(self)
+                    if not cluster_ok:
+                        print(f"[ER] Outer retry {outer + 1}: starting cluster "
+                              f"collapsed after soul gates ({cluster_msg}), "
+                              f"regenerating...")
+                        continue
+
+                    self._sg_pairs = sgr.soul_gate_pairs
+                    return  # success — both structural and soul gates valid
+                else:
+                    # Soul gates exhausted retries on this structural layout.
+                    # Retry with a new structural layout.
+                    if outer < OUTER_MAX - 1:
+                        print(f"[ER] Outer retry {outer + 1}: structural layout "
+                              f"incompatible with soul gates, regenerating...")
+                    continue
+            else:
+                return  # no soul gates, structural ER alone is sufficient
+
+        raise RuntimeError(
+            f"Entrance randomization failed after {OUTER_MAX} full retries "
+            f"(structural + soul gates)."
+        )
+
     def generate_basic(self) -> None:
         """
         Called after set_rules, before AP's fill algorithm.
@@ -193,7 +319,7 @@ class LaMulana2World(World):
         Called after AP has filled all items.
         Do any post-processing here.
         """
-        # Fix filler items with proper location type 
+        # Fix filler items with proper location type
         self.randomizer._fix_empty_locations()
 
     def fill_slot_data(self) -> dict:
@@ -218,6 +344,7 @@ class LaMulana2World(World):
             "entrance_pairs": self.randomizer.get_entrance_pairs(),
             "soul_gate_pairs": self.randomizer.get_soul_gate_pairs(),
             "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
+            "ap_chest_color": int(self.options.ap_chest_color),
         }
 
     def write_spoiler(self, spoiler_handle):
@@ -408,8 +535,9 @@ class LaMulana2World(World):
         
         return True
 
-    def _create_starting_shop_locations(self):
-        """Create starting shop locations if not starting in Village."""
+    def _get_starting_shop_locations(self):
+        """Create and return starting shop locations specific to this player's starting area."""
+        shops = {}
         starting_shop_names = ["[RANDO] Starting Shop 1", "[RANDO] Starting Shop 2", "[RANDO] Starting Shop 3"]
         starting_shop_ids = [LocationID.StartingShop1, LocationID.StartingShop2, LocationID.StartingShop3]
         
@@ -426,10 +554,9 @@ class LaMulana2World(World):
                 ap_id=ap_id,
             )
             
-            LOCATION_DEFS[loc_id] = loc_def
-            LOCATION_DEFS_BY_NAME[name] = loc_def
-            LOCATION_DEFS_BY_AP_ID[ap_id] = loc_def
-            self.location_name_to_id[name] = ap_id
+            shops[loc_id] = LM2Location(self, loc_def)
+            
+        return shops
 
     def _choose_starting_area(self) -> AreaID:
         """Choose starting area based on options."""
@@ -537,3 +664,68 @@ class LaMulana2World(World):
         
         # self.random is the seed-synced random provided by AutoWorld
         return self.random.choice(weights)
+
+    def _debug_dump_settings(self):
+        opts = self.options
+
+        def opt(name):
+            return getattr(opts, name).value if hasattr(getattr(opts, name), "value") else getattr(opts, name)
+
+        print("\n========== LM2 AP DEBUG: SEED SETTINGS ==========")
+
+        # --- Starting Info ---
+        print("[START]")
+        print(f"  Starting Area: {getattr(self, 'starting_area', 'UNKNOWN')}")
+        print(f"  Starting Weapon: {getattr(self, 'starting_weapon', 'UNKNOWN')}")
+
+        # If you track starting inventory explicitly
+        starting_items = getattr(self, "starting_items", [])
+        if starting_items:
+            print(f"  Starting Items: {[item.name for item in starting_items]}")
+        else:
+            print("  Starting Items: None/Not yet assigned")
+
+        # --- Core Options ---
+        print("\n[CORE OPTIONS]")
+        print(f"  Accessibility: {opt('accessibility')}")
+        print(f"  Progression Balancing: {opt('progression_balancing')}")
+        print(f"  Logic Difficulty: {opt('logic_difficulty')}")
+        print(f"  Guardian Specific Ankhs: {opt('guardian_specific_ankhs')}")
+
+        # --- Shops ---
+        print("\n[SHOPS]")
+        print(f"  Shop Placement: {opt('shop_placement')}")
+
+        # --- Mantras ---
+        print("\n[MANTRAS]")
+        print(f"  Mantra Placement: {opt('mantra_placement')}")
+
+        # --- Item Pool ---
+        print("\n[ITEM POOL]")
+        print(f"  Random Research: {opt('random_research')}")
+        print(f"  Remove Research: {opt('remove_research')}")
+        print(f"  Remove Maps: {opt('remove_maps')}")
+        print(f"  Random Dissonance: {opt('random_dissonance')}")
+        print(f"  Required Guardians: {opt('required_guardians')}")
+        print(f"  Required Skulls: {opt('required_skulls')}")
+
+        # --- Entrance Randomization ---
+        print("\n[ENTRANCE RANDOMIZER]")
+        print(f"  Horizontal Entrances: {opt('horizontal_entrances')}")
+        print(f"  Vertical Entrances: {opt('vertical_entrances')}")
+        print(f"  Gate Entrances: {opt('gate_entrances')}")
+        print(f"  Unique Transitions: {opt('unique_transitions')}")
+        print(f"  Soul Gate Entrances: {opt('soul_gate_entrances')}")
+        print(f"  Include 9 Gates: {opt('include_nine_soul_gates')}")
+        print(f"  Random Soul Gate Values: {opt('random_soul_gate_value')}")
+        print(f"  Full Random Entrances: {opt('full_random_entrances')}")
+        print(f"  Prevent Area Loops: {opt('prevent_area_loops')}")
+
+        # --- QoL ---
+        print("\n[QOL]")
+        print(f"  Auto Scan: {opt('auto_scan')}")
+        print(f"  Auto Skulls: {opt('auto_skulls')}")
+        print(f"  Starting Money: {opt('starting_money')}")
+        print(f"  Starting Weights: {opt('starting_weights')}")
+
+        print("================================================\n")

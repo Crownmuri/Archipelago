@@ -184,11 +184,12 @@ class LM2Options(PerGameCommonOptions):
     horizontal_entrances: Toggle
     vertical_entrances: Toggle
     gate_entrances: Toggle
+    unique_transitions: Toggle
     soul_gate_entrances: Toggle
     include_nine_soul_gates: Toggle
     random_soul_gate_value: Toggle
     full_random_entrances: Toggle 
-    include_unique_transitions: Toggle
+    prevent_area_loops: Toggle
 
     # Starting Area Pool
     start_village_of_departure: Toggle

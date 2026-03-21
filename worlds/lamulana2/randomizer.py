@@ -55,9 +55,7 @@ from .regions import (
     AREA_DEFS,
     ExitType
 )
-from .entrances import (
-    EntranceRandomizer
-)
+from .entrances import EntrancePair, SoulGatePair
 from .logic.player_state import PlayerStateAdapter
 
 class ShopEntry(NamedTuple):
@@ -151,9 +149,6 @@ class LM2RandomizerCore:
         self._fix_fdc_logic()
         self._fix_spiral_gate_logic()
         self._fix_ankh_logic()
-    
-        # Randomize entrances
-        self._randomize_entrances()
 
     def _remove_item_from_pool(self, item_id: ItemID, item_name: str) -> bool:
         """
@@ -196,32 +191,6 @@ class LM2RandomizerCore:
         return True
 
     # ============================================================
-    # Entrances
-    # ============================================================
-
-    def _randomize_entrances(self):
-        if not (
-            self.world.options.horizontal_entrances
-            or self.world.options.vertical_entrances
-            or self.world.options.gate_entrances
-            or self.world.options.soul_gate_entrances
-            or self.world.options.full_random_entrances
-        ):
-            return
-
-        entrances = []
-        for region in self.multiworld.regions:
-            if region.player != self.player:
-                continue
-            for e in region.exits:
-                if hasattr(e, "game_exit_id"):
-                    entrances.append(e)
-
-        er = EntranceRandomizer(self.rng, entrances, self.world)
-        self.entrance_pairs = er.randomize()
-        self.soul_gate_pairs = er.soul_gate_pairs
-
-    # ============================================================
     # Logic Checks
     # ============================================================
 
@@ -229,12 +198,10 @@ class LM2RandomizerCore:
         """
         Place non-shuffled logic flag items (bosses, puzzles) at their vanilla locations.
         """
-        print(f"[DEBUG] === START _place_logic_flags() ===")
         mw = self.multiworld
         player = self.player
 
         logic_flags = LOGIC_FLAG_LOCATION_IDS
-        print(f"[DEBUG] Need to place/verify {len(logic_flags)} logic flags")
     
         for loc_id, expected_item_name in logic_flags.items():
             if loc_id not in self.locations:
@@ -260,13 +227,7 @@ class LM2RandomizerCore:
                 loc.address = None
                 mw.push_item(loc, flag_item, collect=False)
                 loc.locked = True
-                print(f"[DEBUG] Placed '{expected_item_name}' at {loc.name} for player {player}")
-            else:
-                # Verify the item is collectible in state
-                print(f"[DEBUG] Location {loc.name} already has correct item '{expected_item_name}' for player {player}")
     
-        print(f"[DEBUG] === END _place_logic_flags() ===")
-
     def _can_reach_location(self, location: LM2Location, state: CollectionState) -> bool:
         """
         Check if a location is reachable in the given state.
@@ -585,14 +546,12 @@ class LM2RandomizerCore:
             return False
 
         # Candidate pool ids: one of each + free_slots random picks (with replacement)
-        candidate_ids: List[ItemID] = list(shop_only_ids)
-        for _ in range(free_slots):
-            candidate_ids.append(self.rng.choice(shop_only_ids))
+        chosen_ids: List[ItemID] = list(shop_only_ids)
+        remaining = max(0, free_slots - len(chosen_ids))
+        for _ in range(remaining):
+            chosen_ids.append(self.rng.choice(shop_only_ids))
 
-        self.rng.shuffle(candidate_ids)
-
-        # Choose exactly free_slots items from the candidate pool
-        chosen_ids = candidate_ids[:free_slots]
+        self.rng.shuffle(chosen_ids)
 
         # Create items
         chosen: List[Item] = []
@@ -993,6 +952,10 @@ class LM2RandomizerCore:
             if category == LocationType.Shop:
                 category = LocationType.FreeStanding
 
+            # --- Hijack: Use ChestWeight for Dissonance ---
+            if category == LocationType.Dissonance:
+                category = LocationType.Chest
+
             # 3. PREFERRED REWARD MATCH
             # Try to match the exact reward type (e.g., AP 30 Coins -> internal 30 Coin ID)
             pool = INTERNAL_POOL_BY_REWARD.get((category, item_id), [])
@@ -1180,25 +1143,32 @@ class LM2RandomizerCore:
         """
         Returns entrance pairs for seed writing.
         Converts ExitID enum values to integers.
+
+        AP Generic ER stores pairs on the world object (_er_pairs).
+        The legacy self.entrance_pairs list remains as a fallback for
+        non-ER seeds.
         """
-        result = []
-        for pair in self.entrance_pairs:
-            result.append((
-                int(pair.from_exit),  # Convert ExitID to int
-                int(pair.to_exit)     # Convert ExitID to int
-            ))
-        return result
+        # Prefer pairs recorded by AP Generic ER in connect_entrances
+        er_pairs = getattr(self.world, '_er_pairs', None)
+        if er_pairs:
+            return [
+                (int(p.from_exit), int(p.to_exit))
+                for p in er_pairs
+                if p.from_exit is not None and p.to_exit is not None
+            ]
+        # Legacy fallback (non-ER seed or manual pairs)
+        return [
+            (int(pair.from_exit), int(pair.to_exit))
+            for pair in self.entrance_pairs
+        ]
 
     def get_soul_gate_pairs(self) -> List[Tuple[int, int, int]]:
         """
         Returns soul gate pairs for seed writing.
         Converts ExitID enum values to integers.
         """
-        result = []
-        for pair in self.soul_gate_pairs:
-            result.append((
-                int(pair.gate1),      # Convert ExitID to int
-                int(pair.gate2),      # Convert ExitID to int
-                pair.soul_amount      # Already an int
-            ))
-        return result
+        sg_pairs = getattr(self.world, '_sg_pairs', None) or self.soul_gate_pairs
+        return [
+            (int(p.gate1), int(p.gate2), p.soul_amount)
+            for p in sg_pairs
+        ]
