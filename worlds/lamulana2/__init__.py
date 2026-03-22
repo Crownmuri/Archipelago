@@ -462,37 +462,10 @@ class LaMulana2World(World):
 
     def generate_output(self, output_directory: str) -> None:
         """
-        Write the LM2 seed file (per-player, Archipelago-style name).
-        Always ends with .lm2r.
-        """
         import os
 
-        mw = self.multiworld
-        player = self.player
-
-        # Prefer Archipelago's standard output naming if available
-        out_base = None
-        get_base = getattr(mw, "get_out_file_name_base", None)
-        if callable(get_base):
-            try:
-                out_base = get_base(player)
-            except Exception:
-                out_base = None
-
-        # Fallback: construct something stable + readable
-        if not out_base:
-            # seed_name is what AP uses for file output naming (often "AP_<seed>..." already),
-            # but if yours is plain, we prefix "AP_" for consistency.
-            seed_name = getattr(mw, "seed_name", None) or str(getattr(mw, "seed", "seed"))
-            try:
-                player_name = mw.get_player_name(player)  # common AP helper
-            except Exception:
-                player_name = str(getattr(mw, "player_name", {}).get(player, f"Player{player}"))
-
-            out_base = f"AP_{seed_name}_P{player}_{player_name}"
-
-        # Ensure extension is exactly .lm2r
-        seed_path = os.path.join(output_directory, f"{out_base}.lm2r")
+        out_base = self.multiworld.get_out_file_name_base(self.player)
+        seed_path = os.path.join(output_directory, out_base + ".lm2r")
 
         write_seed_file(
             path=seed_path,
@@ -506,8 +479,53 @@ class LaMulana2World(World):
             entrance_pairs=self.randomizer.get_entrance_pairs(),
             soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
         )
-
+        
         print(f"[LM2] Seed file written to {seed_path}")
+        """
+        import os
+        import json
+        import zipfile
+        import tempfile
+        import Utils
+
+        mw = self.multiworld
+        player = self.player
+
+        manifest = {
+        "game": "La-Mulana 2",
+        "player": player,
+        "patch_file_ending": ".zip"
+        }
+
+        output_path = os.path.join(
+            output_directory,
+            f"AP-{mw.seed_name}-P{player}-{mw.get_file_safe_player_name(player)}_{Utils.__version__}.zip"
+        )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            lm2r_path = os.path.join(tmpdir, "seed.lm2r")
+
+            # Generate the actual LM2 patch file
+            write_seed_file(
+                path=lm2r_path,
+                starting_weapon=self.randomizer.starting_weapon,
+                starting_area=self.randomizer.starting_area,
+                settings=self.options,
+                starting_items=self.randomizer.get_starting_items(),
+                item_placements=self.randomizer.get_item_placements(),
+                shop_placements=self.randomizer.get_shop_placements(),
+                cursed_locations=self.randomizer.get_cursed_locations(),
+                entrance_pairs=self.randomizer.get_entrance_pairs(),
+                soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
+            )
+
+            # Package the LM2R file plus manifest into the AP zip
+            with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED, True, 9) as output_zip:
+                output_zip.write(lm2r_path, arcname="seed.lm2r")
+                output_zip.writestr(
+                    "archipelago.json",
+                    json.dumps(manifest).encode("utf-8")
+                )
 
     # =============================================================================
     # Helpers
