@@ -956,21 +956,25 @@ class LM2RandomizerCore:
             if category == LocationType.Dissonance:
                 category = LocationType.Chest
 
-            # 3. PREFERRED REWARD MATCH
-            # Try to match the exact reward type (e.g., AP 30 Coins -> internal 30 Coin ID)
-            pool = INTERNAL_POOL_BY_REWARD.get((category, item_id), [])
-            if pool:
-                return pool.pop(0)
-
-            # 4. DYNAMIC OVERFLOW
-            # If the preferred pool is empty, search all other pools in the SAME category.
-            # This allows a '30 Coin' request to take a '10 Coin' or '1 Weight' internal ID.
+           # 3. Collect ALL remaining internal IDs for this category and
+            #    pick one randomly.  The pick is naturally weighted by the
+            #    distribution because more-common rewards have more IDs in
+            #    the pool (e.g. 10 × "5 Weights" vs 1 × "20 Weights").
+            available = []
             for (pool_cat, _), sub_pool in INTERNAL_POOL_BY_REWARD.items():
-                if pool_cat == category and sub_pool:
-                    return sub_pool.pop(0)
-
-            # 5. FINAL FALLBACK
-            # If the entire category distribution is exhausted, use FakeItem01.
+                if pool_cat == category:
+                    available.extend(sub_pool)
+ 
+            if available:
+                chosen = self.rng.choice(available)
+                # Remove it from its sub-pool so it can't be reused
+                for (pool_cat, _), sub_pool in INTERNAL_POOL_BY_REWARD.items():
+                    if pool_cat == category and chosen in sub_pool:
+                        sub_pool.remove(chosen)
+                        break
+                return chosen
+ 
+            # 4. FINAL FALLBACK — entire category exhausted
             return ItemID.Weights
 
     def _fix_empty_locations(self):

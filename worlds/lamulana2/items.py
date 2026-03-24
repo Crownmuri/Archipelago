@@ -509,9 +509,9 @@ AP_FILLER_NAMES: frozenset[str] = frozenset(name for name, _ in AP_FILLER)
 
 # The intended distribution per 40 items (Total = 40)
 FILLER_DISTRIBUTION = [
-    ("1 Coin", 2), ("10 Coins", 4), ("30 Coins", 10),
-    ("50 Coins", 4), ("80 Coins", 2), ("100 Coins", 1),
-    ("1 Weight", 2), ("5 Weights", 10), ("10 Weights", 4), ("20 Weights", 1)
+    ("1 Coin", 3), ("10 Coins", 6), ("30 Coins", 8),
+    ("50 Coins", 3), ("80 Coins", 2), ("100 Coins", 1),
+    ("1 Weight", 4), ("5 Weights", 10), ("10 Weights", 2), ("20 Weights", 1)
 ]
 
 # ============================================================
@@ -550,7 +550,7 @@ def _build_internal_pools():
     # Using your specific manual distribution for Murals
     fs_names = [
         "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins", 
-        "50 Coins", "50 Coins", "80 Coins", "100 Coins",
+        "30 Coins", "50 Coins", "80 Coins", "100 Coins",
         "1 Weight", "5 Weights", "5 Weights", "10 Weights", "10 Weights", "20 Weights"
     ]
     for i, name in enumerate(fs_names):
