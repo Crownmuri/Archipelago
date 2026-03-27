@@ -562,6 +562,44 @@ def _build_internal_pools():
 _build_internal_pools()
 
 # ============================================================
+# Reverse Lookup: Internal ID -> Reward Name & AP Filler ID
+# ============================================================
+# Built from the same distribution logic so the Python side can
+# determine what reward a given FakeItem/ChestWeight/etc. grants.
+# Used by _get_unique_filler_id to sync the AP item name after
+# a random pool pick.
+
+INTERNAL_ID_TO_REWARD: dict[ItemID, tuple[str, ItemID]] = {}
+
+def _build_reverse_lookup():
+    """Maps every internal filler ID to its (reward_name, ap_filler_id)."""
+    # 40-item distribution for Chests and FakeItems
+    for base_id in [ItemID.ChestWeight01, ItemID.FakeItem01]:
+        idx = 0
+        for name, count in FILLER_DISTRIBUTION:
+            ap_id = next(iid for n, iid in AP_FILLER if n == name)
+            for _ in range(count):
+                INTERNAL_ID_TO_REWARD[ItemID(base_id.value + idx)] = (name, ap_id)
+                idx += 1
+
+    # 10-item distribution for NPCMoney
+    for i, (name, _) in enumerate(FILLER_DISTRIBUTION):
+        ap_id = next(iid for n, iid in AP_FILLER if n == name)
+        INTERNAL_ID_TO_REWARD[ItemID(ItemID.NPCMoney01.value + i)] = (name, ap_id)
+
+    # 15-item distribution for FakeScans
+    fs_names = [
+        "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins",
+        "30 Coins", "50 Coins", "80 Coins", "100 Coins",
+        "1 Weight", "5 Weights", "5 Weights", "10 Weights", "10 Weights", "20 Weights"
+    ]
+    for i, name in enumerate(fs_names):
+        ap_id = next(iid for n, iid in AP_FILLER if n == name)
+        INTERNAL_ID_TO_REWARD[ItemID(ItemID.FakeScan01.value + i)] = (name, ap_id)
+
+_build_reverse_lookup()
+
+# ============================================================
 # Generation Function
 # ============================================================
 

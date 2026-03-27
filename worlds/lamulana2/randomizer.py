@@ -38,6 +38,7 @@ from .items import (
     build_pre_filler,
     AP_FILLER,
     INTERNAL_POOL_BY_REWARD,
+    INTERNAL_ID_TO_REWARD,
 )
 from .locations import (
     create_locations,
@@ -956,7 +957,7 @@ class LM2RandomizerCore:
             if category == LocationType.Dissonance:
                 category = LocationType.Chest
 
-           # 3. Collect ALL remaining internal IDs for this category and
+            # 3. Collect ALL remaining internal IDs for this category and
             #    pick one randomly.  The pick is naturally weighted by the
             #    distribution because more-common rewards have more IDs in
             #    the pool (e.g. 10 × "5 Weights" vs 1 × "20 Weights").
@@ -964,7 +965,7 @@ class LM2RandomizerCore:
             for (pool_cat, _), sub_pool in INTERNAL_POOL_BY_REWARD.items():
                 if pool_cat == category:
                     available.extend(sub_pool)
- 
+
             if available:
                 chosen = self.rng.choice(available)
                 # Remove it from its sub-pool so it can't be reused
@@ -972,8 +973,18 @@ class LM2RandomizerCore:
                     if pool_cat == category and chosen in sub_pool:
                         sub_pool.remove(chosen)
                         break
+
+                # Sync the AP item name/code to match what the chosen
+                # internal ID actually grants, so the spoiler, AP tracker,
+                # and in-game reward all agree.
+                reward = INTERNAL_ID_TO_REWARD.get(chosen)
+                if reward and loc.item is not None:
+                    reward_name, reward_ap_id = reward
+                    loc.item.name = reward_name
+                    loc.item.code = BASE_ITEM_ID + int(reward_ap_id)
+
                 return chosen
- 
+
             # 4. FINAL FALLBACK — entire category exhausted
             return ItemID.Weights
 
