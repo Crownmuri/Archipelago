@@ -2098,12 +2098,6 @@ class SoulGateRandomizer:
         can ever reach are the ones already placed in that cluster, and no
         progression path can cross the boundary regardless of where items are
         placed. AP's fill will produce an unbeatable seed every time.
-
-        Concrete failure: ACTablet start where f12GateP0 (ACBottom) is paired
-        with f10GateP0 (ValhallaMain). Both exits are within the starting
-        cluster, and no other exit from the cluster points outside it. The
-        cluster has 23 locations and passes a count-based threshold, but is
-        structurally unbeatable.
         """
         from BaseClasses import CollectionState
 
