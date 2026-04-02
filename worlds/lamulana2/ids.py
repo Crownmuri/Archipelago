@@ -1073,7 +1073,7 @@ ITEM_MAP = {
     "Vessel": ItemID.Vessel,
     "Pepper": ItemID.Pepper,
     "Egg of Creation": ItemID.EggofCreation,
-    "Giants Flute": ItemID.GiantsFlute,
+    "Giant's Flute": ItemID.GiantsFlute,
     "Cog of Antiquity": ItemID.CogofAntiquity,
     "Mulana Talisman": ItemID.MulanaTalisman,
     "Mobile Super x3+": ItemID.MobileSuperx3P,

@@ -100,6 +100,7 @@ class LM2RandomizerCore:
         self.cursed_locations: List[LocationID] = []
         self.entrance_pairs = []
         self.soul_gate_pairs = []
+        self._filler_id_cache: Dict[LocationID, ItemID] = {}
 
         # Use a different seed for each attempt by adding attempt number
         # We'll get this from the world if available
@@ -940,7 +941,7 @@ class LM2RandomizerCore:
     # Fill empty locations with filler
     # ============================================================
 
-    def _get_unique_filler_id(self, item_id: ItemID, loc: LM2Location) -> ItemID:     
+    def _get_unique_filler_id(self, item_id: ItemID, loc: LM2Location) -> ItemID:
             # 1. Ignore non-filler items (e.g. standard progression/tools)
             ap_filler_ids = {fid for _, fid in AP_FILLER}
             if item_id not in ap_filler_ids:
@@ -948,7 +949,7 @@ class LM2RandomizerCore:
 
             # 2. Determine the functional category
             category = loc.location_type
-        
+
             # --- Hijack: Use FakeItem for Shops ---
             if category == LocationType.Shop:
                 category = LocationType.FreeStanding
@@ -957,26 +958,35 @@ class LM2RandomizerCore:
             if category == LocationType.Dissonance:
                 category = LocationType.Chest
 
-            # 3. Collect ALL remaining internal IDs for this category and
-            #    pick one randomly.  The pick is naturally weighted by the
-            #    distribution because more-common rewards have more IDs in
-            #    the pool (e.g. 10 × "5 Weights" vs 1 × "20 Weights").
+            # Use per-instance pool copy (created in precompute_filler_ids)
+            pool = self._local_pool
+
+            # 3. Pick an internal ID that matches the AP reward type.
+            #    This ensures the internal ID's reward always agrees with
+            #    the AP item name — no fragile post-hoc sync needed.
+            key = (category, item_id)
+            matching_pool = pool.get(key, [])
+
+            if matching_pool:
+                chosen = self.rng.choice(matching_pool)
+                matching_pool.remove(chosen)
+                return chosen
+
+            # 4. Matching sub-pool exhausted — fall back to any available
+            #    internal ID in this category and sync the AP item to match.
             available = []
-            for (pool_cat, _), sub_pool in INTERNAL_POOL_BY_REWARD.items():
+            for (pool_cat, _), sub_pool in pool.items():
                 if pool_cat == category:
                     available.extend(sub_pool)
 
             if available:
                 chosen = self.rng.choice(available)
-                # Remove it from its sub-pool so it can't be reused
-                for (pool_cat, _), sub_pool in INTERNAL_POOL_BY_REWARD.items():
+                for (pool_cat, _), sub_pool in pool.items():
                     if pool_cat == category and chosen in sub_pool:
                         sub_pool.remove(chosen)
                         break
 
-                # Sync the AP item name/code to match what the chosen
-                # internal ID actually grants, so the spoiler, AP tracker,
-                # and in-game reward all agree.
+                # Sync AP item name/code to match the chosen internal ID
                 reward = INTERNAL_ID_TO_REWARD.get(chosen)
                 if reward and loc.item is not None:
                     reward_name, reward_ap_id = reward
@@ -985,7 +995,7 @@ class LM2RandomizerCore:
 
                 return chosen
 
-            # 4. FINAL FALLBACK — entire category exhausted
+            # 5. FINAL FALLBACK — entire category exhausted
             return ItemID.Weights
 
     def _fix_empty_locations(self):
@@ -1012,6 +1022,84 @@ class LM2RandomizerCore:
 
 
     # ============================================================
+    # Filler ID pre-computation (must run in post_fill, before
+    # the thread pool that runs generate_output + write_multidata
+    # concurrently — otherwise loc.item mutations race with the
+    # multidata builder reading location.item.code)
+    # ============================================================
+
+    def precompute_filler_ids(self):
+        """Assign unique internal filler IDs for every location and sync
+        ``loc.item`` when the fallback path changes the reward type.
+
+        Must be called from ``post_fill()`` so that mutations to
+        ``loc.item.name`` / ``loc.item.code`` are visible to
+        ``write_multidata()``, which runs concurrently with
+        ``generate_output()`` in the AP thread pool.
+        """
+        self._filler_id_cache: Dict[LocationID, ItemID] = {}
+
+        # Deep-copy the global pool so each world instance gets its own
+        # supply and multi-world games don't share a depleted pool.
+        self._local_pool: Dict[tuple, list] = {
+            k: list(v) for k, v in INTERNAL_POOL_BY_REWARD.items()
+        }
+
+        # --- Non-shop locations first (same iteration order as
+        #     get_item_placements so the RNG and pool consumption
+        #     stay deterministic) ---
+        for loc in self.locations.values():
+            if loc.item is None:
+                continue
+            if loc.game_location_id == LocationID.None_:
+                continue
+            if loc.game_location_id >= LocationID.Ratatoskr1:
+                continue
+            if loc.item.player != self.player:
+                continue
+            if is_shop_location(loc):
+                continue
+
+            try:
+                item_id = get_game_item_id(loc.item)
+            except KeyError:
+                continue
+
+            if item_id in LOGIC_FLAG_ITEM_IDS:
+                continue
+            if item_id == ItemID.None_:
+                continue
+
+            translated = self._get_unique_filler_id(item_id, loc)
+            if translated != item_id:
+                self._filler_id_cache[loc.game_location_id] = translated
+
+        # --- Shop locations second (same order as get_shop_placements) ---
+        for loc_id, loc in self.locations.items():
+            if not is_shop_location(loc):
+                continue
+            if loc.item is None:
+                continue
+            if loc_id == LocationID.None_:
+                continue
+            if loc_id >= LocationID.Ratatoskr1:
+                continue
+            if loc.item.player != self.player:
+                continue
+
+            try:
+                item_id = get_game_item_id(loc.item)
+            except Exception:
+                continue
+
+            if item_id == ItemID.None_:
+                continue
+
+            translated = self._get_unique_filler_id(item_id, loc)
+            if translated != item_id:
+                self._filler_id_cache[loc_id] = translated
+
+    # ============================================================
     # Seed writer extraction API
     # ============================================================
 
@@ -1026,15 +1114,15 @@ class LM2RandomizerCore:
         for loc in self.locations.values():
             if loc.item is None:
                 continue
-            
+
             # Skip LocationID.None (0) - though this should never happen
             if loc.game_location_id == LocationID.None_:
                 continue
-            
+
             # Skip locations with ID >= Ratatoskr1 (253)
             if loc.game_location_id >= LocationID.Ratatoskr1:
                 continue
-            
+
             # Get the game item ID — use unique AP placeholder for items belonging to other players
             if loc.item.player != self.player:
                 item_id = ap_map.get(loc.game_location_id, AP_ITEM_PLACEHOLDER)
@@ -1044,7 +1132,7 @@ class LM2RandomizerCore:
                 except KeyError:
                     print(f"[WARN] Skipping item {loc.item.name} at {loc.name} - no game ID")
                     continue
-            
+
             # Skip logic-only items
             if item_id in LOGIC_FLAG_ITEM_IDS:
                 continue
@@ -1052,13 +1140,13 @@ class LM2RandomizerCore:
             # Skip ItemID.None_ (0) - these shouldn't be written to seed
             if item_id == ItemID.None_:
                 continue
-            
+
             # Skip shop locations (handled separately)
             if is_shop_location(loc):
                 continue
 
-            # TRANSLATE AP TRASH TO INTERNAL UNIQUE IDs HERE:
-            item_id = self._get_unique_filler_id(item_id, loc)
+            # Use pre-computed filler ID (assigned in post_fill)
+            item_id = self._filler_id_cache.get(loc.game_location_id, item_id)
 
             result.append((loc.game_location_id, item_id))
 
@@ -1071,25 +1159,25 @@ class LM2RandomizerCore:
         """
         result: List[Tuple[LocationID, ItemID, int]] = []
         ap_map = self._get_ap_placeholder_map()
-    
+
         # Look at all locations
         for loc_id, loc in self.locations.items():
             # Skip if not a shop
             if not is_shop_location(loc):
                 continue
-            
+
             # Skip if no item
             if loc.item is None:
                 continue
-            
+
             # Skip LocationID.None
             if loc_id == LocationID.None_:
                 continue
-            
+
             # Skip locations with ID >= Ratatoskr1
             if loc_id >= LocationID.Ratatoskr1:
                 continue
-            
+
             # Get item ID — use unique AP placeholder for items belonging to other players
             if loc.item.player != self.player:
                 item_id = ap_map.get(loc_id, AP_ITEM_PLACEHOLDER)
@@ -1098,26 +1186,26 @@ class LM2RandomizerCore:
                     item_id = get_game_item_id(loc.item)
                 except:
                     continue
-            
+
             # Skip ItemID.None
             if item_id == ItemID.None_:
                 continue
 
-            # TRANSLATE AP TRASH TO INTERNAL UNIQUE IDs HERE:
-            item_id = self._get_unique_filler_id(item_id, loc)
-            
+            # Use pre-computed filler ID (assigned in post_fill)
+            item_id = self._filler_id_cache.get(loc_id, item_id)
+
             # Get price - look in shop_entries first, then use default
             price_mult = 5
             for entry in self.shop_entries:
                 if entry.location_id == loc_id:
                     price_mult = entry.price_multiplier
                     break
-        
+
             result.append((loc_id, item_id, price_mult))
-    
+
         # Sort by location ID
         result.sort(key=lambda x: x[0])
-    
+
         return result
 
     def _get_ap_placeholder_map(self) -> dict:

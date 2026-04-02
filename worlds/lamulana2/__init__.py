@@ -322,6 +322,14 @@ class LaMulana2World(World):
         # Fix filler items with proper location type
         self.randomizer._fix_empty_locations()
 
+        # Pre-compute unique filler IDs (FakeItem / ChestWeight / etc.)
+        # and sync loc.item when the fallback changes reward type.
+        # This MUST happen here (before the thread pool) because
+        # generate_output() and write_multidata() run concurrently —
+        # mutating loc.item inside generate_output() races with
+        # write_multidata() reading location.item.code.
+        self.randomizer.precompute_filler_ids()
+
     def fill_slot_data(self) -> dict:
         """
         Return data to be sent to the client.

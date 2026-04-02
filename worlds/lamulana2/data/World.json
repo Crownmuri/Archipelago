@@ -368,7 +368,7 @@
       {
         "Name": "Nidhogg",
         "LocationType": "Miniboss",
-        "Logic": "MeleeAttack and (CanUse(Flare) or ((CanUse(Shuriken) or Has(Claydoll Suit)) and OrbCount(1)))",
+        "Logic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
         "HardLogic": "MeleeAttack",
         "Item": {
           "Name": "Nidhogg",
