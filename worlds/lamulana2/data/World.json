@@ -2,7 +2,14 @@
   {
     "ID": "Start",
     "Name": "Starting Area",
-    "Locations": [],
+    "Locations": [
+        {
+            "Name": "Starting Coin Pot",
+            "ID": "field01-2G",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
+    ],
     "Exits": [
       {
         "Name": "Starting Area",
@@ -17,76 +24,118 @@
     "ID": "VoD",
     "Name": "Village of Departure",
     "Locations": [
-      {
-        "Name": "Xelpud Item",
-        "LocationType": "Dialogue",
-        "Logic": "True"
-      },
-      {
-        "Name": "Nebur Item",
-        "LocationType": "Dialogue",
-        "Logic": "True"
-      },
-      {
-        "Name": "Alsedana Item",
-        "LocationType": "Dialogue",
-        "Logic": "IsDead(Vritra) or GuardianKills(6)"
-      },
-      {
-        "Name": "Giltoriyo Item",
-        "LocationType": "Dialogue",
-        "Logic": "GuardianKills(6)"
-      },
-      {
-        "Name": "Nebur Shop 1",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Nebur Shop 2",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Nebur Shop 3",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Modro Shop 1",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Modro Shop 2",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Modro Shop 3",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Sidro Shop 1",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Sidro Shop 2",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Sidro Shop 3",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Sacred Orb VoD",
-        "LocationType": "FreeStanding",
-        "Logic": "Has(Feather) and CanWarp"
-      }
+        {
+            "Name": "Xelpud Item",
+            "LocationType": "Dialogue",
+            "Logic": "True"
+        },
+        {
+            "Name": "Nebur Item",
+            "LocationType": "Dialogue",
+            "Logic": "True"
+        },
+        {
+            "Name": "Alsedana Item",
+            "LocationType": "Dialogue",
+            "Logic": "IsDead(Vritra) or GuardianKills(6)"
+        },
+        {
+            "Name": "Giltoriyo Item",
+            "LocationType": "Dialogue",
+            "Logic": "GuardianKills(6)"
+        },
+        {
+            "Name": "Nebur Shop 1",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Nebur Shop 2",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Nebur Shop 3",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Modro Shop 1",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Modro Shop 2",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Modro Shop 3",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Sidro Shop 1",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Sidro Shop 2",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Sidro Shop 3",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Sacred Orb VoD",
+            "LocationType": "FreeStanding",
+            "Logic": "Has(Feather) and CanWarp"
+        },
+        {
+            "Name": "Alsedana Coin Pot",
+            "ID": "field01B2",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "Nebur Coin Pot",
+            "ID": "field01C3",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "Xelpud Coin Pot",
+            "ID": "field01D3",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "Xelpud Weight Pot",
+            "ID": "field01D3-2",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "VoD Pre-Ladder Weight Pot",
+            "ID": "field01E3",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "VoD Post-Ladder Coin Pot",
+            "ID": "field01E2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "VoD Chakram Pot",
+            "ID": "field01E2-2",
+            "LocationType": "Pot",
+            "Logic": "Has(Feather)"
+        }
     ],
     "Exits": [
       {
@@ -148,41 +197,59 @@
     "ID": "GateofGuidance",
     "Name": "Gate of Guidance",
     "Locations": [
-      {
-        "Name": "Shell Horn Chest",
-        "LocationType": "Chest",
-        "Logic": "True"
-      },
-      {
-        "Name": "Holy Grail Chest",
-        "LocationType": "Chest",
-        "Logic": "True"
-      },
-      {
-        "Name": "Hiner Shop 1",
-        "LocationType": "Shop",
-        "Logic": "CanReach(Gate of Illusion)"
-      },
-      {
-        "Name": "Hiner Shop 2",
-        "LocationType": "Shop",
-        "Logic": "CanReach(Gate of Illusion)"
-      },
-      {
-        "Name": "Hiner Shop 3",
-        "LocationType": "Shop",
-        "Logic": "CanReach(Gate of Illusion)"
-      },
-      {
-        "Name": "Hiner Shop 4",
-        "LocationType": "Shop",
-        "Logic": "CanReach(Gate of Illusion) and GuardianKills(3)"
-      },
-      {
-        "Name": "Bronze Mirror Spot",
-        "LocationType": "FreeStanding",
-        "Logic": "Has(Feather) or Has(Gale Fibula)"
-      }
+        {
+            "Name": "Shell Horn Chest",
+            "LocationType": "Chest",
+            "Logic": "True"
+        },
+        {
+            "Name": "Holy Grail Chest",
+            "LocationType": "Chest",
+            "Logic": "True"
+        },
+        {
+            "Name": "Hiner Shop 1",
+            "LocationType": "Shop",
+            "Logic": "CanReach(Gate of Illusion)"
+        },
+        {
+            "Name": "Hiner Shop 2",
+            "LocationType": "Shop",
+            "Logic": "CanReach(Gate of Illusion)"
+        },
+        {
+            "Name": "Hiner Shop 3",
+            "LocationType": "Shop",
+            "Logic": "CanReach(Gate of Illusion)"
+        },
+        {
+            "Name": "Hiner Shop 4",
+            "LocationType": "Shop",
+            "Logic": "CanReach(Gate of Illusion) and GuardianKills(3)"
+        },
+        {
+            "Name": "Bronze Mirror Spot",
+            "LocationType": "FreeStanding",
+            "Logic": "Has(Feather) or Has(Gale Fibula)"
+        },
+        {
+            "Name": "GoG Photo-op Weight Pot",
+            "ID": "field01L00W2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "GoG High-up Coin Pot",
+            "ID": "field01L00G30",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "GoG Below Hiner Coin Pot",
+            "ID": "field01L00G2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
     ],
     "Exits": [
       {
@@ -204,7 +271,14 @@
   {
     "ID": "GateofGuidanceLeft",
     "Name": "Gate of Guidance Left",
-    "Locations": [],
+    "Locations": [
+        {
+            "Name": "GoG Illusion Gate Bomb Pot",
+            "ID": "field01L00P",
+            "LocationType": "Pot",
+            "Logic": "True"
+        }
+    ],
     "Exits": [
       {
         "Name": "Gate of Guidance Left Gate (A-3)",
@@ -224,11 +298,35 @@
     "ID": "MausoleumofGiants",
     "Name": "Mausoleum of Giants",
     "Locations": [
-      {
-        "Name": "Dissonance MoG",
-        "LocationType": "Dissonance",
-        "Logic": "Has(Progressive Beherit) and CanChant(Sun) and PuzzleFinished(Sakit Puzzle)"
-      }
+        {
+            "Name": "Dissonance MoG",
+            "LocationType": "Dissonance",
+            "Logic": "Has(Progressive Beherit) and CanChant(Sun) and PuzzleFinished(Sakit Puzzle)"
+        },
+        {
+            "Name": "MoG Ladder Coin Pot",
+            "ID": "field01L02A0",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "MoG Breakable Wall Coin Pot",
+            "ID": "field01L02A1",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "MoG Futo Statue Coin Pot",
+            "ID": "field01L02D3",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "MoG Pre-Ratatoskr Weight Pot",
+            "ID": "field01L02C4",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
     ],
     "Exits": [
       {
@@ -325,66 +423,114 @@
     "ID": "RoY",
     "Name": "Roots of Yggdrasil",
     "Locations": [
-      {
-        "Name": "Map Chest RoY",
-        "LocationType": "Chest",
-        "Logic": "HorizontalAttack"
-      },
-      {
-        "Name": "Ankh Chest RoY",
-        "LocationType": "Chest",
-        "Logic": "Has(Feather) or Has(Katana) or Has(Axe) or CanUse(Bomb) or CanUse(Shuriken) or CanUse(Chakram) or CanUse(Earth Spear) or CanUse(Pistol) or (CanUse(Flare) and HorizontalAttack) or Has(Claydoll Suit) or CanStopTime or (Has(Gale Fibula) and Has(Grapple Claw) and HorizontalAttack)"
-      },
-      {
-        "Name": "Crystal Skull Chest RoY",
-        "LocationType": "Chest",
-        "Logic": "IsDead(Fafnir) and HorizontalAttack"
-      },
-      {
-        "Name": "Shuriken Puzzle Reward",
-        "LocationType": "FreeStanding",
-        "Logic": "HorizontalAttack"
-      },
-      {
-        "Name": "Knife Puzzle Reward",
-        "LocationType": "FreeStanding",
-        "Logic": "Has(Origin Sigil)"
-      },
-      {
-        "Name": "Mantra Mural",
-        "LocationType": "Mural",
-        "Logic": "Has(Snapshot)"
-      },
-      {
-        "Name": "Ratatoskr 1",
-        "LocationType": "Miniboss",
-        "Logic": "MeleeAttack",
-        "HardLogic": "MeleeAttack",
-        "Item": {
-          "Name": "Ratatoskr 1",
-          "IsRequired": true
+        {
+            "Name": "Map Chest RoY",
+            "LocationType": "Chest",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "Ankh Chest RoY",
+            "LocationType": "Chest",
+            "Logic": "Has(Feather) or Has(Katana) or Has(Axe) or CanUse(Bomb) or CanUse(Shuriken) or CanUse(Chakram) or CanUse(Earth Spear) or CanUse(Pistol) or (CanUse(Flare) and HorizontalAttack) or Has(Claydoll Suit) or CanStopTime or (Has(Gale Fibula) and Has(Grapple Claw) and HorizontalAttack)"
+        },
+        {
+            "Name": "Crystal Skull Chest RoY",
+            "LocationType": "Chest",
+            "Logic": "IsDead(Fafnir) and HorizontalAttack"
+        },
+        {
+            "Name": "Shuriken Puzzle Reward",
+            "LocationType": "FreeStanding",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "Knife Puzzle Reward",
+            "LocationType": "FreeStanding",
+            "Logic": "Has(Origin Sigil)"
+        },
+        {
+            "Name": "Mantra Mural",
+            "LocationType": "Mural",
+            "Logic": "Has(Snapshot)"
+        },
+        {
+            "Name": "Ratatoskr 1",
+            "LocationType": "Miniboss",
+            "Logic": "MeleeAttack",
+            "HardLogic": "MeleeAttack",
+            "Item": {
+                "Name": "Ratatoskr 1",
+                "IsRequired": true
+            }
+        },
+        {
+            "Name": "Nidhogg",
+            "LocationType": "Miniboss",
+            "Logic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
+            "HardLogic": "MeleeAttack",
+            "Item": {
+                "Name": "Nidhogg",
+                "IsRequired": true
+            }
+        },
+        {
+            "Name": "Fafnir",
+            "LocationType": "Guardian",
+            "Logic": "MeleeAttack or Glitch(Costume Clip)",
+            "HardLogic": "MeleeAttack or Glitch(Costume Clip)",
+            "Item": {
+                "Name": "Fafnir",
+                "IsRequired": true
+            }
+        },
+        {
+            "Name": "RoY Second Room Weight Pot",
+            "ID": "field00E2w",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Weapon Vault Coin Pot",
+            "ID": "field00C2",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "RoY Weapon Vault Weight Pot",
+            "ID": "field00C2w",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Convenient Shuriken Pot",
+            "ID": "field00B2",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "RoY Below Ratatoskr Coin Pot",
+            "ID": "field00B1",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Footprint Shuriken Pot",
+            "ID": "field00C1",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Bridge Coin Pot",
+            "ID": "field00E1",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Birth Seal Gate Shuriken Pot",
+            "ID": "field00G0",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
         }
-      },
-      {
-        "Name": "Nidhogg",
-        "LocationType": "Miniboss",
-        "Logic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
-        "HardLogic": "MeleeAttack",
-        "Item": {
-          "Name": "Nidhogg",
-          "IsRequired": true
-        }
-      },
-      {
-        "Name": "Fafnir",
-        "LocationType": "Guardian",
-        "Logic": "MeleeAttack or Glitch(Costume Clip)",
-        "HardLogic": "MeleeAttack or Glitch(Costume Clip)",
-        "Item": {
-          "Name": "Fafnir",
-          "IsRequired": true
-        }
-      }
     ],
     "Exits": [
       {
@@ -470,11 +616,17 @@
     "ID": "RoYMiddle",
     "Name": "Roots of Yggdrasil Middle",
     "Locations": [
-      {
-        "Name": "Sacred Orb Chest RoY",
-        "LocationType": "Chest",
-        "Logic": "True"
-      }
+        {
+            "Name": "Sacred Orb Chest RoY",
+            "LocationType": "Chest",
+            "Logic": "True"
+        },
+        {
+            "Name": "RoY First Room Coin Pot",
+            "ID": "field00E3",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
     ],
     "Exits": [
       {
@@ -495,26 +647,56 @@
     "ID": "RoYBottom",
     "Name": "Roots of Yggdrasil Bottom",
     "Locations": [
-      {
-        "Name": "Pyramid Crystal Chest",
-        "LocationType": "Chest",
-        "Logic": "Has(Life Sigil) and (Has(Knife) or (Has(Mjolnir) and MeleeAttack) or (CanUse(Earth Spear) and Has(Ring) and MeleeAttack) or (Has(Spaulder) and (Has(Leather Whip) or Has(Rapier) or Has(Katana))) or (Has(Gauntlet) and Has(Leather Whip)))"
-      },
-      {
-        "Name": "Korobock Shop 1",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Korobock Shop 2",
-        "LocationType": "Shop",
-        "Logic": "True"
-      },
-      {
-        "Name": "Korobock Shop 3",
-        "LocationType": "Shop",
-        "Logic": "True"
-      }
+        {
+            "Name": "Pyramid Crystal Chest",
+            "LocationType": "Chest",
+            "Logic": "Has(Life Sigil) and (Has(Knife) or (Has(Mjolnir) and MeleeAttack) or (CanUse(Earth Spear) and Has(Ring) and MeleeAttack) or (Has(Spaulder) and (Has(Leather Whip) or Has(Rapier) or Has(Katana))) or (Has(Gauntlet) and Has(Leather Whip)))"
+        },
+        {
+            "Name": "Korobock Shop 1",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Korobock Shop 2",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "Korobock Shop 3",
+            "LocationType": "Shop",
+            "Logic": "True"
+        },
+        {
+            "Name": "RoY Large Breakable Wall Coin Pot",
+            "ID": "field00C3",
+            "LocationType": "Pot",
+            "Logic": "Has(Leather Whip) or Has(Rapier) or Has(Katana) or Has(Axe) or Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Flare) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)"
+        },
+        {
+            "Name": "RoY Korobock Weight Pot",
+            "ID": "field00C4",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Lamp of Time Weight Pot",
+            "ID": "field00D4w",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "RoY Torch Room Shuriken Pot",
+            "ID": "field00E4",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "RoY Golden Rock Coin Pot",
+            "ID": "field00E5",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
     ],
     "Exits": [
       {

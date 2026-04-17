@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python -m pytest worlds/lamulana2/test/ -v --tb=short)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_entrance_rando.py::TestHorizontalEntrances::test_all_state_can_reach_everything -v --tb=short)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_entrance_rando.py::TestHorizontalEntrances::test_all_state_can_reach_everything -v --tb=long)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_stress.py -v)",
+      "Bash(LM2_STRESS=5 python -m pytest worlds/lamulana2/test/test_stress.py::StressTestDefault::test_multi_seed_fill worlds/lamulana2/test/test_stress.py::StressTestHorizontalER::test_multi_seed_fill -v --tb=short)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_entrance_rando.py -v --tb=short)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_entrance_rando.py::TestHorizontalEntrances::test_all_state_can_reach_everything --tb=line)",
+      "Bash(python -c ' *)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_default.py worlds/lamulana2/test/test_entrance_rando.py -v --tb=short)",
+      "Bash(python -m pytest worlds/lamulana2/test/test_entrance_rando.py -k \"test_fill\" -v --tb=short)",
+      "Bash(python *)",
+      "Bash(LM2_STRESS=5 python -m pytest worlds/lamulana2/test/test_stress.py -v --tb=short)",
+      "Bash(LM2_STRESS=20 python -m pytest worlds/lamulana2/test/test_stress.py -k \"test_fill or test_multi_seed\" -v --tb=short)",
+      "Bash(ls worlds/AutoWorld*)"
+    ]
+  }
+}

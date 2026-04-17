@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Set, Tuple
 from collections import defaultdict, deque
 
+from . import _log
 from .ids import ExitID, AreaID, LOGIC_FLAG_MAP
 from .regions import LM2Entrance, ExitType
 from .locations import LocationType
@@ -395,11 +396,11 @@ def _repair_same_dungeon_pairs(
             repaired += 1
 
     if repaired:
-        print(f"[ER] Repaired {repaired} same-dungeon pair(s) via swap")
+        _log(f"[ER] Repaired {repaired} same-dungeon pair(s) via swap")
     elif bad:
         still_bad = sum(1 for e1, e2 in result if _same_dungeon(e1, e2))
         if still_bad:
-            print(f"[ER] WARNING: {still_bad} same-dungeon pair(s) could not be repaired")
+            _log(f"[ER] WARNING: {still_bad} same-dungeon pair(s) could not be repaired")
 
     return result
 
@@ -631,11 +632,11 @@ def _generate_pairings(
             uf.union(a1, a2)
 
     if uf.num_components > 1:
-        print(f"[ER] WARNING: {uf.num_components} disconnected area components "
+        _log(f"[ER] WARNING: {uf.num_components} disconnected area components "
               f"after pairing (structural islands likely)")
 
     if pool:
-        print(f"[ER] WARNING: {len(pool)} exit(s) left unpaired: "
+        _log(f"[ER] WARNING: {len(pool)} exit(s) left unpaired: "
               f"{[e.name for e in pool]}")
 
     return _repair_same_dungeon_pairs(pairings, rng)
@@ -776,7 +777,7 @@ def _pair_horizontal_bipartite(
             cavern_to_cliff = True
 
     if right_doors:
-        print(f"[ER-H] WARNING: {len(right_doors)} right door(s) unpaired")
+        _log(f"[ER-H] WARNING: {len(right_doors)} right door(s) unpaired")
     return _repair_same_dungeon_pairs(pairings, rng)
 
 
@@ -895,7 +896,7 @@ def _pair_vertical_bipartite(
             uf.union(a1, a2)
 
     if up_ladders:
-        print(f"[ER-V] WARNING: {len(up_ladders)} up ladder(s) unpaired")
+        _log(f"[ER-V] WARNING: {len(up_ladders)} up ladder(s) unpaired")
     return _repair_same_dungeon_pairs(pairings, rng)
 
 
@@ -1017,7 +1018,7 @@ def _pair_gates_pool(
 
         if not gates:
             # Odd gate left over
-            print(f"[ER-G] WARNING: gate '{g1.name}' unpaired (odd count)")
+            _log(f"[ER-G] WARNING: gate '{g1.name}' unpaired (odd count)")
             break
 
         a1 = _exit_area(g1)
@@ -1042,7 +1043,7 @@ def _pair_gates_pool(
 
     # Any leftover priority gates (shouldn't happen normally)
     if priority_gates:
-        print(f"[ER-G] WARNING: {len(priority_gates)} priority gate(s) unpaired")
+        _log(f"[ER-G] WARNING: {len(priority_gates)} priority gate(s) unpaired")
 
     return _repair_same_dungeon_pairs(pairings, rng)
 
@@ -1086,7 +1087,7 @@ def _pair_unique_pool(
         pairings.append((e1, e2))
 
     if pool:
-        print(f"[ER-U] WARNING: {len(pool)} unique exit(s) unpaired (odd count)")
+        _log(f"[ER-U] WARNING: {len(pool)} unique exit(s) unpaired (odd count)")
 
     return _repair_same_dungeon_pairs(pairings, rng)
 
@@ -1116,36 +1117,49 @@ def _generate_separate_pairings(
                     if getattr(e, 'game_exit_id', None) is not None}
     base_uf = _build_base_uf(world, shuffled_ids)
 
+    # Use a cumulative UF across pools so that later pools know about
+    # connections established by earlier pools (improves connectivity).
+    cumulative_uf = base_uf.copy()
+
     all_pairings: List[Tuple[LM2Entrance, LM2Entrance]] = []
+
+    def _update_cumulative_uf(pairs):
+        for e1, e2 in pairs:
+            a1, a2 = _exit_area(e1), _exit_area(e2)
+            if a1 is not None and a2 is not None:
+                cumulative_uf.union(a1, a2)
 
     if opts.horizontal_entrances:
         pairs = _pair_horizontal_bipartite(
             by_type.get(ExitType.LeftDoor, []),
             by_type.get(ExitType.RightDoor, []),
-            rng, world, base_uf,
+            rng, world, cumulative_uf,
         )
         all_pairings.extend(pairs)
+        _update_cumulative_uf(pairs)
         if pairs:
-            print(f"[ER] Horizontal pool: {len(pairs)} pairs")
+            _log(f"[ER] Horizontal pool: {len(pairs)} pairs")
 
     if opts.vertical_entrances:
         pairs = _pair_vertical_bipartite(
             by_type.get(ExitType.UpLadder, []),
             by_type.get(ExitType.DownLadder, []),
-            rng, world, base_uf,
+            rng, world, cumulative_uf,
         )
         all_pairings.extend(pairs)
+        _update_cumulative_uf(pairs)
         if pairs:
-            print(f"[ER] Vertical pool: {len(pairs)} pairs")
+            _log(f"[ER] Vertical pool: {len(pairs)} pairs")
 
     if opts.gate_entrances:
         pairs = _pair_gates_pool(
             by_type.get(ExitType.Gate, []),
-            rng, world, base_uf,
+            rng, world, cumulative_uf,
         )
         all_pairings.extend(pairs)
+        _update_cumulative_uf(pairs)
         if pairs:
-            print(f"[ER] Gate pool: {len(pairs)} pairs")
+            _log(f"[ER] Gate pool: {len(pairs)} pairs")
 
     if opts.unique_transitions:
         unique: List[LM2Entrance] = []
@@ -1154,8 +1168,9 @@ def _generate_separate_pairings(
         if len(unique) >= 2:
             pairs = _pair_unique_pool(unique, rng, world)
             all_pairings.extend(pairs)
+            _update_cumulative_uf(pairs)
             if pairs:
-                print(f"[ER] Unique pool: {len(pairs)} pairs")
+                _log(f"[ER] Unique pool: {len(pairs)} pairs")
 
     return all_pairings
 
@@ -1199,31 +1214,65 @@ def _build_omniscient_state(world):
 
 def _validate_region_reachability(world) -> Tuple[bool, List[str]]:
     """
-    Check that every location's parent region is reachable using AP's own
-    state.can_reach() with an omniscient CollectionState.
+    Sphere-sweep validation that mirrors AP's fulfills_accessibility().
 
-    This uses the EXACT SAME reachability logic as AP's fill algorithm,
-    including full can_access() evaluation on exits (parent-region checks,
-    CanReach() calls inside compiled rules, etc.).
+    Starts with all POOL items collected (simulating optimal fill placement)
+    but does NOT force-set logic-flag events (bosses, shortcuts, guardians,
+    etc.).  Events are collected dynamically as their locations become
+    reachable, exactly as happens during the real fill sweep.
+
+    This catches circular event dependencies that the old omniscient
+    approach missed: e.g. Area A needs an event from Area B, but Area B
+    is only reachable through Area A.
 
     Returns (is_valid, list_of_unreachable_location_names).
     """
-    state = _build_omniscient_state(world)
+    from BaseClasses import CollectionState
+
+    state = CollectionState(world.multiworld)
     player = world.player
+
+    # Collect all precollected items
+    for item in world.multiworld.precollected_items[player]:
+        state.collect(item)
+
+    # Collect all pool items (assumes the fill will place them optimally)
+    for item in world.multiworld.itempool:
+        if item.player == player:
+            state.collect(item)
 
     if hasattr(state, 'stale'):
         state.stale[player] = True
 
-    unreachable = []
+    # Sphere-sweep: find reachable locations, collect their events, repeat
+    remaining = []
     for loc in world.multiworld.get_locations(player):
-        if loc.parent_region is None:
-            continue
-        try:
-            if not state.can_reach(loc.parent_region, "Region", player):
-                unreachable.append(loc.name)
-        except Exception:
-            unreachable.append(loc.name)
+        if loc.parent_region is not None:
+            remaining.append(loc)
 
+    while True:
+        sphere = []
+        for n in range(len(remaining) - 1, -1, -1):
+            try:
+                if remaining[n].can_reach(state):
+                    sphere.append(remaining.pop(n))
+            except Exception:
+                pass
+
+        if not sphere:
+            break
+
+        # Collect events from newly reachable locations
+        collected_new = False
+        for loc in sphere:
+            if loc.item is not None and loc.item.player == player:
+                state.collect(loc.item, True, loc)
+                collected_new = True
+
+        if hasattr(state, 'stale') and collected_new:
+            state.stale[player] = True
+
+    unreachable = [loc.name for loc in remaining]
     return len(unreachable) == 0, unreachable
 
 
@@ -1482,7 +1531,7 @@ def custom_structural_er(world) -> None:
         inacc = [e for e in candidates if e.game_exit_id in INACCESSIBLE_EXITS]
         dropped = inacc[-1] if inacc else candidates[-1]
         candidates.remove(dropped)
-        print(f"[ER] Odd exit count, leaving '{dropped.name}' in vanilla")
+        _log(f"[ER] Odd exit count, leaving '{dropped.name}' in vanilla")
 
     # ── ReduceDeadEndStarts (full-random mode only) ──────────────────
     # In separate-pool mode, each per-type function handles its own
@@ -1505,7 +1554,7 @@ def custom_structural_er(world) -> None:
             if (e_dungeon is not None and e_dungeon == starting_dungeon) or e_area == starting_area:
                 starting_exit_ids.add(e.game_exit_id)
     if starting_exit_ids:
-        print(f"[ER] ReduceDeadEndStarts: starting area {starting_area}, "
+        _log(f"[ER] ReduceDeadEndStarts: starting area {starting_area}, "
               f"exits in pool: {[str(eid) for eid in starting_exit_ids]}")
 
     if not full_random:
@@ -1513,7 +1562,7 @@ def custom_structural_er(world) -> None:
         pool_summary = defaultdict(int)
         for e in candidates:
             pool_summary[e.exit_type] += 1
-        print(f"[ER] Separate-pool mode: "
+        _log(f"[ER] Separate-pool mode: "
               + ", ".join(f"{t.value}={n}" for t, n in sorted(pool_summary.items(),
                           key=lambda x: x[0].value)))
 
@@ -1547,7 +1596,7 @@ def custom_structural_er(world) -> None:
                     e.connect(target)
                     restored += 1
         if restored:
-            print(f"[ER] Restored {restored} unpaired exit(s) to vanilla")
+            _log(f"[ER] Restored {restored} unpaired exit(s) to vanilla")
 
     last_pairings = None
     last_unreachable: List[str] = []
@@ -1560,14 +1609,8 @@ def custom_structural_er(world) -> None:
                     if getattr(e, 'game_exit_id', None) is not None}
     base_uf = _build_base_uf(world, shuffled_ids)
 
-    # ── Persistent-unreachable tracking ──────────────────────────────
-    # If the SAME locations are unreachable in every attempt, the ER
-    # can't fix them (they're caused by logic/soul-gate issues, not
-    # structural pairing).  After a burn-in period, we identify these
-    # and tolerate them rather than retrying forever.
-    _BURNIN = 5                       # attempts before computing intersection
-    all_unreachable_sets: List[Set[str]] = []
-    persistent_unreachable: Set[str] = set()
+    last_unreachable: List[str] = []
+    last_cluster_msg = ""
 
     for attempt in range(MAX_ATTEMPTS):
         _restore_vanilla()
@@ -1596,35 +1639,38 @@ def custom_structural_er(world) -> None:
         valid, unreachable = _validate_region_reachability(world)
         last_unreachable = unreachable
 
-        # Track unreachable sets for persistent-unreachable detection
-        all_unreachable_sets.append(set(unreachable))
-
-        # After burn-in, compute persistent unreachable (locations that
-        # failed in EVERY attempt so far).  These aren't ER's fault.
-        if attempt + 1 == _BURNIN:
-            persistent_unreachable = set.intersection(*all_unreachable_sets)
-            if persistent_unreachable:
-                print(f"[ER] Detected {len(persistent_unreachable)} persistently "
-                      f"unreachable location(s) (not caused by ER): "
-                      f"{sorted(persistent_unreachable)[:5]}")
-
-        # Filter out persistent unreachable — only reject if there are
-        # NEW unreachable locations that the ER could potentially fix.
-        er_caused = [loc for loc in unreachable
-                     if loc not in persistent_unreachable]
-
-        if er_caused:
-            if attempt < 5 or attempt % 25 == 0:
-                print(f"[ER] Attempt {attempt + 1}: {len(er_caused)} ER-caused + "
-                      f"{len(persistent_unreachable)} persistent unreachable "
-                      f"(e.g. {er_caused[:5]}), retrying...")
-            continue
-
-        # If we get here, only persistent unreachable remain (or none).
-        if persistent_unreachable and unreachable:
-            print(f"[ER] Attempt {attempt + 1}: tolerating "
-                  f"{len(persistent_unreachable)} persistently unreachable "
-                  f"location(s) not caused by ER")
+        if unreachable:
+            accessibility = world.options.accessibility
+            if accessibility == accessibility.option_minimal:
+                # Minimal: tolerate unreachable if enough locations
+                # remain for progression items to be placed.
+                progression_count = sum(
+                    1 for item in world.multiworld.itempool
+                    if item.player == world.player and item.advancement
+                )
+                total_locs = sum(
+                    1 for _ in world.multiworld.get_locations(world.player)
+                )
+                reachable_count = total_locs - len(unreachable)
+                if reachable_count < progression_count + 10:
+                    if attempt < 5 or attempt % 25 == 0:
+                        _log(f"[ER] Attempt {attempt + 1}: only "
+                              f"{reachable_count} reachable locations for "
+                              f"{progression_count} progression items, "
+                              f"retrying...")
+                    continue
+                # Enough reachable — accept with warning
+                if attempt < 5 or attempt % 25 == 0:
+                    _log(f"[ER] Attempt {attempt + 1}: tolerating "
+                          f"{len(unreachable)} unreachable "
+                          f"({reachable_count} reachable for "
+                          f"{progression_count} progression)")
+            else:
+                # Full/Items: zero unreachable locations allowed
+                if attempt < 5 or attempt % 25 == 0:
+                    _log(f"[ER] Attempt {attempt + 1}: {len(unreachable)} "
+                          f"unreachable (e.g. {unreachable[:3]}), retrying...")
+                continue
 
         # ── Validation 2: starting cluster viability ──────────────────
         # With ONLY precollected items, is the reachable cluster large
@@ -1636,20 +1682,20 @@ def custom_structural_er(world) -> None:
 
         if not cluster_ok:
             if attempt < 5 or attempt % 25 == 0:
-                print(f"[ER] Attempt {attempt + 1}: {cluster_msg}, retrying...")
+                _log(f"[ER] Attempt {attempt + 1}: {cluster_msg}, retrying...")
             continue
 
         # Both checks passed
         if attempt > 0:
-            print(f"[ER] Structural ER succeeded on attempt {attempt + 1} "
+            _log(f"[ER] Structural ER succeeded on attempt {attempt + 1} "
                   f"({cluster_msg})")
         break
     else:
-        print(f"[ER] WARNING: Structural ER could not validate after "
-              f"{MAX_ATTEMPTS} attempts. Last failure: "
-              f"{len(last_unreachable)} unreachable "
-              f"({len(persistent_unreachable)} persistent), "
-              f"cluster: {last_cluster_msg}. Seed may be unbeatable.")
+        raise RuntimeError(
+            f"Structural ER failed after {MAX_ATTEMPTS} attempts. "
+            f"Last: {len(last_unreachable)} unreachable, "
+            f"cluster: {last_cluster_msg}"
+        )
 
     # ── Build pairing records for seed file & spoiler log ────────────
     _build_pairing_records(world, last_pairings)
@@ -1660,13 +1706,13 @@ def custom_structural_er(world) -> None:
     world._structural_unreachable = set(last_unreachable)
 
     # ── Print pairings ───────────────────────────────────────────────
-    print(f"\n[ER] === ENTRANCE PAIRINGS ===")
+    _log(f"\n[ER] === ENTRANCE PAIRINGS ===")
     for src, tgt in sorted(world._er_name_pairings):
-        print(f"[ER]   {src}  <->  {tgt}")
-    print(f"[ER] === END PAIRINGS ({len(world._er_name_pairings)} pairs) ===\n")
+        _log(f"[ER]   {src}  <->  {tgt}")
+    _log(f"[ER] === END PAIRINGS ({len(world._er_name_pairings)} pairs) ===\n")
 
-    # ── IBMain post-endgame escape route ─────────────────────────────
-    _log_ibmain_escape_standalone(world)
+    # NOTE: IBMain escape route is logged AFTER soul gates are placed
+    # (in __init__.py) so the graph includes soul gate connections.
 
 
 # ============================================================
@@ -1699,9 +1745,9 @@ class SoulGateRandomizer:
     def _log_soul_gate_pairings(self, label: str = ""):
         """Print current soul gate pairings for debugging."""
         if not self.soul_gate_pairs:
-            print(f"[ER-SG] {label}No soul gate pairs.")
+            _log(f"[ER-SG] {label}No soul gate pairs.")
             return
-        print(f"[ER-SG] {label}Soul gate pairings ({len(self.soul_gate_pairs)} pairs):")
+        _log(f"[ER-SG] {label}Soul gate pairings ({len(self.soul_gate_pairs)} pairs):")
         for sgp in self.soul_gate_pairs:
             # Resolve exit names
             name1 = str(sgp.gate1)
@@ -1712,7 +1758,7 @@ class SoulGateRandomizer:
                         name1 = e.name
                     if e.game_exit_id == sgp.gate2:
                         name2 = e.name
-            print(f"[ER-SG]   {name1} <-> {name2}  (cost: {sgp.soul_amount})")
+            _log(f"[ER-SG]   {name1} <-> {name2}  (cost: {sgp.soul_amount})")
 
     def _get_exits_of_type(self, exit_type: ExitType) -> List[LM2Entrance]:
         return [e for e in self.entrances if e.exit_type == exit_type]
@@ -1901,7 +1947,7 @@ class SoulGateRandomizer:
             self._randomize_soul_gate_entrances()
 
             if not self._validate_soul_gate_reachability():
-                print(f"[ER] Soul gate attempt {attempt + 1} failed, retrying...")
+                _log(f"[ER] Soul gate attempt {attempt + 1} failed, retrying...")
                 continue
 
             # Kill simulation passed.  Now check that the logic modifications
@@ -1915,19 +1961,19 @@ class SoulGateRandomizer:
                 structural = getattr(self.world, '_structural_unreachable', set())
                 new_unreachable = [loc for loc in unreachable if loc not in structural]
                 if new_unreachable:
-                    print(f"[ER] Soul gate attempt {attempt + 1}: post-gate logic "
+                    _log(f"[ER] Soul gate attempt {attempt + 1}: post-gate logic "
                           f"made {len(new_unreachable)} NEW locations unreachable "
                           f"(e.g. {new_unreachable[:3]}), retrying...")
                     continue
                 # All unreachable locations were already unreachable from structural ER
 
             if attempt > 0:
-                print(f"[ER] Soul gate succeeded on attempt {attempt + 1}")
+                _log(f"[ER] Soul gate succeeded on attempt {attempt + 1}")
             self._log_soul_gate_pairings()
             return True
 
-        print(f"[ER] Soul gate randomization failed after {MAX_ATTEMPTS} attempts "
-              f"— structural layout incompatible with soul gates.")
+        _log(f"[ER] Soul gate randomization failed after {MAX_ATTEMPTS} attempts "
+              f"-- structural layout incompatible with soul gates.")
         self._log_soul_gate_pairings("LAST FAILED: ")
         return False
 
@@ -2044,7 +2090,7 @@ class SoulGateRandomizer:
             if not loc.parent_region or loc.parent_region.name not in reachable
         ]
         if unreachable_guardians:
-            print(f"[ER] Soul gate kill simulation failed. Unreachable: {unreachable_guardians}")
+            _log(f"[ER] Soul gate kill simulation failed. Unreachable: {unreachable_guardians}")
             return False
 
         # Part 2: structural reachability (full accessibility only)
@@ -2056,11 +2102,11 @@ class SoulGateRandomizer:
                 if loc.parent_region and loc.parent_region.name not in all_reachable
             ]
             if unreachable_locs:
-                print(f"[ER] Structural reachability failed: {len(unreachable_locs)} locations cut off "
+                _log(f"[ER] Structural reachability failed: {len(unreachable_locs)} locations cut off "
                       f"(e.g. {unreachable_locs[:3]})")
                 return False
 
-        print(f"[ER]   Kill simulation passed: all {len(guardian_locs)} guardians reachable"
+        _log(f"[ER]   Kill simulation passed: all {len(guardian_locs)} guardians reachable"
               + (', all locations structurally reachable'
                  if self.world.options.accessibility == self.world.options.accessibility.option_full
                  else ''))
@@ -2135,7 +2181,7 @@ class SoulGateRandomizer:
                 return True   # open — some exit points outside the cluster
 
         # Every exit from the cluster leads back into it: closed island.
-        print(f"[ER] Attempt {attempt}: FAIL — starting cluster is a closed island "
+        _log(f"[ER] Attempt {attempt}: FAIL -- starting cluster is a closed island "
               f"({len(visited)} areas reachable with starting items, no exit leads outside). "
               f"Guaranteed unbeatable regardless of item placement.")
         return False
@@ -2256,7 +2302,7 @@ class SoulGateRandomizer:
 
         if target not in parent:
             line = "[ER] SPOILER: IBMain has no post-endgame escape route to Cliff."
-            print(line)
+            _log(line)
             self.world.ibmain_escape_spoiler = line
             return line
 
@@ -2273,8 +2319,8 @@ class SoulGateRandomizer:
 
         hop_count = sum(1 for s in steps if not s.startswith('('))
         path_str  = " -> ".join(steps)
-        line = f"[ER] SPOILER — IBMain -> Cliff ({hop_count - 1} hops): {path_str}"
-        print(line)
+        line = f"[ER] SPOILER -- IBMain -> Cliff ({hop_count - 1} hops): {path_str}"
+        _log(line) 
         self.world.ibmain_escape_spoiler = line
         return line
 

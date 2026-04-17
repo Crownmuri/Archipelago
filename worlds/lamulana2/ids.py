@@ -317,6 +317,43 @@ class ItemID(IntEnum):
     Weight5  = 307  # grant 5 weights
     Weight10 = 308  # grant 10 weights
     Weight20 = 309  # grant 20 weights
+    ShurikenBundle = 310  # grant 10 shuriken ammo
+    BombBundle     = 311  # grant 3 bomb ammo
+    ChakramBundle  = 312  # grant 1 chakram ammo
+
+    # -------------------------------------------------------------------------
+    # Pot Filler (internal IDs, 30 pots for now)
+    # -------------------------------------------------------------------------
+    PotFiller01 = 400
+    PotFiller02 = 401
+    PotFiller03 = 402
+    PotFiller04 = 403
+    PotFiller05 = 404
+    PotFiller06 = 405
+    PotFiller07 = 406
+    PotFiller08 = 407
+    PotFiller09 = 408
+    PotFiller10 = 409
+    PotFiller11 = 410
+    PotFiller12 = 411
+    PotFiller13 = 412
+    PotFiller14 = 413
+    PotFiller15 = 414
+    PotFiller16 = 415
+    PotFiller17 = 416
+    PotFiller18 = 417
+    PotFiller19 = 418
+    PotFiller20 = 419
+    PotFiller21 = 420
+    PotFiller22 = 421
+    PotFiller23 = 422
+    PotFiller24 = 423
+    PotFiller25 = 424
+    PotFiller26 = 425
+    PotFiller27 = 426
+    PotFiller28 = 427
+    PotFiller29 = 428
+    PotFiller30 = 429
 
     # -------------------------------------------------------------------------
     # AP Trash
@@ -682,6 +719,172 @@ class LocationID(IntEnum):
     WhitePedestals = 307
     GarmStatuePuzzle = 308
     SakitPuzzle = 309
+
+    # -------------------------------------------------------------------------
+    # Pot Locations (potsanity)
+    # -------------------------------------------------------------------------
+
+    # --- Village of Departure ---
+    StartingCoinPot = 400           # field01-2G, potFlag 302
+    AlsedanaCoinPot = 401           # field01B2, potFlag 122
+    NeburCoinPot = 402              # field01C3, potFlag 123
+    XelpudCoinPot = 403             # field01D3, potFlag 124
+    XelpudWeightPot = 404           # field01D3-2, potFlag 128
+    VoDPreLadderWeightPot = 405     # field01E3, potFlag 125
+    VoDPostLadderCoinPot = 406      # field01E2, potFlag 126
+    VoDChakramPot = 407             # field01E2-2, potFlag 127
+
+    # --- Gate of Guidance ---
+    GoGPhotoopWeightPot = 408       # field01L00W2, potFlag 299
+    GoGHighupCoinPot = 409          # field01L00G30, potFlag 295
+    GoGBelowHinerCoinPot = 410      # field01L00G2, potFlag 297
+    GoGIllusionGateBombPot = 411    # field01L00P, potFlag 301
+
+    # --- Mausoleum of Giants ---
+    MoGLadderCoinPot = 412          # field01L02A0, potFlag 303
+    MoGBreakableWallCoinPot = 413   # field01L02A1, potFlag 304
+    MoGFutoStatueCoinPot = 414      # field01L02D3, potFlag 306
+    MoGPreRatatoskrWeightPot = 415  # field01L02C4, potFlag 307
+
+    # --- Roots of Yggdrasil ---
+    RoYSecondRoomWeightPot = 416    # field00E2w, potFlag 29
+    RoYWeaponVaultCoinPot = 417     # field00C2, potFlag 4
+    RoYWeaponVaultWeightPot = 418   # field00C2w, potFlag 30
+    RoYConvenientShurikenPot = 419  # field00B2, potFlag 5
+    RoYBelowRatatoskrCoinPot = 420  # field00B1, potFlag 0
+    RoYFootprintShurikenPot = 421  # field00C1, potFlag 1
+    RoYBridgeCoinPot = 422          # field00E1, potFlag 2
+    RoYBirthSealGateShurikenPot = 423  # field00G0, potFlag 3
+    RoYFirstRoomCoinPot = 424       # field00E3, potFlag 7
+    RoYLargeBreakableWallCoinPot = 425  # field00C3, potFlag 6
+    RoYKorobockWeightPot = 426      # field00C4, potFlag 9
+    RoYLampofTimeWeightPot = 427    # field00D4w, potFlag 28
+    RoYTorchRoomShurikenPot = 428   # field00E4, potFlag 8
+    RoYGoldenRockCoinPot = 429      # field00E5, potFlag 10
+
+# =========================================================================
+# PotID — maps World.json pot IDs to sheet 21 (itempot) flag numbers.
+# Only the 30 pots currently in World.json are active; the rest are
+# commented out and will be uncommented as more regions are added.
+# =========================================================================
+
+POT_FLAG_MAP: dict[int, int] = {
+    # LocationID.value -> sheet 21 potFlagNo
+    # NOTE: potFlagNo values are 0-indexed (game internal), not 1-indexed.
+    # --- Village of Departure ---
+    400: 302,   # StartingCoinPot         (field01-2G)
+    401: 122,   # AlsedanaCoinPot         (field01B2)
+    402: 123,   # NeburCoinPot            (field01C3)
+    403: 124,   # XelpudCoinPot           (field01D3)
+    404: 128,   # XelpudWeightPot         (field01D3-2)
+    405: 125,   # VoDPreLadderWeightPot   (field01E3)
+    406: 126,   # VoDPostLadderCoinPot    (field01E2)
+    407: 127,   # VoDChakramPot           (field01E2-2)
+    # --- Gate of Guidance ---
+    408: 299,   # GoGPhotoopWeightPot     (field01L00W2)
+    409: 295,   # GoGHighupCoinPot        (field01L00G30)
+    410: 297,   # GoGBelowHinerCoinPot    (field01L00G2)
+    411: 301,   # GoGIllusionGateBombPot  (field01L00P)
+    # --- Mausoleum of Giants ---
+    412: 303,   # MoGLadderCoinPot        (field01L02A0)
+    413: 304,   # MoGBreakableWallCoinPot (field01L02A1)
+    414: 306,   # MoGFutoStatueCoinPot    (field01L02D3)
+    415: 307,   # MoGPreRatatoskrWeightPot(field01L02C4)
+    # --- Roots of Yggdrasil ---
+    416: 29,    # RoYSecondRoomWeightPot  (field00E2w)
+    417: 4,     # RoYWeaponVaultCoinPot   (field00C2)
+    418: 30,    # RoYWeaponVaultWeightPot (field00C2w)
+    419: 5,     # RoYConvenientShurikenPot(field00B2)
+    420: 0,     # RoYBelowRatatoskrCoinPot(field00B1)
+    421: 1,     # RoYFootprintShurikenPot (field00C1)
+    422: 2,     # RoYBridgeCoinPot        (field00E1)
+    423: 3,     # RoYBirthSealGateShurikenPot(field00G0)
+    424: 7,     # RoYFirstRoomCoinPot     (field00E3)
+    425: 6,     # RoYLargeBreakableWallCoinPot(field00C3)
+    426: 9,     # RoYKorobockWeightPot    (field00C4)
+    427: 28,    # RoYLampofTimeWeightPot  (field00D4w)
+    428: 8,     # RoYTorchRoomShurikenPot (field00E4)
+    429: 10,    # RoYGoldenRockCoinPot    (field00E5)
+}
+
+"""
+# --- Unmapped pots (uncomment as World.json regions are added) ---
+# field02D0 = 32, field02B1 = 33, field02C1 = 34, field02D1 = 35,
+# field02E1 = 36, field02F1 = 37, field02C2 = 38, field02C2g = 39,
+# field02D2_1 = 40, field02D2_2 = 41, field02E2 = 42, field02B3 = 43,
+# field02D3 = 44, field02G3 = 45, field02B4 = 46, field02D4_1 = 47,
+# field02D4_2 = 48, field02E4 = 49
+# field03D2_1 = 65, field03G1 = 66, field03G2_1 = 67, field03F3 = 68,
+# field03B4_1 = 69, field03D4 = 70, field03I5 = 71, field03H4g = 72,
+# field03D6 = 73, field03F5 = 74, field03B5 = 75, field03B6 = 76,
+# field03C6 = 77, field03E0 = 78, field03C0 = 79, field03C1 = 80,
+# field03D1 = 81, field03G4 = 82, field03B4_2 = 83, field03G2_2 = 84,
+# field03E5 = 85, field03F1 = 86, field03G6 = 87, field03B1 = 88,
+# field03F1_2 = 89, field03H4 = 90, field03G5 = 91, field03F6 = 92,
+# field03A5 = 93, field03B3 = 94, field03D2_2 = 95, field03E6 = 96,
+# field03D2_3 = 97, field03B4g = 98
+# field04A0 = 99, field04C0 = 100, field04A1 = 101, field04B1 = 102,
+# field04A2 = 103, field04B2 = 104, field04C2 = 105, field04B3_1 = 106,
+# field04B3_2 = 107, field04C3_1 = 108, field04C3_2 = 109, field04C3_3 = 110,
+# field04C3_4 = 111, field04C4 = 112, field04D4 = 113, field04E0 = 114,
+# field04F0 = 115, field04F0g = 116, field04G0g = 117, field04G0 = 118,
+# field04E1 = 119, field04E2 = 120, field04F2 = 121, field04E3 = 122
+# field05B1 = 12, field05C1 = 13, field05D1 = 14, field05A2_1 = 15,
+# field05A2_2 = 16, field05C2 = 17, field05D2 = 18, field05A3 = 19,
+# field05B3_1 = 20, field05B3_2 = 21, field05B3_3 = 22, field05D3 = 23,
+# field05E3 = 24, field05B4_1 = 25, field05B4_2 = 26, field05C4_1 = 27,
+# field05C4_2 = 28
+# field06C1 = 130, field06C1f = 131, field06C2 = 132, field06E2 = 133,
+# field06A3 = 134, field06C3 = 135, field06C3g = 136, field06E3 = 137,
+# field06E3g = 138, field06B4 = 139, field06C4 = 140, field06D4 = 141,
+# field06E4 = 142, field06E4g = 143, field06C5 = 144, field06D5 = 145,
+# field06D5g = 146, field06D6 = 147, field06E6 = 148, field06_2A0 = 293,
+# field06_2C0g = 294, field06_2C0 = 295, field06add1 = 312
+# field07C0 = 149, field07C1 = 150, field07C1s = 151, field07B2 = 152,
+# field07D2 = 153, field07E2 = 154, field07B3 = 155, field07C3 = 156,
+# field07B4 = 157, field07B4y = 158, field07D4 = 159, field07E4 = 160,
+# field07F4 = 161, field07F4f = 162, field07B5 = 163, field07D5 = 164,
+# field07C6 = 165, field07C6g = 166
+# field08A0 = 167, field08A0g = 168, field08B0 = 169, field08C1 = 170,
+# field08D1 = 171, field08C2g = 172, field08C2f = 173, field08D2 = 174,
+# field08F2 = 175, field08B3g = 176, field08B3b = 177, field08C3 = 178,
+# field08D3g = 179, field08D3 = 180, field08C4 = 181, field08C4g = 182,
+# field08C4_2 = 183, field08D4 = 184, field08D5 = 185, field08C6 = 186,
+# field08D6g = 187, field08D6f = 188
+# field09B0 = 189, field09B0g = 190, field09A1 = 191, field09C1 = 192,
+# field09E1 = 193, field09A2 = 194, field09C2 = 195, field09C2g = 196,
+# field09E2 = 197, field09C3 = 198, field09A4 = 199, field09A4y = 200,
+# field09B4 = 201, field09D4 = 202, field09D4g = 203
+# field10B2 = 50, field10C2 = 51, field10D2 = 52, field10D3 = 53,
+# field10C1 = 54, field10A3_1 = 55, field10D3_2 = 56, field10E1 = 57,
+# field10A2 = 58, field10A3_2 = 59, field10C3_1 = 60, field10C3_2 = 61,
+# field10A1 = 62, field10A3_3 = 63, field10_B3 = 64
+# field11B1 = 204, field11C1 = 205, field11C1g = 206, field11B2 = 207,
+# field11C2 = 208, field11B3 = 209, field11B3_2 = 210, field11C3 = 211,
+# field11E3g = 212, field11E3 = 213, field11B4 = 214, field11C4 = 215,
+# field11C4g = 216, field11D4g = 217, field11D4 = 218, field11B5 = 219,
+# field11C5 = 220, field11B61 = 221, field11B62 = 222, field11B63 = 223,
+# field11B64 = 224, field11B65 = 225, field11D6g = 226, field11D6 = 227
+# field12C0 = 228, field12C1 = 229, field12C2 = 230, field12D2 = 231,
+# field12A3g = 232, field12A3 = 233, field12C3 = 234, field12C3g = 235,
+# field12D3 = 236, field12A4 = 237, field12A4g = 238, field12B4 = 239,
+# field12C4 = 240, field12C4g = 241, field12D4 = 242, field12B5 = 243,
+# field12D5 = 244, field12D6 = 245, field12D6g = 246
+# field13C0 = 247, field13C1 = 248, field13D1 = 249, field13B2 = 250,
+# field13B22 = 251, field13C2 = 252, field13A3 = 253, field13A3g = 254,
+# field13B3 = 255, field13B3g = 256, field13E3 = 257, field13G3 = 258,
+# field13G3g = 259, field13D4 = 260, field13E4 = 261, field13F4 = 262
+# field14D0 = 263, field14E0 = 264, field14D1 = 265, field14F1 = 266,
+# field14D2 = 267, field14D2g = 268, field14E2 = 269, field14D3 = 270,
+# field14D3b = 271, field14C4 = 272, field14D4 = 273, field14B5 = 274,
+# field14C5b = 275, field14C5 = 276, field14D5g = 277, field14D5 = 278,
+# field14C6 = 279, field14C6b = 280
+# field15C0 = 281, field15C0g = 282, field15B1 = 283, field15B1g = 284,
+# field15A3 = 285, field15A3g = 286, field15A3b = 287, field15E3 = 288,
+# field15D4 = 289, field15D4g = 290, field15C5 = 291, field15C6 = 292
+# fieldL00G1 = 297, fieldL00W1 = 299, fieldL00W3 = 301
+# fieldL02B0 = 306, fieldL021 = 309, fieldL022 = 310, fieldL023 = 311
+"""
 
 class AreaID(IntEnum):
     None_ = 0
@@ -1058,7 +1261,39 @@ AP_LOCATION_NAMES = {
     "[VOD E-4] Sidro Shop 1": LocationID.SidroShop1,
     "[VOD E-4] Sidro Shop 2": LocationID.SidroShop2,
     "[VOD E-4] Sidro Shop 3": LocationID.SidroShop3,
-    "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD
+    "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD,
+
+    # --- Pot Locations (potsanity) ---
+    "Starting Coin Pot": LocationID.StartingCoinPot,
+    "Alsedana Coin Pot": LocationID.AlsedanaCoinPot,
+    "Nebur Coin Pot": LocationID.NeburCoinPot,
+    "Xelpud Coin Pot": LocationID.XelpudCoinPot,
+    "Xelpud Weight Pot": LocationID.XelpudWeightPot,
+    "VoD Pre-Ladder Weight Pot": LocationID.VoDPreLadderWeightPot,
+    "VoD Post-Ladder Coin Pot": LocationID.VoDPostLadderCoinPot,
+    "VoD Chakram Pot": LocationID.VoDChakramPot,
+    "GoG Photo-op Weight Pot": LocationID.GoGPhotoopWeightPot,
+    "GoG High-up Coin Pot": LocationID.GoGHighupCoinPot,
+    "GoG Below Hiner Coin Pot": LocationID.GoGBelowHinerCoinPot,
+    "GoG Illusion Gate Bomb Pot": LocationID.GoGIllusionGateBombPot,
+    "MoG Ladder Coin Pot": LocationID.MoGLadderCoinPot,
+    "MoG Breakable Wall Coin Pot": LocationID.MoGBreakableWallCoinPot,
+    "MoG Futo Statue Coin Pot": LocationID.MoGFutoStatueCoinPot,
+    "MoG Pre-Ratatoskr Weight Pot": LocationID.MoGPreRatatoskrWeightPot,
+    "RoY Second Room Weight Pot": LocationID.RoYSecondRoomWeightPot,
+    "RoY Weapon Vault Coin Pot": LocationID.RoYWeaponVaultCoinPot,
+    "RoY Weapon Vault Weight Pot": LocationID.RoYWeaponVaultWeightPot,
+    "RoY Convenient Shuriken Pot": LocationID.RoYConvenientShurikenPot,
+    "RoY Below Ratatoskr Coin Pot": LocationID.RoYBelowRatatoskrCoinPot,
+    "RoY Footprint Shuriken Pot": LocationID.RoYFootprintShurikenPot,
+    "RoY Bridge Coin Pot": LocationID.RoYBridgeCoinPot,
+    "RoY Birth Seal Gate Shuriken Pot": LocationID.RoYBirthSealGateShurikenPot,
+    "RoY First Room Coin Pot": LocationID.RoYFirstRoomCoinPot,
+    "RoY Large Breakable Wall Coin Pot": LocationID.RoYLargeBreakableWallCoinPot,
+    "RoY Korobock Weight Pot": LocationID.RoYKorobockWeightPot,
+    "RoY Lamp of Time Weight Pot": LocationID.RoYLampofTimeWeightPot,
+    "RoY Torch Room Shuriken Pot": LocationID.RoYTorchRoomShurikenPot,
+    "RoY Golden Rock Coin Pot": LocationID.RoYGoldenRockCoinPot,
 }
 
 ITEM_MAP = {
@@ -1125,7 +1360,7 @@ ITEM_MAP = {
     "Shuriken": ItemID.Shuriken,
     "Rolling Shuriken": ItemID.RollingShuriken,
     "Earth Spear": ItemID.EarthSpear,
-    "Flare": ItemID.Flare,
+    "Flare Gun": ItemID.Flare,
     "Bomb": ItemID.Bomb,
     "Chakram": ItemID.Chakram,
     "Caltrops": ItemID.Caltrops,
@@ -1349,6 +1584,37 @@ ITEM_MAP = {
     "Fake Scan #13": ItemID.FakeScan13,
     "Fake Scan #14": ItemID.FakeScan14,
     "Fake Scan #15": ItemID.FakeScan15,
+    # --- Pot Filler ---
+    "Pot Filler #1": ItemID.PotFiller01,
+    "Pot Filler #2": ItemID.PotFiller02,
+    "Pot Filler #3": ItemID.PotFiller03,
+    "Pot Filler #4": ItemID.PotFiller04,
+    "Pot Filler #5": ItemID.PotFiller05,
+    "Pot Filler #6": ItemID.PotFiller06,
+    "Pot Filler #7": ItemID.PotFiller07,
+    "Pot Filler #8": ItemID.PotFiller08,
+    "Pot Filler #9": ItemID.PotFiller09,
+    "Pot Filler #10": ItemID.PotFiller10,
+    "Pot Filler #11": ItemID.PotFiller11,
+    "Pot Filler #12": ItemID.PotFiller12,
+    "Pot Filler #13": ItemID.PotFiller13,
+    "Pot Filler #14": ItemID.PotFiller14,
+    "Pot Filler #15": ItemID.PotFiller15,
+    "Pot Filler #16": ItemID.PotFiller16,
+    "Pot Filler #17": ItemID.PotFiller17,
+    "Pot Filler #18": ItemID.PotFiller18,
+    "Pot Filler #19": ItemID.PotFiller19,
+    "Pot Filler #20": ItemID.PotFiller20,
+    "Pot Filler #21": ItemID.PotFiller21,
+    "Pot Filler #22": ItemID.PotFiller22,
+    "Pot Filler #23": ItemID.PotFiller23,
+    "Pot Filler #24": ItemID.PotFiller24,
+    "Pot Filler #25": ItemID.PotFiller25,
+    "Pot Filler #26": ItemID.PotFiller26,
+    "Pot Filler #27": ItemID.PotFiller27,
+    "Pot Filler #28": ItemID.PotFiller28,
+    "Pot Filler #29": ItemID.PotFiller29,
+    "Pot Filler #30": ItemID.PotFiller30,
 }
 
 STARTING_WEAPON_MAP = {
@@ -1771,6 +2037,36 @@ FILLER_ITEM_IDS = {
     ItemID.FakeScan13,
     ItemID.FakeScan14,
     ItemID.FakeScan15,
+    ItemID.PotFiller01,
+    ItemID.PotFiller02,
+    ItemID.PotFiller03,
+    ItemID.PotFiller04,
+    ItemID.PotFiller05,
+    ItemID.PotFiller06,
+    ItemID.PotFiller07,
+    ItemID.PotFiller08,
+    ItemID.PotFiller09,
+    ItemID.PotFiller10,
+    ItemID.PotFiller11,
+    ItemID.PotFiller12,
+    ItemID.PotFiller13,
+    ItemID.PotFiller14,
+    ItemID.PotFiller15,
+    ItemID.PotFiller16,
+    ItemID.PotFiller17,
+    ItemID.PotFiller18,
+    ItemID.PotFiller19,
+    ItemID.PotFiller20,
+    ItemID.PotFiller21,
+    ItemID.PotFiller22,
+    ItemID.PotFiller23,
+    ItemID.PotFiller24,
+    ItemID.PotFiller25,
+    ItemID.PotFiller26,
+    ItemID.PotFiller27,
+    ItemID.PotFiller28,
+    ItemID.PotFiller29,
+    ItemID.PotFiller30,
 }
 TRAP_ITEM_IDS = {
     ItemID.FakeItem01,

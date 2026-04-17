@@ -7,6 +7,8 @@ from collections import Counter
 
 from BaseClasses import Item, CollectionState, ItemClassification, LocationProgressType  #
 
+from . import _log
+
 from .ids import (
     AreaID, 
     ItemID, 
@@ -167,7 +169,7 @@ class LM2RandomizerCore:
                     pool_item_id = get_game_item_id(pool_item)
                     if pool_item_id == item_id:
                         mw.itempool.remove(pool_item)
-                        print(f"[DEBUG] Removed {item_name} (ID: {item_id}) from pool")
+                        _log(f"[DEBUG] Removed {item_name} (ID: {item_id}) from pool")
                         return True
                 except:
                     continue
@@ -177,10 +179,10 @@ class LM2RandomizerCore:
         for pool_item in list(mw.itempool):
             if pool_item.player == player and pool_item.name == item_name:
                 mw.itempool.remove(pool_item)
-                print(f"[DEBUG] Removed {item_name} from pool (by name, ID mismatch)")
+                _log(f"[DEBUG] Removed {item_name} from pool (by name, ID mismatch)")
                 return True
     
-        print(f"[DEBUG] Warning: Could not remove {item_name} (ID: {item_id}) from pool")
+        _log(f"[DEBUG] Warning: Could not remove {item_name} (ID: {item_id}) from pool")
         return False
 
     def _place_available_at_start(self, items_copy: List[Item]) -> bool:
@@ -321,7 +323,7 @@ class LM2RandomizerCore:
             if loc.location_type == LocationType.Guardian
         ]
         total_guardians = len(guardian_locations)
-        print(f"[DEBUG] Total guardians: {total_guardians}")
+        _log(f"[DEBUG] Total guardians: {total_guardians}")
 
         # ── Branch A: guardian-specific mode ────────────────────────────────
         if self.options.guardian_specific_ankhs:
@@ -330,10 +332,10 @@ class LM2RandomizerCore:
                 if ankh_name is None:
                     # Fallback: unknown guardian keeps generic single-jewel gate
                     loc.append_logic_string("and AnkhCount(1)")
-                    print(f"[DEBUG] {loc.name}: no specific ankh mapping, fell back to AnkhCount(1)")
+                    _log(f"[DEBUG] {loc.name}: no specific ankh mapping, fell back to AnkhCount(1)")
                     continue
                 loc.append_logic_string(f"and Has({ankh_name})")
-                print(f"[DEBUG] {loc.name}: requires {ankh_name}")
+                _log(f"[DEBUG] {loc.name}: requires {ankh_name}")
             return  # nothing more to do in this mode
 
         # ── Branch B: vanilla cumulative mode ───────────────────────────────
@@ -417,13 +419,13 @@ class LM2RandomizerCore:
             for guardian in group:
                 guardian.append_logic_string(f" and AnkhCount({ankhs_required})")
 
-        print(f"[DEBUG] Maximum Ankh requirement: {ankhs_required}/{total_guardians}")
+        _log(f"[DEBUG] Maximum Ankh requirement: {ankhs_required}/{total_guardians}")
 
         for i, group in enumerate(guardian_groups):
-            print(f"[DEBUG] Guardian group {i+1} ({len(group)} guardians, "
+            _log(f"[DEBUG] Guardian group {i+1} ({len(group)} guardians, "
                   f"need {sum(len(g) for g in guardian_groups[:i+1])} ankhs):")
             for guardian in group:
-                print(f"[DEBUG]   - {guardian.name}")
+                _log(f"[DEBUG]   - {guardian.name}")
 
     # ============================================================
     # Shop randomization
@@ -434,7 +436,7 @@ class LM2RandomizerCore:
         C# parity: always place Weights + starting subweapon ammo into the starting shop,
         even when ShopPlacement is Original.
         """
-        print("[DEBUG] Placing starting shop items (weights/ammo)")
+        _log("[DEBUG] Placing starting shop items (weights/ammo)")
 
         mw = self.multiworld
 
@@ -485,7 +487,7 @@ class LM2RandomizerCore:
             #    weights_item = create_item(self.world, "Weights")
             #    mw.push_item(starting_shop3, weights_item, collect=False)
             #    # starting_shop3.locked = True
-            #    print(f"[DEBUG] Placed Weights at Starting Shop 3")
+            #    _log(f"[DEBUG] Placed Weights at Starting Shop 3")
 
     def _place_shop_items_random(self) -> bool:
         """
@@ -524,7 +526,7 @@ class LM2RandomizerCore:
 
         open_slots = [l for l in shop_locations if not l.locked and l.item is None]
         if len(open_slots) < free_slots:
-            print(f"[ERROR] Not enough open shop slots: {len(open_slots)} < {free_slots}")
+            _log(f"[ERROR] Not enough open shop slots: {len(open_slots)} < {free_slots}")
             return False
 
         order_index = {lid: i for i, lid in enumerate(SHOP_WRITE_ORDER)}
@@ -544,7 +546,7 @@ class LM2RandomizerCore:
 
         # C# would crash if shop_only_ids empty; we should guard
         if not shop_only_ids:
-            print("[ERROR] No shop-only item ids available for randomized shops")
+            _log("[ERROR] No shop-only item ids available for randomized shops")
             return False
 
         # Candidate pool ids: one of each + free_slots random picks (with replacement)
@@ -561,7 +563,7 @@ class LM2RandomizerCore:
             name = get_item_name_from_id(iid)
             chosen.append(create_item(self.world, name, game_id=iid))
 
-        print(f"[DEBUG] Randomized shops (parity): placing {len(chosen)} items into {len(open_slots)} open slots")
+        _log(f"[DEBUG] Randomized shops (parity): placing {len(chosen)} items into {len(open_slots)} open slots")
 
         # Price multipliers + AP placeholder
         LOWEST_PRICE_MULTIPLIER = 1
@@ -616,15 +618,15 @@ class LM2RandomizerCore:
         placement = self.options.shop_placement.value
 
         if placement != self.options.shop_placement.option_original:
-            print(f"[DEBUG] Shop placement is {placement}, not placing original shops")
+            _log(f"[DEBUG] Shop placement is {placement}, not placing original shops")
             return
 
-        print("[DEBUG] Placing original shop items")
+        _log("[DEBUG] Placing original shop items")
 
         if (self.starting_area == AreaID.VoD) and (self.starting_weapon > ItemID.Katana):
             try:
                 self._remove_item_from_pool(ItemID.Map1, "Map")
-                print("[DEBUG] C# parity: removed Map1 because NeburShop2 is used by starting ammo")
+                _log("[DEBUG] C# parity: removed Map1 because NeburShop2 is used by starting ammo")
             except Exception:
                 pass
 
@@ -641,7 +643,7 @@ class LM2RandomizerCore:
 
             # Skip if already filled
             if loc.item is not None:
-                print(f"[DEBUG] {loc.name} already has {loc.item.name}, skipping")
+                _log(f"[DEBUG] {loc.name} already has {loc.item.name}, skipping")
                 continue
 
             if item_id in ORIGINAL_SHOP_ITEMS:
@@ -660,7 +662,7 @@ class LM2RandomizerCore:
             try:
                 item_name = get_item_name_from_id(item_id)
             except ValueError as e:
-                print(f"[ERROR] Failed to get name for ItemID {item_id}: {e}")
+                _log(f"[ERROR] Failed to get name for ItemID {item_id}: {e}")
                 continue
 
             item = create_item(self.world, item_name, game_id=item_id)
@@ -670,7 +672,7 @@ class LM2RandomizerCore:
 
             self.shop_entries.append(ShopEntry(loc_id, item_id, price_multiplier))
             placed_items_info.append((item_name, loc.name))
-            print(f"[DEBUG] Placed {item_name} (ID: {item_id}) at {loc.name}")
+            _log(f"[DEBUG] Placed {item_name} (ID: {item_id}) at {loc.name}")
 
         # C# parity: for non-VoD starts, place Weights in StartingShop2 (melee only) and StartingShop3
         if self.starting_area != AreaID.VoD:
@@ -679,13 +681,13 @@ class LM2RandomizerCore:
                 if starting_shop2 and starting_shop2.item is None:
                     mw.push_item(starting_shop2, create_item(self.world, "Weights"), collect=False)
                     starting_shop2.locked = True
-                    print(f"[DEBUG] Placed Weights at Starting Shop 2 (melee start)")
+                    _log(f"[DEBUG] Placed Weights at Starting Shop 2 (melee start)")
 
             starting_shop3 = self.locations.get(LocationID.StartingShop3)
             if starting_shop3 and starting_shop3.item is None:
                 mw.push_item(starting_shop3, create_item(self.world, "Weights"), collect=False)
                 starting_shop3.locked = True
-                print(f"[DEBUG] Placed Weights at Starting Shop 3")
+                _log(f"[DEBUG] Placed Weights at Starting Shop 3")
 
 
     def _adjust_shop_prices(self, shop_items):
@@ -787,11 +789,11 @@ class LM2RandomizerCore:
             for mural_loc_id, mantra_item_id in MANTRA_LOCATIONS.items():
                 loc = self.locations.get(mural_loc_id)
                 if loc is None:
-                    print(f"[ERROR] Missing mantra mural location id: {mural_loc_id}")
+                    _log(f"[ERROR] Missing mantra mural location id: {mural_loc_id}")
                     return False
 
                 if loc.item is not None:
-                    print(f"[ERROR] Mantra mural already filled: {loc.name} -> {loc.item.name}")
+                    _log(f"[ERROR] Mantra mural already filled: {loc.name} -> {loc.item.name}")
                     return False
 
                 name = get_item_name_from_id(mantra_item_id)
@@ -806,17 +808,17 @@ class LM2RandomizerCore:
             mural_locations = get_unplaced_locations_of_type(self.locations, LocationType.Mural)
 
             if len(mural_locations) < len(MANTRA_ITEMS):
-                print(f"[ERROR] Not enough mural locations ({len(mural_locations)}) for mantras ({len(MANTRA_ITEMS)})")
+                _log(f"[ERROR] Not enough mural locations ({len(mural_locations)}) for mantras ({len(MANTRA_ITEMS)})")
                 return False
 
             if len(mantra_items) != len(MANTRA_ITEMS):
-                print(f"[WARN] Found {len(mantra_items)} mantra items in AP pool, expected {len(MANTRA_ITEMS)}")
+                _log(f"[WARN] Found {len(mantra_items)} mantra items in AP pool, expected {len(MANTRA_ITEMS)}")
 
             self.rng.shuffle(mural_locations)
             self.rng.shuffle(mantra_items)
 
             if len(mantra_items) > len(mural_locations):
-                print("[ERROR] More mantras to place than mural locations")
+                _log("[ERROR] More mantras to place than mural locations")
                 return False
 
             # Place all mantras
@@ -858,7 +860,7 @@ class LM2RandomizerCore:
         
             for loc_id, research_itemid in research_locations.items():
                 if loc_id not in self.locations:
-                    print(f"[WARN] Research location {loc_id} missing, skipping")
+                    _log(f"[WARN] Research location {loc_id} missing, skipping")
                     continue
 
                 loc = self.locations[loc_id]
@@ -874,7 +876,7 @@ class LM2RandomizerCore:
                         continue
 
                 if not found:
-                    print(f"[WARN] Could not find research {research_itemid} in item pool")
+                    _log(f"[WARN] Could not find research {research_itemid} in item pool")
                     continue
 
                 mw.itempool.remove(found)
@@ -1017,7 +1019,7 @@ class LM2RandomizerCore:
                 continue
 
             filler = build_pre_filler(self.world)
-            print(f"[FILL] {loc.name} <- {filler.name} class={filler.classification}")
+            _log(f"[FILL] {loc.name} <- {filler.name} class={filler.classification}")
             self.multiworld.push_item(loc, filler, collect=False)
 
 
@@ -1130,7 +1132,7 @@ class LM2RandomizerCore:
                 try:
                     item_id = get_game_item_id(loc.item)
                 except KeyError:
-                    print(f"[WARN] Skipping item {loc.item.name} at {loc.name} - no game ID")
+                    _log(f"[WARN] Skipping item {loc.item.name} at {loc.name} - no game ID")
                     continue
 
             # Skip logic-only items

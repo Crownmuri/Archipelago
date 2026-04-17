@@ -24,6 +24,7 @@ class LocationType(Enum):
     Shop = "Shop"
     Dialogue = "Dialogue"
     Mural = "Mural"
+    Pot = "Pot"
     Miniboss = "Miniboss"
     Guardian = "Guardian"
     FinalBoss = "FinalBoss"
@@ -52,7 +53,7 @@ class LM2LocationDef:
 
 def _location_name_to_id(name: str) -> LocationID:
     """Convert location name to LocationID enum value."""
-    key = name.replace(" ", "")
+    key = name.replace(" ", "").replace("-", "")
     try:
         return LocationID[key]
     except KeyError:
@@ -343,6 +344,11 @@ def is_miniboss_location(loc: LM2Location) -> bool:
 def is_chest_location(loc: LM2Location) -> bool:
     """Check if location is a chest."""
     return loc.location_type == LocationType.Chest
+
+
+def is_pot_location(loc: LM2Location) -> bool:
+    """Check if location is a pot."""
+    return loc.location_type == LocationType.Pot
 
 
 def is_dissonance_location(loc: LM2Location) -> bool:

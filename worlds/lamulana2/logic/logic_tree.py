@@ -5,6 +5,8 @@ import re
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Callable
 
+import weakref
+
 from .logic_tokens import Token, TokenType, LogicTokeniser
 from .logic_shunting_yard import LogicShuntingYard
 
@@ -48,11 +50,14 @@ def _make_adapter_rule(
     so it is constructed at most once per sphere step rather than once per check.
     """
     player = world.player
-    multiworld = world.multiworld
+    multiworld_ref = weakref.ref(world.multiworld)
     options = world.options
 
     def rule(state: "CollectionState") -> bool:
         from .player_state import get_cached_adapter
+        multiworld = multiworld_ref()
+        if multiworld is None:
+            return False
         adapter = get_cached_adapter(state, player, multiworld, options)
         return adapter.evaluate_rule(name, args)
 
@@ -74,13 +79,18 @@ def _can_reach_compiled(area_name: str, world) -> "Callable[[CollectionState], b
         return lambda state: False
 
     player = world.player
-    # Capture world by reference; regions_by_area_id is populated later
+    # Use weakref to avoid preventing GC of the World/MultiWorld.
+    # The region is lazily resolved and cached once found.
+    world_ref = weakref.ref(world)
     _region_cache: list = [None]  # mutable cell to cache the resolved Region
 
     def rule(state: "CollectionState") -> bool:
         region = _region_cache[0]
         if region is None:
-            regions_by_area = getattr(world, 'regions_by_area_id', None)
+            w = world_ref()
+            if w is None:
+                return False
+            regions_by_area = getattr(w, 'regions_by_area_id', None)
             if not regions_by_area or area_id not in regions_by_area:
                 return False
             region = regions_by_area[area_id]

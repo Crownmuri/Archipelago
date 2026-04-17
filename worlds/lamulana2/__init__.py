@@ -1,5 +1,16 @@
 from __future__ import annotations
 
+# =============================================================================
+# Debug logging toggle
+# Set DEBUG = True to enable verbose logging during AP generation.
+# Leave False for public/alpha builds to suppress [ER], [DEBUG], etc. output.
+# =============================================================================
+DEBUG = False
+
+def _log(*args, **kwargs):
+    if DEBUG:
+        _log(*args, **kwargs)
+
 import os
 import zipfile
 from typing import Dict, List, Tuple
@@ -10,10 +21,12 @@ from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
 from .options import LM2Options
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
-    ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION
+    ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
+    create_filler_item, POT_FILLER_DISTRIBUTION, INTERNAL_ID_TO_REWARD,
+    build_pot_filler_pool
 )
 from .locations import (
     LM2Location, AreaID, create_locations, LOCATION_DEFS, LocationType,
@@ -147,7 +160,11 @@ class LaMulana2World(World):
 
         # Build the base item pool
         pool = build_item_pool(self)
-        
+
+        # Add pot filler items when potsanity is enabled
+        if self.options.potsanity:
+            pool += build_pot_filler_pool(self)
+
         # Add items to multiworld's item pool
         self.multiworld.itempool += pool
 
@@ -207,12 +224,12 @@ class LaMulana2World(World):
 
             total = sum(1 for _ in mw.get_locations(player))
             if unreachable:
-                print(f"[ER-DIAG] POST-RULES: {len(unreachable)} locations FAIL "
+                _log(f"[ER-DIAG] POST-RULES: {len(unreachable)} locations FAIL "
                       f"omniscient check: {unreachable[:10]}")
-            print(f"[ER-DIAG] POST-RULES: {total} locs total, "
+            _log(f"[ER-DIAG] POST-RULES: {total} locs total, "
                   f"sphere-0: {sphere0_total} accessible / {sphere0_unfilled} unfilled")
         except Exception as e:
-            print(f"[ER-DIAG] diagnostic failed: {e}")
+            _log(f"[ER-DIAG] diagnostic failed: {e}")
 
         # ── Original pre_fill logic ───────────────────────────────────
         # Count fillable locations for this player
@@ -262,7 +279,13 @@ class LaMulana2World(World):
             # ── Structural ER ─────────────────────────────────────────────
             if any_structural:
                 from .entrances import custom_structural_er
-                custom_structural_er(self)
+                try:
+                    custom_structural_er(self)
+                except RuntimeError as e:
+                    if outer < OUTER_MAX - 1:
+                        _log(f"[ER] Outer retry {outer + 1}: {e}")
+                        continue
+                    raise
 
             # ── Soul gate ER ──────────────────────────────────────────────
             if opts.soul_gate_entrances:
@@ -284,21 +307,27 @@ class LaMulana2World(World):
                     # to ensure it's still viable after soul gate placement.
                     cluster_ok, cluster_msg = _validate_starting_cluster(self)
                     if not cluster_ok:
-                        print(f"[ER] Outer retry {outer + 1}: starting cluster "
+                        _log(f"[ER] Outer retry {outer + 1}: starting cluster "
                               f"collapsed after soul gates ({cluster_msg}), "
                               f"regenerating...")
                         continue
 
                     self._sg_pairs = sgr.soul_gate_pairs
+                    # Log escape route now that soul gate connections exist
+                    from .entrances import _log_ibmain_escape_standalone
+                    _log_ibmain_escape_standalone(self)
                     return  # success — both structural and soul gates valid
                 else:
                     # Soul gates exhausted retries on this structural layout.
                     # Retry with a new structural layout.
                     if outer < OUTER_MAX - 1:
-                        print(f"[ER] Outer retry {outer + 1}: structural layout "
+                        _log(f"[ER] Outer retry {outer + 1}: structural layout "
                               f"incompatible with soul gates, regenerating...")
                     continue
             else:
+                # Log escape route (no soul gates, but structural ER is done)
+                from .entrances import _log_ibmain_escape_standalone
+                _log_ibmain_escape_standalone(self)
                 return  # no soul gates, structural ER alone is sufficient
 
         raise RuntimeError(
@@ -334,8 +363,9 @@ class LaMulana2World(World):
         """
         Return data to be sent to the client.
         This is used by the game client to apply the randomization.
+        With the standalone BepInEx mod, this replaces the seed.lm2r file entirely.
         """
-        # Collect shop entries
+        # Collect shop entries (location, item, price multiplier)
         shop_entries = []
         for entry in self.randomizer.shop_entries:
             shop_entries.append({
@@ -344,7 +374,20 @@ class LaMulana2World(World):
                 "price": entry.price_multiplier
             })
 
+        # Full item placements (location -> item mapping)
+        item_placements = [
+            {"location": int(loc_id), "item": int(item_id)}
+            for loc_id, item_id in self.randomizer.get_item_placements()
+        ]
+
+        # Shop placements with prices
+        shop_placements = [
+            {"location": int(loc_id), "item": int(item_id), "price": price}
+            for loc_id, item_id, price in self.randomizer.get_shop_placements()
+        ]
+
         return {
+            # Existing fields
             "starting_area": int(self.starting_area),
             "starting_weapon": int(self.starting_weapon),
             "cursed_locations": [int(loc_id) for loc_id in self.randomizer.cursed_locations],
@@ -353,6 +396,26 @@ class LaMulana2World(World):
             "soul_gate_pairs": self.randomizer.get_soul_gate_pairs(),
             "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
             "ap_chest_color": int(self.options.ap_chest_color),
+
+            # New fields: full placement data (replaces seed.lm2r)
+            "item_placements": item_placements,
+            "shop_placements": shop_placements,
+            "starting_items": [int(item_id) for item_id in self.randomizer.get_starting_items()],
+
+            # Seed header settings
+            "random_dissonance": int(self.options.random_dissonance),
+            "required_guardians": int(self.options.required_guardians),
+            "required_skulls": int(self.options.required_skulls),
+            "remove_it_statue": int(self.options.remove_icefire_treetop_statue),
+            "echidna": int(self.options.echidna_difficulty),
+            "auto_scan_tablets": int(self.options.auto_scan),
+            "auto_place_skull": int(self.options.auto_skulls),
+            "starting_money": int(self.options.starting_money),
+            "starting_weights": int(self.options.starting_weights),
+            "item_chest_color": int(self.options.item_chest_color),
+            "filler_chest_color": int(self.options.filler_chest_color),
+            "potsanity": int(self.options.potsanity),
+            "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()} if self.options.potsanity else {},
         }
 
     def write_spoiler(self, spoiler_handle):
@@ -469,71 +532,52 @@ class LaMulana2World(World):
     # -------------------------------------------------------------------------
 
     def generate_output(self, output_directory: str) -> None:
-        """
-        import os
 
-        out_base = self.multiworld.get_out_file_name_base(self.player)
-        seed_path = os.path.join(output_directory, out_base + ".lm2r")
+        if self.options.write_seed_file and not self.options.potsanity:
+            import os
+            import json
+            import zipfile
+            import tempfile
+            import Utils
 
-        write_seed_file(
-            path=seed_path,
-            starting_weapon=self.randomizer.starting_weapon,
-            starting_area=self.randomizer.starting_area,
-            settings=self.options,
-            starting_items=self.randomizer.get_starting_items(),
-            item_placements=self.randomizer.get_item_placements(),
-            shop_placements=self.randomizer.get_shop_placements(),
-            cursed_locations=self.randomizer.get_cursed_locations(),
-            entrance_pairs=self.randomizer.get_entrance_pairs(),
-            soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
-        )
-        
-        print(f"[LM2] Seed file written to {seed_path}")
-        """
-        import os
-        import json
-        import zipfile
-        import tempfile
-        import Utils
+            mw = self.multiworld
+            player = self.player
 
-        mw = self.multiworld
-        player = self.player
+            manifest = {
+            "game": "La-Mulana 2",
+            "player": player,
+            "patch_file_ending": ".zip"
+            }
 
-        manifest = {
-        "game": "La-Mulana 2",
-        "player": player,
-        "patch_file_ending": ".zip"
-        }
-
-        output_path = os.path.join(
-            output_directory,
-            f"AP-{mw.seed_name}-P{player}-{mw.get_file_safe_player_name(player)}_{Utils.__version__}.zip"
-        )
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            lm2r_path = os.path.join(tmpdir, "seed.lm2r")
-
-            # Generate the actual LM2 patch file
-            write_seed_file(
-                path=lm2r_path,
-                starting_weapon=self.randomizer.starting_weapon,
-                starting_area=self.randomizer.starting_area,
-                settings=self.options,
-                starting_items=self.randomizer.get_starting_items(),
-                item_placements=self.randomizer.get_item_placements(),
-                shop_placements=self.randomizer.get_shop_placements(),
-                cursed_locations=self.randomizer.get_cursed_locations(),
-                entrance_pairs=self.randomizer.get_entrance_pairs(),
-                soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
+            output_path = os.path.join(
+                output_directory,
+                f"AP-{mw.seed_name}-P{player}-{mw.get_file_safe_player_name(player)}_{Utils.__version__}.zip"
             )
 
-            # Package the LM2R file plus manifest into the AP zip
-            with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED, True, 9) as output_zip:
-                output_zip.write(lm2r_path, arcname="seed.lm2r")
-                output_zip.writestr(
-                    "archipelago.json",
-                    json.dumps(manifest).encode("utf-8")
+            with tempfile.TemporaryDirectory() as tmpdir:
+                lm2r_path = os.path.join(tmpdir, "seed.lm2r")
+
+                # Generate the actual LM2 patch file
+                write_seed_file(
+                    path=lm2r_path,
+                    starting_weapon=self.randomizer.starting_weapon,
+                    starting_area=self.randomizer.starting_area,
+                    settings=self.options,
+                    starting_items=self.randomizer.get_starting_items(),
+                    item_placements=self.randomizer.get_item_placements(),
+                    shop_placements=self.randomizer.get_shop_placements(),
+                    cursed_locations=self.randomizer.get_cursed_locations(),
+                    entrance_pairs=self.randomizer.get_entrance_pairs(),
+                    soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
                 )
+
+                # Package the LM2R file plus manifest into the AP zip
+                with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED, True, 9) as output_zip:
+                    output_zip.write(lm2r_path, arcname="seed.lm2r")
+                    output_zip.writestr(
+                        "archipelago.json",
+                        json.dumps(manifest).encode("utf-8")
+                    )
 
     # =============================================================================
     # Helpers
@@ -543,14 +587,14 @@ class LaMulana2World(World):
         """Determine if a location should be included in the pool."""
         """
         from .locations import is_shop_location, is_mural_location
-        
+
         # Skip shops if using original placement
         if is_shop_location(loc) and self.options.shop_placement.value == 0:
             return False
 
         if is_mural_location(loc) and self.options.mantra_placement.value == 0:
             return False
-        
+
         # Skip research if not enabled
         if "Research" in loc.name and not self.options.random_research:
             return False
@@ -558,7 +602,11 @@ class LaMulana2World(World):
         # Skip starting shops if we're starting in Village (they're in the base game)
         if self.starting_area == AreaID.VoD and "Starting Shop" in loc.name:
             return False
-        
+
+        # Skip pot locations unless potsanity is enabled
+        if loc.location_type == LocationType.Pot and not self.options.potsanity:
+            return False
+
         return True
 
     def _get_starting_shop_locations(self):
@@ -697,61 +745,61 @@ class LaMulana2World(World):
         def opt(name):
             return getattr(opts, name).value if hasattr(getattr(opts, name), "value") else getattr(opts, name)
 
-        print("\n========== LM2 AP DEBUG: SEED SETTINGS ==========")
+        _log("\n========== LM2 AP DEBUG: SEED SETTINGS ==========")
 
         # --- Starting Info ---
-        print("[START]")
-        print(f"  Starting Area: {getattr(self, 'starting_area', 'UNKNOWN')}")
-        print(f"  Starting Weapon: {getattr(self, 'starting_weapon', 'UNKNOWN')}")
+        _log("[START]")
+        _log(f"  Starting Area: {getattr(self, 'starting_area', 'UNKNOWN')}")
+        _log(f"  Starting Weapon: {getattr(self, 'starting_weapon', 'UNKNOWN')}")
 
         # If you track starting inventory explicitly
         starting_items = getattr(self, "starting_items", [])
         if starting_items:
-            print(f"  Starting Items: {[item.name for item in starting_items]}")
+            _log(f"  Starting Items: {[item.name for item in starting_items]}")
         else:
-            print("  Starting Items: None/Not yet assigned")
+            _log("  Starting Items: None/Not yet assigned")
 
         # --- Core Options ---
-        print("\n[CORE OPTIONS]")
-        print(f"  Accessibility: {opt('accessibility')}")
-        print(f"  Progression Balancing: {opt('progression_balancing')}")
-        print(f"  Logic Difficulty: {opt('logic_difficulty')}")
-        print(f"  Guardian Specific Ankhs: {opt('guardian_specific_ankhs')}")
+        _log("\n[CORE OPTIONS]")
+        _log(f"  Accessibility: {opt('accessibility')}")
+        _log(f"  Progression Balancing: {opt('progression_balancing')}")
+        _log(f"  Logic Difficulty: {opt('logic_difficulty')}")
+        _log(f"  Guardian Specific Ankhs: {opt('guardian_specific_ankhs')}")
 
         # --- Shops ---
-        print("\n[SHOPS]")
-        print(f"  Shop Placement: {opt('shop_placement')}")
+        _log("\n[SHOPS]")
+        _log(f"  Shop Placement: {opt('shop_placement')}")
 
         # --- Mantras ---
-        print("\n[MANTRAS]")
-        print(f"  Mantra Placement: {opt('mantra_placement')}")
+        _log("\n[MANTRAS]")
+        _log(f"  Mantra Placement: {opt('mantra_placement')}")
 
         # --- Item Pool ---
-        print("\n[ITEM POOL]")
-        print(f"  Random Research: {opt('random_research')}")
-        print(f"  Remove Research: {opt('remove_research')}")
-        print(f"  Remove Maps: {opt('remove_maps')}")
-        print(f"  Random Dissonance: {opt('random_dissonance')}")
-        print(f"  Required Guardians: {opt('required_guardians')}")
-        print(f"  Required Skulls: {opt('required_skulls')}")
+        _log("\n[ITEM POOL]")
+        _log(f"  Random Research: {opt('random_research')}")
+        _log(f"  Remove Research: {opt('remove_research')}")
+        _log(f"  Remove Maps: {opt('remove_maps')}")
+        _log(f"  Random Dissonance: {opt('random_dissonance')}")
+        _log(f"  Required Guardians: {opt('required_guardians')}")
+        _log(f"  Required Skulls: {opt('required_skulls')}")
 
         # --- Entrance Randomization ---
-        print("\n[ENTRANCE RANDOMIZER]")
-        print(f"  Horizontal Entrances: {opt('horizontal_entrances')}")
-        print(f"  Vertical Entrances: {opt('vertical_entrances')}")
-        print(f"  Gate Entrances: {opt('gate_entrances')}")
-        print(f"  Unique Transitions: {opt('unique_transitions')}")
-        print(f"  Soul Gate Entrances: {opt('soul_gate_entrances')}")
-        print(f"  Include 9 Gates: {opt('include_nine_soul_gates')}")
-        print(f"  Random Soul Gate Values: {opt('random_soul_gate_value')}")
-        print(f"  Full Random Entrances: {opt('full_random_entrances')}")
-        print(f"  Prevent Area Loops: {opt('prevent_area_loops')}")
+        _log("\n[ENTRANCE RANDOMIZER]")
+        _log(f"  Horizontal Entrances: {opt('horizontal_entrances')}")
+        _log(f"  Vertical Entrances: {opt('vertical_entrances')}")
+        _log(f"  Gate Entrances: {opt('gate_entrances')}")
+        _log(f"  Unique Transitions: {opt('unique_transitions')}")
+        _log(f"  Soul Gate Entrances: {opt('soul_gate_entrances')}")
+        _log(f"  Include 9 Gates: {opt('include_nine_soul_gates')}")
+        _log(f"  Random Soul Gate Values: {opt('random_soul_gate_value')}")
+        _log(f"  Full Random Entrances: {opt('full_random_entrances')}")
+        _log(f"  Prevent Area Loops: {opt('prevent_area_loops')}")
 
         # --- QoL ---
-        print("\n[QOL]")
-        print(f"  Auto Scan: {opt('auto_scan')}")
-        print(f"  Auto Skulls: {opt('auto_skulls')}")
-        print(f"  Starting Money: {opt('starting_money')}")
-        print(f"  Starting Weights: {opt('starting_weights')}")
+        _log("\n[QOL]")
+        _log(f"  Auto Scan: {opt('auto_scan')}")
+        _log(f"  Auto Skulls: {opt('auto_skulls')}")
+        _log(f"  Starting Money: {opt('starting_money')}")
+        _log(f"  Starting Weights: {opt('starting_weights')}")
 
-        print("================================================\n")
+        _log("================================================\n")

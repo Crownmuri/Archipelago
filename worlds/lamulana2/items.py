@@ -7,7 +7,8 @@ from typing import Dict, List, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER 
+from . import _log
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER
 from .locations import LocationType
 
 # ============================================================
@@ -336,7 +337,7 @@ def apply_starting_inventory(world):
         item_def = ITEM_DEFS_BY_AP_ID.get(ap_id)
         
         if not item_def:
-            print(f"Warning: Starting item {item_id} (AP ID {ap_id}) not found in Items.json")
+            _log(f"Warning: Starting item {item_id} (AP ID {ap_id}) not found in Items.json")
             continue
         
         if item_def.name in existing_precollected:
@@ -503,6 +504,9 @@ AP_FILLER: list[tuple[str, ItemID]] = [
     ("5 Weights",  ItemID.Weight5),
     ("10 Weights", ItemID.Weight10),
     ("20 Weights", ItemID.Weight20),
+    ("10 Shuriken", ItemID.ShurikenBundle),
+    ("3 Bombs",     ItemID.BombBundle),
+    ("1 Chakram",   ItemID.ChakramBundle),
 ]
 
 AP_FILLER_NAMES: frozenset[str] = frozenset(name for name, _ in AP_FILLER)
@@ -512,6 +516,13 @@ FILLER_DISTRIBUTION = [
     ("1 Coin", 3), ("10 Coins", 6), ("30 Coins", 8),
     ("50 Coins", 3), ("80 Coins", 2), ("100 Coins", 1),
     ("1 Weight", 4), ("5 Weights", 10), ("10 Weights", 2), ("20 Weights", 1)
+]
+
+# Pot filler distribution (30 pots, matches vanilla rewards for VoD/GoG/MoG/RoY)
+POT_FILLER_DISTRIBUTION = [
+    ("10 Coins", 14), ("30 Coins", 2),
+    ("1 Weight", 8),
+    ("10 Shuriken", 4), ("3 Bombs", 1), ("1 Chakram", 1),
 ]
 
 # ============================================================
@@ -549,7 +560,7 @@ def _build_internal_pools():
     # 3. Fake Scans / Murals (15 items)
     # Using your specific manual distribution for Murals
     fs_names = [
-        "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins", 
+        "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins",
         "30 Coins", "50 Coins", "80 Coins", "100 Coins",
         "1 Weight", "5 Weights", "5 Weights", "10 Weights", "10 Weights", "20 Weights"
     ]
@@ -557,6 +568,15 @@ def _build_internal_pools():
         ap_id = next(iid for n, iid in AP_FILLER if n == name)
         key = (LocationType.Mural, ap_id)
         INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(ItemID.FakeScan01.value + i))
+
+    # 4. Pot Filler (30 items)
+    idx = 0
+    for name, count in POT_FILLER_DISTRIBUTION:
+        ap_id = next(iid for n, iid in AP_FILLER if n == name)
+        for _ in range(count):
+            key = (LocationType.Pot, ap_id)
+            INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(ItemID.PotFiller01.value + idx))
+            idx += 1
 
 # Initialize the pools immediately
 _build_internal_pools()
@@ -597,11 +617,39 @@ def _build_reverse_lookup():
         ap_id = next(iid for n, iid in AP_FILLER if n == name)
         INTERNAL_ID_TO_REWARD[ItemID(ItemID.FakeScan01.value + i)] = (name, ap_id)
 
+    # 30-item distribution for PotFiller
+    idx = 0
+    for name, count in POT_FILLER_DISTRIBUTION:
+        ap_id = next(iid for n, iid in AP_FILLER if n == name)
+        for _ in range(count):
+            INTERNAL_ID_TO_REWARD[ItemID(ItemID.PotFiller01.value + idx)] = (name, ap_id)
+            idx += 1
+
 _build_reverse_lookup()
 
 # ============================================================
 # Generation Function
 # ============================================================
+
+def build_pot_filler_pool(world) -> list[Item]:
+    """
+    Creates the 30 pot filler items using POT_FILLER_DISTRIBUTION.
+    These use AP-facing IDs (Coin10, ShurikenBundle, etc.) so the spoiler
+    shows the correct reward names. The internal PotFiller IDs are assigned
+    later by precompute_filler_ids when items land at Pot locations.
+    """
+    pool: list[Item] = []
+    for name, count in POT_FILLER_DISTRIBUTION:
+        item_id = next(iid for n, iid in AP_FILLER if n == name)
+        for _ in range(count):
+            pool.append(Item(
+                name=name,
+                classification=ItemClassification.filler,
+                code=BASE_ITEM_ID + int(item_id),
+                player=world.player,
+            ))
+    return pool
+
 
 def build_pre_filler(world) -> Item:
     """

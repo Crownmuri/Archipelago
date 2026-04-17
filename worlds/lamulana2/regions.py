@@ -9,6 +9,7 @@ from typing import Dict, List, Optional
 
 from BaseClasses import Region, Entrance
 
+from . import _log
 from .ids import AreaID, ExitID
 from .logic.logic_tree import LogicTree
 from .logic.logic_tokens import LogicTokeniser
@@ -500,7 +501,7 @@ def disconnect_shuffleable_exits(world) -> None:
             dropped = (orphaned[-1] if orphaned else
                        inaccessible[-1] if inaccessible else exits[-1])
             exits.remove(dropped)
-            print(f"[ER] Group {group}: odd count, leaving '{dropped.name}' vanilla")
+            _log(f"[ER] Group {group}: odd count, leaving '{dropped.name}' vanilla")
         to_disconnect.extend(exits)
 
     for exit_ in to_disconnect:

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, List, Optional, Dict, Set
 import re
 import weakref
 
+from .. import _log
 from ..ids import AreaID, LocationID, ItemID, get_item_name_from_id
 
 if TYPE_CHECKING:
@@ -52,14 +53,22 @@ class PlayerStateAdapter:
     """
     
     BOSS_NAMES = {
-        "Fafnir", "Surtr", "Vritra", "Kujata", "Aten Ra", 
+        "Fafnir", "Surtr", "Vritra", "Kujata", "Aten Ra",
         "Jormungand", "Anu", "Echidna", "Hel"
     }
 
+    @property
+    def state(self):
+        return self._state_ref()
+
+    @property
+    def multiworld(self):
+        return self._multiworld_ref()
+
     def __init__(self, state: "CollectionState", player: int, multiworld: "MultiWorld", options):
-        self.state = state
+        self._state_ref = weakref.ref(state)
         self.player = player
-        self.multiworld = multiworld
+        self._multiworld_ref = weakref.ref(multiworld)
         self.options = multiworld.worlds[player].options
         
         # Caching like C# PlayerState
@@ -459,7 +468,7 @@ class PlayerStateAdapter:
         except KeyError:
             # Check if it's a specific location name instead of area
             # Some logic checks might use location names
-            print(f"[LM2 LOGIC WARNING] Unknown area: {area_name} (normalized: {normalized})")
+            _log(f"[LM2 LOGIC WARNING] Unknown area: {area_name} (normalized: {normalized})")
             return False
     
     def _can_reach_entrance(self, entrance: "LM2Entrance") -> bool:
@@ -476,7 +485,7 @@ class PlayerStateAdapter:
             self.entrance_checks[entrance.name] = can_reach
             return can_reach
         except Exception as e:
-            print(f"[DEBUG] Error checking entrance {entrance.name}: {e}")
+            _log(f"[DEBUG] Error checking entrance {entrance.name}: {e}")
             self.entrance_checks[entrance.name] = False
             return False
         finally:
@@ -782,5 +791,5 @@ class PlayerStateAdapter:
             area_id = AreaID[normalized]
             return area_id == self.starting_area
         except KeyError:
-            print(f"[LM2 LOGIC WARNING] Unknown Start area: {area}")
+            _log(f"[LM2 LOGIC WARNING] Unknown Start area: {area}")
             return False
