@@ -539,7 +539,6 @@ def _build_internal_pools():
     based on your distribution logic.
     """
     # 1. Chests (40 items) & FakeItems (40 items)
-    # Both use the standard 40-item FILLER_DISTRIBUTION
     for category, base_id in [(LocationType.Chest, ItemID.ChestWeight01), 
                              (LocationType.FreeStanding, ItemID.FakeItem01)]:
         idx = 0
@@ -551,14 +550,12 @@ def _build_internal_pools():
                 idx += 1
 
     # 2. NPC Money / Dialogue (10 items)
-    # Distribution: One of each reward (since there are 10 rewards and 10 IDs)
     for i, (name, _) in enumerate(FILLER_DISTRIBUTION):
         ap_id = next(iid for n, iid in AP_FILLER if n == name)
         key = (LocationType.Dialogue, ap_id)
         INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(ItemID.NPCMoney01.value + i))
 
     # 3. Fake Scans / Murals (15 items)
-    # Using your specific manual distribution for Murals
     fs_names = [
         "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins",
         "30 Coins", "50 Coins", "80 Coins", "100 Coins",
