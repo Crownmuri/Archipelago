@@ -1089,7 +1089,7 @@
       {
         "Name": "Sacred Orb Chest IB",
         "LocationType": "Chest",
-        "Logic": "Has(Birth Sigil) and (Has(Feather) or Has(Grapple Claw) or IsDead(Cetus))"
+        "Logic": "Has(Birth Sigil)"
       },
       {
         "Name": "Lamp of Time Chest",
