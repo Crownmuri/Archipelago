@@ -351,6 +351,9 @@ class LaMulana2World(World):
         # Fix filler items with proper location type
         self.randomizer._fix_empty_locations()
 
+        if self.randomizer.shop_entries:
+            self.randomizer._adjust_shop_prices()
+
         # Pre-compute unique filler IDs (FakeItem / ChestWeight / etc.)
         # and sync loc.item when the fallback changes reward type.
         # This MUST happen here (before the thread pool) because

@@ -606,9 +606,6 @@ class LM2RandomizerCore:
                 price_multiplier=price_multiplier_for(item)
             ))
 
-        # C# parity pricing pass
-        self._adjust_shop_prices(placed_items)
-
         return True
 
     def _place_shop_items_original(self):
@@ -690,7 +687,7 @@ class LM2RandomizerCore:
                 _log(f"[DEBUG] Placed Weights at Starting Shop 3")
 
 
-    def _adjust_shop_prices(self, shop_items):
+    def _adjust_shop_prices(self):
         """
         Assign shop prices based on which sphere the item becomes reachable in.
         mirroring the C# AdjustShopPrices() logic but halved for AP
