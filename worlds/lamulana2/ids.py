@@ -318,45 +318,334 @@ class ItemID(IntEnum):
     Weight10 = 308  # grant 10 weights
     Weight20 = 309  # grant 20 weights
     ShurikenBundle = 310  # grant 10 shuriken ammo
-    BombBundle     = 311  # grant 3 bomb ammo
-    ChakramBundle  = 312  # grant 1 chakram ammo
+    RollingShurikenBundle = 311  # grant 10 rolling shuriken ammo
+    EarthSpearBundle = 312   # grant 10 earth spear ammo
+    FlareBundle = 313  # grant 10 flare ammo
+    CaltropsBundle = 314 # grant 10 caltrops ammo
+    ChakramBundle  = 315  # grant 1 chakram ammo
+    BombBundle     = 316  # grant 3 bomb ammo
 
     # -------------------------------------------------------------------------
     # Pot Filler (internal IDs, 30 pots for now)
     # -------------------------------------------------------------------------
-    PotFiller01 = 400
-    PotFiller02 = 401
-    PotFiller03 = 402
-    PotFiller04 = 403
-    PotFiller05 = 404
-    PotFiller06 = 405
-    PotFiller07 = 406
-    PotFiller08 = 407
-    PotFiller09 = 408
-    PotFiller10 = 409
-    PotFiller11 = 410
-    PotFiller12 = 411
-    PotFiller13 = 412
-    PotFiller14 = 413
-    PotFiller15 = 414
-    PotFiller16 = 415
-    PotFiller17 = 416
-    PotFiller18 = 417
-    PotFiller19 = 418
-    PotFiller20 = 419
-    PotFiller21 = 420
-    PotFiller22 = 421
-    PotFiller23 = 422
-    PotFiller24 = 423
-    PotFiller25 = 424
-    PotFiller26 = 425
-    PotFiller27 = 426
-    PotFiller28 = 427
-    PotFiller29 = 428
-    PotFiller30 = 429
+    
+    PotFiller01 = 1001
+    PotFiller02 = 1002
+    PotFiller03 = 1003
+    PotFiller04 = 1004
+    PotFiller05 = 1005
+    PotFiller06 = 1006
+    PotFiller07 = 1007
+    PotFiller08 = 1008
+    PotFiller09 = 1009
+    PotFiller10 = 1010
+    PotFiller11 = 1011
+    PotFiller12 = 1012
+    PotFiller13 = 1013
+    PotFiller14 = 1014
+    PotFiller15 = 1015
+    PotFiller16 = 1016
+    PotFiller17 = 1017
+    PotFiller18 = 1018
+    PotFiller19 = 1019
+    PotFiller20 = 1020
+    PotFiller21 = 1021
+    PotFiller22 = 1022
+    PotFiller23 = 1023
+    PotFiller24 = 1024
+    PotFiller25 = 1025
+    PotFiller26 = 1026
+    PotFiller27 = 1027
+    PotFiller28 = 1028
+    PotFiller29 = 1029
+    PotFiller30 = 1030
+    PotFiller31 = 1031
+    PotFiller32 = 1032
+    PotFiller33 = 1033
+    PotFiller34 = 1034
+    PotFiller35 = 1035
+    PotFiller36 = 1036
+    PotFiller37 = 1037
+    PotFiller38 = 1038
+    PotFiller39 = 1039
+    PotFiller40 = 1040
+    PotFiller41 = 1041
+    PotFiller42 = 1042
+    PotFiller43 = 1043
+    PotFiller44 = 1044
+    PotFiller45 = 1045
+    PotFiller46 = 1046
+    PotFiller47 = 1047
+    PotFiller48 = 1048
+    PotFiller49 = 1049
+    """
+    PotFiller50 = 1050
+    PotFiller51 = 1051
+    PotFiller52 = 1052
+    PotFiller53 = 1053
+    PotFiller54 = 1054
+    PotFiller55 = 1055
+    PotFiller56 = 1056
+    PotFiller57 = 1057
+    PotFiller58 = 1058
+    PotFiller59 = 1059
+    PotFiller60 = 1060
+    PotFiller61 = 1061
+    PotFiller62 = 1062
+    PotFiller63 = 1063
+    PotFiller64 = 1064
+    PotFiller65 = 1065
+    PotFiller66 = 1066
+    PotFiller67 = 1067
+    PotFiller68 = 1068
+    PotFiller69 = 1069
+    PotFiller70 = 1070
+    PotFiller71 = 1071
+    PotFiller72 = 1072
+    PotFiller73 = 1073
+    PotFiller74 = 1074
+    PotFiller75 = 1075
+    PotFiller76 = 1076
+    PotFiller77 = 1077
+    PotFiller78 = 1078
+    PotFiller79 = 1079
+    PotFiller80 = 1080
+    PotFiller81 = 1081
+    PotFiller82 = 1082
+    PotFiller83 = 1083
+    PotFiller84 = 1084
+    PotFiller85 = 1085
+    PotFiller86 = 1086
+    PotFiller87 = 1087
+    PotFiller88 = 1088
+    PotFiller89 = 1089
+    PotFiller90 = 1090
+    PotFiller91 = 1091
+    PotFiller92 = 1092
+    PotFiller93 = 1093
+    PotFiller94 = 1094
+    PotFiller95 = 1095
+    PotFiller96 = 1096
+    PotFiller97 = 1097
+    PotFiller98 = 1098
+    PotFiller99 = 1099
+    PotFiller100 = 1100
+    PotFiller101 = 1101
+    PotFiller102 = 1102
+    PotFiller103 = 1103
+    PotFiller104 = 1104
+    PotFiller105 = 1105
+    PotFiller106 = 1106
+    PotFiller107 = 1107
+    PotFiller108 = 1108
+    PotFiller109 = 1109
+    PotFiller110 = 1110
+    PotFiller111 = 1111
+    PotFiller112 = 1112
+    PotFiller113 = 1113
+    PotFiller114 = 1114
+    PotFiller115 = 1115
+    PotFiller116 = 1116
+    PotFiller117 = 1117
+    PotFiller118 = 1118
+    PotFiller119 = 1119
+    PotFiller120 = 1120
+    PotFiller121 = 1121
+    PotFiller122 = 1122
+    PotFiller123 = 1123
+    PotFiller124 = 1124
+    PotFiller125 = 1125
+    PotFiller126 = 1126
+    PotFiller127 = 1127
+    PotFiller128 = 1128
+    PotFiller129 = 1129
+    PotFiller130 = 1130
+    PotFiller131 = 1131
+    PotFiller132 = 1132
+    PotFiller133 = 1133
+    PotFiller134 = 1134
+    PotFiller135 = 1135
+    PotFiller136 = 1136
+    PotFiller137 = 1137
+    PotFiller138 = 1138
+    PotFiller139 = 1139
+    PotFiller140 = 1140
+    PotFiller141 = 1141
+    PotFiller142 = 1142
+    PotFiller143 = 1143
+    PotFiller144 = 1144
+    PotFiller145 = 1145
+    PotFiller146 = 1146
+    PotFiller147 = 1147
+    PotFiller148 = 1148
+    PotFiller149 = 1149
+    PotFiller150 = 1150
+    PotFiller151 = 1151
+    PotFiller152 = 1152
+    PotFiller153 = 1153
+    PotFiller154 = 1154
+    PotFiller155 = 1155
+    PotFiller156 = 1156
+    PotFiller157 = 1157
+    PotFiller158 = 1158
+    PotFiller159 = 1159
+    PotFiller160 = 1160
+    PotFiller161 = 1161
+    PotFiller162 = 1162
+    PotFiller163 = 1163
+    PotFiller164 = 1164
+    PotFiller165 = 1165
+    PotFiller166 = 1166
+    PotFiller167 = 1167
+    PotFiller168 = 1168
+    PotFiller169 = 1169
+    PotFiller170 = 1170
+    PotFiller171 = 1171
+    PotFiller172 = 1172
+    PotFiller173 = 1173
+    PotFiller174 = 1174
+    PotFiller175 = 1175
+    PotFiller176 = 1176
+    PotFiller177 = 1177
+    PotFiller178 = 1178
+    PotFiller179 = 1179
+    PotFiller180 = 1180
+    PotFiller181 = 1181
+    PotFiller182 = 1182
+    PotFiller183 = 1183
+    PotFiller184 = 1184
+    PotFiller185 = 1185
+    PotFiller186 = 1186
+    PotFiller187 = 1187
+    PotFiller188 = 1188
+    PotFiller189 = 1189
+    PotFiller190 = 1190
+    PotFiller191 = 1191
+    PotFiller192 = 1192
+    PotFiller193 = 1193
+    PotFiller194 = 1194
+    PotFiller195 = 1195
+    PotFiller196 = 1196
+    PotFiller197 = 1197
+    PotFiller198 = 1198
+    PotFiller199 = 1199
+    PotFiller200 = 1200
+    PotFiller201 = 1201
+    PotFiller202 = 1202
+    PotFiller203 = 1203
+    PotFiller204 = 1204
+    PotFiller205 = 1205
+    PotFiller206 = 1206
+    PotFiller207 = 1207
+    PotFiller208 = 1208
+    PotFiller209 = 1209
+    PotFiller210 = 1210
+    PotFiller211 = 1211
+    PotFiller212 = 1212
+    PotFiller213 = 1213
+    PotFiller214 = 1214
+    PotFiller215 = 1215
+    PotFiller216 = 1216
+    PotFiller217 = 1217
+    PotFiller218 = 1218
+    PotFiller219 = 1219
+    PotFiller220 = 1220
+    PotFiller221 = 1221
+    PotFiller222 = 1222
+    PotFiller223 = 1223
+    PotFiller224 = 1224
+    PotFiller225 = 1225
+    PotFiller226 = 1226
+    PotFiller227 = 1227
+    PotFiller228 = 1228
+    PotFiller229 = 1229
+    PotFiller230 = 1230
+    PotFiller231 = 1231
+    PotFiller232 = 1232
+    PotFiller233 = 1233
+    PotFiller234 = 1234
+    PotFiller235 = 1235
+    PotFiller236 = 1236
+    PotFiller237 = 1237
+    PotFiller238 = 1238
+    PotFiller239 = 1239
+    PotFiller240 = 1240
+    PotFiller241 = 1241
+    PotFiller242 = 1242
+    PotFiller243 = 1243
+    PotFiller244 = 1244
+    PotFiller245 = 1245
+    PotFiller246 = 1246
+    PotFiller247 = 1247
+    PotFiller248 = 1248
+    PotFiller249 = 1249
+    PotFiller250 = 1250
+    PotFiller251 = 1251
+    PotFiller252 = 1252
+    PotFiller253 = 1253
+    PotFiller254 = 1254
+    PotFiller255 = 1255
+    PotFiller256 = 1256
+    PotFiller257 = 1257
+    PotFiller258 = 1258
+    PotFiller259 = 1259
+    PotFiller260 = 1260
+    PotFiller261 = 1261
+    PotFiller262 = 1262
+    PotFiller263 = 1263
+    PotFiller264 = 1264
+    PotFiller265 = 1265
+    PotFiller266 = 1266
+    PotFiller267 = 1267
+    PotFiller268 = 1268
+    PotFiller269 = 1269
+    PotFiller270 = 1270
+    PotFiller271 = 1271
+    PotFiller272 = 1272
+    PotFiller273 = 1273
+    PotFiller274 = 1274
+    PotFiller275 = 1275
+    PotFiller276 = 1276
+    PotFiller277 = 1277
+    PotFiller278 = 1278
+    PotFiller279 = 1279
+    PotFiller280 = 1280
+    PotFiller281 = 1281
+    PotFiller282 = 1282
+    PotFiller283 = 1283
+    PotFiller284 = 1284
+    PotFiller285 = 1285
+    PotFiller286 = 1286
+    PotFiller287 = 1287
+    PotFiller288 = 1288
+    PotFiller289 = 1289
+    PotFiller290 = 1290
+    PotFiller291 = 1291
+    PotFiller292 = 1292
+    PotFiller293 = 1293
+    PotFiller294 = 1294
+    PotFiller295 = 1295
+    PotFiller296 = 1296
+    PotFiller297 = 1297
+    PotFiller298 = 1298
+    PotFiller299 = 1299
+    PotFiller300 = 1300
+    PotFiller301 = 1301
+    PotFiller302 = 1302
+    PotFiller303 = 1303
+    PotFiller304 = 1304
+    PotFiller305 = 1305
+    PotFiller306 = 1306
+    PotFiller307 = 1307
+    PotFiller308 = 1308
+    PotFiller309 = 1309
+    PotFiller310 = 1310
+    PotFiller311 = 1311
+    PotFiller312 = 1312
 
+    """
     # -------------------------------------------------------------------------
-    # AP Trash
+    # Logic Flags
     # -------------------------------------------------------------------------
 
     Ratatoskr1 = 500
@@ -741,26 +1030,340 @@ class LocationID(IntEnum):
     GoGIllusionGateBombPot = 411    # field01L00P, potFlag 301
 
     # --- Mausoleum of Giants ---
-    MoGLadderCoinPot = 412          # field01L02A0, potFlag 303
-    MoGBreakableWallCoinPot = 413   # field01L02A1, potFlag 304
-    MoGFutoStatueCoinPot = 414      # field01L02D3, potFlag 306
-    MoGPreRatatoskrWeightPot = 415  # field01L02C4, potFlag 307
+    MoGFirstCoinPot = 412          # field01L02A0, potFlag 303
+    MoGSecondWeightPot = 413   # field01L02A1, potFlag 304
+    MoGBreakableWallCoinPot = 414   # field01L02A1, potFlag 304
+    MoGFutoStatueCoinPot = 415      # field01L02D3, potFlag 306
+    MoGPreRatatoskrWeightPot = 416  # field01L02C4, potFlag 307
 
     # --- Roots of Yggdrasil ---
-    RoYSecondRoomWeightPot = 416    # field00E2w, potFlag 29
-    RoYWeaponVaultCoinPot = 417     # field00C2, potFlag 4
-    RoYWeaponVaultWeightPot = 418   # field00C2w, potFlag 30
-    RoYConvenientShurikenPot = 419  # field00B2, potFlag 5
-    RoYBelowRatatoskrCoinPot = 420  # field00B1, potFlag 0
-    RoYFootprintShurikenPot = 421  # field00C1, potFlag 1
-    RoYBridgeCoinPot = 422          # field00E1, potFlag 2
-    RoYBirthSealGateShurikenPot = 423  # field00G0, potFlag 3
-    RoYFirstRoomCoinPot = 424       # field00E3, potFlag 7
-    RoYLargeBreakableWallCoinPot = 425  # field00C3, potFlag 6
-    RoYKorobockWeightPot = 426      # field00C4, potFlag 9
-    RoYLampofTimeWeightPot = 427    # field00D4w, potFlag 28
-    RoYTorchRoomShurikenPot = 428   # field00E4, potFlag 8
-    RoYGoldenRockCoinPot = 429      # field00E5, potFlag 10
+    RoYSecondRoomWeightPot = 417    # field00E2w, potFlag 29
+    RoYWeaponVaultCoinPot = 418     # field00C2, potFlag 4
+    RoYWeaponVaultWeightPot = 419   # field00C2w, potFlag 30
+    RoYConvenientShurikenPot = 420  # field00B2, potFlag 5
+    RoYBelowRatatoskrCoinPot = 421  # field00B1, potFlag 0
+    RoYFootprintShurikenPot = 422  # field00C1, potFlag 1
+    RoYBridgeCoinPot = 423          # field00E1, potFlag 2
+    RoYBirthSealGateShurikenPot = 424  # field00G0, potFlag 3
+    RoYFirstRoomCoinPot = 425       # field00E3, potFlag 7
+    RoYLargeBreakableWallCoinPot = 426  # field00C3, potFlag 6
+    RoYKorobockWeightPot = 427      # field00C4, potFlag 9
+    RoYLampofTimeWeightPot = 428    # field00D4w, potFlag 28
+    RoYTorchRoomShurikenPot = 429   # field00E4, potFlag 8
+    RoYGoldenRockCoinPot = 430      # field00E5, potFlag 10
+
+    # --- Annwfn ---
+    AnnFairyWatchtowerPot = 431     # field00E4, potFlag 33
+    AnnKaliyaHiddenCoinPot = 432    # field02D1, potFlag 34
+    AnnKaliyaItemPot = 433          # field02D0, potFlag 31
+    AnnGrailCoinPot = 434           # field02C2g, potFlag 38
+    AnnGrailWeightPot = 435         # field02C2, potFlag 37
+    AnnFreyCoinPot = 436            # field02B1, potFlag 32
+    AnnCenterItemPot1 = 437         # field02D2-1, potFlag 39
+    AnnCenterItemPot2 = 438         # field02D2-2, potFlag 40
+    AnnHuracanItemPot = 439         # field02E2, potFlag 41
+    AnnMantraWatchtowerPot = 440    # field02E1, potFlag 35
+    AnnLookAwayWeightPot = 441      # field02B3, potFlag 42
+    AnnBifrostLeftWeightPot = 442   # field02B4, potFlag 45
+    AnnBifrostRightItemPot = 443    # field02D4-1, potFlag 46
+    AnnBifrostRightCoinPot = 444    # field02D4-2, potFlag 47
+    AnnOneWayCoinPot = 445          # field02E4, potFlag 48
+    AnnIxtabCoinPot = 446           # field02D3, potFlag 43
+    AnnDeathsPrisonCoinPot = 447    # field02G3, potFlag 44
+    AnnKujataWeightPot = 448        # field02F1, potFlag 36
+
+    """
+    # --- field03 ---
+    field03D2_1 = 449   # field03D2-1, potFlag 64
+    field03G1 = 450   # field03G1, potFlag 65
+    field03G2_1 = 451   # field03G2-1, potFlag 66
+    field03F3 = 452   # field03F3, potFlag 67
+    field03B4_1 = 453   # field03B4-1, potFlag 68
+    field03D4 = 454   # field03D4, potFlag 69
+    field03I5 = 455   # field03I5, potFlag 70
+    field03H4g = 456   # field03H4g, potFlag 71
+    field03D6 = 457   # field03D6, potFlag 72
+    field03F5 = 458   # field03F5, potFlag 73
+    field03B5 = 459   # field03B5, potFlag 74
+    field03B6 = 460   # field03B6, potFlag 75
+    field03C6 = 461   # field03C6, potFlag 76
+    field03E0 = 462   # field03E0, potFlag 77
+    field03C0 = 463   # field03C0, potFlag 78
+    field03C1 = 464   # field03C1, potFlag 79
+    field03D1 = 465   # field03D1, potFlag 80
+    field03G4 = 466   # field03G4, potFlag 81
+    field03B4_2 = 467   # field03B4-2, potFlag 82
+    field03G2_2 = 468   # field03G2-2, potFlag 83
+    field03E5 = 469   # field03E5, potFlag 84
+    field03F1 = 470   # field03F1, potFlag 85
+    field03G6 = 471   # field03G6, potFlag 86
+    field03B1 = 472   # field03B1, potFlag 87
+    field03F1_2 = 473   # field03F1-2, potFlag 88
+    field03H4 = 474   # field03H4, potFlag 89
+    field03G5 = 475   # field03G5, potFlag 90
+    field03F6 = 476   # field03F6, potFlag 91
+    field03A5 = 477   # field03A5, potFlag 92
+    field03B3 = 478   # field03B3, potFlag 93
+    field03D2_2 = 479   # field03D2-2, potFlag 94
+    field03E6 = 480   # field03E6, potFlag 95
+    field03D2_3 = 481   # field03D2-3, potFlag 96
+    field03B4g = 482   # field03B4g, potFlag 97
+
+    # --- field04 ---
+    field04A0 = 483   # field04A0, potFlag 98
+    field04C0 = 484   # field04C0, potFlag 99
+    field04A1 = 485   # field04A1, potFlag 100
+    field04B1 = 486   # field04B1, potFlag 101
+    field04A2 = 487   # field04A2, potFlag 102
+    field04B2 = 488   # field04B2, potFlag 103
+    field04C2 = 489   # field04C2, potFlag 104
+    field04B3_1 = 490   # field04B3-1, potFlag 105
+    field04B3_2 = 491   # field04B3-2, potFlag 106
+    field04C3_1 = 492   # field04C3-1, potFlag 107
+    field04C3_2 = 493   # field04C3-2, potFlag 108
+    field04C3_3 = 494   # field04C3-3, potFlag 109
+    field04C3_4 = 495   # field04C3-4, potFlag 110
+    field04C4 = 496   # field04C4, potFlag 111
+    field04D4 = 497   # field04D4, potFlag 112
+    field04E0 = 498   # field04E0, potFlag 113
+    field04F0 = 499   # field04F0, potFlag 114
+    field04F0g = 500   # field04F0g, potFlag 115
+    field04G0g = 501   # field04G0g, potFlag 116
+    field04G0 = 502   # field04G0, potFlag 117
+    field04E1 = 503   # field04E1, potFlag 118
+    field04E2 = 504   # field04E2, potFlag 119
+    field04F2 = 505   # field04F2, potFlag 120
+    field04E3 = 506   # field04E3, potFlag 121
+
+    # --- field05 ---
+    field05B1 = 507   # field05B1, potFlag 11
+    field05C1 = 508   # field05C1, potFlag 12
+    field05D1 = 509   # field05D1, potFlag 13
+    field05A2_1 = 510   # field05A2-1, potFlag 14
+    field05A2_2 = 511   # field05A2-2, potFlag 15
+    field05C2 = 512   # field05C2, potFlag 16
+    field05D2 = 513   # field05D2, potFlag 17
+    field05A3 = 514   # field05A3, potFlag 18
+    field05B3_1 = 515   # field05B3-1, potFlag 19
+    field05B3_2 = 516   # field05B3-2, potFlag 20
+    field05B3_3 = 517   # field05B3-3, potFlag 21
+    field05D3 = 518   # field05D3, potFlag 22
+    field05E3 = 519   # field05E3, potFlag 23
+    field05B4_1 = 520   # field05B4-1, potFlag 24
+    field05B4_2 = 521   # field05B4-2, potFlag 25
+    field05C4_1 = 522   # field05C4-1, potFlag 26
+    field05C4_2 = 523   # field05C4-2, potFlag 27
+
+    # --- field06 ---
+    field06C1 = 524   # field06C1, potFlag 129
+    field06C1f = 525   # field06C1f, potFlag 130
+    field06C2 = 526   # field06C2, potFlag 131
+    field06E2 = 527   # field06E2, potFlag 132
+    field06A3 = 528   # field06A3, potFlag 133
+    field06C3 = 529   # field06C3, potFlag 134
+    field06C3g = 530   # field06C3g, potFlag 135
+    field06E3 = 531   # field06E3, potFlag 136
+    field06E3g = 532   # field06E3g, potFlag 137
+    field06B4 = 533   # field06B4, potFlag 138
+    field06C4 = 534   # field06C4, potFlag 139
+    field06D4 = 535   # field06D4, potFlag 140
+    field06E4 = 536   # field06E4, potFlag 141
+    field06E4g = 537   # field06E4g, potFlag 142
+    field06C5 = 538   # field06C5, potFlag 143
+    field06D5 = 539   # field06D5, potFlag 144
+    field06D5g = 540   # field06D5g, potFlag 145
+    field06D6 = 541   # field06D6, potFlag 146
+    field06E6 = 542   # field06E6, potFlag 147
+    field06_2A0 = 543   # field06-2A0, potFlag 292
+    field06_2C0g = 544   # field06-2C0g, potFlag 293
+    field06_2C0 = 545   # field06-2C0, potFlag 294
+    field06add1 = 546   # field06add1, potFlag 311
+
+    # --- field07 ---
+    field07C0 = 547   # field07C0, potFlag 148
+    field07C1 = 548   # field07C1, potFlag 149
+    field07C1s = 549   # field07C1s, potFlag 150
+    field07B2 = 550   # field07B2, potFlag 151
+    field07D2 = 551   # field07D2, potFlag 152
+    field07E2 = 552   # field07E2, potFlag 153
+    field07B3 = 553   # field07B3, potFlag 154
+    field07C3 = 554   # field07C3, potFlag 155
+    field07B4 = 555   # field07B4, potFlag 156
+    field07B4y = 556   # field07B4y, potFlag 157
+    field07D4 = 557   # field07D4, potFlag 158
+    field07E4 = 558   # field07E4, potFlag 159
+    field07F4 = 559   # field07F4, potFlag 160
+    field07F4f = 560   # field07F4f, potFlag 161
+    field07B5 = 561   # field07B5, potFlag 162
+    field07D5 = 562   # field07D5, potFlag 163
+    field07C6 = 563   # field07C6, potFlag 164
+    field07C6g = 564   # field07C6g, potFlag 165
+
+    # --- field08 ---
+    field08A0 = 565   # field08A0, potFlag 166
+    field08A0g = 566   # field08A0g, potFlag 167
+    field08B0 = 567   # field08B0, potFlag 168
+    field08C1 = 568   # field08C1, potFlag 169
+    field08D1 = 569   # field08D1, potFlag 170
+    field08C2g = 570   # field08C2g, potFlag 171
+    field08C2f = 571   # field08C2f, potFlag 172
+    field08D2 = 572   # field08D2, potFlag 173
+    field08F2 = 573   # field08F2, potFlag 174
+    field08B3g = 574   # field08B3g, potFlag 175
+    field08B3b = 575   # field08B3b, potFlag 176
+    field08C3 = 576   # field08C3, potFlag 177
+    field08D3g = 577   # field08D3g, potFlag 178
+    field08D3 = 578   # field08D3, potFlag 179
+    field08C4 = 579   # field08C4, potFlag 180
+    field08C4g = 580   # field08C4g, potFlag 181
+    field08C4_2 = 581   # field08C4-2, potFlag 182
+    field08D4 = 582   # field08D4, potFlag 183
+    field08D5 = 583   # field08D5, potFlag 184
+    field08C6 = 584   # field08C6, potFlag 185
+    field08D6g = 585   # field08D6g, potFlag 186
+    field08D6f = 586   # field08D6f, potFlag 187
+
+    # --- field09 ---
+    field09B0 = 587   # field09B0, potFlag 188
+    field09B0g = 588   # field09B0g, potFlag 189
+    field09A1 = 589   # field09A1, potFlag 190
+    field09C1 = 590   # field09C1, potFlag 191
+    field09E1 = 591   # field09E1, potFlag 192
+    field09A2 = 592   # field09A2, potFlag 193
+    field09C2 = 593   # field09C2, potFlag 194
+    field09C2g = 594   # field09C2g, potFlag 195
+    field09E2 = 595   # field09E2, potFlag 196
+    field09C3 = 596   # field09C3, potFlag 197
+    field09A4 = 597   # field09A4, potFlag 198
+    field09A4y = 598   # field09A4y, potFlag 199
+    field09B4 = 599   # field09B4, potFlag 200
+    field09D4 = 600   # field09D4, potFlag 201
+    field09D4g = 601   # field09D4g, potFlag 202
+
+    # --- field10 ---
+    field10B2 = 602   # field10B2, potFlag 49
+    field10C2 = 603   # field10C2, potFlag 50
+    field10D2 = 604   # field10D2, potFlag 51
+    field10D3 = 605   # field10D3, potFlag 52
+    field10C1 = 606   # field10C1, potFlag 53
+    field10A3_1 = 607   # field10A3-1, potFlag 54
+    field10D3_2 = 608   # field10D3-2, potFlag 55
+    field10E1 = 609   # field10E1, potFlag 56
+    field10A2 = 610   # field10A2, potFlag 57
+    field10A3_2 = 611   # field10A3-2, potFlag 58
+    field10C3_1 = 612   # field10C3-1, potFlag 59
+    field10C3_2 = 613   # field10C3-2, potFlag 60
+    field10A1 = 614   # field10A1, potFlag 61
+    field10A3_3 = 615   # field10A3-3, potFlag 62
+    field10_B3 = 616   # field10-B3, potFlag 63
+
+    # --- field11 ---
+    field11B1 = 617   # field11B1, potFlag 203
+    field11C1 = 618   # field11C1, potFlag 204
+    field11C1g = 619   # field11C1g, potFlag 205
+    field11B2 = 620   # field11B2, potFlag 206
+    field11C2 = 621   # field11C2, potFlag 207
+    field11B3 = 622   # field11B3, potFlag 208
+    field11B3_2 = 623   # field11B3-2, potFlag 209
+    field11C3 = 624   # field11C3, potFlag 210
+    field11E3g = 625   # field11E3g, potFlag 211
+    field11E3 = 626   # field11E3, potFlag 212
+    field11B4 = 627   # field11B4, potFlag 213
+    field11C4 = 628   # field11C4, potFlag 214
+    field11C4g = 629   # field11C4g, potFlag 215
+    field11D4g = 630   # field11D4g, potFlag 216
+    field11D4 = 631   # field11D4, potFlag 217
+    field11B5 = 632   # field11B5, potFlag 218
+    field11C5 = 633   # field11C5, potFlag 219
+    field11B61 = 634   # field11B61, potFlag 220
+    field11B62 = 635   # field11B62, potFlag 221
+    field11B63 = 636   # field11B63, potFlag 222
+    field11B64 = 637   # field11B64, potFlag 223
+    field11B65 = 638   # field11B65, potFlag 224
+    field11D6g = 639   # field11D6g, potFlag 225
+    field11D6 = 640   # field11D6, potFlag 226
+
+    # --- field12 ---
+    field12C0 = 641   # field12C0, potFlag 227
+    field12C1 = 642   # field12C1, potFlag 228
+    field12C2 = 643   # field12C2, potFlag 229
+    field12D2 = 644   # field12D2, potFlag 230
+    field12A3g = 645   # field12A3g, potFlag 231
+    field12A3 = 646   # field12A3, potFlag 232
+    field12C3 = 647   # field12C3, potFlag 233
+    field12C3g = 648   # field12C3g, potFlag 234
+    field12D3 = 649   # field12D3, potFlag 235
+    field12A4 = 650   # field12A4, potFlag 236
+    field12A4g = 651   # field12A4g, potFlag 237
+    field12B4 = 652   # field12B4, potFlag 238
+    field12C4 = 653   # field12C4, potFlag 239
+    field12C4g = 654   # field12C4g, potFlag 240
+    field12D4 = 655   # field12D4, potFlag 241
+    field12B5 = 656   # field12B5, potFlag 242
+    field12D5 = 657   # field12D5, potFlag 243
+    field12D6 = 658   # field12D6, potFlag 244
+    field12D6g = 659   # field12D6g, potFlag 245
+
+    # --- field13 ---
+    field13C0 = 660   # field13C0, potFlag 246
+    field13C1 = 661   # field13C1, potFlag 247
+    field13D1 = 662   # field13D1, potFlag 248
+    field13B2 = 663   # field13B2, potFlag 249
+    field13B22 = 664   # field13B22, potFlag 250
+    field13C2 = 665   # field13C2, potFlag 251
+    field13A3 = 666   # field13A3, potFlag 252
+    field13A3g = 667   # field13A3g, potFlag 253
+    field13B3 = 668   # field13B3, potFlag 254
+    field13B3g = 669   # field13B3g, potFlag 255
+    field13E3 = 670   # field13E3, potFlag 256
+    field13G3 = 671   # field13G3, potFlag 257
+    field13G3g = 672   # field13G3g, potFlag 258
+    field13D4 = 673   # field13D4, potFlag 259
+    field13E4 = 674   # field13E4, potFlag 260
+    field13F4 = 675   # field13F4, potFlag 261
+
+    # --- field14 ---
+    field14D0 = 676   # field14D0, potFlag 262
+    field14E0 = 677   # field14E0, potFlag 263
+    field14D1 = 678   # field14D1, potFlag 264
+    field14F1 = 679   # field14F1, potFlag 265
+    field14D2 = 680   # field14D2, potFlag 266
+    field14D2g = 681   # field14D2g, potFlag 267
+    field14E2 = 682   # field14E2, potFlag 268
+    field14D3 = 683   # field14D3, potFlag 269
+    field14D3b = 684   # field14D3b, potFlag 270
+    field14C4 = 685   # field14C4, potFlag 271
+    field14D4 = 686   # field14D4, potFlag 272
+    field14B5 = 687   # field14B5, potFlag 273
+    field14C5b = 688   # field14C5b, potFlag 274
+    field14C5 = 689   # field14C5, potFlag 275
+    field14D5g = 690   # field14D5g, potFlag 276
+    field14D5 = 691   # field14D5, potFlag 277
+    field14C6 = 692   # field14C6, potFlag 278
+    field14C6b = 693   # field14C6b, potFlag 279
+
+    # --- field15 ---
+    field15C0 = 694   # field15C0, potFlag 280
+    field15C0g = 695   # field15C0g, potFlag 281
+    field15B1 = 696   # field15B1, potFlag 282
+    field15B1g = 697   # field15B1g, potFlag 283
+    field15A3 = 698   # field15A3, potFlag 284
+    field15A3g = 699   # field15A3g, potFlag 285
+    field15A3b = 700   # field15A3b, potFlag 286
+    field15E3 = 701   # field15E3, potFlag 287
+    field15D4 = 702   # field15D4, potFlag 288
+    field15D4g = 703   # field15D4g, potFlag 289
+    field15C5 = 704   # field15C5, potFlag 290
+    field15C6 = 705   # field15C6, potFlag 291
+
+    # --- Other ---
+    fieldL00G1 = 706   # fieldL00G1, potFlag 296
+    fieldL00W1 = 707   # fieldL00W1, potFlag 298
+    fieldL00W3 = 708   # fieldL00W3, potFlag 300
+    fieldL021 = 710   # fieldL021, potFlag 308
+    fieldL022 = 711   # fieldL022, potFlag 309
+    fieldL023 = 712   # fieldL023, potFlag 310
+    """
 
 # =========================================================================
 # PotID — maps World.json pot IDs to sheet 21 (itempot) flag numbers.
@@ -781,109 +1384,342 @@ POT_FLAG_MAP: dict[int, int] = {
     406: 126,   # VoDPostLadderCoinPot    (field01E2)
     407: 127,   # VoDChakramPot           (field01E2-2)
     # --- Gate of Guidance ---
-    408: 299,   # GoGPhotoopWeightPot     (field01L00W2)
-    409: 295,   # GoGHighupCoinPot        (field01L00G30)
-    410: 297,   # GoGBelowHinerCoinPot    (field01L00G2)
-    411: 301,   # GoGIllusionGateBombPot  (field01L00P)
+    408: 299,   # GoGPhotoopWeightPot     (field01L00W2)    Heavenly Temple of the Cross
+    409: 295,   # GoGHighupCoinPot        (field01L00G30)   Heavenly Corridor
+    410: 297,   # GoGBelowHinerCoinPot    (field01L00G2)    Pit of the Holy Grail
+    411: 301,   # GoGIllusionGateBombPot  (field01L00P)     Door to Eden
     # --- Mausoleum of Giants ---
-    412: 303,   # MoGLadderCoinPot        (field01L02A0)
-    413: 304,   # MoGBreakableWallCoinPot (field01L02A1)
-    414: 306,   # MoGFutoStatueCoinPot    (field01L02D3)
-    415: 307,   # MoGPreRatatoskrWeightPot(field01L02C4)
+    412: 303,   # MoGFirstCoinPot        (field01L02A0)     Last Shrine
+    413: 305,   # MoGSecondWeightPot      (field01L02B0)    Last Shrine
+    414: 304,   # MoGBreakableWallCoinPot (field01L02A1)    Approach of the Giants
+    415: 306,   # MoGFutoStatueCoinPot    (field01L02D3)    Star Palace of the Giants
+    416: 307,   # MoGPreRatatoskrWeightPot(field01L02C4)    Shaft to the Heavens
     # --- Roots of Yggdrasil ---
-    416: 29,    # RoYSecondRoomWeightPot  (field00E2w)
-    417: 4,     # RoYWeaponVaultCoinPot   (field00C2)
-    418: 30,    # RoYWeaponVaultWeightPot (field00C2w)
-    419: 5,     # RoYConvenientShurikenPot(field00B2)
-    420: 0,     # RoYBelowRatatoskrCoinPot(field00B1)
-    421: 1,     # RoYFootprintShurikenPot (field00C1)
-    422: 2,     # RoYBridgeCoinPot        (field00E1)
-    423: 3,     # RoYBirthSealGateShurikenPot(field00G0)
-    424: 7,     # RoYFirstRoomCoinPot     (field00E3)
-    425: 6,     # RoYLargeBreakableWallCoinPot(field00C3)
-    426: 9,     # RoYKorobockWeightPot    (field00C4)
-    427: 28,    # RoYLampofTimeWeightPot  (field00D4w)
-    428: 8,     # RoYTorchRoomShurikenPot (field00E4)
-    429: 10,    # RoYGoldenRockCoinPot    (field00E5)
+    417: 29,    # RoYSecondRoomWeightPot  (field00E2w)      Path to the Roots
+    418: 4,     # RoYWeaponVaultCoinPot   (field00C2)       Vampire's Room
+    419: 30,    # RoYWeaponVaultWeightPot (field00C2w)      Vampire's Room
+    420: 5,     # RoYConvenientShurikenPot(field00B2)       Vampire's Room
+    421: 0,     # RoYBelowRatatoskrCoinPot(field00B1)       Dark Star Lord's Footprint
+    422: 1,     # RoYFootprintShurikenPot (field00C1)       Dark Star Lord's Footprint
+    423: 2,     # RoYBridgeCoinPot        (field00E1)       Goddess Seal
+    424: 3,     # RoYBirthSealGateShurikenPot(field00G0)    Verdandi's Root
+    425: 7,     # RoYFirstRoomCoinPot     (field00E3)       Yggdrasil Gate
+    426: 6,     # RoYLargeBreakableWallCoinPot(field00C3)   Yggdrasil Gate
+    427: 9,     # RoYKorobockWeightPot    (field00C4)       Path to Annwfn
+    428: 28,    # RoYLampofTimeWeightPot  (field00D4w)      Antechamber
+    429: 8,     # RoYTorchRoomShurikenPot (field00E4)       Antechamber
+    430: 10,    # RoYGoldenRockCoinPot    (field00E5)       Golden Rock
+    # --- Annwfn ---
+    431: 33,    # AnnFairyWatchtowerPot   (field02C1)       Fairy Watchtower
+    432: 34,    # AnnKaliyaHiddenCoinPot  (field02D1)       Serpent King Watchtower
+    433: 31,    # AnnKaliyaItemPot        (field02D0)       Serpent King Watchtower
+    434: 38,    # AnnGrailCoinPot         (field02C2g)      Kukulkan's Room
+    435: 37,    # AnnGrailWeightPot       (field02C2)       Kukulkan's Room
+    436: 32,    # AnnFreyCoinPot          (field02B1)       Temple of the Fairy King
+    437: 39,    # AnnCenterItemPot1       (field02D2-1)     Huracan's Room
+    438: 40,    # AnnCenterItemPot2       (field02D2-2)     Huracan's Room
+    439: 41,    # AnnHuracanItemPot       (field02E2)       Huracan's Room
+    440: 35,    # AnnMantraWatchtowerPot  (field02E1)       Mantra Watchtower
+    441: 42,    # AnnLookAwayWeightPot    (field02B3)       Shrine Maiden's Room
+    442: 45,    # AnnBifrostLeftWeightPot (field02B4)       Bifrost
+    443: 46,    # AnnBifrostRightItemPot  (field02D4-1)     Bifrost
+    444: 47,    # AnnBifrostRightCoinPot  (field02D4-2)     Bifrost
+    445: 48,    # AnnOneWayCoinPot        (field02E4)       Feathercross Room
+    446: 43,    # AnnIxtabCoinPot         (field02D3)       Shrine Maiden's Room
+    447: 44,    # AnnDeathsPrisonCoinPot  (field02G3)       Death's Prison
+    448: 36,    # AnnKujataWeightPot      (field02F1)       Kujata's Room
 }
-
 """
-# --- Unmapped pots (uncomment as World.json regions are added) ---
-# field02D0 = 32, field02B1 = 33, field02C1 = 34, field02D1 = 35,
-# field02E1 = 36, field02F1 = 37, field02C2 = 38, field02C2g = 39,
-# field02D2_1 = 40, field02D2_2 = 41, field02E2 = 42, field02B3 = 43,
-# field02D3 = 44, field02G3 = 45, field02B4 = 46, field02D4_1 = 47,
-# field02D4_2 = 48, field02E4 = 49
-# field03D2_1 = 65, field03G1 = 66, field03G2_1 = 67, field03F3 = 68,
-# field03B4_1 = 69, field03D4 = 70, field03I5 = 71, field03H4g = 72,
-# field03D6 = 73, field03F5 = 74, field03B5 = 75, field03B6 = 76,
-# field03C6 = 77, field03E0 = 78, field03C0 = 79, field03C1 = 80,
-# field03D1 = 81, field03G4 = 82, field03B4_2 = 83, field03G2_2 = 84,
-# field03E5 = 85, field03F1 = 86, field03G6 = 87, field03B1 = 88,
-# field03F1_2 = 89, field03H4 = 90, field03G5 = 91, field03F6 = 92,
-# field03A5 = 93, field03B3 = 94, field03D2_2 = 95, field03E6 = 96,
-# field03D2_3 = 97, field03B4g = 98
-# field04A0 = 99, field04C0 = 100, field04A1 = 101, field04B1 = 102,
-# field04A2 = 103, field04B2 = 104, field04C2 = 105, field04B3_1 = 106,
-# field04B3_2 = 107, field04C3_1 = 108, field04C3_2 = 109, field04C3_3 = 110,
-# field04C3_4 = 111, field04C4 = 112, field04D4 = 113, field04E0 = 114,
-# field04F0 = 115, field04F0g = 116, field04G0g = 117, field04G0 = 118,
-# field04E1 = 119, field04E2 = 120, field04F2 = 121, field04E3 = 122
-# field05B1 = 12, field05C1 = 13, field05D1 = 14, field05A2_1 = 15,
-# field05A2_2 = 16, field05C2 = 17, field05D2 = 18, field05A3 = 19,
-# field05B3_1 = 20, field05B3_2 = 21, field05B3_3 = 22, field05D3 = 23,
-# field05E3 = 24, field05B4_1 = 25, field05B4_2 = 26, field05C4_1 = 27,
-# field05C4_2 = 28
-# field06C1 = 130, field06C1f = 131, field06C2 = 132, field06E2 = 133,
-# field06A3 = 134, field06C3 = 135, field06C3g = 136, field06E3 = 137,
-# field06E3g = 138, field06B4 = 139, field06C4 = 140, field06D4 = 141,
-# field06E4 = 142, field06E4g = 143, field06C5 = 144, field06D5 = 145,
-# field06D5g = 146, field06D6 = 147, field06E6 = 148, field06_2A0 = 293,
-# field06_2C0g = 294, field06_2C0 = 295, field06add1 = 312
-# field07C0 = 149, field07C1 = 150, field07C1s = 151, field07B2 = 152,
-# field07D2 = 153, field07E2 = 154, field07B3 = 155, field07C3 = 156,
-# field07B4 = 157, field07B4y = 158, field07D4 = 159, field07E4 = 160,
-# field07F4 = 161, field07F4f = 162, field07B5 = 163, field07D5 = 164,
-# field07C6 = 165, field07C6g = 166
-# field08A0 = 167, field08A0g = 168, field08B0 = 169, field08C1 = 170,
-# field08D1 = 171, field08C2g = 172, field08C2f = 173, field08D2 = 174,
-# field08F2 = 175, field08B3g = 176, field08B3b = 177, field08C3 = 178,
-# field08D3g = 179, field08D3 = 180, field08C4 = 181, field08C4g = 182,
-# field08C4_2 = 183, field08D4 = 184, field08D5 = 185, field08C6 = 186,
-# field08D6g = 187, field08D6f = 188
-# field09B0 = 189, field09B0g = 190, field09A1 = 191, field09C1 = 192,
-# field09E1 = 193, field09A2 = 194, field09C2 = 195, field09C2g = 196,
-# field09E2 = 197, field09C3 = 198, field09A4 = 199, field09A4y = 200,
-# field09B4 = 201, field09D4 = 202, field09D4g = 203
-# field10B2 = 50, field10C2 = 51, field10D2 = 52, field10D3 = 53,
-# field10C1 = 54, field10A3_1 = 55, field10D3_2 = 56, field10E1 = 57,
-# field10A2 = 58, field10A3_2 = 59, field10C3_1 = 60, field10C3_2 = 61,
-# field10A1 = 62, field10A3_3 = 63, field10_B3 = 64
-# field11B1 = 204, field11C1 = 205, field11C1g = 206, field11B2 = 207,
-# field11C2 = 208, field11B3 = 209, field11B3_2 = 210, field11C3 = 211,
-# field11E3g = 212, field11E3 = 213, field11B4 = 214, field11C4 = 215,
-# field11C4g = 216, field11D4g = 217, field11D4 = 218, field11B5 = 219,
-# field11C5 = 220, field11B61 = 221, field11B62 = 222, field11B63 = 223,
-# field11B64 = 224, field11B65 = 225, field11D6g = 226, field11D6 = 227
-# field12C0 = 228, field12C1 = 229, field12C2 = 230, field12D2 = 231,
-# field12A3g = 232, field12A3 = 233, field12C3 = 234, field12C3g = 235,
-# field12D3 = 236, field12A4 = 237, field12A4g = 238, field12B4 = 239,
-# field12C4 = 240, field12C4g = 241, field12D4 = 242, field12B5 = 243,
-# field12D5 = 244, field12D6 = 245, field12D6g = 246
-# field13C0 = 247, field13C1 = 248, field13D1 = 249, field13B2 = 250,
-# field13B22 = 251, field13C2 = 252, field13A3 = 253, field13A3g = 254,
-# field13B3 = 255, field13B3g = 256, field13E3 = 257, field13G3 = 258,
-# field13G3g = 259, field13D4 = 260, field13E4 = 261, field13F4 = 262
-# field14D0 = 263, field14E0 = 264, field14D1 = 265, field14F1 = 266,
-# field14D2 = 267, field14D2g = 268, field14E2 = 269, field14D3 = 270,
-# field14D3b = 271, field14C4 = 272, field14D4 = 273, field14B5 = 274,
-# field14C5b = 275, field14C5 = 276, field14D5g = 277, field14D5 = 278,
-# field14C6 = 279, field14C6b = 280
-# field15C0 = 281, field15C0g = 282, field15B1 = 283, field15B1g = 284,
-# field15A3 = 285, field15A3g = 286, field15A3b = 287, field15E3 = 288,
-# field15D4 = 289, field15D4g = 290, field15C5 = 291, field15C6 = 292
-# fieldL00G1 = 297, fieldL00W1 = 299, fieldL00W3 = 301
-# fieldL02B0 = 306, fieldL021 = 309, fieldL022 = 310, fieldL023 = 311
+    # --- field03 ---
+    449: 64, # xx (field03D2-1) xx
+    450: 65, # xx (field03G1) xx
+    451: 66, # xx (field03G2-1) xx
+    452: 67, # xx (field03F3) xx
+    453: 68, # xx (field03B4-1) xx
+    454: 69, # xx (field03D4) xx
+    455: 70, # xx (field03I5) xx
+    456: 71, # xx (field03H4g) xx
+    457: 72, # xx (field03D6) xx
+    458: 73, # xx (field03F5) xx
+    459: 74, # xx (field03B5) xx
+    460: 75, # xx (field03B6) xx
+    461: 76, # xx (field03C6) xx
+    462: 77, # xx (field03E0) xx
+    463: 78, # xx (field03C0) xx
+    464: 79, # xx (field03C1) xx
+    465: 80, # xx (field03D1) xx
+    466: 81, # xx (field03G4) xx
+    467: 82, # xx (field03B4-2) xx
+    468: 83, # xx (field03G2-2) xx
+    469: 84, # xx (field03E5) xx
+    470: 85, # xx (field03F1) xx
+    471: 86, # xx (field03G6) xx
+    472: 87, # xx (field03B1) xx
+    473: 88, # xx (field03F1-2) xx
+    474: 89, # xx (field03H4) xx
+    475: 90, # xx (field03G5) xx
+    476: 91, # xx (field03F6) xx
+    477: 92, # xx (field03A5) xx
+    478: 93, # xx (field03B3) xx
+    479: 94, # xx (field03D2-2) xx
+    480: 95, # xx (field03E6) xx
+    481: 96, # xx (field03D2-3) xx
+    482: 97, # xx (field03B4g) xx
+
+    # --- field04 ---
+    483: 98, # xx (field04A0) xx
+    484: 99, # xx (field04C0) xx
+    485: 100, # xx (field04A1) xx
+    486: 101, # xx (field04B1) xx
+    487: 102, # xx (field04A2) xx
+    488: 103, # xx (field04B2) xx
+    489: 104, # xx (field04C2) xx
+    490: 105, # xx (field04B3-1) xx
+    491: 106, # xx (field04B3-2) xx
+    492: 107, # xx (field04C3-1) xx
+    493: 108, # xx (field04C3-2) xx
+    494: 109, # xx (field04C3-3) xx
+    495: 110, # xx (field04C3-4) xx
+    496: 111, # xx (field04C4) xx
+    497: 112, # xx (field04D4) xx
+    498: 113, # xx (field04E0) xx
+    499: 114, # xx (field04F0) xx
+    500: 115, # xx (field04F0g) xx
+    501: 116, # xx (field04G0g) xx
+    502: 117, # xx (field04G0) xx
+    503: 118, # xx (field04E1) xx
+    504: 119, # xx (field04E2) xx
+    505: 120, # xx (field04F2) xx
+    506: 121, # xx (field04E3) xx
+
+    # --- field05 ---
+    507: 11, # xx (field05B1) xx
+    508: 12, # xx (field05C1) xx
+    509: 13, # xx (field05D1) xx
+    510: 14, # xx (field05A2-1) xx
+    511: 15, # xx (field05A2-2) xx
+    512: 16, # xx (field05C2) xx
+    513: 17, # xx (field05D2) xx
+    514: 18, # xx (field05A3) xx
+    515: 19, # xx (field05B3-1) xx
+    516: 20, # xx (field05B3-2) xx
+    517: 21, # xx (field05B3-3) xx
+    518: 22, # xx (field05D3) xx
+    519: 23, # xx (field05E3) xx
+    520: 24, # xx (field05B4-1) xx
+    521: 25, # xx (field05B4-2) xx
+    522: 26, # xx (field05C4-1) xx
+    523: 27, # xx (field05C4-2) xx
+
+    # --- field06 ---
+    524: 129, # xx (field06C1) xx
+    525: 130, # xx (field06C1f) xx
+    526: 131, # xx (field06C2) xx
+    527: 132, # xx (field06E2) xx
+    528: 133, # xx (field06A3) xx
+    529: 134, # xx (field06C3) xx
+    530: 135, # xx (field06C3g) xx
+    531: 136, # xx (field06E3) xx
+    532: 137, # xx (field06E3g) xx
+    533: 138, # xx (field06B4) xx
+    534: 139, # xx (field06C4) xx
+    535: 140, # xx (field06D4) xx
+    536: 141, # xx (field06E4) xx
+    537: 142, # xx (field06E4g) xx
+    538: 143, # xx (field06C5) xx
+    539: 144, # xx (field06D5) xx
+    540: 145, # xx (field06D5g) xx
+    541: 146, # xx (field06D6) xx
+    542: 147, # xx (field06E6) xx
+    543: 292, # xx (field06-2A0) xx
+    544: 293, # xx (field06-2C0g) xx
+    545: 294, # xx (field06-2C0) xx
+    546: 311, # xx (field06add1) xx
+
+    # --- field07 ---
+    547: 148, # xx (field07C0) xx
+    548: 149, # xx (field07C1) xx
+    549: 150, # xx (field07C1s) xx
+    550: 151, # xx (field07B2) xx
+    551: 152, # xx (field07D2) xx
+    552: 153, # xx (field07E2) xx
+    553: 154, # xx (field07B3) xx
+    554: 155, # xx (field07C3) xx
+    555: 156, # xx (field07B4) xx
+    556: 157, # xx (field07B4y) xx
+    557: 158, # xx (field07D4) xx
+    558: 159, # xx (field07E4) xx
+    559: 160, # xx (field07F4) xx
+    560: 161, # xx (field07F4f) xx
+    561: 162, # xx (field07B5) xx
+    562: 163, # xx (field07D5) xx
+    563: 164, # xx (field07C6) xx
+    564: 165, # xx (field07C6g) xx
+
+    # --- field08 ---
+    565: 166, # xx (field08A0) xx
+    566: 167, # xx (field08A0g) xx
+    567: 168, # xx (field08B0) xx
+    568: 169, # xx (field08C1) xx
+    569: 170, # xx (field08D1) xx
+    570: 171, # xx (field08C2g) xx
+    571: 172, # xx (field08C2f) xx
+    572: 173, # xx (field08D2) xx
+    573: 174, # xx (field08F2) xx
+    574: 175, # xx (field08B3g) xx
+    575: 176, # xx (field08B3b) xx
+    576: 177, # xx (field08C3) xx
+    577: 178, # xx (field08D3g) xx
+    578: 179, # xx (field08D3) xx
+    579: 180, # xx (field08C4) xx
+    580: 181, # xx (field08C4g) xx
+    581: 182, # xx (field08C4-2) xx
+    582: 183, # xx (field08D4) xx
+    583: 184, # xx (field08D5) xx
+    584: 185, # xx (field08C6) xx
+    585: 186, # xx (field08D6g) xx
+    586: 187, # xx (field08D6f) xx
+
+    # --- field09 ---
+    587: 188, # xx (field09B0) xx
+    588: 189, # xx (field09B0g) xx
+    589: 190, # xx (field09A1) xx
+    590: 191, # xx (field09C1) xx
+    591: 192, # xx (field09E1) xx
+    592: 193, # xx (field09A2) xx
+    593: 194, # xx (field09C2) xx
+    594: 195, # xx (field09C2g) xx
+    595: 196, # xx (field09E2) xx
+    596: 197, # xx (field09C3) xx
+    597: 198, # xx (field09A4) xx
+    598: 199, # xx (field09A4y) xx
+    599: 200, # xx (field09B4) xx
+    600: 201, # xx (field09D4) xx
+    601: 202, # xx (field09D4g) xx
+
+    # --- field10 ---
+    602: 49, # xx (field10B2) xx
+    603: 50, # xx (field10C2) xx
+    604: 51, # xx (field10D2) xx
+    605: 52, # xx (field10D3) xx
+    606: 53, # xx (field10C1) xx
+    607: 54, # xx (field10A3-1) xx
+    608: 55, # xx (field10D3-2) xx
+    609: 56, # xx (field10E1) xx
+    610: 57, # xx (field10A2) xx
+    611: 58, # xx (field10A3-2) xx
+    612: 59, # xx (field10C3-1) xx
+    613: 60, # xx (field10C3-2) xx
+    614: 61, # xx (field10A1) xx
+    615: 62, # xx (field10A3-3) xx
+    616: 63, # xx (field10-B3) xx
+
+    # --- field11 ---
+    617: 203, # xx (field11B1) xx
+    618: 204, # xx (field11C1) xx
+    619: 205, # xx (field11C1g) xx
+    620: 206, # xx (field11B2) xx
+    621: 207, # xx (field11C2) xx
+    622: 208, # xx (field11B3) xx
+    623: 209, # xx (field11B3-2) xx
+    624: 210, # xx (field11C3) xx
+    625: 211, # xx (field11E3g) xx
+    626: 212, # xx (field11E3) xx
+    627: 213, # xx (field11B4) xx
+    628: 214, # xx (field11C4) xx
+    629: 215, # xx (field11C4g) xx
+    630: 216, # xx (field11D4g) xx
+    631: 217, # xx (field11D4) xx
+    632: 218, # xx (field11B5) xx
+    633: 219, # xx (field11C5) xx
+    634: 220, # xx (field11B61) xx
+    635: 221, # xx (field11B62) xx
+    636: 222, # xx (field11B63) xx
+    637: 223, # xx (field11B64) xx
+    638: 224, # xx (field11B65) xx
+    639: 225, # xx (field11D6g) xx
+    640: 226, # xx (field11D6) xx
+
+    # --- field12 ---
+    641: 227, # xx (field12C0) xx
+    642: 228, # xx (field12C1) xx
+    643: 229, # xx (field12C2) xx
+    644: 230, # xx (field12D2) xx
+    645: 231, # xx (field12A3g) xx
+    646: 232, # xx (field12A3) xx
+    647: 233, # xx (field12C3) xx
+    648: 234, # xx (field12C3g) xx
+    649: 235, # xx (field12D3) xx
+    650: 236, # xx (field12A4) xx
+    651: 237, # xx (field12A4g) xx
+    652: 238, # xx (field12B4) xx
+    653: 239, # xx (field12C4) xx
+    654: 240, # xx (field12C4g) xx
+    655: 241, # xx (field12D4) xx
+    656: 242, # xx (field12B5) xx
+    657: 243, # xx (field12D5) xx
+    658: 244, # xx (field12D6) xx
+    659: 245, # xx (field12D6g) xx
+
+    # --- field13 ---
+    660: 246, # xx (field13C0) xx
+    661: 247, # xx (field13C1) xx
+    662: 248, # xx (field13D1) xx
+    663: 249, # xx (field13B2) xx
+    664: 250, # xx (field13B22) xx
+    665: 251, # xx (field13C2) xx
+    666: 252, # xx (field13A3) xx
+    667: 253, # xx (field13A3g) xx
+    668: 254, # xx (field13B3) xx
+    669: 255, # xx (field13B3g) xx
+    670: 256, # xx (field13E3) xx
+    671: 257, # xx (field13G3) xx
+    672: 258, # xx (field13G3g) xx
+    673: 259, # xx (field13D4) xx
+    674: 260, # xx (field13E4) xx
+    675: 261, # xx (field13F4) xx
+
+    # --- field14 ---
+    676: 262, # xx (field14D0) xx
+    677: 263, # xx (field14E0) xx
+    678: 264, # xx (field14D1) xx
+    679: 265, # xx (field14F1) xx
+    680: 266, # xx (field14D2) xx
+    681: 267, # xx (field14D2g) xx
+    682: 268, # xx (field14E2) xx
+    683: 269, # xx (field14D3) xx
+    684: 270, # xx (field14D3b) xx
+    685: 271, # xx (field14C4) xx
+    686: 272, # xx (field14D4) xx
+    687: 273, # xx (field14B5) xx
+    688: 274, # xx (field14C5b) xx
+    689: 275, # xx (field14C5) xx
+    690: 276, # xx (field14D5g) xx
+    691: 277, # xx (field14D5) xx
+    692: 278, # xx (field14C6) xx
+    693: 279, # xx (field14C6b) xx
+
+    # --- field15 ---
+    694: 280, # xx (field15C0) xx
+    695: 281, # xx (field15C0g) xx
+    696: 282, # xx (field15B1) xx
+    697: 283, # xx (field15B1g) xx
+    698: 284, # xx (field15A3) xx
+    699: 285, # xx (field15A3g) xx
+    700: 286, # xx (field15A3b) xx
+    701: 287, # xx (field15E3) xx
+    702: 288, # xx (field15D4) xx
+    703: 289, # xx (field15D4g) xx
+    704: 290, # xx (field15C5) xx
+    705: 291, # xx (field15C6) xx
+
+    # --- Check if they even exist ---
+    706: 296, # xx (fieldL00G1) xx
+    707: 298, # xx (fieldL00W1) xx
+    708: 300, # xx (fieldL00W3) xx
+    710: 308, # xx (fieldL021) xx
+    711: 309, # xx (fieldL022) xx
+    712: 310, # xx (fieldL023) xx
 """
 
 class AreaID(IntEnum):
@@ -1264,37 +2100,56 @@ AP_LOCATION_NAMES = {
     "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD,
 
     # --- Pot Locations (potsanity) ---
-    "Starting Coin Pot": LocationID.StartingCoinPot,
-    "Alsedana Coin Pot": LocationID.AlsedanaCoinPot,
-    "Nebur Coin Pot": LocationID.NeburCoinPot,
-    "Xelpud Coin Pot": LocationID.XelpudCoinPot,
-    "Xelpud Weight Pot": LocationID.XelpudWeightPot,
-    "VoD Pre-Ladder Weight Pot": LocationID.VoDPreLadderWeightPot,
-    "VoD Post-Ladder Coin Pot": LocationID.VoDPostLadderCoinPot,
-    "VoD Chakram Pot": LocationID.VoDChakramPot,
-    "GoG Photo-op Weight Pot": LocationID.GoGPhotoopWeightPot,
-    "GoG High-up Coin Pot": LocationID.GoGHighupCoinPot,
-    "GoG Below Hiner Coin Pot": LocationID.GoGBelowHinerCoinPot,
-    "GoG Illusion Gate Bomb Pot": LocationID.GoGIllusionGateBombPot,
-    "MoG Ladder Coin Pot": LocationID.MoGLadderCoinPot,
-    "MoG Breakable Wall Coin Pot": LocationID.MoGBreakableWallCoinPot,
-    "MoG Futo Statue Coin Pot": LocationID.MoGFutoStatueCoinPot,
-    "MoG Pre-Ratatoskr Weight Pot": LocationID.MoGPreRatatoskrWeightPot,
-    "RoY Second Room Weight Pot": LocationID.RoYSecondRoomWeightPot,
-    "RoY Weapon Vault Coin Pot": LocationID.RoYWeaponVaultCoinPot,
-    "RoY Weapon Vault Weight Pot": LocationID.RoYWeaponVaultWeightPot,
-    "RoY Convenient Shuriken Pot": LocationID.RoYConvenientShurikenPot,
-    "RoY Below Ratatoskr Coin Pot": LocationID.RoYBelowRatatoskrCoinPot,
-    "RoY Footprint Shuriken Pot": LocationID.RoYFootprintShurikenPot,
-    "RoY Bridge Coin Pot": LocationID.RoYBridgeCoinPot,
-    "RoY Birth Seal Gate Shuriken Pot": LocationID.RoYBirthSealGateShurikenPot,
-    "RoY First Room Coin Pot": LocationID.RoYFirstRoomCoinPot,
-    "RoY Large Breakable Wall Coin Pot": LocationID.RoYLargeBreakableWallCoinPot,
-    "RoY Korobock Weight Pot": LocationID.RoYKorobockWeightPot,
-    "RoY Lamp of Time Weight Pot": LocationID.RoYLampofTimeWeightPot,
-    "RoY Torch Room Shuriken Pot": LocationID.RoYTorchRoomShurikenPot,
-    "RoY Golden Rock Coin Pot": LocationID.RoYGoldenRockCoinPot,
-}
+    "[START] Starting Coin Pot": LocationID.StartingCoinPot,
+    "[VOD B-3] Alsedana Coin Pot": LocationID.AlsedanaCoinPot,
+    "[VOD C-4] Nebur Coin Pot": LocationID.NeburCoinPot,
+    "[VOD D-4] Xelpud Coin Pot": LocationID.XelpudCoinPot,
+    "[VOD D-4] Xelpud Weight Pot": LocationID.XelpudWeightPot,
+    "[VOD E-4] Pre-Ladder Weight Pot": LocationID.VoDPreLadderWeightPot,
+    "[VOD E-3] Post-Ladder Coin Pot": LocationID.VoDPostLadderCoinPot,
+    "[VOD E-3] Chakram Pot": LocationID.VoDChakramPot,
+    "[GOG C-2] Photo-op Weight Pot": LocationID.GoGPhotoopWeightPot,
+    "[GOG C-3] High-up Coin Pot": LocationID.GoGHighupCoinPot,
+    "[GOG B-5] Below Hiner Coin Pot": LocationID.GoGBelowHinerCoinPot,
+    "[GOG A-3] Illusion Gate Bomb Pot": LocationID.GoGIllusionGateBombPot,
+    "[MOG A-1] First Room Coin Pot": LocationID.MoGFirstCoinPot,
+    "[MOG B-1] Second Room Weight Pot": LocationID.MoGSecondWeightPot,
+    "[MOG A-2] Breakable Wall Coin Pot": LocationID.MoGBreakableWallCoinPot,
+    "[MOG D-4] Futo Statue Coin Pot": LocationID.MoGFutoStatueCoinPot,
+    "[MOG C-5] Pre-Ratatoskr Weight Pot": LocationID.MoGPreRatatoskrWeightPot,
+    "[ROY E-4] First Room Coin Pot": LocationID.RoYFirstRoomCoinPot,
+    "[ROY E-3] Second Room Weight Pot": LocationID.RoYSecondRoomWeightPot,
+    "[ROY C-3] Weapon Vault Coin Pot": LocationID.RoYWeaponVaultCoinPot,
+    "[ROY C-3] Weapon Vault Weight Pot": LocationID.RoYWeaponVaultWeightPot,
+    "[ROY B-3] Convenient Shuriken Pot": LocationID.RoYConvenientShurikenPot,
+    "[ROY B-2] Below Ratatoskr Coin Pot": LocationID.RoYBelowRatatoskrCoinPot,
+    "[ROY C-2] Footprint Shuriken Pot": LocationID.RoYFootprintShurikenPot,
+    "[ROY E-2] Bridge Coin Pot": LocationID.RoYBridgeCoinPot,
+    "[ROY G-1] Birth Seal Gate Shuriken Pot": LocationID.RoYBirthSealGateShurikenPot,
+    "[ROY C-4] Large Breakable Wall Coin Pot": LocationID.RoYLargeBreakableWallCoinPot,
+    "[ROY C-5] Korobock Weight Pot": LocationID.RoYKorobockWeightPot,
+    "[ROY D-5] Lamp of Time Weight Pot": LocationID.RoYLampofTimeWeightPot,
+    "[ROY E-5] Torch Room Shuriken Pot": LocationID.RoYTorchRoomShurikenPot,
+    "[ROY E-6] Golden Rock Coin Pot": LocationID.RoYGoldenRockCoinPot,
+    "[ANN C-2] Fairy Watchtower Item Pot": LocationID.AnnFairyWatchtowerPot,
+    "[ANN D-2] Pre-Kaliya Hidden Coin Pot": LocationID.AnnKaliyaHiddenCoinPot,
+    "[ANN D-1] Kaliya's Item Pot": LocationID.AnnKaliyaItemPot,
+    "[ANN C-3] Kukulkan's Grail Coin Pot": LocationID.AnnGrailCoinPot,
+    "[ANN C-3] Kukulkan's Grail Weight Pot": LocationID.AnnGrailWeightPot,
+    "[ANN B-2] Fairy King's Coin Pot": LocationID.AnnFreyCoinPot,
+    "[ANN D-3] Center Item Pot #1": LocationID.AnnCenterItemPot1,
+    "[ANN D-3] Center Item Pot #2": LocationID.AnnCenterItemPot2,
+    "[ANN E-3] Huracan's Item Pot": LocationID.AnnHuracanItemPot,
+    "[ANN E-2] Mantra Watchtower Weight Pot": LocationID.AnnMantraWatchtowerPot,
+    "[ANN C-4] Look Away Weight Pot": LocationID.AnnLookAwayWeightPot,
+    "[ANN B-5] Bifrost Left Weight Pot": LocationID.AnnBifrostLeftWeightPot,
+    "[ANN D-5] Bifrost Right Item Pot": LocationID.AnnBifrostRightItemPot,
+    "[ANN D-5] Bifrost Right Coin Pot": LocationID.AnnBifrostRightCoinPot,
+    "[ANN E-5] Feathercross One-Way Pot": LocationID.AnnOneWayCoinPot,
+    "[ANN D-4] Ixtab Coin Pot": LocationID.AnnIxtabCoinPot,
+    "[ANN G-4] Death's Prison Coin Pot": LocationID.AnnDeathsPrisonCoinPot,
+    "[ANN F-3] Pre-Kujata Weight Pot": LocationID.AnnKujataWeightPot,
+}  
 
 ITEM_MAP = {
     "Hand Scanner": ItemID.HandScanner,
@@ -1615,7 +2470,292 @@ ITEM_MAP = {
     "Pot Filler #28": ItemID.PotFiller28,
     "Pot Filler #29": ItemID.PotFiller29,
     "Pot Filler #30": ItemID.PotFiller30,
+    "Pot Filler #31": ItemID.PotFiller31,
+    "Pot Filler #32": ItemID.PotFiller32,
+    "Pot Filler #33": ItemID.PotFiller33,
+    "Pot Filler #34": ItemID.PotFiller34,
+    "Pot Filler #35": ItemID.PotFiller35,
+    "Pot Filler #36": ItemID.PotFiller36,
+    "Pot Filler #37": ItemID.PotFiller37,
+    "Pot Filler #38": ItemID.PotFiller38,
+    "Pot Filler #39": ItemID.PotFiller39,
+    "Pot Filler #40": ItemID.PotFiller40,
+    "Pot Filler #41": ItemID.PotFiller41,
+    "Pot Filler #42": ItemID.PotFiller42,
+    "Pot Filler #43": ItemID.PotFiller43,
+    "Pot Filler #44": ItemID.PotFiller44,
+    "Pot Filler #45": ItemID.PotFiller45,
+    "Pot Filler #46": ItemID.PotFiller46,
+    "Pot Filler #47": ItemID.PotFiller47,
+    "Pot Filler #48": ItemID.PotFiller48,
+    "Pot Filler #49": ItemID.PotFiller49,
 }
+
+"""
+    "Pot Filler #50": ItemID.PotFiller50,
+    "Pot Filler #51": ItemID.PotFiller51,
+    "Pot Filler #52": ItemID.PotFiller52,
+    "Pot Filler #53": ItemID.PotFiller53,
+    "Pot Filler #54": ItemID.PotFiller54,
+    "Pot Filler #55": ItemID.PotFiller55,
+    "Pot Filler #56": ItemID.PotFiller56,
+    "Pot Filler #57": ItemID.PotFiller57,
+    "Pot Filler #58": ItemID.PotFiller58,
+    "Pot Filler #59": ItemID.PotFiller59,
+    "Pot Filler #60": ItemID.PotFiller60,
+    "Pot Filler #61": ItemID.PotFiller61,
+    "Pot Filler #62": ItemID.PotFiller62,
+    "Pot Filler #63": ItemID.PotFiller63,
+    "Pot Filler #64": ItemID.PotFiller64,
+    "Pot Filler #65": ItemID.PotFiller65,
+    "Pot Filler #66": ItemID.PotFiller66,
+    "Pot Filler #67": ItemID.PotFiller67,
+    "Pot Filler #68": ItemID.PotFiller68,
+    "Pot Filler #69": ItemID.PotFiller69,
+    "Pot Filler #70": ItemID.PotFiller70,
+    "Pot Filler #71": ItemID.PotFiller71,
+    "Pot Filler #72": ItemID.PotFiller72,
+    "Pot Filler #73": ItemID.PotFiller73,
+    "Pot Filler #74": ItemID.PotFiller74,
+    "Pot Filler #75": ItemID.PotFiller75,
+    "Pot Filler #76": ItemID.PotFiller76,
+    "Pot Filler #77": ItemID.PotFiller77,
+    "Pot Filler #78": ItemID.PotFiller78,
+    "Pot Filler #79": ItemID.PotFiller79,
+    "Pot Filler #80": ItemID.PotFiller80,
+    "Pot Filler #81": ItemID.PotFiller81,
+    "Pot Filler #82": ItemID.PotFiller82,
+    "Pot Filler #83": ItemID.PotFiller83,
+    "Pot Filler #84": ItemID.PotFiller84,
+    "Pot Filler #85": ItemID.PotFiller85,
+    "Pot Filler #86": ItemID.PotFiller86,
+    "Pot Filler #87": ItemID.PotFiller87,
+    "Pot Filler #88": ItemID.PotFiller88,
+    "Pot Filler #89": ItemID.PotFiller89,
+    "Pot Filler #90": ItemID.PotFiller90,
+    "Pot Filler #91": ItemID.PotFiller91,
+    "Pot Filler #92": ItemID.PotFiller92,
+    "Pot Filler #93": ItemID.PotFiller93,
+    "Pot Filler #94": ItemID.PotFiller94,
+    "Pot Filler #95": ItemID.PotFiller95,
+    "Pot Filler #96": ItemID.PotFiller96,
+    "Pot Filler #97": ItemID.PotFiller97,
+    "Pot Filler #98": ItemID.PotFiller98,
+    "Pot Filler #99": ItemID.PotFiller99,
+    "Pot Filler #100": ItemID.PotFiller100,
+    "Pot Filler #101": ItemID.PotFiller101,
+    "Pot Filler #102": ItemID.PotFiller102,
+    "Pot Filler #103": ItemID.PotFiller103,
+    "Pot Filler #104": ItemID.PotFiller104,
+    "Pot Filler #105": ItemID.PotFiller105,
+    "Pot Filler #106": ItemID.PotFiller106,
+    "Pot Filler #107": ItemID.PotFiller107,
+    "Pot Filler #108": ItemID.PotFiller108,
+    "Pot Filler #109": ItemID.PotFiller109,
+    "Pot Filler #110": ItemID.PotFiller110,
+    "Pot Filler #111": ItemID.PotFiller111,
+    "Pot Filler #112": ItemID.PotFiller112,
+    "Pot Filler #113": ItemID.PotFiller113,
+    "Pot Filler #114": ItemID.PotFiller114,
+    "Pot Filler #115": ItemID.PotFiller115,
+    "Pot Filler #116": ItemID.PotFiller116,
+    "Pot Filler #117": ItemID.PotFiller117,
+    "Pot Filler #118": ItemID.PotFiller118,
+    "Pot Filler #119": ItemID.PotFiller119,
+    "Pot Filler #120": ItemID.PotFiller120,
+    "Pot Filler #121": ItemID.PotFiller121,
+    "Pot Filler #122": ItemID.PotFiller122,
+    "Pot Filler #123": ItemID.PotFiller123,
+    "Pot Filler #124": ItemID.PotFiller124,
+    "Pot Filler #125": ItemID.PotFiller125,
+    "Pot Filler #126": ItemID.PotFiller126,
+    "Pot Filler #127": ItemID.PotFiller127,
+    "Pot Filler #128": ItemID.PotFiller128,
+    "Pot Filler #129": ItemID.PotFiller129,
+    "Pot Filler #130": ItemID.PotFiller130,
+    "Pot Filler #131": ItemID.PotFiller131,
+    "Pot Filler #132": ItemID.PotFiller132,
+    "Pot Filler #133": ItemID.PotFiller133,
+    "Pot Filler #134": ItemID.PotFiller134,
+    "Pot Filler #135": ItemID.PotFiller135,
+    "Pot Filler #136": ItemID.PotFiller136,
+    "Pot Filler #137": ItemID.PotFiller137,
+    "Pot Filler #138": ItemID.PotFiller138,
+    "Pot Filler #139": ItemID.PotFiller139,
+    "Pot Filler #140": ItemID.PotFiller140,
+    "Pot Filler #141": ItemID.PotFiller141,
+    "Pot Filler #142": ItemID.PotFiller142,
+    "Pot Filler #143": ItemID.PotFiller143,
+    "Pot Filler #144": ItemID.PotFiller144,
+    "Pot Filler #145": ItemID.PotFiller145,
+    "Pot Filler #146": ItemID.PotFiller146,
+    "Pot Filler #147": ItemID.PotFiller147,
+    "Pot Filler #148": ItemID.PotFiller148,
+    "Pot Filler #149": ItemID.PotFiller149,
+    "Pot Filler #150": ItemID.PotFiller150,
+    "Pot Filler #151": ItemID.PotFiller151,
+    "Pot Filler #152": ItemID.PotFiller152,
+    "Pot Filler #153": ItemID.PotFiller153,
+    "Pot Filler #154": ItemID.PotFiller154,
+    "Pot Filler #155": ItemID.PotFiller155,
+    "Pot Filler #156": ItemID.PotFiller156,
+    "Pot Filler #157": ItemID.PotFiller157,
+    "Pot Filler #158": ItemID.PotFiller158,
+    "Pot Filler #159": ItemID.PotFiller159,
+    "Pot Filler #160": ItemID.PotFiller160,
+    "Pot Filler #161": ItemID.PotFiller161,
+    "Pot Filler #162": ItemID.PotFiller162,
+    "Pot Filler #163": ItemID.PotFiller163,
+    "Pot Filler #164": ItemID.PotFiller164,
+    "Pot Filler #165": ItemID.PotFiller165,
+    "Pot Filler #166": ItemID.PotFiller166,
+    "Pot Filler #167": ItemID.PotFiller167,
+    "Pot Filler #168": ItemID.PotFiller168,
+    "Pot Filler #169": ItemID.PotFiller169,
+    "Pot Filler #170": ItemID.PotFiller170,
+    "Pot Filler #171": ItemID.PotFiller171,
+    "Pot Filler #172": ItemID.PotFiller172,
+    "Pot Filler #173": ItemID.PotFiller173,
+    "Pot Filler #174": ItemID.PotFiller174,
+    "Pot Filler #175": ItemID.PotFiller175,
+    "Pot Filler #176": ItemID.PotFiller176,
+    "Pot Filler #177": ItemID.PotFiller177,
+    "Pot Filler #178": ItemID.PotFiller178,
+    "Pot Filler #179": ItemID.PotFiller179,
+    "Pot Filler #180": ItemID.PotFiller180,
+    "Pot Filler #181": ItemID.PotFiller181,
+    "Pot Filler #182": ItemID.PotFiller182,
+    "Pot Filler #183": ItemID.PotFiller183,
+    "Pot Filler #184": ItemID.PotFiller184,
+    "Pot Filler #185": ItemID.PotFiller185,
+    "Pot Filler #186": ItemID.PotFiller186,
+    "Pot Filler #187": ItemID.PotFiller187,
+    "Pot Filler #188": ItemID.PotFiller188,
+    "Pot Filler #189": ItemID.PotFiller189,
+    "Pot Filler #190": ItemID.PotFiller190,
+    "Pot Filler #191": ItemID.PotFiller191,
+    "Pot Filler #192": ItemID.PotFiller192,
+    "Pot Filler #193": ItemID.PotFiller193,
+    "Pot Filler #194": ItemID.PotFiller194,
+    "Pot Filler #195": ItemID.PotFiller195,
+    "Pot Filler #196": ItemID.PotFiller196,
+    "Pot Filler #197": ItemID.PotFiller197,
+    "Pot Filler #198": ItemID.PotFiller198,
+    "Pot Filler #199": ItemID.PotFiller199,
+    "Pot Filler #200": ItemID.PotFiller200,
+    "Pot Filler #201": ItemID.PotFiller201,
+    "Pot Filler #202": ItemID.PotFiller202,
+    "Pot Filler #203": ItemID.PotFiller203,
+    "Pot Filler #204": ItemID.PotFiller204,
+    "Pot Filler #205": ItemID.PotFiller205,
+    "Pot Filler #206": ItemID.PotFiller206,
+    "Pot Filler #207": ItemID.PotFiller207,
+    "Pot Filler #208": ItemID.PotFiller208,
+    "Pot Filler #209": ItemID.PotFiller209,
+    "Pot Filler #210": ItemID.PotFiller210,
+    "Pot Filler #211": ItemID.PotFiller211,
+    "Pot Filler #212": ItemID.PotFiller212,
+    "Pot Filler #213": ItemID.PotFiller213,
+    "Pot Filler #214": ItemID.PotFiller214,
+    "Pot Filler #215": ItemID.PotFiller215,
+    "Pot Filler #216": ItemID.PotFiller216,
+    "Pot Filler #217": ItemID.PotFiller217,
+    "Pot Filler #218": ItemID.PotFiller218,
+    "Pot Filler #219": ItemID.PotFiller219,
+    "Pot Filler #220": ItemID.PotFiller220,
+    "Pot Filler #221": ItemID.PotFiller221,
+    "Pot Filler #222": ItemID.PotFiller222,
+    "Pot Filler #223": ItemID.PotFiller223,
+    "Pot Filler #224": ItemID.PotFiller224,
+    "Pot Filler #225": ItemID.PotFiller225,
+    "Pot Filler #226": ItemID.PotFiller226,
+    "Pot Filler #227": ItemID.PotFiller227,
+    "Pot Filler #228": ItemID.PotFiller228,
+    "Pot Filler #229": ItemID.PotFiller229,
+    "Pot Filler #230": ItemID.PotFiller230,
+    "Pot Filler #231": ItemID.PotFiller231,
+    "Pot Filler #232": ItemID.PotFiller232,
+    "Pot Filler #233": ItemID.PotFiller233,
+    "Pot Filler #234": ItemID.PotFiller234,
+    "Pot Filler #235": ItemID.PotFiller235,
+    "Pot Filler #236": ItemID.PotFiller236,
+    "Pot Filler #237": ItemID.PotFiller237,
+    "Pot Filler #238": ItemID.PotFiller238,
+    "Pot Filler #239": ItemID.PotFiller239,
+    "Pot Filler #240": ItemID.PotFiller240,
+    "Pot Filler #241": ItemID.PotFiller241,
+    "Pot Filler #242": ItemID.PotFiller242,
+    "Pot Filler #243": ItemID.PotFiller243,
+    "Pot Filler #244": ItemID.PotFiller244,
+    "Pot Filler #245": ItemID.PotFiller245,
+    "Pot Filler #246": ItemID.PotFiller246,
+    "Pot Filler #247": ItemID.PotFiller247,
+    "Pot Filler #248": ItemID.PotFiller248,
+    "Pot Filler #249": ItemID.PotFiller249,
+    "Pot Filler #250": ItemID.PotFiller250,
+    "Pot Filler #251": ItemID.PotFiller251,
+    "Pot Filler #252": ItemID.PotFiller252,
+    "Pot Filler #253": ItemID.PotFiller253,
+    "Pot Filler #254": ItemID.PotFiller254,
+    "Pot Filler #255": ItemID.PotFiller255,
+    "Pot Filler #256": ItemID.PotFiller256,
+    "Pot Filler #257": ItemID.PotFiller257,
+    "Pot Filler #258": ItemID.PotFiller258,
+    "Pot Filler #259": ItemID.PotFiller259,
+    "Pot Filler #260": ItemID.PotFiller260,
+    "Pot Filler #261": ItemID.PotFiller261,
+    "Pot Filler #262": ItemID.PotFiller262,
+    "Pot Filler #263": ItemID.PotFiller263,
+    "Pot Filler #264": ItemID.PotFiller264,
+    "Pot Filler #265": ItemID.PotFiller265,
+    "Pot Filler #266": ItemID.PotFiller266,
+    "Pot Filler #267": ItemID.PotFiller267,
+    "Pot Filler #268": ItemID.PotFiller268,
+    "Pot Filler #269": ItemID.PotFiller269,
+    "Pot Filler #270": ItemID.PotFiller270,
+    "Pot Filler #271": ItemID.PotFiller271,
+    "Pot Filler #272": ItemID.PotFiller272,
+    "Pot Filler #273": ItemID.PotFiller273,
+    "Pot Filler #274": ItemID.PotFiller274,
+    "Pot Filler #275": ItemID.PotFiller275,
+    "Pot Filler #276": ItemID.PotFiller276,
+    "Pot Filler #277": ItemID.PotFiller277,
+    "Pot Filler #278": ItemID.PotFiller278,
+    "Pot Filler #279": ItemID.PotFiller279,
+    "Pot Filler #280": ItemID.PotFiller280,
+    "Pot Filler #281": ItemID.PotFiller281,
+    "Pot Filler #282": ItemID.PotFiller282,
+    "Pot Filler #283": ItemID.PotFiller283,
+    "Pot Filler #284": ItemID.PotFiller284,
+    "Pot Filler #285": ItemID.PotFiller285,
+    "Pot Filler #286": ItemID.PotFiller286,
+    "Pot Filler #287": ItemID.PotFiller287,
+    "Pot Filler #288": ItemID.PotFiller288,
+    "Pot Filler #289": ItemID.PotFiller289,
+    "Pot Filler #290": ItemID.PotFiller290,
+    "Pot Filler #291": ItemID.PotFiller291,
+    "Pot Filler #292": ItemID.PotFiller292,
+    "Pot Filler #293": ItemID.PotFiller293,
+    "Pot Filler #294": ItemID.PotFiller294,
+    "Pot Filler #295": ItemID.PotFiller295,
+    "Pot Filler #296": ItemID.PotFiller296,
+    "Pot Filler #297": ItemID.PotFiller297,
+    "Pot Filler #298": ItemID.PotFiller298,
+    "Pot Filler #299": ItemID.PotFiller299,
+    "Pot Filler #300": ItemID.PotFiller300,
+    "Pot Filler #301": ItemID.PotFiller301,
+    "Pot Filler #302": ItemID.PotFiller302,
+    "Pot Filler #303": ItemID.PotFiller303,
+    "Pot Filler #304": ItemID.PotFiller304,
+    "Pot Filler #305": ItemID.PotFiller305,
+    "Pot Filler #306": ItemID.PotFiller306,
+    "Pot Filler #307": ItemID.PotFiller307,
+    "Pot Filler #308": ItemID.PotFiller308,
+    "Pot Filler #309": ItemID.PotFiller309,
+    "Pot Filler #310": ItemID.PotFiller310,
+    "Pot Filler #311": ItemID.PotFiller311,
+    "Pot Filler #312": ItemID.PotFiller312,
+"""
 
 STARTING_WEAPON_MAP = {
     "start_leather_whip": ItemID.Whip1,

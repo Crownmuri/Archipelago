@@ -53,6 +53,8 @@ class LM2LocationDef:
 
 def _location_name_to_id(name: str) -> LocationID:
     """Convert location name to LocationID enum value."""
+    if name in AP_LOCATION_NAMES:
+        return AP_LOCATION_NAMES[name]
     key = name.replace(" ", "").replace("-", "")
     try:
         return LocationID[key]

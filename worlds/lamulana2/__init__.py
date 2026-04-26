@@ -9,7 +9,7 @@ DEBUG = False
 
 def _log(*args, **kwargs):
     if DEBUG:
-        _log(*args, **kwargs)
+        print(*args, **kwargs)
 
 import os
 import zipfile

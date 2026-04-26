@@ -505,6 +505,12 @@ def disconnect_shuffleable_exits(world) -> None:
         to_disconnect.extend(exits)
 
     for exit_ in to_disconnect:
+        # If an exit was already disconnected earlier (e.g. by a prior
+        # ap_structural_er attempt in the same run), skip — AP's
+        # disconnect_entrance_for_randomization does not tolerate a
+        # None connected_region.
+        if exit_.connected_region is None:
+            continue
         if exit_.randomization_type == _ER_ONE_WAY:
             disconnect_entrance_for_randomization(
                 exit_,

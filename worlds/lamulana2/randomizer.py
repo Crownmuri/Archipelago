@@ -25,6 +25,7 @@ from .ids import (
     DISSONANCE_IDS,
     BASE_ITEM_ID,
     GUARDIAN_ANKHS_LOCATIONS,
+    GUARDIAN_ANKHS_ITEMS,
     LOGIC_FLAG_LOCATION_IDS,
     LOGIC_FLAG_ITEM_IDS,
     AP_ITEM_PLACEHOLDER,
@@ -41,6 +42,7 @@ from .items import (
     AP_FILLER,
     INTERNAL_POOL_BY_REWARD,
     INTERNAL_ID_TO_REWARD,
+    LM2Item,
 )
 from .locations import (
     create_locations,
@@ -341,9 +343,13 @@ class LM2RandomizerCore:
         # ── Branch B: vanilla cumulative mode ───────────────────────────────
         guardian_groups = []
 
-        # Create a state that ignores guardians for grouping
+        # Create a state that ignores guardians for grouping.
+        # PlayerStateAdapter holds the state via weakref, so we must keep a
+        # strong local reference alive for the duration of this function —
+        # otherwise the copy is GC'd and state_adapter.state returns None.
+        state_copy = self.multiworld.state.copy()
         state_adapter = PlayerStateAdapter(
-            self.multiworld.state.copy(),
+            state_copy,
             self.player,
             self.multiworld,
             self.options
@@ -662,6 +668,28 @@ class LM2RandomizerCore:
                 _log(f"[ERROR] Failed to get name for ItemID {item_id}: {e}")
                 continue
 
+            # Ankh Jewels need the boss-specific name when guardian_specific_ankhs
+            # is on, otherwise the pool's "Ankh Jewel (Boss)" gets removed by ID
+            # but is replaced with a generic "Ankh Jewel" that no guardian gate
+            # accepts — making that boss unreachable.
+            if (item_name == "Ankh Jewel"
+                    and getattr(self.options, "guardian_specific_ankhs", False)):
+                specific = GUARDIAN_ANKHS_ITEMS.get(item_id)
+                if specific:
+                    ap_item = LM2Item(
+                        name=specific,
+                        classification=ItemClassification.progression,
+                        code=BASE_ITEM_ID + item_id.value,
+                        player=self.player,
+                    )
+                    ap_item.lm2_game_id = item_id
+                    mw.push_item(loc, ap_item, collect=False)
+                    loc.locked = True
+                    self.shop_entries.append(ShopEntry(loc_id, item_id, price_multiplier))
+                    placed_items_info.append((specific, loc.name))
+                    _log(f"[DEBUG] Placed {specific} (ID: {item_id}) at {loc.name}")
+                    continue
+
             item = create_item(self.world, item_name, game_id=item_id)
 
             mw.push_item(loc, item, collect=False)
@@ -811,23 +839,103 @@ class LM2RandomizerCore:
             if len(mantra_items) != len(MANTRA_ITEMS):
                 _log(f"[WARN] Found {len(mantra_items)} mantra items in AP pool, expected {len(MANTRA_ITEMS)}")
 
-            self.rng.shuffle(mural_locations)
-            self.rng.shuffle(mantra_items)
-
             if len(mantra_items) > len(mural_locations):
                 _log("[ERROR] More mantras to place than mural locations")
                 return False
 
-            # Place all mantras
-            for loc, item in zip(mural_locations, mantra_items):
-                mw.push_item(loc, item, collect=False)
-                loc.locked = True
+            # C# parity with Randomiser.cs::RandomiseWithChecks(): build state
+            # with every NON-mantra item, then place each mantra at a mural
+            # reachable in that state. Mantras must be excluded so that
+            # mantra-gated murals (Child Mural needs CanChant(Mother)+CanChant(Wind),
+            # Moon Mural needs CanChant(Sun)) are correctly seen as unreachable
+            # — otherwise the cyclic mantra→mural dependency softlocks the main
+            # fill.
+            mantra_names = {it.name for it in mantra_items}
 
-                # Remove from AP pool so it can't be placed elsewhere
-                if item in mw.itempool:
-                    mw.itempool.remove(item)
+            state_copy = self.multiworld.state.copy()
+            state_adapter = PlayerStateAdapter(
+                state_copy, self.player, self.multiworld, self.options
+            )
+            state_adapter.set_starting_area(self.starting_area)
 
-            return True
+            for it in mw.itempool:
+                if it.player == self.player and it.name not in mantra_names:
+                    state_adapter.state.collect(it, True)
+                    state_adapter._collect_item_name(it.name)
+            for placed_loc in self.locations.values():
+                pi = placed_loc.item
+                if pi is not None and pi.player == self.player and pi.name not in mantra_names:
+                    state_adapter.state.collect(pi, True)
+                    state_adapter._collect_item_name(pi.name)
+            for it in mw.precollected_items[self.player]:
+                if it.name not in mantra_names:
+                    state_adapter.state.collect(it, True)
+                    state_adapter._collect_item_name(it.name)
+
+            # Mirror C# GetStateWithItems' chained flood-fill: after each
+            # mantra is placed, collect it into the state so subsequent
+            # reachability checks see it. This unlocks chant-gated murals
+            # (Moon needs Sun; Child needs Mother+Wind; Night sits behind
+            # NIBIRU which needs five chants). Without chaining, three
+            # murals stay unreachable forever and we can never place all
+            # 10 mantras.
+            #
+            # Order is sensitive: if the last mantra to place is the one
+            # that gates the only remaining mural, we deadlock. Retry the
+            # shuffle a few times before giving up — most orderings are
+            # solvable given the chain dependency analysis.
+            MAX_SHUFFLE_RETRIES = 25
+
+            def snapshot_state():
+                return {k: v for k, v in state_adapter._collected_items.items()}
+
+            base_collected = snapshot_state()
+            base_locked = [loc for loc in mural_locations]
+
+            for attempt in range(MAX_SHUFFLE_RETRIES):
+                # Reset state and mural pool to pre-placement snapshot
+                state_adapter._collected_items.clear()
+                state_adapter._collected_items.update(base_collected)
+                state_adapter.area_checks.clear()
+                state_adapter.entrance_checks.clear()
+
+                trial_murals = list(base_locked)
+                trial_mantras = list(mantra_items)
+                self.rng.shuffle(trial_mantras)
+                placements = []
+
+                ok = True
+                for mantra_item in trial_mantras:
+                    self.rng.shuffle(trial_murals)
+                    chosen_idx = -1
+                    for i, loc in enumerate(trial_murals):
+                        try:
+                            if loc.can_access_with_adapter(state_adapter):
+                                chosen_idx = i
+                                break
+                        except Exception:
+                            continue
+                    if chosen_idx < 0:
+                        ok = False
+                        break
+                    chosen_loc = trial_murals.pop(chosen_idx)
+                    placements.append((chosen_loc, mantra_item))
+                    state_adapter.state.collect(mantra_item, True)
+                    state_adapter._collect_item_name(mantra_item.name)
+
+                if ok:
+                    for chosen_loc, mantra_item in placements:
+                        mw.push_item(chosen_loc, mantra_item, collect=False)
+                        chosen_loc.locked = True
+                        if mantra_item in mw.itempool:
+                            mw.itempool.remove(mantra_item)
+                    return True
+
+            _log(
+                f"[ERROR] Could not place all mantras at reachable murals after "
+                f"{MAX_SHUFFLE_RETRIES} shuffle attempts"
+            )
+            return False
 
         return True
 

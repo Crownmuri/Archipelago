@@ -330,20 +330,23 @@ def get_starting_item_ids(world) -> List[ItemID]:
 
 def apply_starting_inventory(world):
     """Add starting items to the player's precollected items."""
-    existing_precollected = {item.name for item in world.multiworld.precollected_items[world.player]}
-    
+    # Dedupe by AP code (unique per game_id), not name — multiple distinct
+    # items can share a display name (e.g. all 16 area maps are "Map").
+    existing_precollected = {item.code for item in world.multiworld.precollected_items[world.player]}
+
     for item_id in get_starting_item_ids(world):
         ap_id = BASE_ITEM_ID + int(item_id)
         item_def = ITEM_DEFS_BY_AP_ID.get(ap_id)
-        
+
         if not item_def:
             _log(f"Warning: Starting item {item_id} (AP ID {ap_id}) not found in Items.json")
             continue
-        
-        if item_def.name in existing_precollected:
+
+        if ap_id in existing_precollected:
             continue
-            
+
         world.multiworld.push_precollected(create_item(world, item_def.name, game_id=item_def.game_id))
+        existing_precollected.add(ap_id)
 
 
 # ============================================================
@@ -418,13 +421,20 @@ def build_item_pool(world) -> List[Item]:
         if world.options.remove_maps and item_def.name.startswith("Map"):
             continue
 
+        # Crystal Skulls - skip excess skulls beyond required_skulls when enabled
+        if item_def.name == "Crystal Skull" and world.options.remove_excess_skulls:
+            required = world.options.required_skulls.value
+            skull_index = game_item_id.value - ItemID.CrystalSkull1.value
+            if skull_index >= required:
+                continue
+
         # Handle mantras
         if item_def.name in ["Heaven", "Earth", "Sun", "Moon", "Fire", "Sea", "Wind", "Mother", "Child", "Night"]:
             if world.options.mantra_placement.value == 0:  # original
                 continue
         
         # Handle research
-        if item_def.name in "Research":
+        if "Research" in item_def.name:
             if not world.options.random_research:
                 continue
             if world.options.remove_research:
@@ -494,19 +504,23 @@ def build_shop_item_ids(world) -> List[ItemID]:
 # ============================================================
 
 AP_FILLER: list[tuple[str, ItemID]] = [
-    ("1 Coin",     ItemID.Coin1),
-    ("10 Coins",   ItemID.Coin10),
-    ("30 Coins",   ItemID.Coin30),
-    ("50 Coins",   ItemID.Coin50),
-    ("80 Coins",   ItemID.Coin80),
-    ("100 Coins",  ItemID.Coin100),
-    ("1 Weight",   ItemID.Weight1),
-    ("5 Weights",  ItemID.Weight5),
-    ("10 Weights", ItemID.Weight10),
-    ("20 Weights", ItemID.Weight20),
-    ("10 Shuriken", ItemID.ShurikenBundle),
-    ("3 Bombs",     ItemID.BombBundle),
-    ("1 Chakram",   ItemID.ChakramBundle),
+    ("1 Coin",            ItemID.Coin1),
+    ("10 Coins",          ItemID.Coin10),
+    ("30 Coins",          ItemID.Coin30),
+    ("50 Coins",          ItemID.Coin50),
+    ("80 Coins",          ItemID.Coin80),
+    ("100 Coins",         ItemID.Coin100),
+    ("1 Weight",          ItemID.Weight1),
+    ("5 Weights",         ItemID.Weight5),
+    ("10 Weights",        ItemID.Weight10),
+    ("20 Weights",        ItemID.Weight20),
+    ("10 Shuriken",       ItemID.ShurikenBundle),
+    ("10 Rolling Shuriken", ItemID.RollingShurikenBundle),
+    ("10 Earth Spears",   ItemID.EarthSpearBundle),
+    ("10 Flares",         ItemID.FlareBundle),
+    ("10 Caltrops",       ItemID.CaltropsBundle),
+    ("1 Chakram",         ItemID.ChakramBundle),
+    ("3 Bombs",           ItemID.BombBundle),
 ]
 
 AP_FILLER_NAMES: frozenset[str] = frozenset(name for name, _ in AP_FILLER)
@@ -518,11 +532,21 @@ FILLER_DISTRIBUTION = [
     ("1 Weight", 4), ("5 Weights", 10), ("10 Weights", 2), ("20 Weights", 1)
 ]
 
-# Pot filler distribution (30 pots, matches vanilla rewards for VoD/GoG/MoG/RoY)
+# Pot filler distribution (49 pots up to Annwfn)
 POT_FILLER_DISTRIBUTION = [
-    ("10 Coins", 14), ("30 Coins", 2),
-    ("1 Weight", 8),
-    ("10 Shuriken", 4), ("3 Bombs", 1), ("1 Chakram", 1),
+    ("1 Weight", 14),
+    ("10 Coins", 17),
+    ("30 Coins", 4),
+    ("50 Coins", 0),
+    ("80 Coins", 1),
+    ("100 Coins", 1),
+    ("10 Shuriken", 6),
+    ("10 Rolling Shuriken", 4),
+    ("10 Earth Spears", 0),
+    ("10 Flares", 0),
+    ("10 Caltrops", 0),
+    ("1 Chakram", 1),
+    ("3 Bombs", 1),
 ]
 
 # ============================================================

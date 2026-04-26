@@ -4,7 +4,7 @@
     "Name": "Starting Area",
     "Locations": [
         {
-            "Name": "Starting Coin Pot",
+            "Name": "[START] Starting Coin Pot",
             "ID": "field01-2G",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -95,43 +95,43 @@
             "Logic": "Has(Feather) and CanWarp"
         },
         {
-            "Name": "Alsedana Coin Pot",
+            "Name": "[VOD B-3] Alsedana Coin Pot",
             "ID": "field01B2",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "Nebur Coin Pot",
+            "Name": "[VOD C-4] Nebur Coin Pot",
             "ID": "field01C3",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "Xelpud Coin Pot",
+            "Name": "[VOD D-4] Xelpud Coin Pot",
             "ID": "field01D3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "Xelpud Weight Pot",
+            "Name": "[VOD D-4] Xelpud Weight Pot",
             "ID": "field01D3-2",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "VoD Pre-Ladder Weight Pot",
+            "Name": "[VOD E-4] Pre-Ladder Weight Pot",
             "ID": "field01E3",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "VoD Post-Ladder Coin Pot",
+            "Name": "[VOD E-3] Post-Ladder Coin Pot",
             "ID": "field01E2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "VoD Chakram Pot",
+            "Name": "[VOD E-3] Chakram Pot",
             "ID": "field01E2-2",
             "LocationType": "Pot",
             "Logic": "Has(Feather)"
@@ -210,22 +210,22 @@
         {
             "Name": "Hiner Shop 1",
             "LocationType": "Shop",
-            "Logic": "CanReach(Gate of Illusion)"
+            "Logic": "CanReach(Gate of Illusion) and HorizontalAttack"
         },
         {
             "Name": "Hiner Shop 2",
             "LocationType": "Shop",
-            "Logic": "CanReach(Gate of Illusion)"
+            "Logic": "CanReach(Gate of Illusion) and HorizontalAttack"
         },
         {
             "Name": "Hiner Shop 3",
             "LocationType": "Shop",
-            "Logic": "CanReach(Gate of Illusion)"
+            "Logic": "CanReach(Gate of Illusion) and HorizontalAttack"
         },
         {
             "Name": "Hiner Shop 4",
             "LocationType": "Shop",
-            "Logic": "CanReach(Gate of Illusion) and GuardianKills(3)"
+            "Logic": "CanReach(Gate of Illusion) and HorizontalAttack and GuardianKills(3)"
         },
         {
             "Name": "Bronze Mirror Spot",
@@ -233,19 +233,19 @@
             "Logic": "Has(Feather) or Has(Gale Fibula)"
         },
         {
-            "Name": "GoG Photo-op Weight Pot",
+            "Name": "[GOG C-2] Photo-op Weight Pot",
             "ID": "field01L00W2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "GoG High-up Coin Pot",
+            "Name": "[GOG C-3] High-up Coin Pot",
             "ID": "field01L00G30",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "GoG Below Hiner Coin Pot",
+            "Name": "[GOG B-5] Below Hiner Coin Pot",
             "ID": "field01L00G2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -273,7 +273,7 @@
     "Name": "Gate of Guidance Left",
     "Locations": [
         {
-            "Name": "GoG Illusion Gate Bomb Pot",
+            "Name": "[GOG A-3] Illusion Gate Bomb Pot",
             "ID": "field01L00P",
             "LocationType": "Pot",
             "Logic": "True"
@@ -304,25 +304,31 @@
             "Logic": "Has(Progressive Beherit) and CanChant(Sun) and PuzzleFinished(Sakit Puzzle)"
         },
         {
-            "Name": "MoG Ladder Coin Pot",
+            "Name": "[MOG A-1] First Room Coin Pot",
             "ID": "field01L02A0",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "MoG Breakable Wall Coin Pot",
+            "Name": "[MOG B-1] Second Room Weight Pot",
+            "ID": "field01L02B0",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[MOG A-2] Breakable Wall Coin Pot",
             "ID": "field01L02A1",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "MoG Futo Statue Coin Pot",
+            "Name": "[MOG D-4] Futo Statue Coin Pot",
             "ID": "field01L02D3",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "MoG Pre-Ratatoskr Weight Pot",
+            "Name": "[MOG C-5] Pre-Ratatoskr Weight Pot",
             "ID": "field01L02C4",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -466,7 +472,7 @@
         {
             "Name": "Nidhogg",
             "LocationType": "Miniboss",
-            "Logic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
+            "Logic": "MeleeAttack and (CanUse(Flare) or CanUse(Pistol) or (OrbCount(1) and (CanUse(Shuriken) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))))",
             "HardLogic": "MeleeAttack",
             "Item": {
                 "Name": "Nidhogg",
@@ -484,49 +490,49 @@
             }
         },
         {
-            "Name": "RoY Second Room Weight Pot",
+            "Name": "[ROY E-3] Second Room Weight Pot",
             "ID": "field00E2w",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Weapon Vault Coin Pot",
+            "Name": "[ROY C-3] Weapon Vault Coin Pot",
             "ID": "field00C2",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "RoY Weapon Vault Weight Pot",
+            "Name": "[ROY C-3] Weapon Vault Weight Pot",
             "ID": "field00C2w",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Convenient Shuriken Pot",
+            "Name": "[ROY B-3] Convenient Shuriken Pot",
             "ID": "field00B2",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "RoY Below Ratatoskr Coin Pot",
+            "Name": "[ROY B-2] Below Ratatoskr Coin Pot",
             "ID": "field00B1",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Footprint Shuriken Pot",
+            "Name": "[ROY C-2] Footprint Shuriken Pot",
             "ID": "field00C1",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Bridge Coin Pot",
+            "Name": "[ROY E-2] Bridge Coin Pot",
             "ID": "field00E1",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Birth Seal Gate Shuriken Pot",
+            "Name": "[ROY G-1] Birth Seal Gate Shuriken Pot",
             "ID": "field00G0",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -622,7 +628,7 @@
             "Logic": "True"
         },
         {
-            "Name": "RoY First Room Coin Pot",
+            "Name": "[ROY E-4] First Room Coin Pot",
             "ID": "field00E3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -668,31 +674,31 @@
             "Logic": "True"
         },
         {
-            "Name": "RoY Large Breakable Wall Coin Pot",
+            "Name": "[ROY C-4] Large Breakable Wall Coin Pot",
             "ID": "field00C3",
             "LocationType": "Pot",
             "Logic": "Has(Leather Whip) or Has(Rapier) or Has(Katana) or Has(Axe) or Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Flare) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)"
         },
         {
-            "Name": "RoY Korobock Weight Pot",
+            "Name": "[ROY C-5] Korobock Weight Pot",
             "ID": "field00C4",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Lamp of Time Weight Pot",
+            "Name": "[ROY D-5] Lamp of Time Weight Pot",
             "ID": "field00D4w",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         },
         {
-            "Name": "RoY Torch Room Shuriken Pot",
+            "Name": "[ROY E-5] Torch Room Shuriken Pot",
             "ID": "field00E4",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "RoY Golden Rock Coin Pot",
+            "Name": "[ROY E-6] Golden Rock Coin Pot",
             "ID": "field00E5",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -736,71 +742,155 @@
     "ID": "AnnwfnMain",
     "Name": "Annwfn Main",
     "Locations": [
-      {
-        "Name": "Map Chest Annwfn",
-        "LocationType": "Chest",
-        "Logic": "True"
-      },
-      {
-        "Name": "Glove Chest",
-        "LocationType": "Chest",
-        "Logic": "True"
-      },
-      {
-        "Name": "Crystal Skull Chest Annwfn",
-        "LocationType": "Chest",
-        "Logic": "Has(Birth Sigil) and HorizontalAttack"
-      },
-      {
-        "Name": "Rolling Shuriken Puzzle Reward",
-        "LocationType": "FreeStanding",
-        "Logic": " Has(Gloves)"
-      },
-      {
-        "Name": "Research Annwfn",
-        "LocationType": "FreeStanding",
-        "Logic": "True"
-      },
-      {
-        "Name": "Pym Shop 1",
-        "LocationType": "Shop",
-        "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
-      },
-      {
-        "Name": "Pym Shop 2",
-        "LocationType": "Shop",
-        "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
-      },
-      {
-        "Name": "Pym Shop 3",
-        "LocationType": "Shop",
-        "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
-      },
-      {
-        "Name": "Earth Mantra Mural",
-        "LocationType": "Mural",
-        "Logic": "Has(Birth Sigil) and Has(Snapshot)"
-      },
-      {
-        "Name": "Kaliya",
-        "LocationType": "Miniboss",
-        "Logic": "CanUse(Rolling Shuriken)",
-        "HardLogic": "CanUse(Rolling Shuriken)",
-        "Item": {
-          "Name": "Kaliya",
-          "IsRequired": true
+        {
+            "Name": "Map Chest Annwfn",
+            "LocationType": "Chest",
+            "Logic": "True"
+        },
+        {
+            "Name": "Glove Chest",
+            "LocationType": "Chest",
+            "Logic": "True"
+        },
+        {
+            "Name": "Crystal Skull Chest Annwfn",
+            "LocationType": "Chest",
+            "Logic": "Has(Birth Sigil) and HorizontalAttack"
+        },
+        {
+            "Name": "Rolling Shuriken Puzzle Reward",
+            "LocationType": "FreeStanding",
+            "Logic": " Has(Gloves)"
+        },
+        {
+            "Name": "Research Annwfn",
+            "LocationType": "FreeStanding",
+            "Logic": "True"
+        },
+        {
+            "Name": "Pym Shop 1",
+            "LocationType": "Shop",
+            "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
+        },
+        {
+            "Name": "Pym Shop 2",
+            "LocationType": "Shop",
+            "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
+        },
+        {
+            "Name": "Pym Shop 3",
+            "LocationType": "Shop",
+            "Logic": "(IsDead(Kaliya) or Has(Feather)) and Has(Gloves)"
+        },
+        {
+            "Name": "Earth Mantra Mural",
+            "LocationType": "Mural",
+            "Logic": "Has(Birth Sigil) and Has(Snapshot)"
+        },
+        {
+            "Name": "Kaliya",
+            "LocationType": "Miniboss",
+            "Logic": "CanUse(Rolling Shuriken)",
+            "HardLogic": "CanUse(Rolling Shuriken)",
+            "Item": {
+                "Name": "Kaliya",
+                "IsRequired": true
+            }
+        },
+        {
+            "Name": "Heimdall",
+            "LocationType": "Miniboss",
+            "Logic": "CanSealCorridor and CanChant(Night) and OrbCount(7) and Has(Silver Shield) and (Has(Flail Whip) or Has(Katana) or Has(Axe))",
+            "HardLogic": "CanSealCorridor and CanChant(Night)",
+            "Item": {
+                "Name": "Heimdall",
+                "IsRequired": true
+            }
+        },
+        {
+            "Name": "[ANN C-2] Fairy Watchtower Item Pot",
+            "ID": "field02C1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-2] Pre-Kaliya Hidden Coin Pot",
+            "ID": "field02D1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-1] Kaliya's Item Pot",
+            "ID": "field02D0",
+            "LocationType": "Pot",
+            "Logic": "IsDead(Kaliya) or (Has(Feather) and CanWarp)"
+        },
+        {
+            "Name": "[ANN C-3] Kukulkan's Grail Coin Pot",
+            "ID": "field02C2g",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN C-3] Kukulkan's Grail Weight Pot",
+            "ID": "field02C2",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN B-2] Fairy King's Coin Pot",
+            "ID": "field02B1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-3] Center Item Pot #1",
+            "ID": "field02D2-1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-3] Center Item Pot #2",
+            "ID": "field02D2-2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ANN E-3] Huracan's Item Pot",
+            "ID": "field02E2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ANN E-2] Mantra Watchtower Weight Pot",
+            "ID": "field02E1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN C-4] Look Away Weight Pot",
+            "ID": "field02B3",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ANN B-5] Bifrost Left Weight Pot",
+            "ID": "field02B4",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-5] Bifrost Right Item Pot",
+            "ID": "field02D4-1",
+            "LocationType": "Pot",
+            "Logic": "True"
+        },
+        {
+            "Name": "[ANN D-5] Bifrost Right Coin Pot",
+            "ID": "field02D4-2",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
         }
-      },
-      {
-        "Name": "Heimdall",
-        "LocationType": "Miniboss",
-        "Logic": "CanSealCorridor and CanChant(Night) and OrbCount(7) and Has(Silver Shield) and (Has(Flail Whip) or Has(Katana) or Has(Axe))",
-        "HardLogic": "CanSealCorridor and CanChant(Night)",
-        "Item": {
-          "Name": "Heimdall",
-          "IsRequired": true
-        }
-      }
     ],
     "Exits": [
       {
@@ -832,7 +922,14 @@
   {
     "ID": "AnnwfnOneWay",
     "Name": "Annwfn One Way Corridor",
-    "Locations": [],
+    "Locations": [
+        {
+            "Name": "[ANN E-5] Feathercross One-Way Pot",
+            "ID": "field02E4",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        }
+    ],
     "Exits": [
       {
         "ConnectionType": "Internal",
@@ -925,15 +1022,33 @@
           "IsRequired": true
         }
       },
-      {
-        "Name": "Annwfn Right Shortcut",
-        "LocationType": "Puzzle",
-        "Logic": "IsDead(Ixtab)",
-        "Item": {
-          "Name": "Annwfn Right Shortcut",
-          "IsRequired": false
+        {
+            "Name": "Annwfn Right Shortcut",
+            "LocationType": "Puzzle",
+            "Logic": "IsDead(Ixtab)",
+            "Item": {
+                "Name": "Annwfn Right Shortcut",
+                "IsRequired": false
+            }
+        },
+        {
+            "Name": "[ANN D-4] Ixtab Coin Pot",
+            "ID": "field02E3",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ANN G-4] Death's Prison Coin Pot",
+            "ID": "field02G3",
+            "LocationType": "Pot",
+            "Logic": "HorizontalAttack and (Has(Feather) or IsDead(Ixtab))"
+        },
+        {
+            "Name": "[ANN F-3] Pre-Kujata Weight Pot",
+            "ID": "field02F1",
+            "LocationType": "Pot",
+            "Logic": "True"
         }
-      }
     ],
     "Exits": [
       {
@@ -1089,7 +1204,7 @@
       {
         "Name": "Sacred Orb Chest IB",
         "LocationType": "Chest",
-        "Logic": "Has(Birth Sigil)"
+        "Logic": "Has(Birth Sigil) and (Has(Feather) or Has(Grapple Claw) or IsDead(Cetus))"
       },
       {
         "Name": "Lamp of Time Chest",
@@ -1235,7 +1350,7 @@
       {
         "ConnectionType": "Internal",
         "ConnectingAreaID": "IBMain",
-        "Logic": "Has(Feather) or Has(Grapple Claw)"
+        "Logic": "HorizontalAttack and (Has(Feather) or Has(Grapple Claw))"
       },
       {
         "Name": "Immortal Battlefield Right Door (H-4)",
@@ -1788,7 +1903,7 @@
         "Name": "Vidofnir",
         "LocationType": "Miniboss",
         "Logic": "Has(Flame Torc) and Has(Ice Cloak) and Has(Silver Shield) and ((Has(Chain Whip) and OrbCount(6)) or ((Has(Flail Whip) or Has(Axe) or Has(Katana)) and OrbCount(5)))",
-        "HardLogic": "Has(Flame Torc)",
+        "HardLogic": "MeleeAttack and Has(Flame Torc)",
         "Item": {
           "Name": "Vidofnir",
           "IsRequired": true
@@ -1918,7 +2033,7 @@
         "ID": "f05GateP1",
         "ConnectionType": "Gate",
         "ConnectingAreaID": "ValhallaMain",
-        "Logic": "True"
+        "Logic": "HorizontalAttack"
       }
     ]
   },
@@ -1952,7 +2067,7 @@
       {
         "Name": "Map Chest SotFG",
         "LocationType": "Chest",
-        "Logic": "True"
+        "Logic": "Has(Origin Sigil) or HorizontalAttack"
       },
       {
         "Name": "Pochette Key Chest",
@@ -1982,7 +2097,7 @@
         "Name": "Fenrir",
         "LocationType": "Miniboss",
         "Logic": "PuzzleFinished(Bergelmir) and Has(Flame Torc) and Has(Silver Shield) and OrbCount(7) and (Has(Flail Whip) or Has(Axe) or Has(Katana))",
-        "HardLogic": "PuzzleFinished(Bergelmir) and Has(Flame Torc)",
+        "HardLogic": "PuzzleFinished(Bergelmir) and MeleeAttack and Has(Flame Torc)",
         "Item": {
           "Name": "Fenrir",
           "IsRequired": true
@@ -2103,7 +2218,7 @@
       {
         "Name": "Sacred Orb Chest SotFG",
         "LocationType": "Chest",
-        "Logic": "CanUse(Earth Spear) or CanUse(Flare)"
+        "Logic": "CanUse(Earth Spear) or (CanUse(Flare) and HorizontalAttack)"
       },
       {
         "Name": "Sea Mantra Mural",
@@ -3212,7 +3327,7 @@
         "Name": "Anu",
         "LocationType": "Guardian",
         "Logic": "Has(Gloves) and IsDead(Ki sikil lil la ke) and (((Has(Chain Whip) or Has(Rapier) or Has(Axe) or CanUse(Earth Spear) or (CanUse(Shuriken) and Has(Ring))) and OrbCount(5)) or ((Has(Flail Whip) or (CanUse(Flare) and (Has(Feather) or Has(Ring)))) and OrbCount(4)) or (CanUse(Pistol) and OrbCount(3)))",
-        "HardLogic": "Has(Gloves) and IsDead(Ki sikil lil la ke) and (Has(Leather Whip) or Has(Knife) or Has(Rapier) or Has(Katana) or Has(Axe) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Caltrops) or CanUse(Flare) or CanUse(Earth Spear) or CanUse(Bomb) or Has(Claydoll Suit))",
+        "HardLogic": "Has(Gloves) and IsDead(Ki sikil lil la ke) and (Has(Leather Whip) or Has(Knife) or Has(Rapier) or Has(Katana) or Has(Axe) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Caltrops) or CanUse(Flare) or CanUse(Earth Spear) or (CanUse(Bomb) and Has(Ring)) or (CanUse(Chakram) and Has(Ring)) or Has(Claydoll Suit))",
         "Item": {
           "Name": "Anu",
           "IsRequired": true

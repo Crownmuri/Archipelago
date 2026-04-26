@@ -336,10 +336,10 @@ class StartClaydollSuit(Toggle):
 # --- Range Definitions ---
 
 class GuardianKills(Range):
-    """Number of Guardians required to be defeated."""
+    """Number of Guardians required to be defeated to seal the Corridor of Blood."""
     display_name = "Required Guardian Kills"
     range_start = 0
-    range_end = 8
+    range_end = 9
     default = 5
 
 class RequiredSkulls(Range):
@@ -410,6 +410,8 @@ class LM2Options(PerGameCommonOptions):
     required_skulls: RequiredSkulls
     random_cursed_chests: RandomCursedChests
     cursed_chests: CursedChestCount
+
+    # Sanities
     potsanity: Potsanity
 
     # Entrance Randomizer
