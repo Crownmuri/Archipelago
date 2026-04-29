@@ -227,111 +227,58 @@ class PreventAreaLoops(Toggle):
     """Prevent entrance randomization from pairing exits within the same area."""
     display_name = "Prevent Area Loops"
 
-# --- Starting Area Pool ---
-class StartVillageOfDeparture(Toggle):
-    """Include Village of Departure in the starting area pool."""
-    display_name = "Start: Village of Departure"
+# --- Starting Area ---
+class StartingArea(Choice):
+    """Starting area for the player. Use weighted YAML to randomize, e.g.
+        starting_area:
+          village_of_departure: 25
+          annwfn: 50
+          immortal_battlefield: 50
 
-class StartRootsOfYggdrasil(Toggle):
-    """Include Roots of Yggdrasil in the starting area pool."""
-    display_name = "Start: Roots of Yggdrasil"
+    Some areas require specific entrance randomizer options to be enabled. If the chosen area's
+    prerequisites aren't met, a uniform re-roll is performed across the remaining valid areas
+    (a warning is logged); if no valid options remain, falls back to Village of Departure.
 
-class StartAnnwfn(Toggle):
-    """Include Annwfn in the starting area pool."""
-    display_name = "Start: Annwfn"
+    Requires vertical_entrances: icefire_treetop.
+    Requires gate_entrances: divine_fortress, shrine_of_the_frost_giants, takamagahara_shrine,
+    valhalla, dark_star_lords_mausoleum, ancient_chaos, hall_of_malice."""
+    display_name = "Starting Area"
+    option_village_of_departure = 0
+    option_roots_of_yggdrasil = 1
+    option_annwfn = 2
+    option_immortal_battlefield = 3
+    option_icefire_treetop = 4
+    option_divine_fortress = 5
+    option_shrine_of_the_frost_giants = 6
+    option_takamagahara_shrine = 7
+    option_valhalla = 8
+    option_dark_star_lords_mausoleum = 9
+    option_ancient_chaos = 10
+    option_hall_of_malice = 11
+    default = 0
 
-class StartImmortalBattlefield(Toggle):
-    """Include Immortal Battlefield in the starting area pool."""
-    display_name = "Start: Immortal Battlefield"
-
-class StartIcefireTreetop(Toggle):
-    """Include Icefire Treetop in the starting area pool. Requires vertical_entrances."""
-    display_name = "Start: Icefire Treetop"
-
-class StartDivineFortress(Toggle):
-    """Include Divine Fortress in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Divine Fortress"
-
-class StartShrineOfTheFrostGiants(Toggle):
-    """Include Shrine of the Frost Giants in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Shrine of the Frost Giants"
-
-class StartTakamagaharaShrine(Toggle):
-    """Include Takamagahara Shrine in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Takamagahara Shrine"
-
-class StartValhalla(Toggle):
-    """Include Valhalla in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Valhalla"
-
-class StartDarkStarLordsMausoleum(Toggle):
-    """Include Dark Star Lord's Mausoleum in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Dark Star Lord's Mausoleum"
-
-class StartAncientChaos(Toggle):
-    """Include Ancient Chaos in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Ancient Chaos"
-
-class StartHallOfMalice(Toggle):
-    """Include Hall of Malice in the starting area pool. Requires gate_entrances."""
-    display_name = "Start: Hall of Malice"
-
-# --- Starting Weapon Pool ---
-class StartLeatherWhip(Toggle):
-    """Include Leather Whip in the starting weapon pool."""
-    display_name = "Start: Leather Whip"
-
-class StartKnife(Toggle):
-    """Include Knife in the starting weapon pool."""
-    display_name = "Start: Knife"
-
-class StartRapier(Toggle):
-    """Include Rapier in the starting weapon pool."""
-    display_name = "Start: Rapier"
-
-class StartAxe(Toggle):
-    """Include Axe in the starting weapon pool."""
-    display_name = "Start: Axe"
-
-class StartKatana(Toggle):
-    """Include Katana in the starting weapon pool."""
-    display_name = "Start: Katana"
-
-class StartShuriken(Toggle):
-    """Include Shuriken in the starting weapon pool."""
-    display_name = "Start: Shuriken"
-
-class StartRollingShuriken(Toggle):
-    """Include Rolling Shuriken in the starting weapon pool."""
-    display_name = "Start: Rolling Shuriken"
-
-class StartEarthSpear(Toggle):
-    """Include Earth Spear in the starting weapon pool."""
-    display_name = "Start: Earth Spear"
-
-class StartFlare(Toggle):
-    """Include Flare in the starting weapon pool."""
-    display_name = "Start: Flare"
-
-class StartCaltrops(Toggle):
-    """Include Caltrops in the starting weapon pool."""
-    display_name = "Start: Caltrops"
-
-class StartChakram(Toggle):
-    """Include Chakram in the starting weapon pool."""
-    display_name = "Start: Chakram"
-
-class StartBomb(Toggle):
-    """Include Bomb in the starting weapon pool."""
-    display_name = "Start: Bomb"
-
-class StartPistol(Toggle):
-    """Include Pistol in the starting weapon pool."""
-    display_name = "Start: Pistol"
-
-class StartClaydollSuit(Toggle):
-    """Include Claydoll Suit in the starting weapon pool."""
-    display_name = "Start: Claydoll Suit"
+# --- Starting Weapon ---
+class StartingWeapon(Choice):
+    """Starting weapon for the player. Use weighted YAML to randomize, e.g.
+        starting_weapon:
+          leather_whip: 1
+          katana: 3"""
+    display_name = "Starting Weapon"
+    option_leather_whip = 0
+    option_knife = 1
+    option_rapier = 2
+    option_axe = 3
+    option_katana = 4
+    option_shuriken = 5
+    option_rolling_shuriken = 6
+    option_earth_spear = 7
+    option_flare = 8
+    option_caltrops = 9
+    option_chakram = 10
+    option_bomb = 11
+    option_pistol = 12
+    option_claydoll_suit = 13
+    default = 0
 
 # --- Range Definitions ---
 
@@ -345,7 +292,7 @@ class GuardianKills(Range):
 class RequiredSkulls(Range):
     """Number of Crystal Skulls required for Nibiru Dissonance."""
     display_name = "Nibiru Dissonance Skulls"
-    range_start = 0
+    range_start = 1
     range_end = 12
     default = 6
 
@@ -425,35 +372,9 @@ class LM2Options(PerGameCommonOptions):
     full_random_entrances: FullRandomEntrances
     prevent_area_loops: PreventAreaLoops
 
-    # Starting Area Pool
-    start_village_of_departure: StartVillageOfDeparture
-    start_roots_of_yggdrasil: StartRootsOfYggdrasil
-    start_annwfn: StartAnnwfn
-    start_immortal_battlefield: StartImmortalBattlefield
-    start_icefire_treetop: StartIcefireTreetop
-    start_divine_fortress: StartDivineFortress
-    start_shrine_of_the_frost_giants: StartShrineOfTheFrostGiants
-    start_takamagahara_shrine: StartTakamagaharaShrine
-    start_valhalla: StartValhalla
-    start_dark_star_lords_mausoleum: StartDarkStarLordsMausoleum
-    start_ancient_chaos: StartAncientChaos
-    start_hall_of_malice: StartHallOfMalice
-
-    # Starting Weapon Pool
-    start_leather_whip: StartLeatherWhip
-    start_knife: StartKnife
-    start_rapier: StartRapier
-    start_axe: StartAxe
-    start_katana: StartKatana
-    start_shuriken: StartShuriken
-    start_rolling_shuriken: StartRollingShuriken
-    start_earth_spear: StartEarthSpear
-    start_flare: StartFlare
-    start_caltrops: StartCaltrops
-    start_chakram: StartChakram
-    start_bomb: StartBomb
-    start_pistol: StartPistol
-    start_claydoll_suit: StartClaydollSuit
+    # Starting Area / Weapon
+    starting_area: StartingArea
+    starting_weapon: StartingWeapon
 
     # QoL
     auto_scan: AutoScan

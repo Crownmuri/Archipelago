@@ -11,6 +11,7 @@ def _log(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
 
+import logging
 import os
 import zipfile
 from typing import Dict, List, Tuple
@@ -20,7 +21,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
-from .options import LM2Options
+from .options import LM2Options, StartingArea, StartingWeapon
 from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
@@ -49,6 +50,54 @@ class LaMulana2WebWorld(WebWorld):
     game = GAME_NAME
     theme = "ruins"
     tutorials = []
+
+
+# =============================================================================
+# Starting Area / Weapon resolution tables
+# =============================================================================
+
+_STARTING_AREA_MAP: Dict[int, AreaID] = {
+    StartingArea.option_village_of_departure: AreaID.VoD,
+    StartingArea.option_roots_of_yggdrasil: AreaID.RoY,
+    StartingArea.option_annwfn: AreaID.AnnwfnMain,
+    StartingArea.option_immortal_battlefield: AreaID.IBMain,
+    StartingArea.option_icefire_treetop: AreaID.ITLeft,
+    StartingArea.option_divine_fortress: AreaID.DFMain,
+    StartingArea.option_shrine_of_the_frost_giants: AreaID.SotFGGrail,
+    StartingArea.option_takamagahara_shrine: AreaID.TSLeft,
+    StartingArea.option_valhalla: AreaID.ValhallaMain,
+    StartingArea.option_dark_star_lords_mausoleum: AreaID.DSLMMain,
+    StartingArea.option_ancient_chaos: AreaID.ACTablet,
+    StartingArea.option_hall_of_malice: AreaID.HoMTop,
+}
+
+_STARTING_AREA_PREREQS: Dict[int, Tuple[str, ...]] = {
+    StartingArea.option_icefire_treetop: ("vertical_entrances",),
+    StartingArea.option_divine_fortress: ("gate_entrances",),
+    StartingArea.option_shrine_of_the_frost_giants: ("gate_entrances",),
+    StartingArea.option_takamagahara_shrine: ("gate_entrances",),
+    StartingArea.option_valhalla: ("gate_entrances",),
+    StartingArea.option_dark_star_lords_mausoleum: ("gate_entrances",),
+    StartingArea.option_ancient_chaos: ("gate_entrances",),
+    StartingArea.option_hall_of_malice: ("gate_entrances",),
+}
+
+_STARTING_WEAPON_MAP: Dict[int, ItemID] = {
+    StartingWeapon.option_leather_whip: ItemID.Whip1,
+    StartingWeapon.option_knife: ItemID.Knife,
+    StartingWeapon.option_rapier: ItemID.Rapier,
+    StartingWeapon.option_axe: ItemID.Axe,
+    StartingWeapon.option_katana: ItemID.Katana,
+    StartingWeapon.option_shuriken: ItemID.Shuriken,
+    StartingWeapon.option_rolling_shuriken: ItemID.RollingShuriken,
+    StartingWeapon.option_earth_spear: ItemID.EarthSpear,
+    StartingWeapon.option_flare: ItemID.Flare,
+    StartingWeapon.option_caltrops: ItemID.Caltrops,
+    StartingWeapon.option_chakram: ItemID.Chakram,
+    StartingWeapon.option_bomb: ItemID.Bomb,
+    StartingWeapon.option_pistol: ItemID.Pistol,
+    StartingWeapon.option_claydoll_suit: ItemID.ClaydollSuit,
+}
 
 
 # =============================================================================
@@ -639,79 +688,38 @@ class LaMulana2World(World):
             
         return shops
 
+    def _starting_area_prereqs_met(self, area_value: int) -> bool:
+        prereqs = _STARTING_AREA_PREREQS.get(area_value, ())
+        return all(getattr(self.options, name).value for name in prereqs)
+
     def _choose_starting_area(self) -> AreaID:
-        """Choose starting area based on options."""
-        choices: List[AreaID] = []
-        
-        if self.options.start_village_of_departure:
-            choices.append(AreaID.VoD)
-        if self.options.start_roots_of_yggdrasil:
-            choices.append(AreaID.RoY)
-        if self.options.start_annwfn:
-            choices.append(AreaID.AnnwfnMain)
-        if self.options.start_immortal_battlefield:
-            choices.append(AreaID.IBMain)
-        if self.options.start_icefire_treetop:
-            choices.append(AreaID.ITLeft)
-        if self.options.start_divine_fortress:
-            choices.append(AreaID.DFMain)
-        if self.options.start_shrine_of_the_frost_giants:
-            choices.append(AreaID.SotFGGrail)
-        if self.options.start_takamagahara_shrine:
-            choices.append(AreaID.TSLeft)
-        if self.options.start_valhalla:
-            choices.append(AreaID.ValhallaMain)
-        if self.options.start_dark_star_lords_mausoleum:
-            choices.append(AreaID.DSLMMain)
-        if self.options.start_ancient_chaos:
-            choices.append(AreaID.ACTablet)
-        if self.options.start_hall_of_malice:
-            choices.append(AreaID.HoMTop)
-        
-        if not choices:
-            return AreaID.VoD
-        
-        return self.multiworld.random.choice(choices)
+        """Resolve the chosen starting area, re-rolling uniformly across valid
+        areas if the picked one's entrance prerequisites aren't satisfied."""
+        chosen = self.options.starting_area.value
+        if self._starting_area_prereqs_met(chosen):
+            return _STARTING_AREA_MAP[chosen]
+
+        chosen_name = StartingArea.name_lookup[chosen]
+        valid = [v for v in _STARTING_AREA_MAP if self._starting_area_prereqs_met(v)]
+        if valid:
+            rerolled = self.multiworld.random.choice(valid)
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: starting area '{chosen_name}' requires "
+                f"entrance options that are disabled. Re-rolled to '{StartingArea.name_lookup[rerolled]}'."
+            )
+            return _STARTING_AREA_MAP[rerolled]
+
+        logging.warning(
+            f"[La-Mulana 2] {self.player_name}: no valid starting area available with the "
+            f"current entrance options. Falling back to Village of Departure."
+        )
+        return AreaID.VoD
 
     # -------------------------------------------------------------------------
 
     def _choose_starting_weapon(self) -> ItemID:
-        """Choose starting weapon based on options."""
-        choices: List[ItemID] = []
-        
-        if self.options.start_leather_whip:
-            choices.append(ItemID.Whip1)
-        if self.options.start_knife:
-            choices.append(ItemID.Knife)
-        if self.options.start_rapier:
-            choices.append(ItemID.Rapier)
-        if self.options.start_axe:
-            choices.append(ItemID.Axe)
-        if self.options.start_katana:
-            choices.append(ItemID.Katana)
-        if self.options.start_shuriken:
-            choices.append(ItemID.Shuriken)
-        if self.options.start_rolling_shuriken:
-            choices.append(ItemID.RollingShuriken)
-        if self.options.start_earth_spear:
-            choices.append(ItemID.EarthSpear)
-        if self.options.start_flare:
-            choices.append(ItemID.Flare)
-        if self.options.start_caltrops:
-            choices.append(ItemID.Caltrops)
-        if self.options.start_chakram:
-            choices.append(ItemID.Chakram)
-        if self.options.start_bomb:
-            choices.append(ItemID.Bomb)
-        if self.options.start_pistol:
-            choices.append(ItemID.Pistol)
-        if self.options.start_claydoll_suit:
-            choices.append(ItemID.ClaydollSuit)
-        
-        if not choices:
-            return ItemID.Whip1
-        
-        return self.multiworld.random.choice(choices)
+        """Resolve the chosen starting weapon."""
+        return _STARTING_WEAPON_MAP[self.options.starting_weapon.value]
 
     def _get_weapon_name(self, weapon_id: ItemID) -> str:
         """Get the name of a weapon from its ID."""

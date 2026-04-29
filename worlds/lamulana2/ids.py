@@ -2225,7 +2225,7 @@ ITEM_MAP = {
     "Yagoo Map Reader": ItemID.YagooMapReader,
     "Yagoo Map Street": ItemID.YagooMapStreet,
     "TextTrax 2": ItemID.TextTrax,
-    "Ruins Encylopedia": ItemID.RuinsEncylopedia,
+    "Ruins Encyclopedia": ItemID.RuinsEncylopedia,
     "Mantra": ItemID.Mantra,
     "Guild": ItemID.Guild,
     "Enga Musica": ItemID.EngaMusica,
@@ -2756,38 +2756,6 @@ ITEM_MAP = {
     "Pot Filler #311": ItemID.PotFiller311,
     "Pot Filler #312": ItemID.PotFiller312,
 """
-
-STARTING_WEAPON_MAP = {
-    "start_leather_whip": ItemID.Whip1,
-    "start_knife": ItemID.Knife,
-    "start_rapier": ItemID.Rapier,
-    "start_axe": ItemID.Axe,
-    "start_katana": ItemID.Katana,
-    "start_shuriken": ItemID.Shuriken,
-    "start_rolling_shuriken": ItemID.RollingShuriken,
-    "start_earth_spear": ItemID.EarthSpear,
-    "start_flare": ItemID.Flare,
-    "start_caltrops": ItemID.Caltrops,
-    "start_chakram": ItemID.Chakram,
-    "start_bomb": ItemID.Bomb,
-    "start_pistol": ItemID.Pistol,
-    "start_claydoll_suit": ItemID.ClaydollSuit,
-}
-
-STARTING_AREA_MAP = {
-    "start_village_of_departure": AreaID.VoD,
-    "start_roots_of_yggdrasil": AreaID.RoY,
-    "start_annwfn": AreaID.AnnwfnMain,
-    "start_immortal_battlefield": AreaID.IBMain,
-    "start_icefire_treetop": AreaID.ITLeft,
-    "start_divine_fortress": AreaID.DFMain,
-    "start_shrine_of_the_frost_giants": AreaID.SotFGGrail,
-    "start_takamagahara_shrine": AreaID.TSLeft,
-    "start_valhalla": AreaID.ValhallaMain,
-    "start_dark_star_lords_mausoleum": AreaID.DSLMMain,
-    "start_ancient_chaos": AreaID.ACTablet,
-    "start_hall_of_malice": AreaID.HoMTop,
-}
 
 ORIGINAL_SHOPS = {
     LocationID.NeburShop1: (ItemID.Weights, 10),

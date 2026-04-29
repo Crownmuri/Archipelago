@@ -178,9 +178,29 @@ _BANNED_SELF_LOOP_PAIRS: frozenset = frozenset({
 })
 
 
+# Pairs that form a *virtual* dead-end when one side is the starting exit:
+# both areas can be entered, but escape requires late-game items the player
+# can't have yet (mantras, djed, mid-late bosses), and neither side has
+# another non-soul-gate exit to bootstrap progression.  Treated like Cliff
+# in ReduceDeadEndStarts -- the starting exit must not pair with the other.
+#
+# TS <-> DF: TS escape needs djed + mantra + 5 mantra chants + Raijin/Fujin;
+# DF's only other exit is a soul gate, and no boss is reachable inside the
+# TS<->DF island to earn souls.
+_VIRTUAL_DEAD_END_START_PAIRS: frozenset = frozenset({
+    frozenset({ExitID.f08GateP0, ExitID.f05GateP1}),  # TS Bottom Gate <-> DF Left Gate
+})
+
+
 def _would_self_loop(e1_id: ExitID, e2_id: ExitID) -> bool:
     """True if pairing e1<->e2 would create a trivial self-loop."""
     return frozenset({e1_id, e2_id}) in _BANNED_SELF_LOOP_PAIRS
+
+
+def _is_virtual_dead_end_start_pair(e1_id: ExitID, e2_id: ExitID) -> bool:
+    """True if pairing e1<->e2 forms a virtual dead-end when one side is
+    the starting exit (see _VIRTUAL_DEAD_END_START_PAIRS)."""
+    return frozenset({e1_id, e2_id}) in _VIRTUAL_DEAD_END_START_PAIRS
 
 
 # ── Union-Find for connectivity guarantee ─────────────────────────────
@@ -405,17 +425,35 @@ def _repair_same_dungeon_pairs(
     return result
 
 
+_BASE_UF_EXCLUDED_TYPES: Set = {
+    ExitType.SoulGate,
+    ExitType.Corridor,
+    ExitType.PrisonExit,
+    ExitType.PrisonGate,
+    ExitType.SpiralGate,
+}
+
+
 def _build_base_uf(world, shuffled_exit_ids: Optional[Set] = None) -> '_UnionFind':
     """
     Build a union-find seeded with the EXISTING connectivity graph.
 
     Walks every exit in the world.  For exits that are NOT being shuffled
-    (internal connections, corridors, elevators, soul gates, etc.), unions
-    the parent area with the connected area.  This gives the pairing
-    functions an accurate picture of which areas are ALREADY connected
-    regardless of ER, so cross-component preference actually targets
-    real structural gaps rather than wasting pairings on areas that are
-    already reachable through internal routes.
+    (internal connections, elevators, etc.), unions the parent area with
+    the connected area.  This gives the pairing functions an accurate
+    picture of which areas are ALREADY connected regardless of ER, so
+    cross-component preference actually targets real structural gaps
+    rather than wasting pairings on areas that are already reachable
+    through internal routes.
+
+    Item-gated logical edges (SoulGate, Corridor, PrisonGate, SpiralGate)
+    and one-way drops (PrisonExit) are NOT unioned: the structural
+    algorithm needs to see the raw physical-traversal topology, not the
+    omniscient post-item graph.  Including these inflates base
+    connectivity (the entire backside collapses into one component via
+    vanilla soul gates), which makes the reachability-first source check
+    trivial and prevents the algorithm from prioritising pairings that
+    bridge real structural gaps.
     """
     uf = _UnionFind()
     _shuffled = shuffled_exit_ids or set()
@@ -434,6 +472,11 @@ def _build_base_uf(world, shuffled_exit_ids: Optional[Set] = None) -> '_UnionFin
 
             # Skip disconnected exits
             if exit_.connected_region is None:
+                continue
+
+            # Skip item-gated and one-way exit types (see docstring).
+            ex_type = getattr(exit_, 'exit_type', None)
+            if ex_type in _BASE_UF_EXCLUDED_TYPES:
                 continue
 
             dst_area = getattr(exit_.connected_region, 'game_area_id', None)
@@ -573,6 +616,20 @@ def _generate_pairings_reachable_first(
                 _commit_pair(ow, partner)
 
     # ReduceDeadEndStarts
+    # The C# original guarantees ONE good exit out of the start area (break
+    # after first successful pair).  LM2's reality with multi-exit start
+    # areas (TS, RoY, IB) needs stricter: ALL starting-area exits must avoid
+    # dead-end partners, not just one.  Otherwise the unprotected exits get
+    # paired with dead-ends in the main loop, leaving the player with one
+    # narrow escape route from the start.
+    #
+    # Extra exclusions beyond _generate_pairings parity:
+    #  - virtual dead-end pairs (e.g. TS<->DF) — see _VIRTUAL_DEAD_END_START_PAIRS
+    #  - other starting-area exits — when prevent_area_loops=False, _same_area
+    #    only matches exact sub-areas (e.g. TSBottom != TSNeck), so without
+    #    this guard step 596 could pair TS Bottom <-> TS Neck and leave zero
+    #    outward exits from the starting region's gate exits.
+    starting_partner_dungeons: Set[str] = set()
     if _starting_exit_ids:
         start_exits = [e for e in pool if e.game_exit_id in _starting_exit_ids]
         rng.shuffle(start_exits)
@@ -584,13 +641,23 @@ def _generate_pairings_reachable_first(
                 or e.game_exit_id in DEAD_END_EXITS
                 or e.game_exit_id == ExitID.fP02Left
                 or _would_self_loop(se.game_exit_id, e.game_exit_id)
+                or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
+                or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
             ))
             if partner is not None:
                 _commit_pair(se, partner)
-                break
+                d = _exit_dungeon(partner)
+                if d is not None:
+                    starting_partner_dungeons.add(d)
 
-    # Inaccessible exits — pair up with accessible partners
+    # Inaccessible exits — pair up with accessible partners.
+    # Must not pair with starting-area exits (mirrors Cliff's step-1 guard):
+    # otherwise the player can be stranded with only late-game routes out.
+    # Also avoid exits whose dungeon already absorbed a starting-area pairing —
+    # otherwise we extend the dead-end through a passthrough dungeon (e.g.
+    # TS Bottom <-> GoI Left, then Inferno Cavern <-> GoI Right makes the
+    # entire GoI dungeon a 2-screen dead-end from start).
     inaccessible = [e for e in pool if e.game_exit_id in INACCESSIBLE_EXITS]
     rng.shuffle(inaccessible)
     for inac in inaccessible:
@@ -599,8 +666,24 @@ def _generate_pairings_reachable_first(
         accessible_partners = [e for e in pool
                                if e is not inac
                                and e.game_exit_id not in INACCESSIBLE_EXITS
+                               and e.game_exit_id not in _starting_exit_ids
+                               and _exit_dungeon(e) not in starting_partner_dungeons
                                and not _same_area(inac, e)]
         if not accessible_partners:
+            # Relax starting-partner-dungeon constraint first
+            accessible_partners = [e for e in pool
+                                   if e is not inac
+                                   and e.game_exit_id not in INACCESSIBLE_EXITS
+                                   and e.game_exit_id not in _starting_exit_ids
+                                   and not _same_area(inac, e)]
+        if not accessible_partners:
+            # Then relax same-area
+            accessible_partners = [e for e in pool
+                                   if e is not inac
+                                   and e.game_exit_id not in INACCESSIBLE_EXITS
+                                   and e.game_exit_id not in _starting_exit_ids]
+        if not accessible_partners:
+            # Last-resort: relax everything to avoid leaving inaccessibles unpaired
             accessible_partners = [e for e in pool
                                    if e is not inac
                                    and e.game_exit_id not in INACCESSIBLE_EXITS]
@@ -770,13 +853,10 @@ def _generate_pairings(
                 _pair(ow, partner)
 
     # ── 5b. ReduceDeadEndStarts ───────────────────────────────────────────
-    # Port of C# ReduceDeadEndStarts: the starting area's exits should not ALL
-    # lead to dead-end areas (areas with only one transition).  Guarantees at
-    # least one exit from the starting area goes somewhere with multiple paths.
-    #
-    # Strategy: shuffle the starting-area exits still in pool, then pair the
-    # first one that can find a non-dead-end, non-Cliff partner.  A single
-    # non-dead-end exit is sufficient; remaining starting exits pair normally.
+    # Stricter than C# ReduceDeadEndStarts: ALL starting-area exits must
+    # avoid dead-end partners, not just one.  See _generate_pairings_reachable_first
+    # for the full rationale (LM2 multi-exit start areas need it).
+    starting_partner_dungeons: Set[str] = set()
     if _starting_exit_ids:
         start_exits = [e for e in pool if e.game_exit_id in _starting_exit_ids]
         rng.shuffle(start_exits)
@@ -788,14 +868,24 @@ def _generate_pairings(
                 or e.game_exit_id in DEAD_END_EXITS
                 or e.game_exit_id == ExitID.fP02Left   # Cliff is a single-transition dead end
                 or _would_self_loop(se.game_exit_id, e.game_exit_id)
+                or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
+                or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
             ))
             if partner is not None:
                 _pair(se, partner)
-                break   # one guaranteed non-dead-end exit from start is enough
-        # Any remaining starting exits fall through to steps 6 & 7.
+                d = _exit_dungeon(partner)
+                if d is not None:
+                    starting_partner_dungeons.add(d)
 
     # ── 6. Priority-pair inaccessible exits ───────────────────────────────
+    # Inaccessibles (Endless Corridor, Inferno Cavern, etc.) must not pair
+    # with starting-area exits: that would leave the player stranded with
+    # only late-game routes out (matches Cliff's step-1 guard).  Cliff
+    # itself was already removed in step 1.
+    # Also avoid exits in dungeons that absorbed a starting-area pairing —
+    # otherwise we extend the dead-end by 1 hop through a passthrough dungeon
+    # (e.g. TS Bottom <-> GoI Left, Inferno Cavern <-> GoI Right).
     inaccessible = [e for e in pool if e.game_exit_id in INACCESSIBLE_EXITS]
     rng.shuffle(inaccessible)
     for inac in inaccessible:
@@ -804,9 +894,24 @@ def _generate_pairings(
         accessible_partners = [e for e in pool
                                if e is not inac
                                and e.game_exit_id not in INACCESSIBLE_EXITS
+                               and e.game_exit_id not in _starting_exit_ids
+                               and _exit_dungeon(e) not in starting_partner_dungeons
                                and not _same_area(inac, e)]
         if not accessible_partners:
-            # Relax same-area constraint before giving up entirely
+            # Relax starting-partner-dungeon constraint first
+            accessible_partners = [e for e in pool
+                                   if e is not inac
+                                   and e.game_exit_id not in INACCESSIBLE_EXITS
+                                   and e.game_exit_id not in _starting_exit_ids
+                                   and not _same_area(inac, e)]
+        if not accessible_partners:
+            # Then relax same-area
+            accessible_partners = [e for e in pool
+                                   if e is not inac
+                                   and e.game_exit_id not in INACCESSIBLE_EXITS
+                                   and e.game_exit_id not in _starting_exit_ids]
+        if not accessible_partners:
+            # Last-resort: relax everything to avoid leaving inaccessibles unpaired
             accessible_partners = [e for e in pool
                                    if e is not inac
                                    and e.game_exit_id not in INACCESSIBLE_EXITS]
@@ -1246,12 +1351,14 @@ def _pair_gates_pool(
             ok = [g for g in gates
                   if g.game_exit_id not in DEAD_END_EXITS
                   and not _start_loop_check(starting_eid, g.game_exit_id)
+                  and not _is_virtual_dead_end_start_pair(starting_eid, g.game_exit_id)
                   and not _same_dungeon(starter, g)]
             if not ok:
                 # Relax dungeon constraint
                 ok = [g for g in gates
                       if g.game_exit_id not in DEAD_END_EXITS
-                      and not _start_loop_check(starting_eid, g.game_exit_id)]
+                      and not _start_loop_check(starting_eid, g.game_exit_id)
+                      and not _is_virtual_dead_end_start_pair(starting_eid, g.game_exit_id)]
             if ok:
                 partner = rng.choice(ok)
                 gates.remove(partner)
@@ -1669,20 +1776,19 @@ def _validate_region_reachability(world, base_state=None) -> Tuple[bool, List[st
 # Must be high enough that after pre-fills (shops, mantras, research,
 # logic flags, dissonance), enough UNFILLED slots remain for the fill
 # to bootstrap progression. 
-_MIN_STARTING_LOCATIONS = 15
+_MIN_STARTING_LOCATIONS = 8
 
 # Minimum number of UNFILLED accessible locations in sphere-0.
 # This is the actual bottleneck: the fill algorithm needs empty slots
 # to place progression items.  Pre-fills (shops, mantras, research,
 # dissonance, logic flags) consume slots before the fill even starts.
-_MIN_STARTING_UNFILLED = 11
+_MIN_STARTING_UNFILLED = 4
 
 # Minimum number of distinct REACHABLE AREAS (regions with unique
 # game_area_id) in sphere-0.  Prevents configurations where many
 # locations are accessible but all in 1-2 areas (tiny cluster that
 # the fill can't break out of even with the unfilled minimum met).
 _MIN_STARTING_AREAS = 3
-
 
 def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
     """
