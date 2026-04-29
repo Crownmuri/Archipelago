@@ -670,8 +670,7 @@ class LM2RandomizerCore:
 
             # Ankh Jewels need the boss-specific name when guardian_specific_ankhs
             # is on, otherwise the pool's "Ankh Jewel (Boss)" gets removed by ID
-            # but is replaced with a generic "Ankh Jewel" that no guardian gate
-            # accepts — making that boss unreachable.
+            # and is replaced with a generic "Ankh Jewel"
             if (item_name == "Ankh Jewel"
                     and getattr(self.options, "guardian_specific_ankhs", False)):
                 specific = GUARDIAN_ANKHS_ITEMS.get(item_id)
