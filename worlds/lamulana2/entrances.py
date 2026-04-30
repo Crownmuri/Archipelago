@@ -31,17 +31,14 @@ class SoulGatePair:
 
 
 # ============================================================
-# One-way exits (used by regions.py disconnect_shuffleable_exits)
+# Exit pool filters
 # ============================================================
-
+#
 # All exits in LM2 are treated as TWO_WAY by the ER.  Even exits that are
 # physically one-directional in vanilla (Bifrost falls, corridor drops) are
 # shuffled as paired two-way transitions by the C# randomizer, because in
 # ER context taking exit A connects you to B, and the reverse connection
 # from B back to A is the ER-created coupled pair.
-#
-# ONE_WAY_EXITS is kept as an empty set for API compatibility.
-ONE_WAY_EXITS: set = set()
 
 # Exits whose vanilla logic is False but which the C# randomizer still
 # includes in the shuffle pool as normal two-way exits.
@@ -110,18 +107,6 @@ INACCESSIBLE_EXITS = {
     ExitID.fNibiru,
     ExitID.fP01Left,
 }
-
-# Areas that allow the player to continue after the final boss
-_ESCAPE_AREAS: frozenset = frozenset({
-    AreaID.Cliff,
-    AreaID.GateofGuidance,
-    AreaID.MausoleumofGiants,
-    AreaID.VoD,
-    AreaID.VoDLadder,
-    AreaID.GateofIllusion,
-    AreaID.Nibiru,
-})
-
 
 # ============================================================
 # Standalone IBMain escape log (called from connect_entrances)
@@ -993,59 +978,6 @@ def _find_in(pool: List[LM2Entrance], eid: ExitID) -> Optional[LM2Entrance]:
 
 # ── Horizontal (bipartite: left doors ↔ right doors) ─────────────────
 
-# ── Reachability helpers for bipartite/same-pool pairing ─────────────
-
-# Reachable-first scaffolding for bipartite/same-pool pairing.
-#
-# Disabled by default: empirical fuzz benchmarks (3× runs of 81 samples
-# each) showed bipartite reachable-first AVERAGED ~8 successes WORSE
-# than the legacy union-find cross-component preference (24/81 vs
-# 32/81).  The pattern that helps full-random pairing apparently does
-# not generalize to bipartite topology — likely because filtering to
-# "prefer unreached targets" inside an already cross-component-biased
-# selection over-constrains the search and biases toward dead-end
-# targets in the early game.
-#
-# Code retained behind this flag for future investigation; flip to
-# True to re-enable for benchmarking.
-_BIPARTITE_REACHABLE_FIRST = False
-
-
-def _reachable_areas_from(uf: '_UnionFind', starting_area) -> Set:
-    """Return the set of areas in the same UF component as starting_area.
-    Returns an empty set if either argument is missing."""
-    if uf is None or starting_area is None:
-        return set()
-    root = uf.find(starting_area)
-    return {a for a in uf.parent if uf.find(a) == root}
-
-
-def _filter_prefer_unreached(items: List[LM2Entrance], reachable: Set):
-    """Return items whose area is NOT reachable, falling back to all
-    items if none qualify.  Used when picking a target — bias toward
-    expanding the reachable graph."""
-    if not reachable:
-        return items
-    unreached = [e for e in items if _exit_area(e) not in reachable]
-    return unreached if unreached else items
-
-
-def _reorder_reachable_first(pool: List[LM2Entrance], reachable: Set,
-                              rng: random.Random) -> List[LM2Entrance]:
-    """Return a fresh list with reachable-area entrances first,
-    shuffled within each group.  Used to pick sources in an order
-    that lets the reachable set grow before non-reachable sources
-    are forced to commit pairings."""
-    if not reachable:
-        out = list(pool)
-        rng.shuffle(out)
-        return out
-    in_reach = [e for e in pool if _exit_area(e) in reachable]
-    out_reach = [e for e in pool if _exit_area(e) not in reachable]
-    rng.shuffle(in_reach)
-    rng.shuffle(out_reach)
-    return in_reach + out_reach
-
 
 def _pair_horizontal_bipartite(
     left_pool: List[LM2Entrance],
@@ -1067,8 +999,6 @@ def _pair_horizontal_bipartite(
     pairings: List[Tuple[LM2Entrance, LM2Entrance]] = []
 
     starting_area = getattr(world, 'starting_area', None)
-    opts = world.options
-    has_vertical = bool(opts.vertical_entrances)
 
     # Priority left doors: Cliff first, then Cavern
     priority_left: List[LM2Entrance] = []
@@ -1088,14 +1018,6 @@ def _pair_horizontal_bipartite(
     for e in left_pool + right_pool:
         uf.find(_exit_area(e))
 
-    # Reachable-first: process left doors whose area is reachable from
-    # starting_area FIRST, so each pair commit can expand the reachable
-    # set before less-connected sources are forced.  Priority left doors
-    # (Cliff, Cavern) keep their position — their structural constraints
-    # take precedence over reachability.
-    reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
-    left_doors = _reorder_reachable_first(left_doors, reachable, rng)
-
     # Pair all left doors (priority first, then remaining)
     all_left = priority_left + left_doors
     for left_door in all_left:
@@ -1107,8 +1029,7 @@ def _pair_horizontal_bipartite(
             ok = [rd for rd in right_doors if not (
                 rd.game_exit_id == ExitID.fL08Right
                 or (rd.game_exit_id == ExitID.f01Right
-                    and starting_area == AreaID.VoD
-                    and (not has_vertical or True))  # ReduceDeadEndStarts always on
+                    and starting_area == AreaID.VoD)
                 or (rd.game_exit_id == ExitID.f03Right
                     and starting_area == AreaID.IBMain)
             )]
@@ -1121,8 +1042,7 @@ def _pair_horizontal_bipartite(
                 or (cavern_to_cliff and (
                     rd.game_exit_id == ExitID.fL08Right
                     or (rd.game_exit_id == ExitID.f01Right
-                        and starting_area == AreaID.VoD
-                        and (not has_vertical or True))
+                        and starting_area == AreaID.VoD)
                     or (rd.game_exit_id == ExitID.f03Right
                         and starting_area == AreaID.IBMain)
                 ))
@@ -1134,9 +1054,6 @@ def _pair_horizontal_bipartite(
             cross = [rd for rd in right_doors
                      if not uf.connected(a1, _exit_area(rd))
                      and not _same_dungeon(left_door, rd)]
-            # Among cross-component candidates, prefer those in
-            # unreached areas (expands the reachable graph from start).
-            cross = _filter_prefer_unreached(cross, reachable) if cross else cross
             if cross:
                 partner = rng.choice(cross)
             else:
@@ -1150,9 +1067,6 @@ def _pair_horizontal_bipartite(
         a1, a2 = _exit_area(left_door), _exit_area(partner)
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
-        # Recompute reachable after each commit so subsequent picks see
-        # the freshly-merged component.
-        reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
 
         # Track if Cliff was paired with Cavern's right door
         if (left_door.game_exit_id == ExitID.fP02Left
@@ -1244,12 +1158,6 @@ def _pair_vertical_bipartite(
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
 
-    # Reachable-first: reorder down_ladders so reachable-source-area
-    # ladders are processed first.  Priority one-way ladders keep their
-    # leading position — their structural constraint comes first.
-    reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
-    down_ladders = _reorder_reachable_first(down_ladders, reachable, rng)
-
     # Pair: priority down ladders first, then remaining
     all_down = priority_down + down_ladders
     for down_ladder in all_down:
@@ -1271,8 +1179,6 @@ def _pair_vertical_bipartite(
             cross = [ul for ul in up_ladders
                      if not uf.connected(a1, _exit_area(ul))
                      and not _same_dungeon(down_ladder, ul)]
-            # Among cross-component candidates, prefer unreached areas
-            cross = _filter_prefer_unreached(cross, reachable) if cross else cross
             if cross:
                 partner = rng.choice(cross)
             else:
@@ -1285,7 +1191,6 @@ def _pair_vertical_bipartite(
         a1, a2 = _exit_area(partner), _exit_area(down_ladder)
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
-        reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
 
     if up_ladders:
         _log(f"[ER-V] WARNING: {len(up_ladders)} up ladder(s) unpaired")
@@ -1402,26 +1307,13 @@ def _pair_gates_pool(
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
 
-    # Reachable-first: reorder remaining gates so reachable-area gates
-    # come first.  Priority gates (inaccessibles) still get their lead.
-    reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
-    gates = _reorder_reachable_first(gates, reachable, rng)
-
     # Pair: priority gates pick from main pool, then connectivity-aware random
     while gates:
         if priority_gates:
             g1 = rng.choice(priority_gates)
             priority_gates.remove(g1)
         else:
-            # Pop reachable-area gate first (already at the front of the
-            # reordered list).  Fall back to a random non-reachable one
-            # only when the front of the list is exhausted.
-            in_reach = [i for i, g in enumerate(gates)
-                        if _exit_area(g) in reachable]
-            if in_reach:
-                g1 = gates.pop(in_reach[0])
-            else:
-                g1 = gates.pop(rng.randrange(len(gates)))
+            g1 = gates.pop(rng.randrange(len(gates)))
 
         if not gates:
             # Odd gate left over
@@ -1433,8 +1325,6 @@ def _pair_gates_pool(
         cross = [g for g in gates
                  if not uf.connected(a1, _exit_area(g))
                  and not _same_dungeon(g1, g)]
-        # Among cross-component candidates, prefer unreached areas
-        cross = _filter_prefer_unreached(cross, reachable) if cross else cross
         if cross:
             g2 = rng.choice(cross)
         else:
@@ -1449,7 +1339,6 @@ def _pair_gates_pool(
         a2 = _exit_area(g2)
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
-        reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
 
     # Any leftover priority gates (shouldn't happen normally)
     if priority_gates:
@@ -1473,20 +1362,14 @@ def _pair_unique_pool(
     not in separate-pool mode.  This function exists as an extension for
     cases where unique_transitions is enabled alongside separate
     pools.  It applies the Altar anti-self-loop constraint.
-
-    Reachable-first: when base_uf is supplied, the remainder loop
-    prefers picking sources from currently-reachable areas and targets
-    from unreachable ones (expands the graph from start).
     """
     pool = list(unique_pool)
     rng.shuffle(pool)
     pairings: List[Tuple[LM2Entrance, LM2Entrance]] = []
 
-    starting_area = getattr(world, 'starting_area', None)
     uf = base_uf.copy() if base_uf is not None else _UnionFind()
     for e in unique_pool:
         uf.find(_exit_area(e))
-    reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
 
     # Altar anti-self-loop
     altar_left = _find_in(pool, ExitID.fP01Left)
@@ -1494,35 +1377,23 @@ def _pair_unique_pool(
         pool.remove(altar_left)
         ok = [e for e in pool if e.game_exit_id != ExitID.fP01Right]
         if ok:
-            # Among non-self-loop options, prefer unreached partner
-            ok = _filter_prefer_unreached(ok, reachable)
             partner = rng.choice(ok)
             pool.remove(partner)
             pairings.append((altar_left, partner))
             a1, a2 = _exit_area(altar_left), _exit_area(partner)
             if a1 is not None and a2 is not None:
                 uf.union(a1, a2)
-            reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
         else:
             pool.append(altar_left)
 
-    # Pair remainder, biased to keep expanding reachable from start
     while len(pool) >= 2:
-        # Source: prefer reachable area
-        in_reach = [i for i, e in enumerate(pool) if _exit_area(e) in reachable]
-        if in_reach:
-            e1 = pool.pop(rng.choice(in_reach))
-        else:
-            e1 = pool.pop(rng.randrange(len(pool)))
-        # Target: prefer unreachable area
-        candidates = _filter_prefer_unreached(pool, reachable)
-        e2 = rng.choice(candidates)
+        e1 = pool.pop(rng.randrange(len(pool)))
+        e2 = rng.choice(pool)
         pool.remove(e2)
         pairings.append((e1, e2))
         a1, a2 = _exit_area(e1), _exit_area(e2)
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
-        reachable = _reachable_areas_from(uf, starting_area) if _BIPARTITE_REACHABLE_FIRST else set()
 
     if pool:
         _log(f"[ER-U] WARNING: {len(pool)} unique exit(s) unpaired (odd count)")
@@ -1995,145 +1866,6 @@ def _build_pairing_records(world, pairings):
         ))
 
 
-# ── AP Generic ER entry point (constructive, no retry loop) ──────────
-
-def _restore_ap_er_vanilla(world, candidates, vanilla_targets):
-    """
-    Undo the state changes made by disconnect_entrance_for_randomization
-    (and any partial placements AP ER may have made before failing) so
-    the world looks like it did before ap_structural_er was called.
-
-    Steps:
-      1. For each candidate, detach it from whichever region it's
-         currently connected to (may be a random partial placement).
-      2. Remove ER target shadows (plain Entrance objects named after
-         candidates) from all regions' entrances lists.
-      3. Reconnect each candidate to its saved vanilla target.
-    """
-    candidate_names = {e.name for e in candidates}
-
-    # 1. Detach candidates from any current connection.
-    for exit_ in candidates:
-        cur = exit_.connected_region
-        if cur is not None:
-            try:
-                cur.entrances.remove(exit_)
-            except ValueError:
-                pass
-            exit_.connected_region = None
-
-    # 2. Strip ER target shadows from every region's entrances list.
-    for region in world.multiworld.get_regions(world.player):
-        region.entrances = [
-            entr for entr in region.entrances
-            if not (not isinstance(entr, LM2Entrance)
-                    and entr.name in candidate_names
-                    and entr.connected_region is region)
-        ]
-
-    # 3. Reconnect each candidate to its vanilla target (this re-adds
-    #    the candidate to the target region's entrances list).
-    for exit_ in candidates:
-        target = vanilla_targets.get(id(exit_))
-        if target is not None:
-            exit_.connect(target)
-
-
-def ap_structural_er(world) -> None:
-    """
-    Run structural entrance randomization via AP's built-in
-    randomize_entrances (entrance_rando.py).
-
-    Unlike custom_structural_er, this is a constructive algorithm that
-    builds the region graph incrementally while preserving reachability.
-    It does not need a retry/validation loop — by construction, every
-    placement expands or preserves the reachable region set, so the final
-    graph is guaranteed traversable with the collected pool items.
-
-    Soul gates are NOT part of this pool; they are handled afterwards
-    by SoulGateRandomizer.  The target_group_lookup controls which
-    structural pools can connect to which, mirroring the C# separate-pool
-    vs full-random behaviour.
-
-    Sets world._er_pairs and world._er_name_pairings for seed writing
-    and spoiler logging — same contract as custom_structural_er.
-    """
-    from entrance_rando import (
-        randomize_entrances,
-        EntranceRandomizationError,
-    )
-    from .regions import (
-        disconnect_shuffleable_exits,
-        _shuffleable_exits,
-        LM2ERGroup,
-    )
-
-    opts = world.options
-    full_random = bool(opts.full_random_entrances)
-
-    candidates = _shuffleable_exits(world)
-    if not candidates:
-        return
-
-    # Snapshot vanilla connections so we can restore if AP ER fails
-    # and the caller wants to fall back to legacy custom_structural_er.
-    _vanilla_targets_snapshot = {
-        id(e): e.connected_region for e in candidates
-    }
-
-    # Disconnect the shuffleable exits (creates AP ER "target" shadows).
-    # Soul gates are not in this pool — SoulGateRandomizer handles them.
-    disconnect_shuffleable_exits(world)
-
-    # Build target_group_lookup:
-    #   full-random: every group can connect to every other group
-    #   separate-pool: each group only connects within itself
-    all_groups = [int(g) for g in
-                  (LM2ERGroup.HORIZONTAL, LM2ERGroup.VERTICAL,
-                   LM2ERGroup.GATE, LM2ERGroup.UNIQUE)]
-    if full_random:
-        target_group_lookup = {g: list(all_groups) for g in all_groups}
-    else:
-        target_group_lookup = {g: [g] for g in all_groups}
-
-    _log(f"[ER] AP structural ER: {len(candidates)} candidates, "
-          f"{'full-random' if full_random else 'separate-pool'} mode")
-
-    try:
-        er_state = randomize_entrances(
-            world,
-            coupled=True,
-            target_group_lookup=target_group_lookup,
-        )
-    except EntranceRandomizationError as e:
-        # Restore vanilla connections so callers can fall back to legacy ER
-        # without seeing partial/corrupted state.
-        _restore_ap_er_vanilla(world, candidates, _vanilla_targets_snapshot)
-        # Trim the message — the AP exception dumps full exit lists.
-        msg = str(e).splitlines()[0] if str(e) else "unknown"
-        raise RuntimeError(f"AP structural ER failed: {msg}") from e
-
-    # Reconstruct (LM2Entrance, LM2Entrance) pair tuples for seed writing.
-    # er_state.placements is ordered: [source, reverse, source, reverse, ...]
-    # for coupled two-way (connect() appends both directions consecutively).
-    pairings: List[Tuple[LM2Entrance, LM2Entrance]] = []
-    placements = er_state.placements
-    for i in range(0, len(placements) - 1, 2):
-        e1, e2 = placements[i], placements[i + 1]
-        if isinstance(e1, LM2Entrance) and isinstance(e2, LM2Entrance):
-            pairings.append((e1, e2))
-
-    _build_pairing_records(world, pairings)
-
-    # Structural ER is correct by construction — nothing was unreachable.
-    world._structural_unreachable = set()
-
-    _log(f"\n[ER] === ENTRANCE PAIRINGS ===")
-    for src, tgt in sorted(world._er_name_pairings):
-        _log(f"[ER]   {src}  <->  {tgt}")
-    _log(f"[ER] === END PAIRINGS ({len(world._er_name_pairings)} pairs) ===\n")
-
-
 # ── Main entry point (called from __init__.connect_entrances) ─────────
 
 def custom_structural_er(world) -> None:
@@ -2219,13 +1951,6 @@ def custom_structural_er(world) -> None:
     for e in candidates:
         vanilla_targets[id(e)] = e.connected_region
 
-    def _restore_vanilla():
-        for e in candidates:
-            _disconnect_exit(e)
-            target = vanilla_targets[id(e)]
-            if target is not None:
-                e.connect(target)
-
     def _disconnect_all():
         for e in candidates:
             _disconnect_exit(e)
@@ -2257,9 +1982,6 @@ def custom_structural_er(world) -> None:
                     if getattr(e, 'game_exit_id', None) is not None}
     base_uf = _build_base_uf(world, shuffled_ids)
 
-    last_unreachable: List[str] = []
-    last_cluster_msg = ""
-
     # Build base CollectionStates ONCE — items and precollected don't
     # change between ER attempts, only entrance pairings do.  Validators
     # accept a base state, copy it, and reset its reachability cache so
@@ -2269,22 +1991,17 @@ def custom_structural_er(world) -> None:
     omniscient_base = _build_omniscient_state(world)
 
     for attempt in range(MAX_ATTEMPTS):
-        _restore_vanilla()
         _disconnect_all()
 
         # ── Generate pairings ─────────────────────────────────────────
-        # A/B switch: USE_REACHABLE_FIRST=True uses TUNIC-style
-        # constructive pairing (source must be reachable from start).
-        # False uses the legacy union-find cross-component approach.
-        USE_REACHABLE_FIRST = True
+        # Full-random uses TUNIC-style constructive pairing (source must
+        # be reachable from start); separate-pool mode dispatches per
+        # exit type.  _generate_pairings_reachable_first falls back to
+        # the legacy _generate_pairings when starting_area is None.
         if full_random:
-            if USE_REACHABLE_FIRST:
-                pairings = _generate_pairings_reachable_first(
-                    candidates, rng, world, starting_exit_ids,
-                    base_uf=base_uf)
-            else:
-                pairings = _generate_pairings(candidates, rng, starting_exit_ids,
-                                              base_uf=base_uf)
+            pairings = _generate_pairings_reachable_first(
+                candidates, rng, world, starting_exit_ids,
+                base_uf=base_uf)
         else:
             pairings = _generate_separate_pairings(candidates, rng, world)
 
@@ -2390,10 +2107,9 @@ class SoulGateRandomizer:
     """
     Handles soul gate pairing and GuardianKills(N) logic injection.
 
-    This is the only entrance randomization that remains custom after
-    migrating structural ER to AP's built-in entrance_rando system.
-    Soul gates carry dynamic GuardianKills(N) thresholds that AP Generic
-    ER has no model for, so they are handled here separately.
+    Runs after custom_structural_er.  Soul gates carry dynamic
+    GuardianKills(N) thresholds that the structural ER pool has no
+    model for, so they are paired separately with their own retry loop.
     """
 
     def __init__(self, rng: random.Random, entrances: List[LM2Entrance], world):
@@ -2431,117 +2147,8 @@ class SoulGateRandomizer:
         return [e for e in self.entrances if e.exit_type == exit_type]
 
     # ============================================================
-    # Soul gate randomization (unchanged from original)
+    # Soul gate randomization
     # ============================================================
-
-    def _randomize_soul_gate_entrances(self):
-        """
-        Direct port of C# RandomiseSoulGateEntrances().
-
-        AP-safe change: soul amounts are sorted ascending before assignment
-        so that low-cost gates are placed before high-cost ones, preventing
-        deadlocks where GuardianKills(N) areas are only accessible through
-        other GuardianKills(N) gates.
-        """
-        gates = list(self._get_exits_of_type(ExitType.SoulGate))
-        self.rng.shuffle(gates)
-
-        if self.options.random_soul_gate_value:
-            soul_amounts = [1, 2, 3, 5]
-        else:
-            soul_amounts = [1, 2, 2, 3, 3, 5, 5, 5]
-
-        if self.options.include_nine_soul_gates:
-            soul_amounts.append(9)
-            priority_gates = [g for g in gates
-                              if g.game_exit_id in (ExitID.f03GateN9, ExitID.f13GateN9)]
-            for g in priority_gates:
-                gates.remove(g)
-        else:
-            gate1 = next((g for g in gates if g.game_exit_id == ExitID.f03GateN9), None)
-            gate2 = next((g for g in gates if g.game_exit_id == ExitID.f13GateN9), None)
-            if gate1 and gate2:
-                gates.remove(gate1)
-                gates.remove(gate2)
-                self._append_logic_outside_parens(gate1, 'and GuardianKills(9)')
-                self._append_logic_outside_parens(gate2, 'and GuardianKills(9)')
-                self._fix_soul_gate_logic(gate1, gate2)
-                self._fix_soul_gate_logic(gate2, gate1)
-                saved1 = gate1.parent_region
-                saved2 = gate2.parent_region
-                gate1.disconnect()
-                gate2.disconnect()
-                gate1.connect(saved2)
-                gate2.connect(saved1)
-                self.soul_gate_pairs.append(SoulGatePair(gate1.game_exit_id, gate2.game_exit_id, 9))
-            priority_gates = []
-
-        if not self.options.random_soul_gate_value:
-            soul_amounts.sort()
-        else:
-            self.rng.shuffle(soul_amounts)
-
-        while gates or priority_gates:
-            if len(gates) + len(priority_gates) < 2:
-                break
-
-            if priority_gates:
-                gate1 = self.rng.choice(priority_gates)
-                priority_gates.remove(gate1)
-            else:
-                gate1 = self.rng.choice(gates)
-                gates.remove(gate1)
-
-            valid_gate2 = []
-            for g in gates:
-                if (gate1.game_exit_id == ExitID.f03GateN9 and (
-                        g.game_exit_id == ExitID.f08GateN8 or
-                        (g.game_exit_id == ExitID.f14GateN6 and self.options.random_dissonance))):
-                    continue
-                if (gate1.game_exit_id == ExitID.f13GateN9 and
-                        g.game_exit_id not in DEAD_END_EXITS and
-                        g.game_exit_id not in INACCESSIBLE_EXITS):
-                    continue
-                valid_gate2.append(g)
-
-            if not valid_gate2:
-                valid_gate2 = list(gates)
-            gate2 = self.rng.choice(valid_gate2)
-            gates.remove(gate2)
-
-            valid_amounts = [
-                a for a in soul_amounts
-                if not (
-                    (self.options.accessibility.value == 2 or not self.options.random_dissonance)
-                    and (gate1.game_exit_id == ExitID.f14GateN6 or gate2.game_exit_id == ExitID.f14GateN6)
-                    and a == 9
-                )
-            ]
-            if not valid_amounts:
-                valid_amounts = soul_amounts
-
-            if self.options.random_soul_gate_value:
-                soul_amount = self.rng.choice(valid_amounts)
-            else:
-                soul_amount = valid_amounts[0]
-                soul_amounts.remove(soul_amount)
-
-            self._append_logic_outside_parens(gate1, f'and GuardianKills({soul_amount})')
-            self._append_logic_outside_parens(gate2, f'and GuardianKills({soul_amount})')
-            self._fix_soul_gate_logic(gate1, gate2)
-            self._fix_soul_gate_logic(gate2, gate1)
-
-            saved1 = gate1.parent_region
-            saved2 = gate2.parent_region
-            gate1.disconnect()
-            gate2.disconnect()
-            gate1.connect(saved2)
-            gate2.connect(saved1)
-
-            self.soul_gate_pairs.append(SoulGatePair(gate1.game_exit_id, gate2.game_exit_id, soul_amount))
-
-            if gate1.game_exit_id == ExitID.f14GateN6 or gate2.game_exit_id == ExitID.f14GateN6:
-                self._update_epg_logic(gate1, gate2, soul_amount)
 
     def _fix_soul_gate_logic(self, gate1: LM2Entrance, gate2: LM2Entrance):
         """
@@ -2569,13 +2176,12 @@ class SoulGateRandomizer:
                 break
 
     # ============================================================
-    # Speculative gate placement (TUNIC-inspired)
+    # Speculative gate placement
     #
     # Place each soul gate pair one at a time.  After each placement,
     # run the kill-simulation check; if the new constraint cuts off a
     # critical region, roll back and try a different (partner, kills)
-    # combination.  Avoids the "shuffle everything, validate at end,
-    # retry on failure" shotgun pattern that wastes most attempts.
+    # combination.
     # ============================================================
 
     def _kill_simulation_check(self) -> bool:
@@ -2655,8 +2261,7 @@ class SoulGateRandomizer:
     def _apply_gate_pair(self, gate1, gate2, soul_amount: int) -> None:
         """
         Execute one gate pairing: append GuardianKills + extra logic,
-        swap target regions.  Mirrors the per-pair block in
-        _randomize_soul_gate_entrances.
+        swap target regions.
         """
         self._append_logic_outside_parens(gate1, f'and GuardianKills({soul_amount})')
         self._append_logic_outside_parens(gate2, f'and GuardianKills({soul_amount})')
@@ -2731,7 +2336,7 @@ class SoulGateRandomizer:
         else:
             soul_amounts = [1, 2, 2, 3, 3, 5, 5, 5]
 
-        # ── 9-soul gate handling (matches _randomize_soul_gate_entrances) ──
+        # ── 9-soul gate handling ──
         priority_gates = []
         if self.options.include_nine_soul_gates:
             soul_amounts.append(9)
@@ -2867,23 +2472,13 @@ class SoulGateRandomizer:
                 self._reset_logic(epd_hel_exit, epd_hel_vanilla_logic)
             self.soul_gate_pairs.clear()
 
-        # A/B switch — set USE_SPECULATIVE=False to fall back to the
-        # legacy "shuffle all then validate" pattern for benchmarking.
-        USE_SPECULATIVE = True
-
         for attempt in range(MAX_ATTEMPTS):
             _reset_all_gates_to_vanilla()
 
-            if USE_SPECULATIVE:
-                if not self._randomize_soul_gate_entrances_speculative(epd_hel_exit):
-                    _log(f"[ER] Soul gate speculative attempt {attempt + 1} "
-                          f"could not place all gates, retrying with fresh shuffle...")
-                    continue
-            else:
-                self._randomize_soul_gate_entrances()
-                if not self._validate_soul_gate_reachability():
-                    _log(f"[ER] Soul gate attempt {attempt + 1} failed, retrying...")
-                    continue
+            if not self._randomize_soul_gate_entrances_speculative(epd_hel_exit):
+                _log(f"[ER] Soul gate speculative attempt {attempt + 1} "
+                      f"could not place all gates, retrying with fresh shuffle...")
+                continue
 
             # All gates placed.  Final structural check (catches the rare
             # case where kill simulation passes but full-region accessibility
@@ -2961,13 +2556,12 @@ class SoulGateRandomizer:
         """
         Scan ALL exits for GuardianKills(N) requirements and return a dict
         mapping id(exit) -> kill cost.  This covers soul gates (which have
-        GuardianKills appended by _randomize_soul_gate_entrances) AND any
+        GuardianKills appended by _apply_gate_pair) AND any
         internal/other exits modified by _update_epg_logic.
 
         Exits with 'and False' in their logic get cost 9999 (permanently blocked).
         Exits without GuardianKills are NOT in the dict (freely traversable).
         """
-        import re
         kill_costs: dict = {}
 
         for region in self.world.multiworld.get_regions(self.world.player):
@@ -2993,139 +2587,7 @@ class SoulGateRandomizer:
 
         return kill_costs
 
-    def _validate_soul_gate_reachability(self) -> bool:
-        # Part 1: kill-order simulation — each guardian must be reachable in
-        # a valid sequence where each kill unlocks the next threshold.
-        if not self._kill_simulation_check():
-            kill_costs = self._build_kill_costs()
-            guardian_locs = [
-                loc for loc in self.world.multiworld.get_locations(self.world.player)
-                if hasattr(loc, 'location_type')
-                    and loc.location_type == LocationType.Guardian
-            ]
-            reachable = self._flood_fill(len(guardian_locs), kill_costs)
-            unreachable_guardians = [
-                loc.name for loc in guardian_locs
-                if not loc.parent_region or loc.parent_region.name not in reachable
-            ]
-            _log(f"[ER] Soul gate kill simulation failed. "
-                  f"Unreachable: {unreachable_guardians}")
-            return False
-
-        kill_costs = self._build_kill_costs()
-        guardian_locs = [
-            loc for loc in self.world.multiworld.get_locations(self.world.player)
-            if hasattr(loc, 'location_type')
-                and loc.location_type == LocationType.Guardian
-        ]
-
-        # Part 2: structural reachability (full accessibility only)
-        if self.world.options.accessibility == self.world.options.accessibility.option_full:
-            all_reachable = self._flood_fill(len(guardian_locs), kill_costs)
-            all_locs = list(self.world.multiworld.get_locations(self.world.player))
-            unreachable_locs = [
-                loc.name for loc in all_locs
-                if loc.parent_region and loc.parent_region.name not in all_reachable
-            ]
-            if unreachable_locs:
-                _log(f"[ER] Structural reachability failed: {len(unreachable_locs)} locations cut off "
-                      f"(e.g. {unreachable_locs[:3]})")
-                return False
-
-        _log(f"[ER]   Kill simulation passed: all {len(guardian_locs)} guardians reachable"
-              + (', all locations structurally reachable'
-                 if self.world.options.accessibility == self.world.options.accessibility.option_full
-                 else ''))
-        return True
-
-
-    def _logic_free_graph(self) -> Dict[AreaID, Set[AreaID]]:
-        """
-        Area graph restricted to exits whose logic is unconditionally True
-        (bare 'True' or empty string only — no item or flag requirements).
-
-        Used by _starting_cluster_viable to approximate the set of areas
-        reachable with zero items from the starting area.
-        """
-        graph: Dict[AreaID, Set[AreaID]] = defaultdict(set)
-        for e in self.entrances:
-            if e.connected_region is None:
-                continue
-            logic = (getattr(e, '_original_logic', '') or '').strip()
-            if logic.lower() not in ('true', ''):
-                continue
-            graph[e.parent_region.game_area_id].add(e.connected_region.game_area_id)
-        return graph
-
-    def _starting_cluster_viable(self, attempt: int) -> bool:
-        """
-        Guard against closed-island item deadlocks that ER structural checks miss.
-
-        Builds the set of areas reachable from the starting area using only
-        starting items (via can_access on the pre-collected CollectionState).
-        Then checks that at least one exit FROM that cluster leads to an area
-        OUTSIDE it — i.e. the cluster is open and can expand with more items.
-
-        A cluster with no outward exits is a closed island: all items the player
-        can ever reach are the ones already placed in that cluster, and no
-        progression path can cross the boundary regardless of where items are
-        placed. AP's fill will produce an unbeatable seed every time.
-        """
-        from BaseClasses import CollectionState
-
-        # Build a CollectionState with only the pre-collected starting items.
-        state = CollectionState(self.world.multiworld)
-        for item in self.world.multiworld.precollected_items[self.world.player]:
-            state.collect(item)
-
-        # BFS: expand through any exit accessible with starting items.
-        visited: Set[AreaID] = {self.starting_area}
-        queue: list = [self.starting_area]
-        while queue:
-            cur = queue.pop()
-            for exit_ in self.entrances:
-                if exit_.parent_region.game_area_id != cur:
-                    continue
-                if exit_.connected_region is None:
-                    continue
-                dst = exit_.connected_region.game_area_id
-                if dst in visited:
-                    continue
-                if exit_.can_access(state):
-                    visited.add(dst)
-                    queue.append(dst)
-
-        # Open-cluster check: at least one exit from the cluster must lead outside.
-        # An exit pointing to a destination NOT in visited means the cluster has
-        # an item-gated door that can expand reachability with more items.
-        for exit_ in self.entrances:
-            if exit_.connected_region is None:
-                continue
-            if exit_.parent_region.game_area_id not in visited:
-                continue
-            if exit_.connected_region.game_area_id not in visited:
-                return True   # open — some exit points outside the cluster
-
-        # Every exit from the cluster leads back into it: closed island.
-        _log(f"[ER] Attempt {attempt}: FAIL -- starting cluster is a closed island "
-              f"({len(visited)} areas reachable with starting items, no exit leads outside). "
-              f"Guaranteed unbeatable regardless of item placement.")
-        return False
-
-
     # ── Graph helpers used by IBMain escape path ──────────────────────
-
-    def _area_graph(self) -> Dict[AreaID, Set[AreaID]]:
-        graph: Dict[AreaID, Set[AreaID]] = defaultdict(set)
-        for e in self.entrances:
-            if e.connected_region is None:
-                continue
-            logic = getattr(e, '_original_logic', '') or ''
-            if 'false' in logic.lower():
-                continue
-            if hasattr(e.parent_region, 'game_area_id') and hasattr(e.connected_region, 'game_area_id'):
-                graph[e.parent_region.game_area_id].add(e.connected_region.game_area_id)
-        return graph
 
     def _ibmain_escape_graph(self,
                               base_graph: Dict[AreaID, Set[AreaID]]
