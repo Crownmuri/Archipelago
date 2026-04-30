@@ -5,12 +5,7 @@ from Options import Choice, Toggle, DefaultOnToggle, Range, ItemsAccessibility, 
 # --- Choice Definitions ---
 
 class StartingArea(Choice):
-    """Starting area for the player. Use weighted YAML to randomize, e.g.
-        starting_area:
-          village_of_departure: 25
-          annwfn: 50
-          immortal_battlefield: 50
-
+    """Starting area for the player.
     Some areas require specific entrance randomizer options to be enabled. If the chosen area's
     prerequisites aren't met, a uniform re-roll is performed across the remaining valid areas
     (a warning is logged); if no valid options remain, falls back to Village of Departure.
@@ -34,10 +29,7 @@ class StartingArea(Choice):
     default = 0
 
 class StartingWeapon(Choice):
-    """Starting weapon for the player. Use weighted YAML to randomize, e.g.
-        starting_weapon:
-          leather_whip: 50
-          katana: 50"""
+    """Starting weapon for the player."""
     display_name = "Starting Weapon"
     option_leather_whip = 0
     option_knife = 1
@@ -158,8 +150,8 @@ class Potsanity(Toggle):
     display_name = "Potsanity"
 
 class GuardianKills(Range):
-    """Number of Guardians required to be defeated to seal the Corridor of Blood."""
-    """Note: does not impact the soul gate blocking access to Spiral Hell."""
+    """Number of Guardians required to be defeated to seal the Corridor of Blood.
+    Note: does not impact the soul gate blocking access to Spiral Hell."""
     display_name = "Required Guardian Kills"
     range_start = 0
     range_end = 9
@@ -243,8 +235,8 @@ class GateEntrances(Toggle):
     display_name = "Gate Entrances"
 
 class UniqueTransitions(Toggle):
-    """Shuffle unique transitions."""
-    """(e.g. Annwfn -> Immortal Battlefield / Takamagahara Shrine -> Heaven's Labyrinth)"""
+    """Shuffle unique transitions.
+    (e.g. Annwfn -> Immortal Battlefield / Takamagahara Shrine -> Heaven's Labyrinth)"""
     display_name = "Unique Transitions"
 
 class FullRandomEntrances(Toggle):
@@ -252,30 +244,30 @@ class FullRandomEntrances(Toggle):
     display_name = "Full Random Entrances"
 
 class PreventAreaLoops(Toggle):
-    """Prevent entrance randomization from pairing exits within the same area."""
-    """May increase fill success rate if you're having issues with generation."""
+    """Prevent entrance randomization from pairing exits within the same area.
+    May increase fill success rate if you're having issues with generation."""
     display_name = "Prevent Area Loops"
 
 class SoulGateEntrances(Toggle):
-    """Shuffle [1,2,3,5] soul gate entrances with each other."""
-    """Note: does not mix with regular the above regular entrances and transitions."""
+    """Shuffle [1,2,3,5] soul gate entrances with each other.
+    Note: does not mix with regular the above regular entrances and transitions."""
     display_name = "Soul Gate Entrances"
 
 class IncludeNineSoulGates(Toggle):
-    """Requires Soul Gate Entrances shuffled."""
-    """Include the two [9] soul gates (HoM to IB Boat) in the shuffled Soul Gate pool."""
+    """Requires Soul Gate Entrances shuffled.
+    Include the two [9] soul gates (HoM to IB Boat) in the shuffled Soul Gate pool."""
     display_name = "Include Nine Soul Gates"
 
 class RandomSoulGateValue(Toggle):
-    """Requires Soul Gate Entrances shuffled."""
-    """Randomize soul gate cost values of shuffled Soul Gates."""
+    """Requires Soul Gate Entrances shuffled.
+    Randomize soul gate cost values of shuffled Soul Gates."""
     display_name = "Random Soul Gate Value"
 
 # --- Quality of Life ---
 
 class AutoScan(DefaultOnToggle):
-    """Automatically scan tablets when read."""
-    """Requires Hand Scanner in logic if disabled."""
+    """Automatically scan tablets when read.
+    Requires Hand Scanner in logic if disabled."""
     display_name = "Auto Scan Tablets"
 
 class AutoSkulls(DefaultOnToggle):
@@ -329,8 +321,11 @@ class APChestColor(Choice):
 # --- Other ---
 
 class WriteSeedFile(Toggle):
-    """Writes a seed.lm2r file for backwards compatibility. Note that the original randomizer will not feature custom filler or prevent you from using Guardian Specific Ankh Jewels freely."""
-    display_name = "Write Legacy Seed File."
+    """Writes a seed.lm2r file for backwards compatibility. 
+    Play AP seeds offline through using the in-game GUI to turn AP filler and Guardian Ankhs on or off.
+    The mod can also play original randomizer seeds (will use the original filler and ankh jewel system)
+    Does not support Potsanity."""
+    display_name = "Write Seed File."
 
 @dataclass
 class LM2Options(PerGameCommonOptions):
