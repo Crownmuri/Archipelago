@@ -473,6 +473,7 @@
             "Name": "Nidhogg",
             "LocationType": "Miniboss",
             "Logic": "MeleeAttack and (CanUse(Flare) or CanUse(Pistol) or (OrbCount(1) and (CanUse(Shuriken) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))))",
+            "TrickyLogic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
             "HardLogic": "MeleeAttack",
             "Item": {
                 "Name": "Nidhogg",
@@ -1204,7 +1205,8 @@
       {
         "Name": "Sacred Orb Chest IB",
         "LocationType": "Chest",
-        "Logic": "Has(Birth Sigil) and (Has(Feather) or Has(Grapple Claw) or IsDead(Cetus))"
+        "Logic": "Has(Birth Sigil) and (Has(Feather) or Has(Grapple Claw) or IsDead(Cetus))",
+        "TrickyLogic": "Has(Birth Sigil)"
       },
       {
         "Name": "Lamp of Time Chest",
@@ -1307,7 +1309,7 @@
         "ID": "f03GateP1",
         "ConnectionType": "Altar",
         "ConnectingAreaID": "AltarRight",
-        "Logic": "Has(Dinosaur Figure)"
+        "Logic": "Has(Dinosaur Figure) and HorizontalAttack"
       }
     ]
   },
@@ -1380,7 +1382,8 @@
       {
         "ConnectionType": "Internal",
         "ConnectingAreaID": "IBMain",
-        "Logic": "HorizontalAttack"
+        "Logic": "MeleeAttack",
+        "TrickyLogic": "HorizontalAttack"
       },
       {
         "ConnectionType": "Internal",

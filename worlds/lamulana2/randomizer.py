@@ -1159,7 +1159,8 @@ class LM2RandomizerCore:
                 continue
             if loc.game_location_id == LocationID.None_:
                 continue
-            if loc.game_location_id >= LocationID.Ratatoskr1:
+            # Skip logic-flag/boss locations (253-399), allow sanities
+            if LocationID.Ratatoskr1 <= loc.game_location_id < 400:
                 continue
             if loc.item.player != self.player:
                 continue
@@ -1188,7 +1189,8 @@ class LM2RandomizerCore:
                 continue
             if loc_id == LocationID.None_:
                 continue
-            if loc_id >= LocationID.Ratatoskr1:
+            # Skip logic-flag/boss locations (253-399), allow sanities
+            if LocationID.Ratatoskr1 <= loc_id < 400:
                 continue
             if loc.item.player != self.player:
                 continue
@@ -1225,8 +1227,8 @@ class LM2RandomizerCore:
             if loc.game_location_id == LocationID.None_:
                 continue
 
-            # Skip locations with ID >= Ratatoskr1 (253)
-            if loc.game_location_id >= LocationID.Ratatoskr1:
+            # Skip logic-flag/boss locations (253-399), allow sanities
+            if LocationID.Ratatoskr1 <= loc.game_location_id < 400:
                 continue
 
             # Get the game item ID — use unique AP placeholder for items belonging to other players
@@ -1280,8 +1282,8 @@ class LM2RandomizerCore:
             if loc_id == LocationID.None_:
                 continue
 
-            # Skip locations with ID >= Ratatoskr1
-            if loc_id >= LocationID.Ratatoskr1:
+            # Skip logic-flag/boss locations (253-399), allow sanities
+            if LocationID.Ratatoskr1 <= loc_id < 400:
                 continue
 
             # Get item ID — use unique AP placeholder for items belonging to other players

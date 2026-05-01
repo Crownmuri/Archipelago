@@ -109,7 +109,8 @@ class MantraPlacement(Choice):
 class ShopPlacement(Choice):
     """random: All shop items are shuffled.
     at_least_one: Each shop is guaranteed at least one non-ammo/weight item.
-    original: Shops keep vanilla items."""
+    original: Shops keep vanilla items.
+    Note: If [original] is selected, FDC, Codices and Hand Scanner cannot not be randomized."""
     display_name = "Shop Placement"
     option_original = 0
     option_at_least_one = 1
@@ -117,15 +118,18 @@ class ShopPlacement(Choice):
     default = 2
 
 class RandomResearch(DefaultOnToggle):
-    """Shuffle research into the AP item pool."""
+    """Add all Kosugi Research Papers into the AP item pool.
+    If disabled, they will be static untracked locations in-game."""
     display_name = "Random Research"
 
 class RemoveResearch(Toggle):
-    """Remove Kosugi Research Notes from the item pool."""
+    """Remove Kosugi Research Notes from the item pool.
+    This means that 10 filler items will take their place."""
     display_name = "Remove Research Notes"
 
 class RemoveMaps(Toggle):
-    """Removes mapping items from the item pool."""
+    """Removes maps from the item pool.
+    This means that 16 filler items will take their place."""
     display_name = "Remove Maps"
 
 class RequiredSkulls(Range):
@@ -140,22 +144,24 @@ class RemoveSkulls(DefaultOnToggle):
     display_name = "Remove Skulls"
 
 class RandomDissonance(DefaultOnToggle):
-    """Adds Progressive Beherit into the item pool and places chests at dissonance locations."""
+    """Adds Progressive Beherit into the item pool and places chests at dissonance locations.
+    If true, the randomizer will check the custom GuardianKills option for sealing the Corridor of Blood.
+    If false, all dissonance required for sealing the Corridor of Blood."""
     display_name = "Random Dissonance"
+
+class GuardianKills(Range):
+    """Only applies if RandomDissonance is on: Number of Guardians required to be defeated to seal the Corridor of Blood.
+    Note: does not impact the soul gate blocking access to Spiral Hell."""
+    display_name = "Required Guardian Kills"
+    range_start = 0
+    range_end = 9
+    default = 5
 
 class Potsanity(Toggle):
     """Include pots as randomized location checks (WIP).
    As of April 2026, 49 pot locations containing filler rewards (coins, weights, ammo). 
    Not compatible with legacy seed files."""
     display_name = "Potsanity"
-
-class GuardianKills(Range):
-    """Number of Guardians required to be defeated to seal the Corridor of Blood.
-    Note: does not impact the soul gate blocking access to Spiral Hell."""
-    display_name = "Required Guardian Kills"
-    range_start = 0
-    range_end = 9
-    default = 5
 
 class GuardianSpecificAnkhJewels(DefaultOnToggle):
     """Makes Ankhs only usable at their designated bosses."""
