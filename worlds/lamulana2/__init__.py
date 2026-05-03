@@ -442,17 +442,13 @@ class LaMulana2World(World):
             # Existing fields
             "starting_area": int(self.starting_area),
             "starting_weapon": int(self.starting_weapon),
+            "starting_items": [int(item_id) for item_id in self.randomizer.get_starting_items()],
             "cursed_locations": [int(loc_id) for loc_id in self.randomizer.cursed_locations],
+            "item_placements": item_placements,
+            "shop_placements": shop_placements,
             "shop_entries": shop_entries,
             "entrance_pairs": self.randomizer.get_entrance_pairs(),
             "soul_gate_pairs": self.randomizer.get_soul_gate_pairs(),
-            "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
-            "ap_chest_color": int(self.options.ap_chest_color),
-
-            # New fields: full placement data (replaces seed.lm2r)
-            "item_placements": item_placements,
-            "shop_placements": shop_placements,
-            "starting_items": [int(item_id) for item_id in self.randomizer.get_starting_items()],
 
             # Seed header settings
             "random_dissonance": int(self.options.random_dissonance),
@@ -470,8 +466,17 @@ class LaMulana2World(World):
             "starting_weights": int(self.options.starting_weights),
             "item_chest_color": int(self.options.item_chest_color),
             "filler_chest_color": int(self.options.filler_chest_color),
+            "ap_chest_color": int(self.options.ap_chest_color),
+
+            # AP unique settings
+            "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
+
+            # Potsanity
             "potsanity": int(self.options.potsanity),
             "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()} if self.options.potsanity else {},
+
+            # AP settings
+            "death_link": int(self.options.death_link),
         }
 
     def write_spoiler(self, spoiler_handle):
