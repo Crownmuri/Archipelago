@@ -2319,6 +2319,21 @@ class SoulGateRandomizer:
         ]
         return valid if valid else list(soul_amounts)
 
+    def _floor_to_available_gate_value(self, required_guardians: int, allowed_amounts: List[int]) -> int:
+        """
+        Return the highest available soul-gate value that is <= required_guardians.
+        Falls back to the lowest available value if required_guardians is below range.
+        """
+        allowed = sorted({int(a) for a in allowed_amounts})
+        if not allowed:
+            return 1
+
+        for value in reversed(allowed):
+            if value <= required_guardians:
+                return value
+
+        return allowed[0]
+
     def _randomize_soul_gate_entrances_speculative(self, epd_hel_exit) -> bool:
         """
         Greedy per-pair placement with rollback.  Returns True if all
@@ -2390,7 +2405,22 @@ class SoulGateRandomizer:
             tried = 0
             for gate2 in partners:
                 amounts = self._valid_amounts_for(gate1, gate2, soul_amounts)
-                if self.options.random_soul_gate_value:
+                forced_amount = None
+                if (
+                    self.options.random_dissonance
+                    and self.options.include_nine_soul_gates
+                    and self.options.random_soul_gate_value
+                    and (
+                        gate1.game_exit_id == ExitID.f03GateN9
+                        or gate2.game_exit_id == ExitID.f03GateN9
+                    )
+                ):
+                    required_guardians = int(self.options.required_guardians.value)
+                    forced_amount = self._floor_to_available_gate_value(required_guardians, amounts)
+
+                if forced_amount is not None:
+                    amount_order = [forced_amount]
+                elif self.options.random_soul_gate_value:
                     amount_order = list(amounts)
                     self.rng.shuffle(amount_order)
                 else:
