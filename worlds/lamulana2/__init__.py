@@ -317,7 +317,17 @@ class LaMulana2World(World):
             or opts.unique_transitions
             or opts.full_random_entrances
         )
-        any_er = any_structural or opts.soul_gate_entrances
+        # Value-only soul gate pass: vanilla pairings, but values may
+        # still need rewriting (random_soul_gate_value, include_nine_soul_gates,
+        # or random_dissonance N9 floor).
+        sg_value_only = (not opts.soul_gate_entrances) and (
+            opts.random_soul_gate_value
+            or opts.include_nine_soul_gates
+            or opts.random_dissonance
+        )
+        any_er = (any_structural
+                   or opts.soul_gate_entrances
+                   or sg_value_only)
 
         if not any_er:
             return
@@ -337,7 +347,7 @@ class LaMulana2World(World):
                     raise
 
             # ── Soul gate ER ──────────────────────────────────────────────
-            if opts.soul_gate_entrances:
+            if opts.soul_gate_entrances or sg_value_only:
                 import random as _random
                 from .entrances import SoulGateRandomizer, _validate_starting_cluster
 
@@ -368,7 +378,12 @@ class LaMulana2World(World):
                     return  # success — both structural and soul gates valid
                 else:
                     # Soul gates exhausted retries on this structural layout.
-                    # Retry with a new structural layout.
+                    # Retry with a new structural layout (only meaningful
+                    # when structural ER is in play; value-only failures
+                    # don't depend on the structural layout).
+                    if not any_structural:
+                        raise RuntimeError(
+                            "Soul gate value-only randomization failed.")
                     if outer < OUTER_MAX - 1:
                         _log(f"[ER] Outer retry {outer + 1}: structural layout "
                               f"incompatible with soul gates, regenerating...")

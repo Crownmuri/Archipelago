@@ -177,6 +177,22 @@ _VIRTUAL_DEAD_END_START_PAIRS: frozenset = frozenset({
 })
 
 
+# Vanilla soul gate pairings used when soul_gate_entrances is OFF but
+# value-only randomization is enabled.  N9 pair is listed last so that
+# random_dissonance N9 floor handling is straightforward.
+_VANILLA_SOUL_GATE_PAIRS: Tuple[Tuple[ExitID, ExitID], ...] = (
+    (ExitID.f00GateN1, ExitID.f05GateN1),
+    (ExitID.f02GateN2, ExitID.f06GateN2),
+    (ExitID.f03GateN3, ExitID.f07GateN3),
+    (ExitID.f03GateN4, ExitID.f08GateN4),
+    (ExitID.f04GateN5, ExitID.f09GateN5),
+    (ExitID.f04GateN6, ExitID.f14GateN6),
+    (ExitID.f06GateN7, ExitID.f10GateN7),
+    (ExitID.f08GateN8, ExitID.f12GateN8),
+    (ExitID.f03GateN9, ExitID.f13GateN9),
+)
+
+
 def _would_self_loop(e1_id: ExitID, e2_id: ExitID) -> bool:
     """True if pairing e1<->e2 would create a trivial self-loop."""
     return frozenset({e1_id, e2_id}) in _BANNED_SELF_LOOP_PAIRS
@@ -2121,9 +2137,19 @@ class SoulGateRandomizer:
 
     def randomize(self) -> bool:
         """Randomize soul gates with retry logic. Returns True on success, False if exhausted."""
-        if not self.options.soul_gate_entrances:
+        if self.options.soul_gate_entrances:
+            return self._randomize_soul_gate_entrances_retry()
+        # Value-only mode: vanilla pairings, but values may still change
+        # because of value/include-nine shuffling or the random_dissonance
+        # N9 floor.  Skip entirely when none of those apply.
+        needs_value_pass = (
+            self.options.random_soul_gate_value
+            or self.options.include_nine_soul_gates
+            or self.options.random_dissonance
+        )
+        if not needs_value_pass:
             return True
-        return self._randomize_soul_gate_entrances_retry()
+        return self._randomize_soul_gate_values_retry()
 
     def _log_soul_gate_pairings(self, label: str = ""):
         """Print current soul gate pairings for debugging."""
@@ -2164,10 +2190,13 @@ class SoulGateRandomizer:
         elif gate1.game_exit_id == ExitID.f13GateN9:
             self._append_logic_outside_parens(gate2, 'and False')
 
-    def _update_epg_logic(self, gate1: LM2Entrance, gate2: LM2Entrance, soul_amount: int):
+    def _update_epg_logic(self, gate1: LM2Entrance, gate2: LM2Entrance, soul_amount: int,
+                            force_override: bool = False):
         """Update EPG gates puzzle logic when the EPG soul gate is randomized."""
         for exit_ in self.entrances:
             if hasattr(exit_, 'connecting_area') and exit_.connecting_area == AreaID.EPDHel:
+                if force_override:
+                    self._override_guardian_kills(exit_, soul_amount)
                 if gate1.game_exit_id == ExitID.f04GateN6 or gate2.game_exit_id == ExitID.f04GateN6:
                     self._append_logic_outside_parens(
                         exit_, f'and IsDead(Vidofnir) and GuardianKills({soul_amount})')
@@ -2258,26 +2287,41 @@ class SoulGateRandomizer:
         if epd_hel_exit is not None and snap['epd_logic'] is not None:
             self._reset_logic(epd_hel_exit, snap['epd_logic'])
 
-    def _apply_gate_pair(self, gate1, gate2, soul_amount: int) -> None:
+    def _apply_gate_pair(self, gate1, gate2, soul_amount: int,
+                          swap_regions: bool = True,
+                          force_override: bool = False) -> None:
         """
         Execute one gate pairing: append GuardianKills + extra logic,
-        swap target regions.
+        and optionally swap target regions.
+
+        When force_override is True, also rewrites any existing
+        GuardianKills(N) literal in each gate's vanilla logic so that the
+        new value actually lowers the cost.  Required when the floored N9
+        amount must take effect even with random_soul_gate_value off
+        (Setting(Random Soul Gates) is False, so the original
+        GuardianKills(N) clause would otherwise dominate).
         """
+        if force_override:
+            self._override_guardian_kills(gate1, soul_amount)
+            self._override_guardian_kills(gate2, soul_amount)
+
         self._append_logic_outside_parens(gate1, f'and GuardianKills({soul_amount})')
         self._append_logic_outside_parens(gate2, f'and GuardianKills({soul_amount})')
         self._fix_soul_gate_logic(gate1, gate2)
         self._fix_soul_gate_logic(gate2, gate1)
 
-        saved1 = gate1.parent_region
-        saved2 = gate2.parent_region
-        gate1.disconnect()
-        gate2.disconnect()
-        gate1.connect(saved2)
-        gate2.connect(saved1)
+        if swap_regions:
+            saved1 = gate1.parent_region
+            saved2 = gate2.parent_region
+            gate1.disconnect()
+            gate2.disconnect()
+            gate1.connect(saved2)
+            gate2.connect(saved1)
 
         if (gate1.game_exit_id == ExitID.f14GateN6
                 or gate2.game_exit_id == ExitID.f14GateN6):
-            self._update_epg_logic(gate1, gate2, soul_amount)
+            self._update_epg_logic(gate1, gate2, soul_amount,
+                                    force_override=force_override)
 
     def _valid_partners_for(self, gate1, candidate_pool):
         """
@@ -2370,13 +2414,24 @@ class SoulGateRandomizer:
             if g1 and g2:
                 gates.remove(g1)
                 gates.remove(g2)
+                # With random_dissonance, the final-boss gate has to be
+                # accessible based on RequiredGuardians, not the literal
+                # 9 the gate is hardcoded to.
+                if self.options.random_dissonance:
+                    nine_amount = self._floor_to_available_gate_value(
+                        int(self.options.required_guardians.value),
+                        [1, 2, 3, 5, 9])
+                else:
+                    nine_amount = 9
                 snap = self._save_gate_pair_state(g1, g2, epd_hel_exit)
-                self._apply_gate_pair(g1, g2, 9)
+                self._apply_gate_pair(
+                    g1, g2, nine_amount,
+                    force_override=self.options.random_dissonance)
                 if not self._kill_simulation_check():
                     self._restore_gate_pair_state(g1, g2, epd_hel_exit, snap)
                     return False
                 self.soul_gate_pairs.append(SoulGatePair(g1.game_exit_id,
-                                                         g2.game_exit_id, 9))
+                                                         g2.game_exit_id, nine_amount))
 
         if not self.options.random_soul_gate_value:
             soul_amounts.sort()
@@ -2406,17 +2461,25 @@ class SoulGateRandomizer:
             for gate2 in partners:
                 amounts = self._valid_amounts_for(gate1, gate2, soul_amounts)
                 forced_amount = None
-                if (
-                    self.options.random_dissonance
-                    and self.options.include_nine_soul_gates
-                    and self.options.random_soul_gate_value
-                    and (
-                        gate1.game_exit_id == ExitID.f03GateN9
-                        or gate2.game_exit_id == ExitID.f03GateN9
-                    )
-                ):
+                is_nine_pair = (
+                    gate1.game_exit_id == ExitID.f03GateN9
+                    or gate2.game_exit_id == ExitID.f03GateN9
+                )
+                if self.options.random_dissonance and is_nine_pair:
                     required_guardians = int(self.options.required_guardians.value)
-                    forced_amount = self._floor_to_available_gate_value(required_guardians, amounts)
+                    # Floor against the canonical soul-gate values so the
+                    # result is always a sane game-mechanic number even
+                    # when soul_amounts contains duplicates / N9 isn't in
+                    # the active pool.
+                    forced_amount = self._floor_to_available_gate_value(
+                        required_guardians, [1, 2, 3, 5, 9])
+                    # When using the multiset (random_soul_gate_value off),
+                    # the floored value still has to be drawable from the
+                    # remaining pool for the bookkeeping below to work.
+                    if (not self.options.random_soul_gate_value
+                            and forced_amount not in soul_amounts):
+                        forced_amount = self._floor_to_available_gate_value(
+                            required_guardians, amounts)
 
                 if forced_amount is not None:
                     amount_order = [forced_amount]
@@ -2430,14 +2493,23 @@ class SoulGateRandomizer:
 
                 for soul_amount in amount_order:
                     snap = self._save_gate_pair_state(gate1, gate2, epd_hel_exit)
-                    self._apply_gate_pair(gate1, gate2, soul_amount)
+                    # When forcing the N9 floor, also rewrite the vanilla
+                    # GuardianKills(9) literal so the floor isn't masked
+                    # by the original constraint when Setting(Random Soul
+                    # Gates) is False.
+                    self._apply_gate_pair(
+                        gate1, gate2, soul_amount,
+                        force_override=(forced_amount is not None
+                                          and self.options.random_dissonance
+                                          and is_nine_pair))
                     tried += 1
 
                     if self._kill_simulation_check():
                         # Commit
                         gates.remove(gate2)
                         if not self.options.random_soul_gate_value:
-                            soul_amounts.remove(soul_amount)
+                            if soul_amount in soul_amounts:
+                                soul_amounts.remove(soul_amount)
                         self.soul_gate_pairs.append(
                             SoulGatePair(gate1.game_exit_id,
                                          gate2.game_exit_id, soul_amount))
@@ -2532,6 +2604,198 @@ class SoulGateRandomizer:
         _log(f"[ER] Soul gate randomization failed after {MAX_ATTEMPTS} attempts "
               f"-- structural layout incompatible with soul gates.")
         self._log_soul_gate_pairings("LAST FAILED: ")
+        return False
+
+    # ============================================================
+    # Value-only randomization (vanilla pairs, shuffled costs)
+    #
+    # Used when soul_gate_entrances is OFF but value/include-nine
+    # shuffling or the random_dissonance N9 floor is requested.  The
+    # gates keep their vanilla destinations; only the GuardianKills cost
+    # is rewritten.
+    # ============================================================
+
+    def _randomize_soul_gate_values_speculative(self, epd_hel_exit) -> bool:
+        """
+        Walk the canonical vanilla pair list, assign each pair a soul
+        cost according to the active options, and apply it via
+        _apply_gate_pair(swap_regions=False).  Each placement is
+        validated with the same kill-simulation check as the entrance
+        speculative loop and rolled back on failure.
+
+        Returns True if every pair found a working assignment.
+        """
+        gate_by_id = {
+            g.game_exit_id: g
+            for g in self._get_exits_of_type(ExitType.SoulGate)
+        }
+
+        nine_pair_ids = (ExitID.f03GateN9, ExitID.f13GateN9)
+        non_nine_pairs: List[Tuple[LM2Entrance, LM2Entrance]] = []
+        nine_pair: Optional[Tuple[LM2Entrance, LM2Entrance]] = None
+        for a, b in _VANILLA_SOUL_GATE_PAIRS:
+            ga = gate_by_id.get(a)
+            gb = gate_by_id.get(b)
+            if ga is None or gb is None:
+                continue
+            if (a, b) == nine_pair_ids:
+                nine_pair = (ga, gb)
+            else:
+                non_nine_pairs.append((ga, gb))
+
+        if self.options.random_soul_gate_value:
+            soul_amounts: List[int] = [1, 2, 3, 5]
+        else:
+            soul_amounts = [1, 2, 2, 3, 3, 5, 5, 5]
+
+        # Determine N9 floor up-front; applied whenever the N9 pair is
+        # placed (whether through the include-nine shuffle or the
+        # standalone path below).
+        nine_forced: Optional[int] = None
+        if self.options.random_dissonance:
+            nine_forced = self._floor_to_available_gate_value(
+                int(self.options.required_guardians.value),
+                [1, 2, 3, 5, 9])
+
+        # Non-N9 pairs only get reshuffled when the player asked for value
+        # randomization (random_soul_gate_value or include_nine_soul_gates).
+        # When the only active flag is random_dissonance, we leave them at
+        # vanilla and just floor the N9 pair below.
+        shuffle_non_nine = (self.options.random_soul_gate_value
+                              or self.options.include_nine_soul_gates)
+
+        pairs_to_place: List[Tuple[LM2Entrance, LM2Entrance]] = []
+        if shuffle_non_nine:
+            pairs_to_place.extend(non_nine_pairs)
+            self.rng.shuffle(pairs_to_place)
+        if self.options.include_nine_soul_gates and nine_pair is not None:
+            soul_amounts.append(9)
+            pairs_to_place.append(nine_pair)
+            self.rng.shuffle(pairs_to_place)
+
+        if self.options.random_soul_gate_value:
+            self.rng.shuffle(soul_amounts)
+        else:
+            soul_amounts.sort()
+
+        for gate1, gate2 in pairs_to_place:
+            is_nine = (gate1.game_exit_id == ExitID.f03GateN9
+                        or gate2.game_exit_id == ExitID.f03GateN9)
+
+            if is_nine and nine_forced is not None:
+                amount_order = [nine_forced]
+            elif self.options.random_soul_gate_value:
+                amount_order = list(soul_amounts)
+                self.rng.shuffle(amount_order)
+            else:
+                amount_order = list(soul_amounts)
+
+            placed = False
+            for soul_amount in amount_order:
+                snap = self._save_gate_pair_state(gate1, gate2, epd_hel_exit)
+                # Always force_override in value-only mode: vanilla pair
+                # logic still references the vanilla GuardianKills(N),
+                # which would otherwise dominate when Setting(Random Soul
+                # Gates) is False.
+                self._apply_gate_pair(
+                    gate1, gate2, soul_amount,
+                    swap_regions=False, force_override=True)
+
+                if self._kill_simulation_check():
+                    if (not self.options.random_soul_gate_value
+                            and not (is_nine and nine_forced is not None)
+                            and soul_amount in soul_amounts):
+                        soul_amounts.remove(soul_amount)
+                    self.soul_gate_pairs.append(
+                        SoulGatePair(gate1.game_exit_id,
+                                     gate2.game_exit_id, soul_amount))
+                    placed = True
+                    break
+
+                self._restore_gate_pair_state(gate1, gate2, epd_hel_exit, snap)
+
+            if not placed:
+                _log(f"[ER-SG] Value-only placement: no valid amount for "
+                      f"{gate1.name} <-> {gate2.name} — signaling reset")
+                return False
+
+        # When include_nine_soul_gates is OFF, the N9 pair was held back.
+        # Floor it (if random_dissonance) or keep it at vanilla 9 -- the
+        # apply step is still required when forced, since vanilla logic
+        # has GuardianKills(9) hard-coded.
+        if (nine_pair is not None
+                and not self.options.include_nine_soul_gates):
+            g1, g2 = nine_pair
+            amount = nine_forced if nine_forced is not None else 9
+            if amount != 9:
+                snap = self._save_gate_pair_state(g1, g2, epd_hel_exit)
+                self._apply_gate_pair(
+                    g1, g2, amount,
+                    swap_regions=False, force_override=True)
+                if not self._kill_simulation_check():
+                    self._restore_gate_pair_state(g1, g2, epd_hel_exit, snap)
+                    return False
+            self.soul_gate_pairs.append(
+                SoulGatePair(g1.game_exit_id, g2.game_exit_id, amount))
+
+        return True
+
+    def _randomize_soul_gate_values_retry(self) -> bool:
+        """Retry wrapper around _randomize_soul_gate_values_speculative."""
+        MAX_ATTEMPTS = 50
+
+        gates = self._get_exits_of_type(ExitType.SoulGate)
+        vanilla_logic = {
+            g.game_exit_id: g._original_logic for g in gates
+        }
+
+        epd_hel_exit = None
+        epd_hel_vanilla_logic = None
+        for e in self.entrances:
+            if (hasattr(e, 'connecting_area')
+                    and e.connecting_area == AreaID.EPDHel):
+                epd_hel_exit = e
+                epd_hel_vanilla_logic = e._original_logic
+                break
+
+        items_only_base = _build_items_only_state(self.world)
+
+        def _reset_logic_only():
+            for gate in gates:
+                saved_logic = vanilla_logic[gate.game_exit_id]
+                self._reset_logic(gate, saved_logic)
+            if epd_hel_exit is not None and epd_hel_vanilla_logic is not None:
+                self._reset_logic(epd_hel_exit, epd_hel_vanilla_logic)
+            self.soul_gate_pairs.clear()
+
+        for attempt in range(MAX_ATTEMPTS):
+            _reset_logic_only()
+
+            if not self._randomize_soul_gate_values_speculative(epd_hel_exit):
+                _log(f"[ER] Soul gate value-only attempt {attempt + 1} "
+                      f"could not place all values, retrying with fresh shuffle...")
+                continue
+
+            valid, unreachable = _validate_region_reachability(
+                self.world, base_state=items_only_base)
+            if not valid:
+                structural = getattr(self.world, '_structural_unreachable', set())
+                new_unreachable = [loc for loc in unreachable if loc not in structural]
+                if new_unreachable:
+                    _log(f"[ER] Soul gate value-only attempt {attempt + 1}: "
+                          f"post-value logic made {len(new_unreachable)} NEW "
+                          f"locations unreachable (e.g. {new_unreachable[:3]}), "
+                          f"retrying...")
+                    continue
+
+            if attempt > 0:
+                _log(f"[ER] Soul gate value-only succeeded on attempt {attempt + 1}")
+            self._log_soul_gate_pairings("VALUE-ONLY: ")
+            return True
+
+        _log(f"[ER] Soul gate value-only randomization failed after "
+              f"{MAX_ATTEMPTS} attempts.")
+        self._log_soul_gate_pairings("LAST FAILED (VALUE-ONLY): ")
         return False
 
     # ============================================================
@@ -2770,3 +3034,25 @@ class SoulGateRandomizer:
                 entrance._compiled_rule = entrance._logic_tree.compile(entrance._world)
             else:
                 entrance._compiled_rule = None
+
+    @staticmethod
+    def _override_guardian_kills(entrance: LM2Entrance, new_value: int) -> None:
+        """
+        Replace any GuardianKills(N) literal in the entrance's logic with
+        GuardianKills(new_value).  Used when the assigned soul cost must
+        actually lower the gate's kill requirement (vanilla pairs in
+        value-only mode, or random_dissonance forced N9 floor with
+        random_soul_gate_value off).
+        """
+        cur = getattr(entrance, '_original_logic', '') or ''
+        new_logic = re.sub(r'GuardianKills\(\s*\d+\s*\)',
+                           f'GuardianKills({new_value})', cur)
+        if new_logic == cur:
+            return
+        entrance._original_logic = new_logic
+        tokens = LogicTokeniser(new_logic).tokenise()
+        entrance._logic_tree = LogicTree.parse(tokens)
+        if getattr(entrance, '_world', None) is not None:
+            entrance._compiled_rule = entrance._logic_tree.compile(entrance._world)
+        else:
+            entrance._compiled_rule = None

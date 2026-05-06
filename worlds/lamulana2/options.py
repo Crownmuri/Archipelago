@@ -139,7 +139,7 @@ class RequiredSkulls(Range):
     range_end = 12
     default = 6
 
-class RemoveSkulls(DefaultOnToggle):
+class RemoveSkulls(Toggle):
     """Remove Excess Crystal Skulls from the item pool."""
     display_name = "Remove Skulls"
 
@@ -150,8 +150,10 @@ class RandomDissonance(DefaultOnToggle):
     display_name = "Random Dissonance"
 
 class GuardianKills(Range):
-    """Only applies if RandomDissonance is on: Number of Guardians required to be defeated to seal the Corridor of Blood.
-    Note: does not impact the soul gate blocking access to Spiral Hell."""
+    """Only applies if RandomDissonance is on.
+    Number of Guardians required to be defeated to seal the Corridor of Blood.
+    Note: the Spiral Boat soul gate value will be adjusted to be at or below this value.
+    This way, you will always be able to reach the final area without requiring additional guardians."""
     display_name = "Required Guardian Kills"
     range_start = 0
     range_end = 9
@@ -259,15 +261,18 @@ class SoulGateEntrances(Toggle):
     Note: does not mix with regular the above regular entrances and transitions."""
     display_name = "Soul Gate Entrances"
 
-class IncludeNineSoulGates(Toggle):
-    """Requires Soul Gate Entrances shuffled.
-    Include the two [9] soul gates (HoM to IB Boat) in the shuffled Soul Gate pool."""
-    display_name = "Include Nine Soul Gates"
-
 class RandomSoulGateValue(Toggle):
-    """Requires Soul Gate Entrances shuffled.
-    Randomize soul gate cost values of shuffled Soul Gates."""
+    """Randomize soul gate cost values.
+    If Soul Gate Entrances is shuffled: shuffle values along with pairing
+    If Soul Gate Entrances is vanilla: only shuffle values, keep vanilla pairing."""
     display_name = "Random Soul Gate Value"
+
+class IncludeNineSoulGates(Toggle):
+    """Include the two [9] soul gates (HoM to IB Boat) in the Soul Gate pool.
+    Can work with Soul Gate Entrances and Random Soul Gate Values separately.
+    Note: [9] soul gate is floored to be reachable depending on player set
+    RequiredGuardians value if RandomDissonance is enabled."""
+    display_name = "Include Nine Soul Gates"
 
 # --- Quality of Life ---
 

@@ -2235,7 +2235,7 @@ ITEM_MAP = {
     "Skull Reader": ItemID.SkullReader,
     "Race Scanner": ItemID.RaceScanner,
     "Death Village": ItemID.DeathVillage,
-    "Rose and Camelia": ItemID.RoseandCamelia,
+    "Rose and Camellia": ItemID.RoseandCamelia,
     "Space Capstar II": ItemID.SpaceCapstarII,
     "Lonely House Moving": ItemID.LonelyHouseMoving,
     "Mekuri Master": ItemID.MekuriMaster,
