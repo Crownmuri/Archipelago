@@ -1140,15 +1140,15 @@
         "LocationType": "Chest",
         "Logic": "(CanUse(Earth Spear) or CanUse(Flare) or (CanUse(Bomb) and Has(Ring))) and Has(Gloves)"
       },
-      {
-        "Name": "Earth Spear Puzzle Reward",
-        "LocationType": "FreeStanding",
-        "Logic": "Has(Gloves) or Has(Feather)"
-      },
+        {
+            "Name": "Earth Spear Puzzle Reward",
+            "LocationType": "FreeStanding",
+            "Logic": "Has(Gloves) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
+        },
       {
         "Name": "Research IB Top Left",
         "LocationType": "FreeStanding",
-        "Logic": "Has(Feather) or (Has(Gloves) and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
+        "Logic": "(CanReach(IBTop) and CanWarp) or Has(Feather) or (Has(Gloves) and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
       }
     ],
     "Exits": [
@@ -1261,7 +1261,7 @@
       {
         "Name": "Jormungand",
         "LocationType": "Guardian",
-        "Logic": "IsDead(Cetus) and Has(Pochette Key) and CanReach(AltarRight) and (((Has(Rapier) or CanUse(Rolling Shuriken)) and OrbCount(5)) or ((Has(Chain Whip) or Has(Katana) or Has(Axe) or CanUse(Bomb) or CanUse(Earth Spear) or CanUse(Flare) or CanUse(Chakram)) and OrbCount(4)) or (CanUse(pistol) and OrbCount(2)))",
+        "Logic": "IsDead(Cetus) and Has(Pochette Key) and CanReach(AltarRight) and (((Has(Rapier) or CanUse(Rolling Shuriken)) and OrbCount(5)) or ((Has(Chain Whip) or Has(Katana) or Has(Axe) or CanUse(Bomb) or CanUse(Earth Spear) or CanUse(Flare) or CanUse(Chakram)) and OrbCount(4)) or (CanUse(Pistol) and OrbCount(2)))",
         "HardLogic": "IsDead(Cetus) and Has(Pochette Key) and CanReach(AltarRight)",
         "Item": {
           "Name": "Jormungand",

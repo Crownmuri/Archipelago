@@ -144,9 +144,9 @@ class RemoveSkulls(Toggle):
     display_name = "Remove Skulls"
 
 class RandomDissonance(DefaultOnToggle):
-    """Adds Progressive Beherit into the item pool and places chests at dissonance locations.
-    If true, the randomizer will check the custom GuardianKills option for sealing the Corridor of Blood.
-    If false, all dissonance required for sealing the Corridor of Blood."""
+    """All 6 dissonance locations are converted into chests and turns the Beherit into 7 progressive items.
+    If true, sealing the Corridor of Blood requires all 7 Progressive Beherit in addition to the set GuardianKills.
+    If false, sealing the Corridor of Blood requires absorbing all dissonance from their original locations."""
     display_name = "Random Dissonance"
 
 class GuardianKills(Range):
@@ -217,7 +217,7 @@ class RandomCursedChests(DefaultOnToggle):
     Vanilla:
     - FlameTorcChest (Surtr)
     - GiantsFluteChest (Echidna)
-    - DestinyTabletChest (Ammit)
+    - DestinyTabletChest (Anu)
     - PowerBandChest (Belial)"""
     display_name = "Random Cursed Chests"
 
