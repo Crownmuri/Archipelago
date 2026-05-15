@@ -263,8 +263,8 @@ class SoulGateEntrances(Toggle):
 
 class RandomSoulGateValue(Toggle):
     """Randomize soul gate cost values.
-    If Soul Gate Entrances is shuffled: shuffle values along with pairing
-    If Soul Gate Entrances is vanilla: only shuffle values, keep vanilla pairing."""
+    If Soul Gate Entrances is vanilla (false): only shuffle values, keep vanilla pairing.
+    If Soul Gate Entrances is shuffled (true): shuffle values along with the pairing."""
     display_name = "Random Soul Gate Value"
 
 class IncludeNineSoulGates(Toggle):
@@ -332,10 +332,12 @@ class APChestColor(Choice):
 # --- Other ---
 
 class WriteSeedFile(Toggle):
-    """Writes a seed.lm2r file for backwards compatibility. 
-    Play AP seeds offline through using the in-game GUI to turn AP filler and Guardian Ankhs on or off.
-    The mod can also play original randomizer seeds (will use the original filler and ankh jewel system)
-    Does not support Potsanity."""
+    """Writes seed.lm2r (standalone compatible) and a seed.lm2ap
+    For those who wish to play solo seeds outside of AP.
+    AP generated seeds require both files to play the seed solo offline.
+    Standalone generated seeds can also be played (will use the original
+    filler and ankh jewel system).
+    Seed files need to be placed in La-Mulana 2/LaMulana2Randomizer/Seed"""
     display_name = "Write Seed File."
 
 @dataclass

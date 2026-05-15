@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import struct
-from typing import BinaryIO, Iterable, List, Tuple
+from typing import BinaryIO, Dict, Iterable, List, Tuple
 
 from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID
 
@@ -14,6 +14,20 @@ from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLD
 #     return AP_ITEM_PLACEHOLDER <= raw_item_id < BASE_ITEM_ID
 
 # ============================================================
+# .lm2ap format constants
+# ============================================================
+# Magic ASCII "LM2A" so the mod can validate the file before reading.
+LM2AP_MAGIC = b"LM2A"
+# Bump when the layout below changes in a non-backwards-compatible way.
+# v2: appended location_labels section after pot_flag_map.
+LM2AP_VERSION = 2
+
+# Pot LocationIDs are written here, not in the legacy items section,
+# so seed.lm2r stays compatible with the original LM2 randomizer mod.
+# 400 is the first pot LocationID (see POT_FLAG_MAP in ids.py).
+POT_LOCATION_ID_MIN = 400
+
+# ============================================================
 # Low-level writers (C# BinaryWriter parity)
 # ============================================================
 
@@ -24,6 +38,20 @@ def _write_i32(f: BinaryIO, value: int):
 def _write_bool(f: BinaryIO, value: bool):
     # C# BinaryWriter.Write(bool) = 1 byte
     f.write(struct.pack("<?", bool(value)))
+
+
+def _write_string(f: BinaryIO, value: str):
+    # i32 length prefix + UTF-8 bytes. Pairs with C# ReadInt32 + ReadBytes
+    # + Encoding.UTF8.GetString. (We don't use BinaryWriter.Write(string)
+    # because that uses 7-bit-encoded length, which is fiddly to emit
+    # from Python.)
+    encoded = value.encode("utf-8")
+    _write_i32(f, len(encoded))
+    f.write(encoded)
+
+
+def _is_pot_location_id(loc_id: int) -> bool:
+    return int(loc_id) >= POT_LOCATION_ID_MIN
 
 
 # ============================================================
@@ -44,11 +72,24 @@ def write_seed_file(
     soul_gate_pairs: List[Tuple[ExitID, ExitID, int]],
 ):
     """
-    Exact Python equivalent of FileUtils.WriteSeedFile()
+    Exact Python equivalent of FileUtils.WriteSeedFile().
+
+    Writes the legacy LaMulana2Randomizer seed.lm2r format so the original
+    randomizer mod can load AP-generated seeds for solo play. Pot placements
+    are filtered out here (they live in seed.lm2ap); everything else mirrors
+    the C# layout byte-for-byte.
 
     This function performs NO logic.
     It assumes all inputs are final and valid.
     """
+
+    # Pot LocationIDs (>= 400) are not understood by the legacy mod; the
+    # .lm2ap companion file owns them. Drop them here defensively in case
+    # the caller passes a mixed list.
+    legacy_item_placements = [
+        (loc_id, item_id) for loc_id, item_id in item_placements
+        if not _is_pot_location_id(loc_id)
+    ]
 
     with open(path, "wb") as f:
         # ----------------------------------------------------
@@ -108,14 +149,14 @@ def write_seed_file(
         # Normal item placements
         # ----------------------------------------------------
         # br.Write(items.Count);
-        _write_i32(f, len(item_placements))
+        _write_i32(f, len(legacy_item_placements))
 
         # foreach(var item in items)
         # {
         #     br.Write((int)item.Item1);
         #     br.Write((int)item.Item2);
         # }
-        for location_id, item_id in item_placements:
+        for location_id, item_id in legacy_item_placements:
             location_id = LocationID(location_id)
             raw_item_id = int(item_id)
 
@@ -137,7 +178,7 @@ def write_seed_file(
 
         # Create a dictionary for quick lookup
         shop_dict = {loc_id: (item_id, price) for loc_id, item_id, price in shop_placements}
-        
+
         # Write in the correct order from SHOP_WRITE_ORDER
         for location_id in SHOP_WRITE_ORDER:
             if location_id in shop_dict:
@@ -190,3 +231,87 @@ def write_seed_file(
             _write_i32(f, exit_a)
             _write_i32(f, exit_b)
             _write_i32(f, requirement)
+
+
+def write_ap_seed_file(
+    *,
+    path: str,
+    settings,
+    item_placements: List[Tuple[LocationID, ItemID]],
+    pot_flag_map: Dict[int, int],
+    location_labels: Dict[int, str],
+):
+    """
+    Write the AP-extended companion file `seed.lm2ap`.
+
+    Holds settings and data the legacy seed format can't express: AP-specific
+    toggles, pot placements (LocationIDs >= 400), and the LocationID -> in-game
+    potFlagNo mapping the mod needs to apply pot rewards.
+
+    Layout (little-endian, C# BinaryReader compatible):
+        magic[4]        = "LM2A"
+        version int32   = LM2AP_VERSION
+        --- AP settings ---
+        guardian_specific_ankhs   bool
+        potsanity                 bool
+        ap_chest_color            int32
+        logic_difficulty          int32
+        costume_clip              bool
+        dlc_item_logic            bool
+        life_sigil_to_awaken_hom  bool
+        random_research           bool
+        death_link                bool
+        --- Pot placements (same shape as the legacy items section) ---
+        pot_count int32
+        for each: location_id int32, item_id int32
+        --- Pot flag map ---
+        pot_flag_count int32
+        for each: location_id int32, pot_flag_no int32
+        --- Location labels (v2+) ---
+        Display name per LocationID. Covers AP-foreign items (where the C#
+        mod has no other source of truth in offline mode) and own items
+        whose AP name diverges from the vanilla BoxName, e.g. the
+        guardian-specific "Ankh Jewel (Vritra)".
+        label_count int32
+        for each: location_id int32, name_byte_count int32, name UTF-8 bytes
+    """
+
+    pot_placements = [
+        (loc_id, item_id) for loc_id, item_id in item_placements
+        if _is_pot_location_id(loc_id)
+    ]
+
+    with open(path, "wb") as f:
+        f.write(LM2AP_MAGIC)
+        _write_i32(f, LM2AP_VERSION)
+
+        # --- AP-only settings -------------------------------------------
+        _write_bool(f, settings.guardian_specific_ankhs)
+        _write_bool(f, settings.potsanity)
+        _write_i32(f, settings.ap_chest_color)
+        _write_i32(f, settings.logic_difficulty)
+        _write_bool(f, settings.costume_clip)
+        _write_bool(f, settings.dlc_item_logic)
+        _write_bool(f, settings.life_sigil_to_awaken_hom)
+        _write_bool(f, settings.random_research)
+        _write_bool(f, settings.death_link)
+
+        # --- Pot placements ---------------------------------------------
+        _write_i32(f, len(pot_placements))
+        for location_id, item_id in pot_placements:
+            _write_i32(f, int(location_id))
+            _write_i32(f, int(item_id))
+
+        # --- Pot flag map -----------------------------------------------
+        flag_entries = [(int(loc_id), int(flag_no)) for loc_id, flag_no in pot_flag_map.items()]
+        _write_i32(f, len(flag_entries))
+        for location_id, flag_no in flag_entries:
+            _write_i32(f, location_id)
+            _write_i32(f, flag_no)
+
+        # --- Location labels (v2+) --------------------------------------
+        label_entries = sorted(location_labels.items())
+        _write_i32(f, len(label_entries))
+        for location_id, name in label_entries:
+            _write_i32(f, int(location_id))
+            _write_string(f, name)

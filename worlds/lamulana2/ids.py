@@ -3494,6 +3494,19 @@ ORIGINAL_SHOP_PRICES = {
     # Most other items default to 10
 }
 
+# Inverse of ITEM_MAP: game ItemID → display label.
+# Built from ITEM_MAP so the area-specific labels (e.g. "Map (Roots of Yggdrasil)",
+# "Sacred Orb (VoD)", "Ankh Jewel (Vritra)") flow through wherever a game ItemID
+# needs to be turned back into a player-facing name. seed.py uses this when
+# writing the location_labels section of seed.lm2ap.
+# Note: skips internal filler IDs that share game enum values with shop items
+# already covered above (no collisions today, but if any are added later the
+# first occurrence wins per dict.setdefault semantics below).
+ITEM_LABEL_BY_ID: dict = {}
+for _name, _item_id in ITEM_MAP.items():
+    ITEM_LABEL_BY_ID.setdefault(_item_id, _name)
+del _name, _item_id
+
 def get_item_name_from_id(item_id: ItemID) -> str:
     # Handle Ankh Jewels
     if 134 <= item_id <= 142:

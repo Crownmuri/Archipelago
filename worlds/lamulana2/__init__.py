@@ -22,7 +22,7 @@ from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
 from .options import LM2Options, StartingArea, StartingWeapon
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
@@ -37,7 +37,7 @@ from .locations import (
 from .regions import create_regions
 from .rules import set_rules
 from .randomizer import LM2RandomizerCore
-from .seed import write_seed_file
+from .seed import write_seed_file, write_ap_seed_file
 
 GAME_NAME = "La-Mulana 2"
 
@@ -199,6 +199,11 @@ class LaMulana2World(World):
             included_locations[key] = loc
 
         self.locations = included_locations
+
+    def create_item(self, name: str):
+        # AP base hook used by plando_items (and create_filler).
+        # Delegate to the module-level factory in items.py.
+        return create_item(self, name)
 
     def create_items(self) -> None:
         """
@@ -415,15 +420,15 @@ class LaMulana2World(World):
         # Fix filler items with proper location type
         self.randomizer._fix_empty_locations()
 
+    def pre_output(self) -> None:
+        # balance_multiworld_progression (Main.py) runs between post_fill
+        # and pre_output and may swap items between players' locations.
+        # Anything that snapshots loc.item must run here, after balancing,
+        # but pre_output is still synchronous — mutations to loc.item are
+        # visible to write_multidata in the thread pool that follows.
         if self.randomizer.shop_entries:
             self.randomizer._adjust_shop_prices()
 
-        # Pre-compute unique filler IDs (FakeItem / ChestWeight / etc.)
-        # and sync loc.item when the fallback changes reward type.
-        # This MUST happen here (before the thread pool) because
-        # generate_output() and write_multidata() run concurrently —
-        # mutating loc.item inside generate_output() races with
-        # write_multidata() reading location.item.code.
         self.randomizer.precompute_filler_ids()
 
     def fill_slot_data(self) -> dict:
@@ -453,6 +458,24 @@ class LaMulana2World(World):
             for loc_id, item_id, price in self.randomizer.get_shop_placements()
         ]
 
+        # Display name per LocationID — same data as the lm2ap labels
+        # section, sent here so the online path can also override the
+        # vanilla BoxName (e.g. show "Ankh Jewel (Vritra)" instead of
+        # the generic "Ankh Jewel").
+        # Prefer the descriptive ITEM_MAP label (so e.g. a Map item
+        # carries "Map (Roots of Yggdrasil)" rather than the generic
+        # AP name "Map"); fall back to loc.item.name for foreign items
+        # and anything not registered in ITEM_MAP.
+        slot_location_labels: Dict[str, str] = {}
+        for loc in self.multiworld.get_filled_locations(self.player):
+            if not hasattr(loc, "game_location_id"):
+                continue
+            if loc.item is None:
+                continue
+            slot_location_labels[str(int(loc.game_location_id))] = (
+                self._label_for_location(loc)
+            )
+
         return {
             # Existing fields
             "starting_area": int(self.starting_area),
@@ -467,6 +490,7 @@ class LaMulana2World(World):
 
             # Seed header settings
             "random_dissonance": int(self.options.random_dissonance),
+            "random_research": int(self.options.random_research),
             "required_guardians": int(self.options.required_guardians),
             "required_skulls": int(self.options.required_skulls),
             "remove_it_statue": int(self.options.remove_icefire_treetop_statue),
@@ -489,6 +513,9 @@ class LaMulana2World(World):
             # Potsanity
             "potsanity": int(self.options.potsanity),
             "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()} if self.options.potsanity else {},
+
+            # Per-location display names — see comment above the dict build.
+            "location_labels": slot_location_labels,
 
             # AP settings
             "death_link": int(self.options.death_link),
@@ -609,7 +636,7 @@ class LaMulana2World(World):
 
     def generate_output(self, output_directory: str) -> None:
 
-        if self.options.write_seed_file and not self.options.potsanity:
+        if self.options.write_seed_file:
             import os
             import json
             import zipfile
@@ -630,26 +657,65 @@ class LaMulana2World(World):
                 f"AP-{mw.seed_name}-P{player}-{mw.get_file_safe_player_name(player)}_{Utils.__version__}.zip"
             )
 
+            item_placements = self.randomizer.get_item_placements()
+
             with tempfile.TemporaryDirectory() as tmpdir:
                 lm2r_path = os.path.join(tmpdir, "seed.lm2r")
+                lm2ap_path = os.path.join(tmpdir, "seed.lm2ap")
 
-                # Generate the actual LM2 patch file
+                # Legacy LM2 randomizer seed (chests/shops/entrances/soul gates).
+                # Pot placements are stripped inside write_seed_file so the
+                # original-rando mod can still parse this file.
                 write_seed_file(
                     path=lm2r_path,
                     starting_weapon=self.randomizer.starting_weapon,
                     starting_area=self.randomizer.starting_area,
                     settings=self.options,
                     starting_items=self.randomizer.get_starting_items(),
-                    item_placements=self.randomizer.get_item_placements(),
+                    item_placements=item_placements,
                     shop_placements=self.randomizer.get_shop_placements(),
                     cursed_locations=self.randomizer.get_cursed_locations(),
                     entrance_pairs=self.randomizer.get_entrance_pairs(),
                     soul_gate_pairs=self.randomizer.get_soul_gate_pairs(),
                 )
 
-                # Package the LM2R file plus manifest into the AP zip
+                # AP-extended companion: AP-only settings, pot placements,
+                # and pot LocationID -> in-game potFlagNo map. Pot data is
+                # only meaningful when potsanity is enabled, but settings
+                # are always worth carrying for solo replay.
+                pot_flag_map = (
+                    {int(k): int(v) for k, v in POT_FLAG_MAP.items()}
+                    if self.options.potsanity else {}
+                )
+
+                # Display name per LocationID — captures every filled
+                # location (own + foreign) so the C# mod can label items
+                # in offline mode and so guardian-specific Ankh names
+                # survive in place of the vanilla BoxName.
+                # See _label_for_location for the ITEM_MAP-first / loc.item.name
+                # fallback rationale (matches slot_data["location_labels"]).
+                location_labels: Dict[int, str] = {}
+                for loc in mw.get_filled_locations(player):
+                    if not hasattr(loc, "game_location_id"):
+                        continue
+                    if loc.item is None:
+                        continue
+                    location_labels[int(loc.game_location_id)] = (
+                        self._label_for_location(loc)
+                    )
+
+                write_ap_seed_file(
+                    path=lm2ap_path,
+                    settings=self.options,
+                    item_placements=item_placements,
+                    pot_flag_map=pot_flag_map,
+                    location_labels=location_labels,
+                )
+
+                # Package both seed files plus manifest into the AP zip
                 with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED, True, 9) as output_zip:
                     output_zip.write(lm2r_path, arcname="seed.lm2r")
+                    output_zip.write(lm2ap_path, arcname="seed.lm2ap")
                     output_zip.writestr(
                         "archipelago.json",
                         json.dumps(manifest).encode("utf-8")
@@ -658,6 +724,40 @@ class LaMulana2World(World):
     # =============================================================================
     # Helpers
     # =============================================================================
+
+    def _label_for_location(self, loc) -> str:
+        """
+        Player-facing label for the item at this location.
+
+        Prefers the descriptive ITEM_MAP entry keyed by the underlying game
+        ItemID (so e.g. Maps and Sacred Orbs carry their area-specific names
+        rather than the generic AP display name), and falls back to
+        loc.item.name when the item isn't registered there — that catches
+        foreign-player items, AP filler bundles, and any one-offs that don't
+        have an ITEM_MAP entry.
+
+        For LM2Items carrying lm2_game_id (Progressive Whip/Shield/Beherit and
+        the guardian-specific Ankh Jewels), we look up by the underlying
+        per-tier game ID first; ITEM_MAP doesn't have entries for the
+        intermediate progressive IDs, so the lookup naturally falls through
+        to loc.item.name (which is the AP-side label like "Progressive Whip"
+        or "Ankh Jewel (Vritra)").
+        """
+        item = loc.item
+        # LM2Item-specific game ID (preserves progressives + guardian ankhs).
+        game_id = getattr(item, "lm2_game_id", None)
+        if game_id is None:
+            code = getattr(item, "code", None)
+            if isinstance(code, int) and code >= BASE_ITEM_ID:
+                try:
+                    game_id = ItemID(code - BASE_ITEM_ID)
+                except ValueError:
+                    game_id = None
+        if game_id is not None:
+            label = ITEM_LABEL_BY_ID.get(game_id)
+            if label:
+                return label
+        return item.name
 
     def _should_include_location(self, loc) -> bool:
         """Determine if a location should be included in the pool."""

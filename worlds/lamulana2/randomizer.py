@@ -1343,9 +1343,34 @@ class LM2RandomizerCore:
 
     def get_starting_items(self) -> List[ItemID]:
         """
-        Seed writer helper.
+        Seed writer / slot_data helper.
+
+        Returns the union of LM2-derived starters (Random X: Starting options)
+        and AP `start_inventory` precollected items, minus the starting weapon
+        (the C# mod handles the weapon via its own slot_data field).
+
+        precollected_items already contains both sources by the time this is
+        called: apply_starting_inventory pushes the LM2-derived starters in,
+        and AP core pushes start_inventory entries in.
         """
-        return get_starting_item_ids(self.world)
+        starting_weapon_id = int(self.starting_weapon)
+        seen: set[int] = set()
+        result: List[ItemID] = []
+
+        for item in self.world.multiworld.precollected_items[self.world.player]:
+            try:
+                game_id = get_game_item_id(item)
+            except KeyError:
+                continue
+            game_id_int = int(game_id)
+            if game_id_int == starting_weapon_id:
+                continue
+            if game_id_int in seen:
+                continue
+            seen.add(game_id_int)
+            result.append(game_id)
+
+        return result
 
     def get_cursed_locations(self) -> List[LocationID]:
         return self.cursed_locations
