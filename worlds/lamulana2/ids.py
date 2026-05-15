@@ -2051,7 +2051,7 @@ AP_LOCATION_NAMES = {
     "[ROY E-3] Map Chest": LocationID.MapChestRoY,
     "[ROY E-4] Sacred Orb Chest": LocationID.SacredOrbChestRoY,
     "[ROY E-6] Golden Rock Chest (S3)": LocationID.PyramidCrystalChest,
-    "[ROY F-3] Fafnir Boss Reward": LocationID.CrystalSkullChestRoY,
+    "[ROY F-3] Fafnir Reward": LocationID.CrystalSkullChestRoY,
     "[SFG A-3] Top-Left Breakable Ceiling (S3)": LocationID.GauntletChest,
     "[SFG A-5] Hydlit Shop 1": LocationID.HydlitShop1,
     "[SFG A-5] Hydlit Shop 2": LocationID.HydlitShop2,

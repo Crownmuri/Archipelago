@@ -4,7 +4,7 @@ import json
 import importlib.resources as resources
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Optional
+from typing import Dict, Optional, Set
 
 from BaseClasses import Location
 
@@ -368,6 +368,193 @@ def get_unplaced_locations_of_type(locations: Dict[LocationID, LM2Location],
                                    loc_type: LocationType) -> list[LM2Location]:
     """Get all unplaced locations of a specific type."""
     return [
-        loc for loc in locations.values() 
+        loc for loc in locations.values()
         if loc.location_type == loc_type and loc.item is None and not loc.is_locked
     ]
+
+
+# ============================================================
+# AreaID → display name (collapses sub-areas to broad regions
+# for AP location_name_groups). Areas without locations
+# (Cliff, Start) are still mapped — they drop out naturally.
+# ============================================================
+
+AREA_DISPLAY_NAME: Dict[AreaID, str] = {
+    AreaID.VoD: "Village of Departure",
+    AreaID.VoDLadder: "Village of Departure",
+    AreaID.InfernoCavern: "Inferno Cavern",
+    AreaID.GateofGuidance: "Gate of Guidance",
+    AreaID.GateofGuidanceLeft: "Gate of Guidance",
+    AreaID.MausoleumofGiants: "Mausoleum of Giants",
+    AreaID.MausoleumofGiantsRubble: "Mausoleum of Giants",
+    AreaID.EndlessCorridor: "Endless Corridor",
+    AreaID.GateofIllusion: "Gate of Illusion",
+    AreaID.RoY: "Roots of Yggdrasil",
+    AreaID.RoYTopLeft: "Roots of Yggdrasil",
+    AreaID.RoYTopRight: "Roots of Yggdrasil",
+    AreaID.RoYTopMiddle: "Roots of Yggdrasil",
+    AreaID.RoYMiddle: "Roots of Yggdrasil",
+    AreaID.RoYBottom: "Roots of Yggdrasil",
+    AreaID.RoYBottomLeft: "Roots of Yggdrasil",
+    AreaID.AnnwfnMain: "Annwfn",
+    AreaID.AnnwfnOneWay: "Annwfn",
+    AreaID.AnnwfnSG: "Annwfn",
+    AreaID.AnnwfnPoison: "Annwfn",
+    AreaID.AnnwfnRight: "Annwfn",
+    AreaID.IBBifrost: "Immortal Battlefield",
+    AreaID.IBTop: "Immortal Battlefield",
+    AreaID.IBTopLeft: "Immortal Battlefield",
+    AreaID.IBCetusLadder: "Immortal Battlefield",
+    AreaID.IBMain: "Immortal Battlefield",
+    AreaID.IBRight: "Immortal Battlefield",
+    AreaID.IBBottom: "Immortal Battlefield",
+    AreaID.IBLeft: "Immortal Battlefield",
+    AreaID.IBLeftSG: "Immortal Battlefield",
+    AreaID.IBBattery: "Immortal Battlefield",
+    AreaID.IBDinosaur: "Immortal Battlefield",
+    AreaID.IBMoon: "Immortal Battlefield",
+    AreaID.IBLadder: "Immortal Battlefield",
+    AreaID.IBBoat: "Immortal Battlefield",
+    AreaID.Cavern: "Cavern",
+    AreaID.Cliff: "Cliff",
+    AreaID.AltarLeft: "Altar",
+    AreaID.AltarRight: "Altar",
+    AreaID.ITEntrance: "Icefire Treetop",
+    AreaID.ITBottom: "Icefire Treetop",
+    AreaID.ITSinmara: "Icefire Treetop",
+    AreaID.ITLeft: "Icefire Treetop",
+    AreaID.ITRight: "Icefire Treetop",
+    AreaID.ITRightLeftLadder: "Icefire Treetop",
+    AreaID.ITVidofnir: "Icefire Treetop",
+    AreaID.DFEntrance: "Divine Fortress",
+    AreaID.DFRight: "Divine Fortress",
+    AreaID.DFMain: "Divine Fortress",
+    AreaID.DFTop: "Divine Fortress",
+    AreaID.SotFGMain: "Shrine of the Frost Giants",
+    AreaID.SotFGGrail: "Shrine of the Frost Giants",
+    AreaID.SotFGTop: "Shrine of the Frost Giants",
+    AreaID.SotFGBalor: "Shrine of the Frost Giants",
+    AreaID.SotFGBlood: "Shrine of the Frost Giants",
+    AreaID.SotFGBloodTez: "Shrine of the Frost Giants",
+    AreaID.SotFGLeft: "Shrine of the Frost Giants",
+    AreaID.GotD: "Gate of the Dead",
+    AreaID.GotDWedjet: "Gate of the Dead",
+    AreaID.TSEntrance: "Takamagahara Shrine",
+    AreaID.TSMain: "Takamagahara Shrine",
+    AreaID.TSLeft: "Takamagahara Shrine",
+    AreaID.TSNeck: "Takamagahara Shrine",
+    AreaID.TSNeckEntrance: "Takamagahara Shrine",
+    AreaID.TSBottom: "Takamagahara Shrine",
+    AreaID.TSBlood: "Takamagahara Shrine",
+    AreaID.HL: "Heaven's Labyrinth",
+    AreaID.HLGate: "Heaven's Labyrinth",
+    AreaID.HLSpun: "Heaven's Labyrinth",
+    AreaID.HLCog: "Heaven's Labyrinth",
+    AreaID.ValhallaMain: "Valhalla",
+    AreaID.ValhallaTop: "Valhalla",
+    AreaID.ValhallaTopRight: "Valhalla",
+    AreaID.DSLMMain: "Dark Star Lord's Mausoleum",
+    AreaID.DSLMTop: "Dark Star Lord's Mausoleum",
+    AreaID.DSLMPyramid: "Dark Star Lord's Mausoleum",
+    AreaID.Nibiru: "Nibiru",
+    AreaID.ACBottom: "Ancient Chaos",
+    AreaID.ACWind: "Ancient Chaos",
+    AreaID.ACTablet: "Ancient Chaos",
+    AreaID.ACMain: "Ancient Chaos",
+    AreaID.ACBlood: "Ancient Chaos",
+    AreaID.HoMTop: "Hall of Malice",
+    AreaID.HoM: "Hall of Malice",
+    AreaID.HoMAwoken: "Hall of Malice",
+    AreaID.EPDEntrance: "Eternal Prison Doom",
+    AreaID.EPDMain: "Eternal Prison Doom",
+    AreaID.EPDTop: "Eternal Prison Doom",
+    AreaID.EPDHel: "Eternal Prison Doom",
+    AreaID.EPG: "Eternal Prison Gloom",
+    AreaID.SpiralHell: "Spiral Hell",
+}
+
+
+# Area-display-name → tuple of alias group names. Each alias becomes a
+# parallel group with the same members, so e.g. !hint_location ANN and
+# !hint_location Annwfn resolve identically.
+AREA_ALIASES: Dict[str, tuple[str, ...]] = {
+    "Village of Departure": ("VOD",),
+    "Inferno Cavern": ("IC",),
+    "Gate of Guidance": ("GOG",),
+    "Mausoleum of Giants": ("MOG",),
+    "Endless Corridor": ("EC",),
+    "Gate of Illusion": ("GOI",),
+    "Roots of Yggdrasil": ("ROY",),
+    "Annwfn": ("ANN",),
+    "Immortal Battlefield": ("IB",),
+    "Icefire Treetop": ("IT",),
+    "Divine Fortress": ("DF",),
+    "Shrine of the Frost Giants": ("SOTFG", "SFG"),
+    "Gate of the Dead": ("GOTD",),
+    "Takamagahara Shrine": ("TS",),
+    "Heaven's Labyrinth": ("HL",),
+    "Valhalla": ("VAL",),
+    "Dark Star Lord's Mausoleum": ("DSLM",),
+    "Nibiru": ("NIB",),
+    "Ancient Chaos": ("AC",),
+    "Hall of Malice": ("HOM",),
+    "Eternal Prison Doom": ("EPD",),
+    "Eternal Prison Gloom": ("EPG",),
+    "Spiral Hell": ("SH",),
+}
+
+
+def build_location_name_groups() -> Dict[str, Set[str]]:
+    """
+    Build location_name_groups for AP hinting.
+
+    Skips logic-flag locations (events, not registered as real AP locations).
+    Empty groups (e.g. Cliff/Start, which have no locations) are dropped.
+    """
+    from .ids import LOGIC_FLAG_LOCATION_IDS
+
+    groups: Dict[str, Set[str]] = {
+        "Dissonance": set(),
+        "Bosses": set(),
+        "Murals": set(),
+        "Shops": set(),
+    }
+
+    for loc_id, loc_def in LOCATION_DEFS.items():
+        if loc_id in LOGIC_FLAG_LOCATION_IDS:
+            continue
+
+        ap_name = AP_LOCATION_DEFS.get(loc_id, loc_def.name)
+
+        if loc_def.location_type == LocationType.Dissonance:
+            groups["Dissonance"].add(ap_name)
+        elif loc_def.location_type == LocationType.Guardian:
+            groups["Bosses"].add(ap_name)
+        elif loc_def.location_type == LocationType.Mural:
+            groups["Murals"].add(ap_name)
+        elif loc_def.location_type == LocationType.Shop:
+            groups["Shops"].add(ap_name)
+
+        area_name = AREA_DISPLAY_NAME.get(loc_def.parent_area)
+        if area_name:
+            groups.setdefault(area_name, set()).add(ap_name)
+
+    # Player-created starting shops live outside LOCATION_DEFS but are
+    # always added to location_name_to_id. Per-area assignment is skipped
+    # because parent_area depends on the player's resolved starting_area.
+    groups["Shops"].update({
+        "[RANDO] Starting Shop 1",
+        "[RANDO] Starting Shop 2",
+        "[RANDO] Starting Shop 3",
+    })
+
+    # Mirror each area group under its abbreviated alias(es) so players
+    # can hint with shorthand (e.g. !hint_location ANN == Annwfn).
+    for full_name, aliases in AREA_ALIASES.items():
+        members = groups.get(full_name)
+        if not members:
+            continue
+        for alias in aliases:
+            groups[alias] = set(members)
+
+    return {name: members for name, members in groups.items() if members}

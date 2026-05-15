@@ -27,12 +27,12 @@ from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
     create_filler_item, POT_FILLER_DISTRIBUTION, INTERNAL_ID_TO_REWARD,
-    build_pot_filler_pool
+    build_pot_filler_pool, build_item_name_groups
 )
 from .locations import (
     LM2Location, AreaID, create_locations, LOCATION_DEFS, LocationType,
     LOCATION_DEFS_BY_AP_ID, LOCATION_DEFS_BY_NAME, LM2LocationDef,
-    AP_LOCATION_DEFS
+    AP_LOCATION_DEFS, build_location_name_groups
 )
 from .regions import create_regions
 from .rules import set_rules
@@ -151,6 +151,9 @@ class LaMulana2World(World):
         "[RANDO] Starting Shop 2": BASE_LOCATION_ID + LocationID.StartingShop2.value,
         "[RANDO] Starting Shop 3": BASE_LOCATION_ID + LocationID.StartingShop3.value,
     })
+
+    item_name_groups: Dict[str, set] = build_item_name_groups()
+    location_name_groups: Dict[str, set] = build_location_name_groups()
 
     # -------------------------------------------------------------------------
     # Lifecycle

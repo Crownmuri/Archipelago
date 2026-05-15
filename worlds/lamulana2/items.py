@@ -680,7 +680,7 @@ def build_pre_filler(world) -> Item:
     # Create a weighted list of names based on FILLER_DISTRIBUTION
     weighted_names = [name for name, weight in FILLER_DISTRIBUTION for _ in range(weight)]
     name = world.random.choice(weighted_names)
-    
+
     # Get the generic AP ItemID (300-309)
     item_id = next(iid for n, iid in AP_FILLER if n == name)
 
@@ -690,3 +690,58 @@ def build_pre_filler(world) -> Item:
         code=BASE_ITEM_ID + int(item_id),
         player=world.player,
     )
+
+
+# ============================================================
+# Item name groups (AP hint targets)
+# ============================================================
+# Group names must not collide with any individual item name.
+# Members must match names registered in LaMulana2World.item_name_to_id.
+
+_WEAPON_NAMES: frozenset[str] = frozenset({
+    "Progressive Whip", "Progressive Shield",
+    "Knife", "Rapier", "Axe", "Katana", "Pistol",
+})
+
+_SUBWEAPON_NAMES: frozenset[str] = frozenset({
+    "Shuriken", "Rolling Shuriken", "Earth Spear", "Flare",
+    "Caltrops", "Chakram", "Bomb", "Claydoll Suit",
+})
+
+_MANTRA_NAMES: frozenset[str] = frozenset({
+    "Heaven", "Earth", "Sun", "Moon", "Fire",
+    "Sea", "Wind", "Mother", "Child", "Night",
+})
+
+# Names match Items.json exactly (note: "Ruins Encylopedia" and
+# "Beo Eglana" are spelled as in the JSON, "TextTrax" has no "2").
+_SOFTWARE_NAMES: frozenset[str] = frozenset({
+    "Xelputter", "Yagoo Map Reader", "Yagoo Map Street",
+    "TextTrax", "Ruins Encylopedia", "Mantra", "Guild",
+    "Enga Musica", "Beo Eglana", "Alert", "Snapshot",
+    "Skull Reader", "Race Scanner", "Death Village",
+    "Rose and Camellia", "Space Capstar II",
+    "Lonely House Moving", "Mekuri Master", "Bounce Shot",
+    "Miracle Witch", "Future Development Company",
+    "La-Mulana", "La-Mulana 2",
+})
+
+
+def build_item_name_groups() -> Dict[str, Set[str]]:
+    """Build item_name_groups for AP hinting."""
+    from .ids import GUARDIAN_ANKHS_ITEMS
+
+    all_names = {d.name for d in ITEM_DEFS}
+
+    return {
+        "Weapons": set(_WEAPON_NAMES),
+        "Subweapons": set(_SUBWEAPON_NAMES),
+        "Maps": {n for n in all_names if n.startswith("Map")},
+        "Research": {n for n in all_names if "Research" in n},
+        "Ammo": {n for n in all_names if n.endswith(" Ammo")},
+        "Crystal Skulls": {"Crystal Skull"},
+        "Ankh Jewels": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
+        "Mantras": set(_MANTRA_NAMES),
+        "Sacred Orbs": {"Sacred Orb"},
+        "Software": set(_SOFTWARE_NAMES),
+    }
