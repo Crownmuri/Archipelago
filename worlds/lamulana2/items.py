@@ -713,6 +713,10 @@ _MANTRA_NAMES: frozenset[str] = frozenset({
     "Sea", "Wind", "Mother", "Child", "Night",
 })
 
+_SIGIL_NAMES: frozenset[str] = frozenset({
+    "Origin Sigil", "Birth Sigil", "Life Sigil", "Death Sigil",
+})
+
 # Names match Items.json exactly (note: "Ruins Encylopedia" and
 # "Beo Eglana" are spelled as in the JSON, "TextTrax" has no "2").
 _SOFTWARE_NAMES: frozenset[str] = frozenset({
@@ -740,8 +744,12 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
         "Research": {n for n in all_names if "Research" in n},
         "Ammo": {n for n in all_names if n.endswith(" Ammo")},
         "Crystal Skulls": {"Crystal Skull"},
+        "Skulls":{"Crystal Skull"},
         "Ankh Jewels": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
         "Mantras": set(_MANTRA_NAMES),
         "Sacred Orbs": {"Sacred Orb"},
+        "HP":{"Sacred Orb"},
         "Software": set(_SOFTWARE_NAMES),
+        "Sigils": set(_SIGIL_NAMES),
+        "Seals": set(_SIGIL_NAMES),
     }
