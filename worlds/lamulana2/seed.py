@@ -20,7 +20,7 @@ from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLD
 LM2AP_MAGIC = b"LM2A"
 # Bump when the layout below changes in a non-backwards-compatible way.
 # v2: appended location_labels section after pot_flag_map.
-LM2AP_VERSION = 2
+LM2AP_VERSION = 3
 
 # Pot LocationIDs are written here, not in the legacy items section,
 # so seed.lm2r stays compatible with the original LM2 randomizer mod.
@@ -274,6 +274,8 @@ def write_ap_seed_file(
         guardian-specific "Ankh Jewel (Vritra)".
         label_count int32
         for each: location_id int32, name_byte_count int32, name UTF-8 bytes
+        --- v3+ QoL toggles ---
+        greedy_charon             bool
     """
 
     pot_placements = [
@@ -315,3 +317,6 @@ def write_ap_seed_file(
         for location_id, name in label_entries:
             _write_i32(f, int(location_id))
             _write_string(f, name)
+
+        # --- v3+ QoL toggles --------------------------------------------
+        _write_bool(f, settings.greedy_charon)

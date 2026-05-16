@@ -299,6 +299,13 @@ class StartingWeights(Range):
     range_end = 100
     default = 10
 
+class GreedyCharon(DefaultOnToggle):
+    """AP coin grants can be sent by another player at any point, 
+    which may not be ideal in synced playthroughs. 
+    Turning this on will make Charon take all your coins as payment, 
+    so you don't get bricked with additional coins while trying to get to Charon."""
+    display_name = "Greedy Charon"
+
 class ItemChestColor(Choice):
     """Color for item chests."""
     display_name = "Item Chest Color"
@@ -396,6 +403,7 @@ class LM2Options(PerGameCommonOptions):
     # Quality of Life
     auto_scan: AutoScan
     auto_skulls: AutoSkulls
+    greedy_charon: GreedyCharon
     starting_money: StartingMoney
     starting_weights: StartingWeights
     item_chest_color: ItemChestColor

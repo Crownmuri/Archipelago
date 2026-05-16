@@ -499,6 +499,7 @@ class LaMulana2World(World):
             "remove_it_statue": int(self.options.remove_icefire_treetop_statue),
             "echidna": int(self.options.echidna_difficulty),
             "auto_scan_tablets": int(self.options.auto_scan),
+            "greedy_charon": int(self.options.greedy_charon),
             "logic_difficulty": int(self.options.logic_difficulty),
             "costume_clip": int(self.options.costume_clip),
             "dlc_item_logic": int(self.options.dlc_item_logic),
@@ -937,6 +938,7 @@ class LaMulana2World(World):
         _log("\n[QOL]")
         _log(f"  Auto Scan: {opt('auto_scan')}")
         _log(f"  Auto Skulls: {opt('auto_skulls')}")
+        _log(f"  Greedy Charon: {opt('greedy_charon')}")
         _log(f"  Starting Money: {opt('starting_money')}")
         _log(f"  Starting Weights: {opt('starting_weights')}")
 
