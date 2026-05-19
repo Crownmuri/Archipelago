@@ -433,9 +433,6 @@ class LaMulana2World(World):
                         continue
 
                     self._sg_pairs = sgr.soul_gate_pairs
-                    # Log escape route now that soul gate connections exist
-                    from .entrances import _log_ibmain_escape_standalone
-                    _log_ibmain_escape_standalone(self)
                     return  # success — both structural and soul gates valid
                 else:
                     # Soul gates exhausted retries on this structural layout.
@@ -450,9 +447,6 @@ class LaMulana2World(World):
                               f"incompatible with soul gates, regenerating...")
                     continue
             else:
-                # Log escape route (no soul gates, but structural ER is done)
-                from .entrances import _log_ibmain_escape_standalone
-                _log_ibmain_escape_standalone(self)
                 return  # no soul gates, structural ER alone is sufficient
 
         raise RuntimeError(
@@ -672,18 +666,6 @@ class LaMulana2World(World):
                 for g1, g2 in sorted(by_cost[cost], key=lambda p: (_exit_label(p[0]), _exit_label(p[1]))):
                     spoiler_handle.write(f'    "{_exit_label(g1)}": "{_exit_label(g2)}"\n')
                     spoiler_handle.write(f'    "{_exit_label(g2)}": "{_exit_label(g1)}"\n')
-            spoiler_handle.write("\n")
-
-        # ----------------------------------------------------------------------
-        # IBMain post-endgame escape route to Cliff
-        # ----------------------------------------------------------------------
-        escape_line = getattr(self, 'ibmain_escape_spoiler', None)
-        if escape_line:
-            spoiler_handle.write('IBMain Escape Route:\n')
-            spoiler_handle.write('-' * 40 + '\n')
-            # Strip the "[ER] SPOILER — " prefix for the file
-            clean = escape_line.replace('[ER] SPOILER — ', '').replace('[ER] SPOILER: ', '')
-            spoiler_handle.write(f'  {clean}\n')
             spoiler_handle.write("\n")
 
         # Write all locations

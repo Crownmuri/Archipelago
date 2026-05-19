@@ -3702,7 +3702,7 @@
         "Logic": "Has(Life Sigil)"
       },
       {
-        "Name": "Beo Eg-Lana Mural",
+        "Name": "Beo Eglana Mural",
         "LocationType": "Mural",
         "Logic": "CanUse(Bomb) and Has(Snapshot)"
       },

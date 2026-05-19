@@ -109,39 +109,6 @@ INACCESSIBLE_EXITS = {
 }
 
 # ============================================================
-# Standalone IBMain escape log (called from connect_entrances)
-# ============================================================
-
-def _log_ibmain_escape_standalone(world) -> str:
-    """
-    Build the IBMain -> Cliff post-endgame escape spoiler from the live
-    region graph.  Called from LaMulana2World.connect_entrances after
-    structural ER has finished connecting exits.
-    """
-    # Build area-adjacency graph from the live AP region graph
-    graph: Dict[AreaID, Set[AreaID]] = defaultdict(set)
-    for region in world.multiworld.get_regions(world.player):
-        if not hasattr(region, 'game_area_id'):
-            continue
-        for exit_ in region.exits:
-            if exit_.connected_region is None:
-                continue
-            if not hasattr(exit_.connected_region, 'game_area_id'):
-                continue
-            logic = getattr(exit_, '_original_logic', '') or ''
-            if 'false' in logic.lower():
-                continue
-            graph[region.game_area_id].add(exit_.connected_region.game_area_id)
-
-    # Reuse the graph/log logic from SoulGateRandomizer
-    sgr = SoulGateRandomizer.__new__(SoulGateRandomizer)
-    sgr.world = world
-    line = sgr._log_ibmain_escape_path(graph)
-    world.ibmain_escape_spoiler = line
-    return line
-
-
-# ============================================================
 # Custom Structural ER (replaces AP Generic ER)
 # ============================================================
 #
@@ -2125,9 +2092,6 @@ def custom_structural_er(world) -> None:
         _log(f"[ER]   {src}  <->  {tgt}")
     _log(f"[ER] === END PAIRINGS ({len(world._er_name_pairings)} pairs) ===\n")
 
-    # NOTE: IBMain escape route is logged AFTER soul gates are placed
-    # (in __init__.py) so the graph includes soul gate connections.
-
 
 # ============================================================
 # Soul Gate Randomizer
@@ -2914,131 +2878,6 @@ class SoulGateRandomizer:
                     kill_costs[id(exit_)] = int(kill_matches[-1])
 
         return kill_costs
-
-    # ── Graph helpers used by IBMain escape path ──────────────────────
-
-    def _ibmain_escape_graph(self,
-                              base_graph: Dict[AreaID, Set[AreaID]]
-                              ) -> Tuple[Dict[AreaID, Set[AreaID]],
-                                         Dict[Tuple[AreaID, AreaID], str]]:
-        """
-        Extend *base_graph* with Holy Grail warp edges for the escape BFS.
-
-        Mirrors the JavaScript tracker's calculateEscapeRoute logic:
-          - Reaching any of the five grail-enabling areas re-enables Holy Grail.
-          - From there the player can warp to any of the fourteen grail fields.
-          - Those virtual warp edges are added here so the BFS can find a path
-            to Cliff through a Holy Grail warp even if no direct physical path
-            exists from IBMain.
-
-        Returns (extended_graph, edge_labels) where edge_labels maps
-        (src, dst) -> human-readable description for warp hops.
-        """
-        # Areas whose entry re-enables the Holy Grail (post-endgame).
-        _GRAIL_ENABLING: frozenset = frozenset({
-            AreaID.GateofGuidance,
-            AreaID.GateofGuidanceLeft,
-            AreaID.MausoleumofGiants,
-            AreaID.MausoleumofGiantsRubble,
-            AreaID.VoD,
-            AreaID.VoDLadder,
-            AreaID.GateofIllusion,
-            AreaID.Nibiru,
-        })
-
-        # Canonical grail warp landing spots (one representative area per dungeon).
-        # Order mirrors the JS GRAIL_FIELDS list.
-        _GRAIL_WARP_DESTS: List[Tuple[str, AreaID]] = [
-            ("Village of Departure",         AreaID.VoD),
-            ("Roots of Yggdrasil",           AreaID.RoY),
-            ("Annwfn",                       AreaID.AnnwfnMain),
-            ("Immortal Battlefield",         AreaID.IBMain),
-            ("Icefire Treetop",              AreaID.ITLeft),
-            ("Divine Fortress",              AreaID.DFMain),
-            ("Shrine of the Frost Giants",   AreaID.SotFGGrail),
-            ("Gate of the Dead",             AreaID.GotD),
-            ("Takamagahara Shrine",          AreaID.TSMain),
-            ("Heaven's Labyrinth",           AreaID.HL),
-            ("Valhalla",                     AreaID.ValhallaMain),
-            ("Dark Star Lord's Mausoleum",   AreaID.DSLMMain),
-            ("Ancient Chaos",                AreaID.ACTablet),
-            ("Hall of Malice",               AreaID.HoM),
-            ("Eternal Prison Gloom",         AreaID.EPG),
-            ("Eternal Prison Doom",          AreaID.EPDHel),
-        ]
-
-        extended: Dict[AreaID, Set[AreaID]] = defaultdict(set)
-        for src, dsts in base_graph.items():
-            extended[src].update(dsts)
-
-        edge_labels: Dict[Tuple[AreaID, AreaID], str] = {}
-
-        for src in _GRAIL_ENABLING:
-            for dest_name, dest_area in _GRAIL_WARP_DESTS:
-                if dest_area != src:  # no self-warp
-                    extended[src].add(dest_area)
-                    edge_labels[(src, dest_area)] = f"Holy Grail warp to {dest_name}"
-
-        return extended, edge_labels
-
-    def _log_ibmain_escape_path(self, graph: Dict[AreaID, Set[AreaID]]) -> str:
-        """
-        BFS from IBMain to Cliff using the Holy Grail-extended escape graph.
-
-        Mirrors the JavaScript tracker's calculateEscapeRoute function:
-        if IBMain can reach a grail-enabling area (Gate of Guidance, Mausoleum
-        of Giants, VoD, Gate of Illusion, or Nibiru) the player can re-enable
-        the Holy Grail and warp to any dungeon, then walk to Cliff from there.
-        Warp hops are labelled in the path string.
-
-        Returns a human-readable path string, prints it, and stores it on
-        self.world.ibmain_escape_spoiler for __init__.write_spoiler().
-        """
-        def aname(a: AreaID) -> str:
-            return a.name if hasattr(a, 'name') else str(a)
-
-        extended, edge_labels = self._ibmain_escape_graph(graph)
-
-        target = AreaID.Cliff
-        start  = AreaID.IBMain
-
-        # BFS tracking both predecessor area and the edge label (if any).
-        parent: Dict[AreaID, Optional[AreaID]]   = {start: None}
-        via:    Dict[AreaID, Optional[str]]       = {start: None}
-        q: deque = deque([start])
-        while q:
-            cur = q.popleft()
-            if cur == target:
-                break
-            for nxt in extended.get(cur, ()):
-                if nxt not in parent:
-                    parent[nxt] = cur
-                    via[nxt]    = edge_labels.get((cur, nxt))
-                    q.append(nxt)
-
-        if target not in parent:
-            line = "[ER] SPOILER: IBMain has no post-endgame escape route to Cliff."
-            _log(line)
-            self.world.ibmain_escape_spoiler = line
-            return line
-
-        # Reconstruct path with labels for warp hops.
-        steps: List[str] = []
-        cur = target
-        while cur is not None:
-            label = via.get(cur)
-            if label:
-                steps.append(f"({label})")
-            steps.append(aname(cur))
-            cur = parent.get(cur)
-        steps.reverse()
-
-        hop_count = sum(1 for s in steps if not s.startswith('('))
-        path_str  = " -> ".join(steps)
-        line = f"[ER] SPOILER -- IBMain -> Cliff ({hop_count - 1} hops): {path_str}"
-        _log(line) 
-        self.world.ibmain_escape_spoiler = line
-        return line
 
     # ── Logic append helpers (used by soul gate methods) ──────────────
 
