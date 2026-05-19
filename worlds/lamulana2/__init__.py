@@ -110,6 +110,20 @@ class LaMulana2World(World):
     options_dataclass = LM2Options
     topology_present = True
 
+    # Universal Tracker: allow tracking without the player's YAML.
+    # All generation-affecting options are echoed into slot_data["options"]
+    # and read back in generate_early().
+    ut_can_gen_without_yaml = True
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict) -> dict:
+        # Returning the slot_data tells Universal Tracker to do a full
+        # regeneration with multiworld.re_gen_passthrough[GAME_NAME] = slot_data.
+        # We need that path because LM2's entrance randomization mutates
+        # both region connections and entrance logic strings — easier to
+        # bypass randomization than to reverse it after the fact.
+        return slot_data
+
     # -------------------------------------------------------------------------
     # AP ID maps (pure AP-facing)
     # -------------------------------------------------------------------------
@@ -166,11 +180,38 @@ class LaMulana2World(World):
         """
         super().generate_early()
 
-        # Resolve starting area
-        self.starting_area = self._choose_starting_area()
+        ut_data = self._ut_passthrough()
+        if ut_data is not None:
+            # Universal Tracker regen: restore every option from slot_data
+            # so anything downstream that reads self.options matches the
+            # server. Uses Option.from_any to round-trip values produced by
+            # Options.as_dict (which serializes to the option's "any" form).
+            opts_dict = ut_data.get("options") or {}
+            for key, value in opts_dict.items():
+                current_opt = getattr(self.options, key, None)
+                if current_opt is None:
+                    continue
+                try:
+                    setattr(self.options, key, current_opt.from_any(value))
+                except Exception:
+                    pass
+            # Use the resolved starting area/weapon from slot_data instead of
+            # re-rolling — _choose_starting_area can use multiworld.random,
+            # which would diverge from the server's RNG state.
+            try:
+                self.starting_area = AreaID(int(ut_data["starting_area"]))
+            except (KeyError, ValueError, TypeError):
+                self.starting_area = self._choose_starting_area()
+            try:
+                self.starting_weapon = ItemID(int(ut_data["starting_weapon"]))
+            except (KeyError, ValueError, TypeError):
+                self.starting_weapon = self._choose_starting_weapon()
+        else:
+            # Resolve starting area
+            self.starting_area = self._choose_starting_area()
 
-        # Resolve starting weapon
-        self.starting_weapon = self._choose_starting_weapon()
+            # Resolve starting weapon
+            self.starting_weapon = self._choose_starting_weapon()
 
         # Add starting weapon to precollected items
         starting_weapon_name = self._get_weapon_name(self.starting_weapon)
@@ -317,6 +358,18 @@ class LaMulana2World(World):
         layout (some layouts are fundamentally incompatible), the entire
         structural layout is regenerated and both are retried.
         """
+        ut_data = self._ut_passthrough()
+        if ut_data is not None:
+            # Universal Tracker regen: skip randomization, replay server's
+            # exact layout from slot_data.
+            self._apply_ut_layout(ut_data)
+            return
+        if self._is_ut_fake_gen():
+            # UT's initial fake gen, before it has slot_data. The regen will
+            # come next with the real layout; randomizing here just wastes
+            # time and risks failing the retry budget.
+            return
+
         opts = self.options
         any_structural = (
             opts.horizontal_entrances
@@ -523,6 +576,31 @@ class LaMulana2World(World):
 
             # AP settings
             "death_link": int(self.options.death_link),
+
+            # Universal Tracker: full option dump so UT can re-run generation
+            # without the player's YAML (ut_can_gen_without_yaml = True).
+            # Read back in generate_early() via re_gen_passthrough.
+            "options": self.options.as_dict(
+                "accessibility",
+                "starting_area", "starting_weapon",
+                "random_grail", "random_scanner", "random_codices", "random_fdc",
+                "random_ring", "random_shell_horn", "random_maps_software",
+                "mantra_placement", "shop_placement",
+                "random_research", "remove_research", "remove_maps",
+                "required_skulls", "remove_excess_skulls", "random_dissonance",
+                "potsanity",
+                "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
+                "echidna_difficulty", "costume_clip", "require_fdc",
+                "dlc_item_logic", "life_sigil_to_awaken_hom",
+                "remove_icefire_treetop_statue", "random_cursed_chests", "cursed_chests",
+                "horizontal_entrances", "vertical_entrances", "gate_entrances",
+                "unique_transitions", "full_random_entrances", "prevent_area_loops",
+                "soul_gate_entrances", "include_nine_soul_gates", "random_soul_gate_value",
+                "auto_scan", "auto_skulls", "greedy_charon",
+                "starting_money", "starting_weights",
+                "item_chest_color", "filler_chest_color", "ap_chest_color",
+                "write_seed_file", "death_link",
+            ),
         }
 
     def write_spoiler(self, spoiler_handle):
@@ -639,6 +717,8 @@ class LaMulana2World(World):
     # -------------------------------------------------------------------------
 
     def generate_output(self, output_directory: str) -> None:
+        if self._is_ut_fake_gen():
+            return
 
         if self.options.write_seed_file:
             import os
@@ -812,6 +892,108 @@ class LaMulana2World(World):
             
         return shops
 
+    # =============================================================================
+    # Universal Tracker helpers
+    # =============================================================================
+
+    def _ut_passthrough(self) -> "dict | None":
+        rgp = getattr(self.multiworld, "re_gen_passthrough", None)
+        if not rgp:
+            return None
+        return rgp.get(self.game)
+
+    def _is_ut_fake_gen(self) -> bool:
+        return getattr(self.multiworld, "generation_is_fake", False)
+
+    def _apply_ut_layout(self, slot_data: dict) -> None:
+        """Apply server-provided entrance + soul-gate layout (UT regen path).
+
+        Bypasses the randomized custom_structural_er / SoulGateRandomizer flow:
+        we already know the exact pairings from slot_data, so we just replay
+        them onto the freshly-created (vanilla-connected) regions.
+        """
+        from .ids import ExitID
+        from .entrances import (
+            EntrancePair, SoulGatePair, SoulGateRandomizer,
+        )
+
+        all_entrances = [
+            e for region in self.multiworld.get_regions(self.player)
+            for e in region.exits
+            if hasattr(e, "game_exit_id")
+        ]
+        entrances_by_id = {int(e.game_exit_id): e for e in all_entrances}
+
+        # ── Structural entrance pairs ─────────────────────────────────
+        # _er_pairs holds ONE tuple per logical pair; both directions are
+        # rewired here (mirrors entrances._apply_pairings at line 1874).
+        er_pairs_raw = slot_data.get("entrance_pairs") or []
+        applied_er: list = []
+        for raw in er_pairs_raw:
+            try:
+                from_id = int(raw[0])
+                to_id = int(raw[1])
+            except (TypeError, ValueError, IndexError):
+                continue
+            e_from = entrances_by_id.get(from_id)
+            e_to = entrances_by_id.get(to_id)
+            if e_from is None or e_to is None:
+                continue
+            # Disconnect both from their current (vanilla) targets first.
+            for e in (e_from, e_to):
+                if e.connected_region is not None:
+                    try:
+                        e.connected_region.entrances.remove(e)
+                    except ValueError:
+                        pass
+                    e.connected_region = None
+            e_from.connect(e_to.parent_region)
+            e_to.connect(e_from.parent_region)
+            applied_er.append(EntrancePair(
+                from_exit=e_from.game_exit_id,
+                to_exit=e_to.game_exit_id,
+            ))
+        self._er_pairs = applied_er
+
+        # ── Soul gate pairs ───────────────────────────────────────────
+        # Reuse SoulGateRandomizer._apply_gate_pair so the logic-string
+        # injection (GuardianKills, _fix_soul_gate_logic, _update_epg_logic)
+        # matches what custom-gen produced on the server.
+        sg_pairs_raw = slot_data.get("soul_gate_pairs") or []
+        sgr = SoulGateRandomizer(rng=None, entrances=all_entrances, world=self)
+        applied_sg: list = []
+        for raw in sg_pairs_raw:
+            try:
+                gate1_id = int(raw[0])
+                gate2_id = int(raw[1])
+                soul_amount = int(raw[2])
+            except (TypeError, ValueError, IndexError):
+                continue
+            gate1 = entrances_by_id.get(gate1_id)
+            gate2 = entrances_by_id.get(gate2_id)
+            if gate1 is None or gate2 is None:
+                continue
+            # Match the server's force_override condition (entrances.py:2482).
+            is_nine_pair = (
+                gate1.game_exit_id == ExitID.f03GateN9
+                or gate2.game_exit_id == ExitID.f03GateN9
+            )
+            force_override = bool(self.options.random_dissonance) and is_nine_pair
+            # Always pass swap_regions=True. In value-only mode the swap
+            # is a no-op (gates start on their vanilla pairing); in shuffled
+            # mode it swaps from the vanilla connection to this pairing.
+            sgr._apply_gate_pair(
+                gate1, gate2, soul_amount,
+                swap_regions=True,
+                force_override=force_override,
+            )
+            applied_sg.append(SoulGatePair(
+                gate1=gate1.game_exit_id,
+                gate2=gate2.game_exit_id,
+                soul_amount=soul_amount,
+            ))
+        self._sg_pairs = applied_sg
+
     def _starting_area_prereqs_met(self, area_value: int) -> bool:
         prereqs = _STARTING_AREA_PREREQS.get(area_value, ())
         return all(getattr(self.options, name).value for name in prereqs)
@@ -856,7 +1038,7 @@ class LaMulana2World(World):
             ItemID.Shuriken: "Shuriken",
             ItemID.RollingShuriken: "Rolling Shuriken",
             ItemID.EarthSpear: "Earth Spear",
-            ItemID.Flare: "Flare",
+            ItemID.Flare: "Flare Gun",
             ItemID.Caltrops: "Caltrops",
             ItemID.Chakram: "Chakram",
             ItemID.Bomb: "Bomb",

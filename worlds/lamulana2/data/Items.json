@@ -55,7 +55,7 @@
     "isRequired": true
   },
   {
-    "name": "Giants Flute",
+    "name": "Giant's Flute",
     "id": 13,
     "isRequired": true
   },
@@ -85,12 +85,12 @@
     "isRequired": true
   },
   {
-    "name": "Fairy Pass",
+    "name": "Fairy Guild Pass",
     "id": 19,
     "isRequired": true
   },
   {
-    "name": "Gloves",
+    "name": "Glove",
     "id": 20,
     "isRequired": true
   },
@@ -150,7 +150,7 @@
     "isRequired": true
   },
   {
-    "name": "Freyas Pendant",
+    "name": "Freya's Pendant",
     "id": 32,
     "isRequired": true
   },
@@ -180,12 +180,12 @@
     "isRequired": false
   },
   {
-    "name": "Ganesha Talisman",
+    "name": "Ganesha's Talisman",
     "id": 38,
     "isRequired": false
   },
   {
-    "name": "Maats Feather",
+    "name": "Maat's Feather",
     "id": 39,
     "isRequired": true
   },
@@ -210,7 +210,7 @@
     "isRequired": false
   },
   {
-    "name": "Freys Ship",
+    "name": "Frey's Ship",
     "id": 44,
     "isRequired": true
   },
@@ -325,7 +325,7 @@
     "isRequired": true
   },
   {
-    "name": "Flare",
+    "name": "Flare Gun",
     "id": 71,
     "isRequired": true
   },
@@ -380,12 +380,12 @@
     "isRequired": false
   },
   {
-    "name": "TextTrax",
+    "name": "TextTrax 2",
     "id": 83,
     "isRequired": false
   },
   {
-    "name": "Ruins Encylopedia",
+    "name": "Ruins Encyclopedia",
     "id": 84,
     "isRequired": false
   },
@@ -405,7 +405,7 @@
     "isRequired": true
   },
   {
-    "name": "Beo Eglana",
+    "name": "Beo Eg-Lana",
     "id": 89,
     "isRequired": false
   },
@@ -833,7 +833,7 @@
     "shop": true
   },
   {
-    "name": "Flare Ammo",
+    "name": "Flare Gun Ammo",
     "id": 185,
     "isRequired": true,
     "shop": true

@@ -699,8 +699,7 @@ def build_pre_filler(world) -> Item:
 # Members must match names registered in LaMulana2World.item_name_to_id.
 
 _WEAPON_NAMES: frozenset[str] = frozenset({
-    "Progressive Whip", "Progressive Shield",
-    "Knife", "Rapier", "Axe", "Katana", "Pistol",
+    "Progressive Whip", "Knife", "Rapier", "Axe", "Katana", "Pistol",
 })
 
 _SUBWEAPON_NAMES: frozenset[str] = frozenset({
@@ -717,12 +716,11 @@ _SIGIL_NAMES: frozenset[str] = frozenset({
     "Origin Sigil", "Birth Sigil", "Life Sigil", "Death Sigil",
 })
 
-# Names match Items.json exactly (note: "Ruins Encylopedia" and
-# "Beo Eglana" are spelled as in the JSON, "TextTrax" has no "2").
+# Names match Items.json exactly 
 _SOFTWARE_NAMES: frozenset[str] = frozenset({
     "Xelputter", "Yagoo Map Reader", "Yagoo Map Street",
-    "TextTrax", "Ruins Encylopedia", "Mantra", "Guild",
-    "Enga Musica", "Beo Eglana", "Alert", "Snapshot",
+    "TextTrax 2", "Ruins Encyclopedia", "Mantra", "Guild",
+    "Enga Musica", "Beo Eg-Lana", "Alert", "Snapshot",
     "Skull Reader", "Race Scanner", "Death Village",
     "Rose and Camellia", "Space Capstar II",
     "Lonely House Moving", "Mekuri Master", "Bounce Shot",

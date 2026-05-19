@@ -26,7 +26,7 @@ class ItemID(IntEnum):
     ShellHorn = 17
     HolyGrail = 18
     FairyPass = 19
-    Gloves = 20
+    Glove = 20
     DinosaurFigure = 21
     GaleFibula = 22
     FlameTorc = 23
@@ -2170,7 +2170,7 @@ ITEM_MAP = {
     "Shell Horn": ItemID.ShellHorn,
     "Holy Grail": ItemID.HolyGrail,
     "Fairy Guild Pass": ItemID.FairyPass,
-    "Glove": ItemID.Gloves,
+    "Glove": ItemID.Glove,
     "Dinosaur Figure": ItemID.DinosaurFigure,
     "Gale Fibula": ItemID.GaleFibula,
     "Flame Torc": ItemID.FlameTorc,
@@ -2257,7 +2257,7 @@ ITEM_MAP = {
     "Shuriken Ammo": ItemID.ShurikenAmmo,
     "Rolling Shuriken Ammo": ItemID.RollingShurikenAmmo,
     "Earth Spear Ammo": ItemID.EarthSpearAmmo,
-    "Flare Ammo": ItemID.FlareAmmo,
+    "Flare Gun Ammo": ItemID.FlareAmmo,
     "Bomb Ammo": ItemID.BombAmmo,
     "Chakram Ammo": ItemID.ChakramAmmo,
     "Caltrops Ammo": ItemID.CaltropsAmmo,

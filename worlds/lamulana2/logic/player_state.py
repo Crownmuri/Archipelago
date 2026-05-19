@@ -247,7 +247,7 @@ class PlayerStateAdapter:
                 ItemID.Shuriken: "Shuriken Ammo",
                 ItemID.RollingShuriken: "Rolling Shuriken Ammo",
                 ItemID.EarthSpear: "Earth Spear Ammo",
-                ItemID.Flare: "Flare Ammo",
+                ItemID.Flare: "Flare Gun Ammo",
                 ItemID.Caltrops: "Caltrops Ammo",
                 ItemID.Chakram: "Chakram Ammo",
                 ItemID.Bomb: "Bomb Ammo",

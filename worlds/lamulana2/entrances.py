@@ -192,6 +192,20 @@ _VANILLA_SOUL_GATE_PAIRS: Tuple[Tuple[ExitID, ExitID], ...] = (
     (ExitID.f03GateN9, ExitID.f13GateN9),
 )
 
+# Vanilla GuardianKills(N) cost for each pair above.  The N# suffix in the
+# ExitID is an internal index, not the cost — sourced from World.json logic.
+_VANILLA_SOUL_GATE_COSTS: Dict[Tuple[ExitID, ExitID], int] = {
+    (ExitID.f00GateN1, ExitID.f05GateN1): 1,
+    (ExitID.f02GateN2, ExitID.f06GateN2): 2,
+    (ExitID.f03GateN3, ExitID.f07GateN3): 2,
+    (ExitID.f03GateN4, ExitID.f08GateN4): 3,
+    (ExitID.f04GateN5, ExitID.f09GateN5): 3,
+    (ExitID.f04GateN6, ExitID.f14GateN6): 5,
+    (ExitID.f06GateN7, ExitID.f10GateN7): 5,
+    (ExitID.f08GateN8, ExitID.f12GateN8): 5,
+    (ExitID.f03GateN9, ExitID.f13GateN9): 9,
+}
+
 
 def _would_self_loop(e1_id: ExitID, e2_id: ExitID) -> bool:
     """True if pairing e1<->e2 would create a trivial self-loop."""
@@ -2737,6 +2751,26 @@ class SoulGateRandomizer:
                     return False
             self.soul_gate_pairs.append(
                 SoulGatePair(g1.game_exit_id, g2.game_exit_id, amount))
+
+        # Top up with any vanilla pairs that didn't get placed above.  The
+        # mod treats a non-empty soul_gate_pairs list as "rando owns every
+        # soul gate" and strips all gate visuals on scene load -- if we
+        # only emit the pairs whose values changed, the untouched gates
+        # lose their visuals with nothing to replace them.  Emitting every
+        # vanilla pair at its canonical cost keeps the strip-and-rebuild
+        # path consistent; unchanged gates round-trip to the same visual.
+        placed_ids: Set[Tuple[ExitID, ExitID]] = {
+            (sgp.gate1, sgp.gate2) for sgp in self.soul_gate_pairs
+        }
+        placed_ids |= {
+            (sgp.gate2, sgp.gate1) for sgp in self.soul_gate_pairs
+        }
+        for pair in _VANILLA_SOUL_GATE_PAIRS:
+            if pair in placed_ids:
+                continue
+            self.soul_gate_pairs.append(
+                SoulGatePair(pair[0], pair[1],
+                             _VANILLA_SOUL_GATE_COSTS[pair]))
 
         return True
 
