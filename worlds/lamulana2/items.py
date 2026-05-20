@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP
 from .locations import LocationType
 
 # ============================================================
@@ -198,8 +198,47 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
             player=world.player,
         )
     
+    # Area/boss-labeled names ("Sacred Orb (VoD)", "Crystal Skull (RoY)",
+    # "Map (Annwfn)", "Ankh Jewel (Fafnir)", ...) are the canonical datapackage
+    # names (item_name_to_id is built from ITEM_MAP), each tied to a distinct
+    # game id. The POOL builder, however, emits these items under their generic
+    # ItemDef name ("Sacred Orb", "Crystal Skull", "Map") — only guardian ankhs
+    # are renamed, and only when guardian_specific_ankhs is on. The logic
+    # follows the pool: OrbCount/SkullCount/AnkhCount compile to
+    # state.count("Sacred Orb"/"Crystal Skull"/"Ankh Jewel"), while guardian
+    # access compiles to Has("Ankh Jewel (Boss)").
+    #
+    # Anything recreating an item from the network by its datapackage name
+    # (Universal Tracker rebuilding received items) gets the labeled name, so
+    # we must map it back to the SAME name the pool used, or those items won't
+    # match the compiled rules and progression silently vanishes from logic.
+    if name not in ITEM_DEFS_BY_NAME:
+        mapped_id = ITEM_MAP.get(name)
+        if mapped_id is not None:
+            base_def = next(
+                (d for d in ITEM_DEFS if d.game_id == mapped_id.value), None)
+            if (mapped_id in GUARDIAN_ANKHS_ITEMS
+                    and getattr(world.options, "guardian_specific_ankhs", False)):
+                pool_name = name                      # keep "Ankh Jewel (Boss)"
+            elif base_def is not None:
+                pool_name = base_def.name             # generic "Sacred Orb" etc.
+            else:
+                pool_name = name
+            classification = (
+                _get_classification(base_def) if base_def is not None
+                else ItemClassification.progression
+            )
+            item = LM2Item(
+                name=pool_name,
+                classification=classification,
+                code=BASE_ITEM_ID + mapped_id.value,
+                player=world.player,
+            )
+            item.lm2_game_id = mapped_id
+            return item
+
     matching_defs = [d for d in ITEM_DEFS if d.name == name]
-    
+
     if not matching_defs:
         raise KeyError(f"No item def found for name: {name}")
     
