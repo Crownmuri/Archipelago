@@ -938,11 +938,21 @@ class LaMulana2World(World):
         self._er_pairs = applied_er
 
         # ── Soul gate pairs ───────────────────────────────────────────
-        # Reuse SoulGateRandomizer._apply_gate_pair so the logic-string
-        # injection (GuardianKills, _fix_soul_gate_logic, _update_epg_logic)
-        # matches what custom-gen produced on the server.
+        # Two distinct server behaviours, replayed differently:
+        #
+        #  * Structural (soul_gate_entrances ON): gates were physically
+        #    re-paired, so we must swap regions and re-inject cross-gate
+        #    logic via _apply_gate_pair — same as the speculative path.
+        #
+        #  * Value-only (soul_gate_entrances OFF, but random_dissonance /
+        #    random_soul_gate_value / include_nine): gates keep their
+        #    vanilla destinations and vanilla logic from World.json; the
+        #    server only rewrote the GuardianKills(N) literal. Calling
+        #    _apply_gate_pair here would wrongly swap regions and append
+        #    duplicate / partner clauses, so we override the literal only.
         sg_pairs_raw = slot_data.get("soul_gate_pairs") or []
         sgr = SoulGateRandomizer(rng=None, entrances=all_entrances, world=self)
+        structural_sg = bool(self.options.soul_gate_entrances)
         applied_sg: list = []
         for raw in sg_pairs_raw:
             try:
@@ -955,20 +965,26 @@ class LaMulana2World(World):
             gate2 = entrances_by_id.get(gate2_id)
             if gate1 is None or gate2 is None:
                 continue
-            # Match the server's force_override condition (entrances.py:2482).
-            is_nine_pair = (
-                gate1.game_exit_id == ExitID.f03GateN9
-                or gate2.game_exit_id == ExitID.f03GateN9
-            )
-            force_override = bool(self.options.random_dissonance) and is_nine_pair
-            # Always pass swap_regions=True. In value-only mode the swap
-            # is a no-op (gates start on their vanilla pairing); in shuffled
-            # mode it swaps from the vanilla connection to this pairing.
-            sgr._apply_gate_pair(
-                gate1, gate2, soul_amount,
-                swap_regions=True,
-                force_override=force_override,
-            )
+            if structural_sg:
+                # Match the server's force_override condition (entrances.py:2482).
+                is_nine_pair = (
+                    gate1.game_exit_id == ExitID.f03GateN9
+                    or gate2.game_exit_id == ExitID.f03GateN9
+                )
+                force_override = bool(self.options.random_dissonance) and is_nine_pair
+                sgr._apply_gate_pair(
+                    gate1, gate2, soul_amount,
+                    swap_regions=True,
+                    force_override=force_override,
+                )
+            else:
+                # Value-only: gates already sit on their vanilla pairing
+                # with vanilla logic; just rewrite the kill cost. Net logic
+                # is equivalent to the server's (Setting(Random Soul Gates)
+                # is False here, so the vanilla "or Setting(...)" branch is
+                # dead and the GuardianKills literal alone governs access).
+                sgr._override_guardian_kills(gate1, soul_amount)
+                sgr._override_guardian_kills(gate2, soul_amount)
             applied_sg.append(SoulGatePair(
                 gate1=gate1.game_exit_id,
                 gate2=gate2.game_exit_id,
