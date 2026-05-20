@@ -146,7 +146,8 @@ class RemoveSkulls(Toggle):
 class RandomDissonance(DefaultOnToggle):
     """All 6 dissonance locations are converted into chests and turns the Beherit into 7 progressive items.
     If true, sealing the Corridor of Blood requires all 7 Progressive Beherit in addition to the set GuardianKills.
-    If false, sealing the Corridor of Blood requires absorbing all dissonance from their original locations."""
+    If false, sealing the Corridor of Blood requires beating Anu and absorbing all dissonance from their original locations.
+    (Effectively requires beating at least Vritra, Aten-Ra, Anu, Echidna and Hel based on just this flag)."""
     display_name = "Random Dissonance"
 
 class GuardianKills(Range):
