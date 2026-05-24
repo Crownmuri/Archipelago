@@ -218,7 +218,7 @@ class RandomCursedChests(DefaultOnToggle):
     Vanilla:
     - FlameTorcChest (Surtr)
     - GiantsFluteChest (Echidna)
-    - DestinyTabletChest (Anu)
+    - DestinyTabletChest (Anzu)
     - PowerBandChest (Belial)"""
     display_name = "Random Cursed Chests"
 
