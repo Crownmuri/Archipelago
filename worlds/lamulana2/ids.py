@@ -1983,7 +1983,7 @@ AP_LOCATION_NAMES = {
     "[HL C-5] Map Chest": LocationID.MapChestHL,
     "[HL D-1] Heaven's Labyrinth Tent Item": LocationID.MobileSuperX3Item,
     "[HL E-2] Griffin Reward": LocationID.PerfumeChest,
-    "[HOM A-3] Time Puzzle Chest": LocationID.NemeanFurChest,
+    "[HOM A-4] Time Puzzle Chest": LocationID.NemeanFurChest,
     "[HOM C-1] Map Chest": LocationID.MapChestHoM,
     "[HOM C-5] Echidna Reward": LocationID.GiantsFluteChest,
     "[HOM E-5] Flame Torc Breakable Wall Chest": LocationID.MiracleWitchChest,

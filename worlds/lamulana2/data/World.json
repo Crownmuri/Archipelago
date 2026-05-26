@@ -1016,7 +1016,7 @@
       {
         "Name": "Kujata",
         "LocationType": "Guardian",
-        "Logic": "Has(Frey's Ship) and IsDead(Ixtab) and ((CanUse(Pistol) and OrbCount(1)) or ((Has(Flail Whip) or Has(Axe) or CanUse(Bombs)) and OrbCount(2)) or ((Has(Chain Whip) or Has(Katana) or CanUse(Earth Spear) or CanUse(Chakram)) and OrbCount(3)) or ((Has(Knife) or Has(Rapier) or (CanUse(Shuriken) and Has(Ring))) and OrbCount(3) and Has(Feather)) or ((Has(Leather Whip) and CanUse(Rolling Shuriken)) and OrbCount(4)))",
+        "Logic": "Has(Frey's Ship) and IsDead(Ixtab) and ((CanUse(Pistol) and OrbCount(1)) or ((Has(Flail Whip) or Has(Axe) or CanUse(Bomb)) and OrbCount(2)) or ((Has(Chain Whip) or Has(Katana) or CanUse(Earth Spear) or CanUse(Chakram)) and OrbCount(3)) or ((Has(Knife) or Has(Rapier) or (CanUse(Shuriken) and Has(Ring))) and OrbCount(3) and Has(Feather)) or ((Has(Leather Whip) and CanUse(Rolling Shuriken)) and OrbCount(4)))",
         "HardLogic": "Has(Frey's Ship) and IsDead(Ixtab)",
         "Item": {
           "Name": "Kujata",
@@ -3053,7 +3053,7 @@
       {
         "Name": "Aten Ra",
         "LocationType": "Guardian",
-        "Logic": "(IsDead(Sekhmet) or Glitch(Costume Clip)) and PuzzleFinished(White Pedestals) and (((Has(Chain Whip) or CanUse(Earth Spear) or CanUse(Flare Gun) or CanUse(Chakrams) or CanUse(Bomb)) and OrbCount(6)) or ((Has(Flail Whip) or Has(Katana) or Has(Axe)) and OrbCount(5)) or (CanUse(Pistol) and OrbCount(4)))",
+        "Logic": "(IsDead(Sekhmet) or Glitch(Costume Clip)) and PuzzleFinished(White Pedestals) and (((Has(Chain Whip) or CanUse(Earth Spear) or CanUse(Flare Gun) or CanUse(Chakram) or CanUse(Bomb)) and OrbCount(6)) or ((Has(Flail Whip) or Has(Katana) or Has(Axe)) and OrbCount(5)) or (CanUse(Pistol) and OrbCount(4)))",
         "HardLogic": "(IsDead(Sekhmet) or Glitch(Costume Clip)) and PuzzleFinished(White Pedestals)",
         "Item": {
           "Name": "Aten Ra",
@@ -3109,12 +3109,12 @@
       {
         "Name": "Crystal Skull Chest DLM",
         "LocationType": "Chest",
-        "Logic": "SkullCount(1) and (Has(Feather) or CanWarp or (CanReach(DSLM Main) and CanUse(Bomb)))"
+        "Logic": "SkullCount(1) and HorizontalAttack and (Has(Feather) or CanWarp or (CanReach(DSLMMain) and CanUse(Bomb)))"
       },
       {
         "Name": "La Mulana Chest",
         "LocationType": "Chest",
-        "Logic": "CanUse(Bomb) and (Has(Feather) or CanWarp or CanReach(DSLM Main))"
+        "Logic": "CanUse(Bomb) and (Has(Feather) or CanWarp or CanReach(DSLMMain))"
       },
       {
         "Name": "Vessel Chest",
@@ -3124,8 +3124,8 @@
       {
         "Name": "Angra Mainyu",
         "LocationType": "Miniboss",
-        "Logic": "Has(Mjolnir) and OrbCount(1) and (CanWarp or Has(Feather) or CanReach(DSLM Main))",
-        "HardLogic": "Has(Mjolnir) and (Has(Feather) or CanWarp or CanReach(DSLM Main))",
+        "Logic": "Has(Mjolnir) and OrbCount(1) and (CanWarp or Has(Feather) or CanReach(DSLMMain))",
+        "HardLogic": "Has(Mjolnir) and (Has(Feather) or CanWarp or CanReach(DSLMMain))",
         "Item": {
           "Name": "Angra Mainyu",
           "IsRequired": true
