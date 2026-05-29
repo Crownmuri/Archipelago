@@ -102,7 +102,7 @@ class PlayerStateAdapter:
             "RandomDissonance": "random_dissonance",
             "RandomResearch": "random_research",
             "CostumeClip": "costume_clip",
-            "HardBosses": "logic_difficulty",
+            "MinimalBosses": "logic_difficulty",
             "RemoveITStatue": "remove_icefire_treetop_statue",
             "LifeForHoM": "life_sigil_to_awaken_hom",
             "DLCItem": "dlc_item_logic",
@@ -775,7 +775,7 @@ class PlayerStateAdapter:
         if hasattr(option_value, 'value'):
             value = option_value.value
             if key == "logic_difficulty":
-                return value == 1
+                return value == 2
             return bool(value)
         
         return bool(option_value)

@@ -46,10 +46,12 @@ class ExitType(Enum):
 @dataclass
 class LM2ExitDef:
     name: str
-    game_id: ExitID | None          
-    parent_area: AreaID            
-    connecting_area: AreaID        
+    game_id: ExitID | None
+    parent_area: AreaID
+    connecting_area: AreaID
     logic: str
+    tricky_logic: Optional[str]
+    minimal_logic: Optional[str]
     exit_type: ExitType
 
 @dataclass
@@ -104,9 +106,11 @@ def _load_areas() -> Dict[AreaID, LM2AreaDef]:
                 LM2ExitDef(
                     name=ex.get("Name") or f"{area_id_str}->{connecting_area_str}",
                     game_id=game_id,  # Now an ExitID enum or None
-                    parent_area=area_id,  
-                    connecting_area=connecting_area, 
+                    parent_area=area_id,
+                    connecting_area=connecting_area,
                     logic=ex.get("Logic", "True"),
+                    tricky_logic=ex.get("TrickyLogic"),
+                    minimal_logic=ex.get("HardLogic"),
                     exit_type=ExitType(ex["ConnectionType"]),
                 )
             )
@@ -142,26 +146,51 @@ class LM2Entrance(Entrance):
             self.game_exit_id = exit_def.game_id or ExitID.None_
         else:
             self.game_exit_id = ExitID.None_
-            
+
         self.exit_type = exit_def.exit_type
-        self.parent_area = exit_def.parent_area  
+        self.parent_area = exit_def.parent_area
         self.connecting_area = exit_def.connecting_area
-        self._original_logic = exit_def.logic
-        
-        tokens = LogicTokeniser(exit_def.logic).tokenise()
+
+        # Resolve player's logic_difficulty tier so we can pick the right
+        # logic string up front. Same fallback as LM2Location.
+        try:
+            world = parent_region.multiworld.worlds[player]
+        except Exception:
+            world = None
+
+        level = 0
+        if world is not None:
+            opt = getattr(world.options, "logic_difficulty", None)
+            level = int(opt.value if hasattr(opt, "value") else (opt or 0))
+
+        if level >= 2 and exit_def.minimal_logic:
+            chosen_logic = exit_def.minimal_logic
+        elif level >= 2 and exit_def.tricky_logic:
+            chosen_logic = exit_def.tricky_logic
+        elif level == 1 and exit_def.tricky_logic:
+            chosen_logic = exit_def.tricky_logic
+        else:
+            chosen_logic = exit_def.logic
+
+        self._original_logic = chosen_logic
+
+        tokens = LogicTokeniser(chosen_logic).tokenise()
         self._logic_tree = LogicTree.parse(tokens)
-        
+
         # For soul gate logic
         self._additional_logic = []
-        
+
         # For checking state to prevent infinite recursion
         self.checking = False
 
-        try:
-            world = parent_region.multiworld.worlds[player]
-            self._compiled_rule = self._logic_tree.compile(world)
-            self._world = world          # cache for recompilation in append_logic_string
-        except Exception:
+        if world is not None:
+            try:
+                self._compiled_rule = self._logic_tree.compile(world)
+                self._world = world      # cache for recompilation in append_logic_string
+            except Exception:
+                self._compiled_rule = None
+                self._world = None
+        else:
             self._compiled_rule = None
             self._world = None
 

@@ -20,7 +20,9 @@ from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLD
 LM2AP_MAGIC = b"LM2A"
 # Bump when the layout below changes in a non-backwards-compatible way.
 # v2: appended location_labels section after pot_flag_map.
-LM2AP_VERSION = 3
+# v3: appended greedy_charon bool.
+# v4: appended game_difficulty int32.
+LM2AP_VERSION = 4
 
 # Pot LocationIDs are written here, not in the legacy items section,
 # so seed.lm2r stays compatible with the original LM2 randomizer mod.
@@ -276,6 +278,8 @@ def write_ap_seed_file(
         for each: location_id int32, name_byte_count int32, name UTF-8 bytes
         --- v3+ QoL toggles ---
         greedy_charon             bool
+        --- v4+ Difficulty ---
+        game_difficulty           int32
     """
 
     pot_placements = [
@@ -320,3 +324,6 @@ def write_ap_seed_file(
 
         # --- v3+ QoL toggles --------------------------------------------
         _write_bool(f, settings.greedy_charon)
+
+        # --- v4+ Difficulty ---------------------------------------------
+        _write_i32(f, settings.game_difficulty)

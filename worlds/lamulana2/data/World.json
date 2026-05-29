@@ -1683,18 +1683,21 @@
       {
         "Name": "Mino Shop 1",
         "LocationType": "Shop",
-        "Logic": "Has(Feather)"
+        "Logic": "Has(Feather) or Glitch(Costume Clip)",
+        "TrickyLogic": "True"
       },
-      {
-        "Name": "Mino Shop 2",
-        "LocationType": "Shop",
-        "Logic": "Has(Feather)"
-      },
-      {
-        "Name": "Mino Shop 3",
-        "LocationType": "Shop",
-        "Logic": "Has(Feather)"
-      },
+        {
+            "Name": "Mino Shop 2",
+            "LocationType": "Shop",
+            "Logic": "Has(Feather) or Glitch(Costume Clip)",
+            "TrickyLogic": "True"
+        },
+        {
+            "Name": "Mino Shop 3",
+            "LocationType": "Shop",
+            "Logic": "Has(Feather) or Glitch(Costume Clip)",
+            "TrickyLogic": "True"
+        },
       {
         "Name": "Grapple Claw Chest",
         "LocationType": "Chest",

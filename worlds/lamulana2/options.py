@@ -172,11 +172,25 @@ class GuardianSpecificAnkhJewels(DefaultOnToggle):
 
 class LogicDifficulty(Choice):
     """Logic difficulty setting.
-    - standard: intuitive logic - certain HP / damage thresholds required for bosses.
-    - hard: minimal logic - as long as bosses can be theoretically beaten. """
+    - normal: intuitive logic - certain HP / damage thresholds required for (mini-)bosses.
+    - tricky: includes some shenanigans such as precise jumps, janky hitboxes or damage boosting.
+    - minimal: in addition to tricky logic, sets minimal combat requirements for (mini-)bosses."""
     display_name = "Logic Difficulty"
-    option_standard = 0
+    option_normal = 0
+    option_tricky = 1
+    option_minimal = 2
+    default = 0
+
+class GameDifficulty(Choice):
+    """In-game difficulty.
+    - normal: default game difficulty.
+    - hard: difficulty level +3 (normally toggled by scanning a specific tablet twice).
+    - hardest: difficulty level +6 (APWorld dev did not testplay this).
+    Note: Logic is unaffected — this is a QoL (?) feature for those wanting to play on Hard Mode."""
+    display_name = "Game Difficulty"
+    option_normal = 0
     option_hard = 1
+    option_hardest = 2
     default = 0
 
 class EchidnaDifficulty(Choice):
@@ -218,7 +232,7 @@ class RandomCursedChests(DefaultOnToggle):
     Vanilla:
     - FlameTorcChest (Surtr)
     - GiantsFluteChest (Echidna)
-    - DestinyTabletChest (Anu)
+    - DestinyTabletChest (Anzu)
     - PowerBandChest (Belial)"""
     display_name = "Random Cursed Chests"
 
@@ -381,6 +395,7 @@ class LM2Options(PerGameCommonOptions):
     required_guardians: GuardianKills
     guardian_specific_ankhs: GuardianSpecificAnkhJewels
     logic_difficulty: LogicDifficulty
+    game_difficulty: GameDifficulty
     echidna_difficulty: EchidnaDifficulty
     costume_clip: CostumeClip
     require_fdc: RequireFDC

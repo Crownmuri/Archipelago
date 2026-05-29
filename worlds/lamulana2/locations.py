@@ -42,7 +42,8 @@ class LM2LocationDef:
     game_id: LocationID
     location_type: LocationType
     logic: str
-    hard_logic: Optional[str]
+    tricky_logic: Optional[str]
+    minimal_logic: Optional[str]
     parent_area: AreaID
     ap_id: int
 
@@ -105,7 +106,8 @@ def _load_locations() -> Dict[LocationID, LM2LocationDef]:
                 game_id=loc_id,
                 location_type=loc_type,
                 logic=loc.get("Logic", "True"),
-                hard_logic=loc.get("HardLogic"),
+                tricky_logic=loc.get("TrickyLogic"),
+                minimal_logic=loc.get("HardLogic"),
                 parent_area=parent_area,
                 ap_id=ap_id,
             )
@@ -158,14 +160,27 @@ class LM2Location(Location):
         self.is_locked: bool = False
         self.random_placement: bool = False
 
-        self._logic_string: str = loc_def.logic
-        self._hard_logic_string: Optional[str] = loc_def.hard_logic
+        self._base_logic_string: str = loc_def.logic
+        self._tricky_logic_string: Optional[str] = loc_def.tricky_logic
+        self._minimal_logic_string: Optional[str] = loc_def.minimal_logic
         self._logic_tree = None
         self._compiled_rule = None
-        
-        # Store original logic string for reference
-        self._original_logic = loc_def.logic
-        
+
+        # Select the active logic string based on the player's logic_difficulty
+        # tier (normal=0, tricky=1, minimal=2). Fallback order:
+        #   minimal -> tricky -> base
+        #   tricky  -> base
+        level = 0
+        if world is not None:
+            opt = getattr(world.options, "logic_difficulty", None)
+            level = int(opt.value if hasattr(opt, "value") else (opt or 0))
+
+        self._logic_string = self._select_logic_for_level(level)
+
+        # Store original logic string for reference (matches the chosen tier
+        # so _rebuild_combined_logic re-applies on top of it).
+        self._original_logic = self._logic_string
+
         # For additional logic strings
         self._additional_logic = []
 
@@ -186,13 +201,36 @@ class LM2Location(Location):
             self._compiled_rule = None
 
 
-    def use_hard_logic(self):
+    def _select_logic_for_level(self, level: int) -> str:
         """
-        Equivalent to C# UseHardLogic()
+        Pick the logic string for the given LogicDifficulty tier.
+
+        Fallback:
+            minimal (2) -> minimal_logic, else tricky_logic, else base
+            tricky  (1) -> tricky_logic,  else base
+            normal  (0) -> base
         """
-        if self._hard_logic_string:
-            self._logic_string = self._hard_logic_string
-            self.build_logic_tree()
+        if level >= 2:
+            if self._minimal_logic_string:
+                return self._minimal_logic_string
+            if self._tricky_logic_string:
+                return self._tricky_logic_string
+            return self._base_logic_string
+        if level == 1:
+            if self._tricky_logic_string:
+                return self._tricky_logic_string
+            return self._base_logic_string
+        return self._base_logic_string
+
+    def apply_logic_difficulty(self, level: int):
+        """
+        Re-select the active logic string for the given LogicDifficulty tier
+        and rebuild the logic tree. Any append_logic_string additions are
+        preserved on top of the newly selected tier.
+        """
+        self._logic_string = self._select_logic_for_level(level)
+        self._original_logic = self._logic_string
+        self._rebuild_combined_logic()
 
     def append_logic_string(self, extra: str):
         """

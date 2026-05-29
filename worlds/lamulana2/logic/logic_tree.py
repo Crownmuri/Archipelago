@@ -433,7 +433,7 @@ def _eval_setting(setting_name: str, options) -> bool:
         "RandomDissonance":  "random_dissonance",
         "RandomResearch":    "include_research_locations",
         "CostumeClip":       "costume_clip",
-        "HardBosses":        "logic_difficulty",
+        "MinimalBosses":     "logic_difficulty",
         "RemoveITStatue":    "remove_icefire_treetop_statue",
         "LifeForHoM":        "life_sigil_to_awaken_hom",
         "DLCItem":           "dlc_item_logic",
@@ -454,6 +454,6 @@ def _eval_setting(setting_name: str, options) -> bool:
     raw = value.value if hasattr(value, "value") else value
 
     if key == "logic_difficulty":
-        return raw == 1
+        return raw == 2
 
     return bool(raw)

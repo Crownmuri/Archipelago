@@ -548,6 +548,7 @@ class LaMulana2World(World):
             "auto_scan_tablets": int(self.options.auto_scan),
             "greedy_charon": int(self.options.greedy_charon),
             "logic_difficulty": int(self.options.logic_difficulty),
+            "game_difficulty": int(self.options.game_difficulty),
             "costume_clip": int(self.options.costume_clip),
             "dlc_item_logic": int(self.options.dlc_item_logic),
             "life_sigil_to_awaken_hom": int(self.options.life_sigil_to_awaken_hom),
@@ -584,6 +585,7 @@ class LaMulana2World(World):
                 "required_skulls", "remove_excess_skulls", "random_dissonance",
                 "potsanity",
                 "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
+                "game_difficulty",
                 "echidna_difficulty", "costume_clip", "require_fdc",
                 "dlc_item_logic", "life_sigil_to_awaken_hom",
                 "remove_icefire_treetop_statue", "random_cursed_chests", "cursed_chests",
@@ -865,7 +867,8 @@ class LaMulana2World(World):
                 game_id=loc_id,
                 location_type=LocationType.Shop,
                 logic="True",
-                hard_logic=None,
+                tricky_logic=None,
+                minimal_logic=None,
                 parent_area=self.starting_area,
                 ap_id=ap_id,
             )
@@ -1083,6 +1086,7 @@ class LaMulana2World(World):
         _log(f"  Accessibility: {opt('accessibility')}")
         _log(f"  Progression Balancing: {opt('progression_balancing')}")
         _log(f"  Logic Difficulty: {opt('logic_difficulty')}")
+        _log(f"  Game Difficulty: {opt('game_difficulty')}")
         _log(f"  Guardian Specific Ankhs: {opt('guardian_specific_ankhs')}")
 
         # --- Shops ---
