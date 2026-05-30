@@ -573,19 +573,20 @@ FILLER_DISTRIBUTION = [
 
 # Pot filler distribution (49 pots up to Annwfn)
 POT_FILLER_DISTRIBUTION = [
-    ("1 Weight", 14),
-    ("10 Coins", 17),
-    ("30 Coins", 4),
-    ("50 Coins", 0),
-    ("80 Coins", 1),
-    ("100 Coins", 1),
-    ("10 Shuriken", 6),
-    ("10 Rolling Shuriken", 4),
-    ("10 Earth Spears", 0),
-    ("10 Flares", 0),
-    ("10 Caltrops", 0),
-    ("1 Chakram", 1),
-    ("3 Bombs", 1),
+    # ... + Hall of Malice 16 + Eternal Prison Gloom (field14, 18) + Doom (field15, 12) = 307
+    ("1 Weight", 39),            # 38 + 1
+    ("10 Coins", 74),           # 67 + 7
+    ("30 Coins", 31),           # 30 + 1
+    ("50 Coins", 8),            # 6 + 2
+    ("80 Coins", 7),            # 6 + 1
+    ("100 Coins", 9),           # 8 + 1
+    ("10 Shuriken", 23),        # 23 + 0
+    ("10 Rolling Shuriken", 16),# 15 + 1
+    ("10 Earth Spears", 23),    # 20 + 3
+    ("10 Flares", 24),          # 22 + 2
+    ("10 Caltrops", 17),        # 16 + 1
+    ("1 Chakram", 10),          # 8 + 2
+    ("3 Bombs", 26),            # 18 + 8
 ]
 
 # ============================================================

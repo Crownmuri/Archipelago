@@ -161,9 +161,8 @@ class GuardianKills(Range):
     default = 5
 
 class Potsanity(Toggle):
-    """Include pots as randomized location checks (WIP).
-   As of April 2026, 49 pot locations containing filler rewards (coins, weights, ammo). 
-   Not compatible with legacy seed files."""
+    """Include pots as randomized location checks.
+    Regular potsanity will add all 307 regular item pots to the pool (ammo, coins, weights)."""
     display_name = "Potsanity"
 
 class GuardianSpecificAnkhJewels(DefaultOnToggle):
@@ -185,12 +184,10 @@ class GameDifficulty(Choice):
     """In-game difficulty.
     - normal: default game difficulty.
     - hard: difficulty level +3 (normally toggled by scanning a specific tablet twice).
-    - hardest: difficulty level +6 (APWorld dev did not testplay this).
     Note: Logic is unaffected — this is a QoL (?) feature for those wanting to play on Hard Mode."""
     display_name = "Game Difficulty"
     option_normal = 0
     option_hard = 1
-    option_hardest = 2
     default = 0
 
 class EchidnaDifficulty(Choice):

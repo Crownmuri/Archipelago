@@ -378,7 +378,6 @@ class ItemID(IntEnum):
     PotFiller47 = 1047
     PotFiller48 = 1048
     PotFiller49 = 1049
-    """
     PotFiller50 = 1050
     PotFiller51 = 1051
     PotFiller52 = 1052
@@ -637,6 +636,7 @@ class ItemID(IntEnum):
     PotFiller305 = 1305
     PotFiller306 = 1306
     PotFiller307 = 1307
+    """
     PotFiller308 = 1308
     PotFiller309 = 1309
     PotFiller310 = 1310
@@ -1014,66 +1014,65 @@ class LocationID(IntEnum):
     # -------------------------------------------------------------------------
 
     # --- Village of Departure ---
-    StartingCoinPot = 400           # field01-2G, potFlag 302
-    AlsedanaCoinPot = 401           # field01B2, potFlag 122
-    NeburCoinPot = 402              # field01C3, potFlag 123
-    XelpudCoinPot = 403             # field01D3, potFlag 124
-    XelpudWeightPot = 404           # field01D3-2, potFlag 128
-    VoDPreLadderWeightPot = 405     # field01E3, potFlag 125
-    VoDPostLadderCoinPot = 406      # field01E2, potFlag 126
-    VoDChakramPot = 407             # field01E2-2, potFlag 127
+    field01_2G = 400      # field01-2G, potFlag 302   (Starting Coin Pot)
+    field01B2 = 401       # field01B2, potFlag 122     (Alsedana Coin Pot)
+    field01C3 = 402       # field01C3, potFlag 123     (Nebur Coin Pot)
+    field01D3 = 403       # field01D3, potFlag 124     (Xelpud Coin Pot)
+    field01D3_2 = 404     # field01D3-2, potFlag 128   (Xelpud Weight Pot)
+    field01E3 = 405       # field01E3, potFlag 125     (Pre-Ladder Weight Pot)
+    field01E2 = 406       # field01E2, potFlag 126     (Post-Ladder Coin Pot)
+    field01E2_2 = 407     # field01E2-2, potFlag 127   (Double Jump Item Pot)
 
     # --- Gate of Guidance ---
-    GoGPhotoopWeightPot = 408       # field01L00W2, potFlag 299
-    GoGHighupCoinPot = 409          # field01L00G30, potFlag 295
-    GoGBelowHinerCoinPot = 410      # field01L00G2, potFlag 297
-    GoGIllusionGateBombPot = 411    # field01L00P, potFlag 301
+    fieldL00W2 = 408      # fieldL00W2, potFlag 299    (Photo Stand-in Weight Pot)
+    fieldL00G30 = 409     # fieldL00G30, potFlag 295   (High-up Coin Pot)
+    fieldL00G2 = 410      # fieldL00G2, potFlag 297    (Below Hiner Coin Pot)
+    fieldL00P = 411       # fieldL00P, potFlag 301     (Illusion Gate Item Pot)
 
     # --- Mausoleum of Giants ---
-    MoGFirstCoinPot = 412          # field01L02A0, potFlag 303
-    MoGSecondWeightPot = 413   # field01L02A1, potFlag 304
-    MoGBreakableWallCoinPot = 414   # field01L02A1, potFlag 304
-    MoGFutoStatueCoinPot = 415      # field01L02D3, potFlag 306
-    MoGPreRatatoskrWeightPot = 416  # field01L02C4, potFlag 307
+    fieldL02A0 = 412      # fieldL02A0, potFlag 303    (First Room Coin Pot)
+    fieldL02B0 = 413      # fieldL02B0, potFlag 305    (Second Room Weight Pot)
+    fieldL02A1 = 414      # fieldL02A1, potFlag 304    (Breakable Wall Coin Pot)
+    fieldL02D3 = 415      # fieldL02D3, potFlag 306    (Futo Statue Coin Pot)
+    fieldL02C4 = 416      # fieldL02C4, potFlag 307    (Pre-Ratatoskr Weight Pot)
 
     # --- Roots of Yggdrasil ---
-    RoYSecondRoomWeightPot = 417    # field00E2w, potFlag 29
-    RoYWeaponVaultCoinPot = 418     # field00C2, potFlag 4
-    RoYWeaponVaultWeightPot = 419   # field00C2w, potFlag 30
-    RoYConvenientShurikenPot = 420  # field00B2, potFlag 5
-    RoYBelowRatatoskrCoinPot = 421  # field00B1, potFlag 0
-    RoYFootprintShurikenPot = 422  # field00C1, potFlag 1
-    RoYBridgeCoinPot = 423          # field00E1, potFlag 2
-    RoYBirthSealGateShurikenPot = 424  # field00G0, potFlag 3
-    RoYFirstRoomCoinPot = 425       # field00E3, potFlag 7
-    RoYLargeBreakableWallCoinPot = 426  # field00C3, potFlag 6
-    RoYKorobockWeightPot = 427      # field00C4, potFlag 9
-    RoYLampofTimeWeightPot = 428    # field00D4w, potFlag 28
-    RoYTorchRoomShurikenPot = 429   # field00E4, potFlag 8
-    RoYGoldenRockCoinPot = 430      # field00E5, potFlag 10
+    field00E2w = 417      # field00E2w, potFlag 29     (Second Room Weight Pot)
+    field00C2 = 418       # field00C2, potFlag 4       (Weapon Vault Coin Pot)
+    field00C2w = 419      # field00C2w, potFlag 30     (Weapon Vault Weight Pot)
+    field00B2 = 420       # field00B2, potFlag 5       (Convenient Item Pot)
+    field00B1 = 421       # field00B1, potFlag 0       (Below Ratatoskr Coin Pot)
+    field00C1 = 422       # field00C1, potFlag 1       (Footprint Item Pot)
+    field00E1 = 423       # field00E1, potFlag 2       (Bridge Coin Pot)
+    field00G0 = 424       # field00G0, potFlag 3       (Birth Seal Gate Item Pot)
+    field00E3 = 425       # field00E3, potFlag 7       (First Room Coin Pot)
+    field00C3 = 426       # field00C3, potFlag 6       (Large Breakable Wall Coin Pot)
+    field00C4 = 427       # field00C4, potFlag 9       (Korobock Weight Pot)
+    field00D4w = 428      # field00D4w, potFlag 28     (Candlestick of Time Weight Pot)
+    field00E4 = 429       # field00E4, potFlag 8       (Torch Room Item Pot)
+    field00E5 = 430       # field00E5, potFlag 10      (Golden Rock Coin Pot)
 
     # --- Annwfn ---
-    AnnFairyWatchtowerPot = 431     # field00E4, potFlag 33
-    AnnKaliyaHiddenCoinPot = 432    # field02D1, potFlag 34
-    AnnKaliyaItemPot = 433          # field02D0, potFlag 31
-    AnnGrailCoinPot = 434           # field02C2g, potFlag 38
-    AnnGrailWeightPot = 435         # field02C2, potFlag 37
-    AnnFreyCoinPot = 436            # field02B1, potFlag 32
-    AnnCenterItemPot1 = 437         # field02D2-1, potFlag 39
-    AnnCenterItemPot2 = 438         # field02D2-2, potFlag 40
-    AnnHuracanItemPot = 439         # field02E2, potFlag 41
-    AnnMantraWatchtowerPot = 440    # field02E1, potFlag 35
-    AnnLookAwayWeightPot = 441      # field02B3, potFlag 42
-    AnnBifrostLeftWeightPot = 442   # field02B4, potFlag 45
-    AnnBifrostRightItemPot = 443    # field02D4-1, potFlag 46
-    AnnBifrostRightCoinPot = 444    # field02D4-2, potFlag 47
-    AnnOneWayCoinPot = 445          # field02E4, potFlag 48
-    AnnIxtabCoinPot = 446           # field02D3, potFlag 43
-    AnnDeathsPrisonCoinPot = 447    # field02G3, potFlag 44
-    AnnKujataWeightPot = 448        # field02F1, potFlag 36
+    field02C1 = 431       # field02C1, potFlag 33      (Fairy Watchtower Item Pot)
+    field02D1 = 432       # field02D1, potFlag 34      (Pre-Kaliya Hidden Coin Pot)
+    field02D0 = 433       # field02D0, potFlag 31      (Kaliya's Item Pot)
+    field02C2g = 434      # field02C2g, potFlag 38     (Kukulkan's Grail Coin Pot)
+    field02C2 = 435       # field02C2, potFlag 37      (Kukulkan's Grail Weight Pot)
+    field02B1 = 436       # field02B1, potFlag 32      (Fairy King's Coin Pot)
+    field02D2_1 = 437     # field02D2-1, potFlag 39    (Center Item Pot #1)
+    field02D2_2 = 438     # field02D2-2, potFlag 40    (Center Item Pot #2)
+    field02E2 = 439       # field02E2, potFlag 41      (Huracan's Item Pot)
+    field02E1 = 440       # field02E1, potFlag 35      (Mantra Watchtower Weight Pot)
+    field02B3 = 441       # field02B3, potFlag 42      (Look Away Weight Pot)
+    field02B4 = 442       # field02B4, potFlag 45      (Bifrost Left Weight Pot)
+    field02D4_1 = 443     # field02D4-1, potFlag 46    (Bifrost Right Item Pot)
+    field02D4_2 = 444     # field02D4-2, potFlag 47    (Bifrost Right Coin Pot)
+    field02E4 = 445       # field02E4, potFlag 48      (Feathercross One-Way Pot)
+    field02D3 = 446       # field02D3, potFlag 43      (Ixtab Coin Pot)
+    field02G3 = 447       # field02G3, potFlag 44      (Death's Prison Hidden Coin Pot)
+    field02F1 = 448       # field02F1, potFlag 36      (Pre-Kujata Weight Pot)
 
-    """
-    # --- field03 ---
+    # --- Immortal Battlefield (field03) — potsanity ---
     field03D2_1 = 449   # field03D2-1, potFlag 64
     field03G1 = 450   # field03G1, potFlag 65
     field03G2_1 = 451   # field03G2-1, potFlag 66
@@ -1102,14 +1101,14 @@ class LocationID(IntEnum):
     field03H4 = 474   # field03H4, potFlag 89
     field03G5 = 475   # field03G5, potFlag 90
     field03F6 = 476   # field03F6, potFlag 91
-    field03A5 = 477   # field03A5, potFlag 92
     field03B3 = 478   # field03B3, potFlag 93
     field03D2_2 = 479   # field03D2-2, potFlag 94
     field03E6 = 480   # field03E6, potFlag 95
     field03D2_3 = 481   # field03D2-3, potFlag 96
     field03B4g = 482   # field03B4g, potFlag 97
+    fieldL00W3 = 708   # fieldL00W3, potFlag 300 
 
-    # --- field04 ---
+    # --- Icefire Treetop (field04) — potsanity ---
     field04A0 = 483   # field04A0, potFlag 98
     field04C0 = 484   # field04C0, potFlag 99
     field04A1 = 485   # field04A1, potFlag 100
@@ -1135,7 +1134,7 @@ class LocationID(IntEnum):
     field04F2 = 505   # field04F2, potFlag 120
     field04E3 = 506   # field04E3, potFlag 121
 
-    # --- field05 ---
+    # --- Divine Fortress (field05) — potsanity ---
     field05B1 = 507   # field05B1, potFlag 11
     field05C1 = 508   # field05C1, potFlag 12
     field05D1 = 509   # field05D1, potFlag 13
@@ -1154,7 +1153,7 @@ class LocationID(IntEnum):
     field05C4_1 = 522   # field05C4-1, potFlag 26
     field05C4_2 = 523   # field05C4-2, potFlag 27
 
-    # --- field06 ---
+    # --- Shrine of the Frost Giants (field06) — potsanity ---
     field06C1 = 524   # field06C1, potFlag 129
     field06C1f = 525   # field06C1f, potFlag 130
     field06C2 = 526   # field06C2, potFlag 131
@@ -1170,16 +1169,14 @@ class LocationID(IntEnum):
     field06E4 = 536   # field06E4, potFlag 141
     field06E4g = 537   # field06E4g, potFlag 142
     field06C5 = 538   # field06C5, potFlag 143
-    field06D5 = 539   # field06D5, potFlag 144
     field06D5g = 540   # field06D5g, potFlag 145
     field06D6 = 541   # field06D6, potFlag 146
-    field06E6 = 542   # field06E6, potFlag 147
     field06_2A0 = 543   # field06-2A0, potFlag 292
     field06_2C0g = 544   # field06-2C0g, potFlag 293
     field06_2C0 = 545   # field06-2C0, potFlag 294
     field06add1 = 546   # field06add1, potFlag 311
 
-    # --- field07 ---
+    # --- Gate of the Dead (field07) — potsanity ---
     field07C0 = 547   # field07C0, potFlag 148
     field07C1 = 548   # field07C1, potFlag 149
     field07C1s = 549   # field07C1s, potFlag 150
@@ -1199,7 +1196,7 @@ class LocationID(IntEnum):
     field07C6 = 563   # field07C6, potFlag 164
     field07C6g = 564   # field07C6g, potFlag 165
 
-    # --- field08 ---
+    # --- Takamagahara Shrine (field08) — potsanity ---
     field08A0 = 565   # field08A0, potFlag 166
     field08A0g = 566   # field08A0g, potFlag 167
     field08B0 = 567   # field08B0, potFlag 168
@@ -1223,7 +1220,7 @@ class LocationID(IntEnum):
     field08D6g = 585   # field08D6g, potFlag 186
     field08D6f = 586   # field08D6f, potFlag 187
 
-    # --- field09 ---
+    # --- Heaven's Labyrinth (field09) — potsanity ---
     field09B0 = 587   # field09B0, potFlag 188
     field09B0g = 588   # field09B0g, potFlag 189
     field09A1 = 589   # field09A1, potFlag 190
@@ -1240,9 +1237,8 @@ class LocationID(IntEnum):
     field09D4 = 600   # field09D4, potFlag 201
     field09D4g = 601   # field09D4g, potFlag 202
 
-    # --- field10 ---
+    # --- Valhalla (field10) — potsanity ---
     field10B2 = 602   # field10B2, potFlag 49
-    field10C2 = 603   # field10C2, potFlag 50
     field10D2 = 604   # field10D2, potFlag 51
     field10D3 = 605   # field10D3, potFlag 52
     field10C1 = 606   # field10C1, potFlag 53
@@ -1256,8 +1252,9 @@ class LocationID(IntEnum):
     field10A1 = 614   # field10A1, potFlag 61
     field10A3_3 = 615   # field10A3-3, potFlag 62
     field10_B3 = 616   # field10-B3, potFlag 63
+    fieldL00W1 = 707   # fieldL00W1, potFlag 298  (Valhalla item pot)
 
-    # --- field11 ---
+    # --- Dark Star Lord's Mausoleum (field11) — potsanity ---
     field11B1 = 617   # field11B1, potFlag 203
     field11C1 = 618   # field11C1, potFlag 204
     field11C1g = 619   # field11C1g, potFlag 205
@@ -1275,7 +1272,6 @@ class LocationID(IntEnum):
     field11D4 = 631   # field11D4, potFlag 217
     field11B5 = 632   # field11B5, potFlag 218
     field11C5 = 633   # field11C5, potFlag 219
-    field11B61 = 634   # field11B61, potFlag 220
     field11B62 = 635   # field11B62, potFlag 221
     field11B63 = 636   # field11B63, potFlag 222
     field11B64 = 637   # field11B64, potFlag 223
@@ -1283,7 +1279,7 @@ class LocationID(IntEnum):
     field11D6g = 639   # field11D6g, potFlag 225
     field11D6 = 640   # field11D6, potFlag 226
 
-    # --- field12 ---
+    # --- Ancient Chaos (field12) — potsanity ---
     field12C0 = 641   # field12C0, potFlag 227
     field12C1 = 642   # field12C1, potFlag 228
     field12C2 = 643   # field12C2, potFlag 229
@@ -1303,8 +1299,12 @@ class LocationID(IntEnum):
     field12D5 = 657   # field12D5, potFlag 243
     field12D6 = 658   # field12D6, potFlag 244
     field12D6g = 659   # field12D6g, potFlag 245
+    ACMapPot1 = 713   # in-game pot id 312, potFlag 312
+    ACMapPot2 = 714   # in-game pot id 313, potFlag 313
+    ACMapPot3 = 715   # in-game pot id 314, potFlag 314
+    ACMapPot4 = 716   # in-game pot id 315, potFlag 315
 
-    # --- field13 ---
+    # --- Hall of Malice (field13) ---
     field13C0 = 660   # field13C0, potFlag 246
     field13C1 = 661   # field13C1, potFlag 247
     field13D1 = 662   # field13D1, potFlag 248
@@ -1322,7 +1322,7 @@ class LocationID(IntEnum):
     field13E4 = 674   # field13E4, potFlag 260
     field13F4 = 675   # field13F4, potFlag 261
 
-    # --- field14 ---
+    # --- Eternal Prison Gloom (field14) ---
     field14D0 = 676   # field14D0, potFlag 262
     field14E0 = 677   # field14E0, potFlag 263
     field14D1 = 678   # field14D1, potFlag 264
@@ -1342,7 +1342,7 @@ class LocationID(IntEnum):
     field14C6 = 692   # field14C6, potFlag 278
     field14C6b = 693   # field14C6b, potFlag 279
 
-    # --- field15 ---
+    # --- Eternal Prison Doom (field15) ---
     field15C0 = 694   # field15C0, potFlag 280
     field15C0g = 695   # field15C0g, potFlag 281
     field15B1 = 696   # field15B1, potFlag 282
@@ -1356,10 +1356,9 @@ class LocationID(IntEnum):
     field15C5 = 704   # field15C5, potFlag 290
     field15C6 = 705   # field15C6, potFlag 291
 
+    """
     # --- Other ---
     fieldL00G1 = 706   # fieldL00G1, potFlag 296
-    fieldL00W1 = 707   # fieldL00W1, potFlag 298
-    fieldL00W3 = 708   # fieldL00W3, potFlag 300
     fieldL021 = 710   # fieldL021, potFlag 308
     fieldL022 = 711   # fieldL022, potFlag 309
     fieldL023 = 712   # fieldL023, potFlag 310
@@ -1375,62 +1374,60 @@ POT_FLAG_MAP: dict[int, int] = {
     # LocationID.value -> sheet 21 potFlagNo
     # NOTE: potFlagNo values are 0-indexed (game internal), not 1-indexed.
     # --- Village of Departure ---
-    400: 302,   # StartingCoinPot         (field01-2G)
-    401: 122,   # AlsedanaCoinPot         (field01B2)
-    402: 123,   # NeburCoinPot            (field01C3)
-    403: 124,   # XelpudCoinPot           (field01D3)
-    404: 128,   # XelpudWeightPot         (field01D3-2)
-    405: 125,   # VoDPreLadderWeightPot   (field01E3)
-    406: 126,   # VoDPostLadderCoinPot    (field01E2)
-    407: 127,   # VoDChakramPot           (field01E2-2)
+    400: 302,   # field01-2G    Starting Coin Pot
+    401: 122,   # field01B2     Alsedana Coin Pot
+    402: 123,   # field01C3     Nebur Coin Pot
+    403: 124,   # field01D3     Xelpud Coin Pot
+    404: 128,   # field01D3-2   Xelpud Weight Pot
+    405: 125,   # field01E3     Pre-Ladder Weight Pot
+    406: 126,   # field01E2     Post-Ladder Coin Pot
+    407: 127,   # field01E2-2   Double Jump Item Pot
     # --- Gate of Guidance ---
-    408: 299,   # GoGPhotoopWeightPot     (field01L00W2)    Heavenly Temple of the Cross
-    409: 295,   # GoGHighupCoinPot        (field01L00G30)   Heavenly Corridor
-    410: 297,   # GoGBelowHinerCoinPot    (field01L00G2)    Pit of the Holy Grail
-    411: 301,   # GoGIllusionGateBombPot  (field01L00P)     Door to Eden
+    408: 299,   # fieldL00W2    Photo Stand-in Weight Pot     Heavenly Temple of the Cross
+    409: 295,   # fieldL00G30   High-up Coin Pot              Heavenly Corridor
+    410: 297,   # fieldL00G2    Below Hiner Coin Pot          Pit of the Holy Grail
+    411: 301,   # fieldL00P     Illusion Gate Item Pot        Door to Eden
     # --- Mausoleum of Giants ---
-    412: 303,   # MoGFirstCoinPot        (field01L02A0)     Last Shrine
-    413: 305,   # MoGSecondWeightPot      (field01L02B0)    Last Shrine
-    414: 304,   # MoGBreakableWallCoinPot (field01L02A1)    Approach of the Giants
-    415: 306,   # MoGFutoStatueCoinPot    (field01L02D3)    Star Palace of the Giants
-    416: 307,   # MoGPreRatatoskrWeightPot(field01L02C4)    Shaft to the Heavens
+    412: 303,   # fieldL02A0    First Room Coin Pot           Last Shrine
+    413: 305,   # fieldL02B0    Second Room Weight Pot        Last Shrine
+    414: 304,   # fieldL02A1    Breakable Wall Coin Pot       Approach of the Giants
+    415: 306,   # fieldL02D3    Futo Statue Coin Pot          Star Palace of the Giants
+    416: 307,   # fieldL02C4    Pre-Ratatoskr Weight Pot      Shaft to the Heavens
     # --- Roots of Yggdrasil ---
-    417: 29,    # RoYSecondRoomWeightPot  (field00E2w)      Path to the Roots
-    418: 4,     # RoYWeaponVaultCoinPot   (field00C2)       Vampire's Room
-    419: 30,    # RoYWeaponVaultWeightPot (field00C2w)      Vampire's Room
-    420: 5,     # RoYConvenientShurikenPot(field00B2)       Vampire's Room
-    421: 0,     # RoYBelowRatatoskrCoinPot(field00B1)       Dark Star Lord's Footprint
-    422: 1,     # RoYFootprintShurikenPot (field00C1)       Dark Star Lord's Footprint
-    423: 2,     # RoYBridgeCoinPot        (field00E1)       Goddess Seal
-    424: 3,     # RoYBirthSealGateShurikenPot(field00G0)    Verdandi's Root
-    425: 7,     # RoYFirstRoomCoinPot     (field00E3)       Yggdrasil Gate
-    426: 6,     # RoYLargeBreakableWallCoinPot(field00C3)   Yggdrasil Gate
-    427: 9,     # RoYKorobockWeightPot    (field00C4)       Path to Annwfn
-    428: 28,    # RoYLampofTimeWeightPot  (field00D4w)      Antechamber
-    429: 8,     # RoYTorchRoomShurikenPot (field00E4)       Antechamber
-    430: 10,    # RoYGoldenRockCoinPot    (field00E5)       Golden Rock
+    417: 29,    # field00E2w    Second Room Weight Pot        Path to the Roots
+    418: 4,     # field00C2     Weapon Vault Coin Pot         Vampire's Room
+    419: 30,    # field00C2w    Weapon Vault Weight Pot       Vampire's Room
+    420: 5,     # field00B2     Convenient Item Pot           Vampire's Room
+    421: 0,     # field00B1     Below Ratatoskr Coin Pot      Dark Star Lord's Footprint
+    422: 1,     # field00C1     Footprint Item Pot            Dark Star Lord's Footprint
+    423: 2,     # field00E1     Bridge Coin Pot               Goddess Seal
+    424: 3,     # field00G0     Birth Seal Gate Item Pot      Verdandi's Root
+    425: 7,     # field00E3     First Room Coin Pot           Yggdrasil Gate
+    426: 6,     # field00C3     Large Breakable Wall Coin Pot Yggdrasil Gate
+    427: 9,     # field00C4     Korobock Weight Pot           Path to Annwfn
+    428: 28,    # field00D4w    Candlestick of Time Weight Pot Antechamber
+    429: 8,     # field00E4     Torch Room Item Pot           Antechamber
+    430: 10,    # field00E5     Golden Rock Coin Pot          Golden Rock
     # --- Annwfn ---
-    431: 33,    # AnnFairyWatchtowerPot   (field02C1)       Fairy Watchtower
-    432: 34,    # AnnKaliyaHiddenCoinPot  (field02D1)       Serpent King Watchtower
-    433: 31,    # AnnKaliyaItemPot        (field02D0)       Serpent King Watchtower
-    434: 38,    # AnnGrailCoinPot         (field02C2g)      Kukulkan's Room
-    435: 37,    # AnnGrailWeightPot       (field02C2)       Kukulkan's Room
-    436: 32,    # AnnFreyCoinPot          (field02B1)       Temple of the Fairy King
-    437: 39,    # AnnCenterItemPot1       (field02D2-1)     Huracan's Room
-    438: 40,    # AnnCenterItemPot2       (field02D2-2)     Huracan's Room
-    439: 41,    # AnnHuracanItemPot       (field02E2)       Huracan's Room
-    440: 35,    # AnnMantraWatchtowerPot  (field02E1)       Mantra Watchtower
-    441: 42,    # AnnLookAwayWeightPot    (field02B3)       Shrine Maiden's Room
-    442: 45,    # AnnBifrostLeftWeightPot (field02B4)       Bifrost
-    443: 46,    # AnnBifrostRightItemPot  (field02D4-1)     Bifrost
-    444: 47,    # AnnBifrostRightCoinPot  (field02D4-2)     Bifrost
-    445: 48,    # AnnOneWayCoinPot        (field02E4)       Feathercross Room
-    446: 43,    # AnnIxtabCoinPot         (field02D3)       Shrine Maiden's Room
-    447: 44,    # AnnDeathsPrisonCoinPot  (field02G3)       Death's Prison
-    448: 36,    # AnnKujataWeightPot      (field02F1)       Kujata's Room
-}
-"""
-    # --- field03 ---
+    431: 33,    # field02C1     Fairy Watchtower Item Pot     Fairy Watchtower
+    432: 34,    # field02D1     Pre-Kaliya Hidden Coin Pot    Serpent King Watchtower
+    433: 31,    # field02D0     Kaliya's Item Pot             Serpent King Watchtower
+    434: 38,    # field02C2g    Kukulkan's Grail Coin Pot     Kukulkan's Room
+    435: 37,    # field02C2     Kukulkan's Grail Weight Pot   Kukulkan's Room
+    436: 32,    # field02B1     Fairy King's Coin Pot         Temple of the Fairy King
+    437: 39,    # field02D2-1   Center Item Pot #1            Huracan's Room
+    438: 40,    # field02D2-2   Center Item Pot #2            Huracan's Room
+    439: 41,    # field02E2     Huracan's Item Pot            Huracan's Room
+    440: 35,    # field02E1     Mantra Watchtower Weight Pot  Mantra Watchtower
+    441: 42,    # field02B3     Look Away Weight Pot          Shrine Maiden's Room
+    442: 45,    # field02B4     Bifrost Left Weight Pot       Bifrost
+    443: 46,    # field02D4-1   Bifrost Right Item Pot        Bifrost
+    444: 47,    # field02D4-2   Bifrost Right Coin Pot        Bifrost
+    445: 48,    # field02E4     Feathercross One-Way Pot      Feathercross Room
+    446: 43,    # field02D3     Ixtab Coin Pot                Shrine Maiden's Room
+    447: 44,    # field02G3     Death's Prison Hidden Coin Pot Death's Prison
+    448: 36,    # field02F1     Pre-Kujata Weight Pot         Kujata's Room
+    # --- Immortal Battlefield (field03) ---
     449: 64, # xx (field03D2-1) xx
     450: 65, # xx (field03G1) xx
     451: 66, # xx (field03G2-1) xx
@@ -1459,14 +1456,14 @@ POT_FLAG_MAP: dict[int, int] = {
     474: 89, # xx (field03H4) xx
     475: 90, # xx (field03G5) xx
     476: 91, # xx (field03F6) xx
-    477: 92, # xx (field03A5) xx
+    # 477: 92,  # field03A5 — no item in pots.json, disabled
     478: 93, # xx (field03B3) xx
     479: 94, # xx (field03D2-2) xx
     480: 95, # xx (field03E6) xx
     481: 96, # xx (field03D2-3) xx
     482: 97, # xx (field03B4g) xx
-
-    # --- field04 ---
+    708: 300, # fieldL00W3 (physically in IB — Chakram room)
+    # --- Icefire Treetop (field04) ---
     483: 98, # xx (field04A0) xx
     484: 99, # xx (field04C0) xx
     485: 100, # xx (field04A1) xx
@@ -1491,8 +1488,7 @@ POT_FLAG_MAP: dict[int, int] = {
     504: 119, # xx (field04E2) xx
     505: 120, # xx (field04F2) xx
     506: 121, # xx (field04E3) xx
-
-    # --- field05 ---
+    # --- Divine Fortress (field05) ---
     507: 11, # xx (field05B1) xx
     508: 12, # xx (field05C1) xx
     509: 13, # xx (field05D1) xx
@@ -1510,8 +1506,7 @@ POT_FLAG_MAP: dict[int, int] = {
     521: 25, # xx (field05B4-2) xx
     522: 26, # xx (field05C4-1) xx
     523: 27, # xx (field05C4-2) xx
-
-    # --- field06 ---
+    # --- Shrine of the Frost Giants (field06) ---
     524: 129, # xx (field06C1) xx
     525: 130, # xx (field06C1f) xx
     526: 131, # xx (field06C2) xx
@@ -1527,16 +1522,15 @@ POT_FLAG_MAP: dict[int, int] = {
     536: 141, # xx (field06E4) xx
     537: 142, # xx (field06E4g) xx
     538: 143, # xx (field06C5) xx
-    539: 144, # xx (field06D5) xx
+    # 539: 144,  # field06D5 — no item in pots.json, disabled
     540: 145, # xx (field06D5g) xx
     541: 146, # xx (field06D6) xx
-    542: 147, # xx (field06E6) xx
+    # 542: 147,  # field06E6 — no item in pots.json, disabled
     543: 292, # xx (field06-2A0) xx
     544: 293, # xx (field06-2C0g) xx
     545: 294, # xx (field06-2C0) xx
     546: 311, # xx (field06add1) xx
-
-    # --- field07 ---
+    # --- Gate of the Dead (field07) ---
     547: 148, # xx (field07C0) xx
     548: 149, # xx (field07C1) xx
     549: 150, # xx (field07C1s) xx
@@ -1555,8 +1549,7 @@ POT_FLAG_MAP: dict[int, int] = {
     562: 163, # xx (field07D5) xx
     563: 164, # xx (field07C6) xx
     564: 165, # xx (field07C6g) xx
-
-    # --- field08 ---
+    # --- Takamagahara Shrine (field08) ---
     565: 166, # xx (field08A0) xx
     566: 167, # xx (field08A0g) xx
     567: 168, # xx (field08B0) xx
@@ -1579,8 +1572,7 @@ POT_FLAG_MAP: dict[int, int] = {
     584: 185, # xx (field08C6) xx
     585: 186, # xx (field08D6g) xx
     586: 187, # xx (field08D6f) xx
-
-    # --- field09 ---
+    # --- Heaven's Labyrinth (field09) ---
     587: 188, # xx (field09B0) xx
     588: 189, # xx (field09B0g) xx
     589: 190, # xx (field09A1) xx
@@ -1596,10 +1588,9 @@ POT_FLAG_MAP: dict[int, int] = {
     599: 200, # xx (field09B4) xx
     600: 201, # xx (field09D4) xx
     601: 202, # xx (field09D4g) xx
-
-    # --- field10 ---
+    # --- Valhalla (field10) ---
     602: 49, # xx (field10B2) xx
-    603: 50, # xx (field10C2) xx
+    # 603: 50,  # field10C2 — no item in pots.json, disabled
     604: 51, # xx (field10D2) xx
     605: 52, # xx (field10D3) xx
     606: 53, # xx (field10C1) xx
@@ -1613,8 +1604,8 @@ POT_FLAG_MAP: dict[int, int] = {
     614: 61, # xx (field10A1) xx
     615: 62, # xx (field10A3-3) xx
     616: 63, # xx (field10-B3) xx
-
-    # --- field11 ---
+    707: 298, # fieldL00W1 (Valhalla item pot)
+    # --- Dark Star Lord's Mausoleum (field11) ---
     617: 203, # xx (field11B1) xx
     618: 204, # xx (field11C1) xx
     619: 205, # xx (field11C1g) xx
@@ -1632,15 +1623,14 @@ POT_FLAG_MAP: dict[int, int] = {
     631: 217, # xx (field11D4) xx
     632: 218, # xx (field11B5) xx
     633: 219, # xx (field11C5) xx
-    634: 220, # xx (field11B61) xx
+    # 634: 220,  # field11B61 — no item in pots.json, disabled
     635: 221, # xx (field11B62) xx
     636: 222, # xx (field11B63) xx
     637: 223, # xx (field11B64) xx
     638: 224, # xx (field11B65) xx
     639: 225, # xx (field11D6g) xx
     640: 226, # xx (field11D6) xx
-
-    # --- field12 ---
+    # --- Ancient Chaos (field12) ---
     641: 227, # xx (field12C0) xx
     642: 228, # xx (field12C1) xx
     643: 229, # xx (field12C2) xx
@@ -1660,8 +1650,11 @@ POT_FLAG_MAP: dict[int, int] = {
     657: 243, # xx (field12D5) xx
     658: 244, # xx (field12D6) xx
     659: 245, # xx (field12D6g) xx
-
-    # --- field13 ---
+    713: 312, # ACMapPot1
+    714: 313, # ACMapPot2
+    715: 314, # ACMapPot3
+    716: 315, # ACMapPot4
+    # --- Hall of Malice (field13) ---
     660: 246, # xx (field13C0) xx
     661: 247, # xx (field13C1) xx
     662: 248, # xx (field13D1) xx
@@ -1678,8 +1671,7 @@ POT_FLAG_MAP: dict[int, int] = {
     673: 259, # xx (field13D4) xx
     674: 260, # xx (field13E4) xx
     675: 261, # xx (field13F4) xx
-
-    # --- field14 ---
+    # --- Eternal Prison Gloom (field14) ---
     676: 262, # xx (field14D0) xx
     677: 263, # xx (field14E0) xx
     678: 264, # xx (field14D1) xx
@@ -1712,11 +1704,10 @@ POT_FLAG_MAP: dict[int, int] = {
     703: 289, # xx (field15D4g) xx
     704: 290, # xx (field15C5) xx
     705: 291, # xx (field15C6) xx
-
+}
+"""
     # --- Check if they even exist ---
     706: 296, # xx (fieldL00G1) xx
-    707: 298, # xx (fieldL00W1) xx
-    708: 300, # xx (fieldL00W3) xx
     710: 308, # xx (fieldL021) xx
     711: 309, # xx (fieldL022) xx
     712: 310, # xx (fieldL023) xx
@@ -2100,55 +2091,326 @@ AP_LOCATION_NAMES = {
     "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD,
 
     # --- Pot Locations (potsanity) ---
-    "[START] Starting Coin Pot": LocationID.StartingCoinPot,
-    "[VOD B-3] Alsedana Coin Pot": LocationID.AlsedanaCoinPot,
-    "[VOD C-4] Nebur Coin Pot": LocationID.NeburCoinPot,
-    "[VOD D-4] Xelpud Coin Pot": LocationID.XelpudCoinPot,
-    "[VOD D-4] Xelpud Weight Pot": LocationID.XelpudWeightPot,
-    "[VOD E-4] Pre-Ladder Weight Pot": LocationID.VoDPreLadderWeightPot,
-    "[VOD E-3] Post-Ladder Coin Pot": LocationID.VoDPostLadderCoinPot,
-    "[VOD E-3] Chakram Pot": LocationID.VoDChakramPot,
-    "[GOG C-2] Photo-op Weight Pot": LocationID.GoGPhotoopWeightPot,
-    "[GOG C-3] High-up Coin Pot": LocationID.GoGHighupCoinPot,
-    "[GOG B-5] Below Hiner Coin Pot": LocationID.GoGBelowHinerCoinPot,
-    "[GOG A-3] Illusion Gate Bomb Pot": LocationID.GoGIllusionGateBombPot,
-    "[MOG A-1] First Room Coin Pot": LocationID.MoGFirstCoinPot,
-    "[MOG B-1] Second Room Weight Pot": LocationID.MoGSecondWeightPot,
-    "[MOG A-2] Breakable Wall Coin Pot": LocationID.MoGBreakableWallCoinPot,
-    "[MOG D-4] Futo Statue Coin Pot": LocationID.MoGFutoStatueCoinPot,
-    "[MOG C-5] Pre-Ratatoskr Weight Pot": LocationID.MoGPreRatatoskrWeightPot,
-    "[ROY E-4] First Room Coin Pot": LocationID.RoYFirstRoomCoinPot,
-    "[ROY E-3] Second Room Weight Pot": LocationID.RoYSecondRoomWeightPot,
-    "[ROY C-3] Weapon Vault Coin Pot": LocationID.RoYWeaponVaultCoinPot,
-    "[ROY C-3] Weapon Vault Weight Pot": LocationID.RoYWeaponVaultWeightPot,
-    "[ROY B-3] Convenient Shuriken Pot": LocationID.RoYConvenientShurikenPot,
-    "[ROY B-2] Below Ratatoskr Coin Pot": LocationID.RoYBelowRatatoskrCoinPot,
-    "[ROY C-2] Footprint Shuriken Pot": LocationID.RoYFootprintShurikenPot,
-    "[ROY E-2] Bridge Coin Pot": LocationID.RoYBridgeCoinPot,
-    "[ROY G-1] Birth Seal Gate Shuriken Pot": LocationID.RoYBirthSealGateShurikenPot,
-    "[ROY C-4] Large Breakable Wall Coin Pot": LocationID.RoYLargeBreakableWallCoinPot,
-    "[ROY C-5] Korobock Weight Pot": LocationID.RoYKorobockWeightPot,
-    "[ROY D-5] Lamp of Time Weight Pot": LocationID.RoYLampofTimeWeightPot,
-    "[ROY E-5] Torch Room Shuriken Pot": LocationID.RoYTorchRoomShurikenPot,
-    "[ROY E-6] Golden Rock Coin Pot": LocationID.RoYGoldenRockCoinPot,
-    "[ANN C-2] Fairy Watchtower Item Pot": LocationID.AnnFairyWatchtowerPot,
-    "[ANN D-2] Pre-Kaliya Hidden Coin Pot": LocationID.AnnKaliyaHiddenCoinPot,
-    "[ANN D-1] Kaliya's Item Pot": LocationID.AnnKaliyaItemPot,
-    "[ANN C-3] Kukulkan's Grail Coin Pot": LocationID.AnnGrailCoinPot,
-    "[ANN C-3] Kukulkan's Grail Weight Pot": LocationID.AnnGrailWeightPot,
-    "[ANN B-2] Fairy King's Coin Pot": LocationID.AnnFreyCoinPot,
-    "[ANN D-3] Center Item Pot #1": LocationID.AnnCenterItemPot1,
-    "[ANN D-3] Center Item Pot #2": LocationID.AnnCenterItemPot2,
-    "[ANN E-3] Huracan's Item Pot": LocationID.AnnHuracanItemPot,
-    "[ANN E-2] Mantra Watchtower Weight Pot": LocationID.AnnMantraWatchtowerPot,
-    "[ANN C-4] Look Away Weight Pot": LocationID.AnnLookAwayWeightPot,
-    "[ANN B-5] Bifrost Left Weight Pot": LocationID.AnnBifrostLeftWeightPot,
-    "[ANN D-5] Bifrost Right Item Pot": LocationID.AnnBifrostRightItemPot,
-    "[ANN D-5] Bifrost Right Coin Pot": LocationID.AnnBifrostRightCoinPot,
-    "[ANN E-5] Feathercross One-Way Pot": LocationID.AnnOneWayCoinPot,
-    "[ANN D-4] Ixtab Coin Pot": LocationID.AnnIxtabCoinPot,
-    "[ANN G-4] Death's Prison Coin Pot": LocationID.AnnDeathsPrisonCoinPot,
-    "[ANN F-3] Pre-Kujata Weight Pot": LocationID.AnnKujataWeightPot,
+    "[START] Starting Coin Pot": LocationID.field01_2G,
+    "[VOD B-3] Alsedana Coin Pot": LocationID.field01B2,
+    "[VOD C-4] Nebur Coin Pot": LocationID.field01C3,
+    "[VOD D-4] Xelpud Coin Pot": LocationID.field01D3,
+    "[VOD D-4] Xelpud Weight Pot": LocationID.field01D3_2,
+    "[VOD E-4] Pre-Ladder Weight Pot": LocationID.field01E3,
+    "[VOD E-3] Post-Ladder Coin Pot": LocationID.field01E2,
+    "[VOD E-3] Double Jump Item Pot": LocationID.field01E2_2,
+    "[GOG C-2] Photo Stand-in Weight Pot": LocationID.fieldL00W2,
+    "[GOG C-3] High-up Coin Pot": LocationID.fieldL00G30,
+    "[GOG B-5] Below Hiner Coin Pot": LocationID.fieldL00G2,
+    "[GOG A-3] Illusion Gate Item Pot": LocationID.fieldL00P,
+    "[MOG A-1] First Room Coin Pot": LocationID.fieldL02A0,
+    "[MOG B-1] Second Room Weight Pot": LocationID.fieldL02B0,
+    "[MOG A-2] Breakable Wall Coin Pot": LocationID.fieldL02A1,
+    "[MOG D-4] Futo Statue Coin Pot": LocationID.fieldL02D3,
+    "[MOG C-5] Pre-Ratatoskr Weight Pot": LocationID.fieldL02C4,
+    "[ROY E-4] First Room Coin Pot": LocationID.field00E3,
+    "[ROY E-3] Second Room Weight Pot": LocationID.field00E2w,
+    "[ROY C-3] Weapon Vault Coin Pot": LocationID.field00C2,
+    "[ROY C-3] Weapon Vault Weight Pot": LocationID.field00C2w,
+    "[ROY B-3] Convenient Item Pot": LocationID.field00B2,
+    "[ROY B-2] Below Ratatoskr Coin Pot": LocationID.field00B1,
+    "[ROY C-2] Footprint Item Pot": LocationID.field00C1,
+    "[ROY E-2] Bridge Coin Pot": LocationID.field00E1,
+    "[ROY G-1] Birth Seal Gate Item Pot": LocationID.field00G0,
+    "[ROY C-4] Large Breakable Wall Coin Pot": LocationID.field00C3,
+    "[ROY C-5] Korobock Weight Pot": LocationID.field00C4,
+    "[ROY D-5] Candlestick of Time Weight Pot": LocationID.field00D4w,
+    "[ROY E-5] Torch Room Item Pot": LocationID.field00E4,
+    "[ROY E-6] Golden Rock Coin Pot": LocationID.field00E5,
+    "[ANN C-2] Fairy Watchtower Item Pot": LocationID.field02C1,
+    "[ANN D-2] Pre-Kaliya Hidden Coin Pot": LocationID.field02D1,
+    "[ANN D-1] Kaliya's Item Pot": LocationID.field02D0,
+    "[ANN C-3] Kukulkan's Grail Coin Pot": LocationID.field02C2g,
+    "[ANN C-3] Kukulkan's Grail Weight Pot": LocationID.field02C2,
+    "[ANN B-2] Fairy King's Coin Pot": LocationID.field02B1,
+    "[ANN D-3] Center Item Pot #1": LocationID.field02D2_1,
+    "[ANN D-3] Center Item Pot #2": LocationID.field02D2_2,
+    "[ANN E-3] Huracan's Item Pot": LocationID.field02E2,
+    "[ANN E-2] Mantra Watchtower Weight Pot": LocationID.field02E1,
+    "[ANN C-4] Look Away Weight Pot": LocationID.field02B3,
+    "[ANN B-5] Bifrost Left Weight Pot": LocationID.field02B4,
+    "[ANN D-5] Bifrost Right Item Pot": LocationID.field02D4_1,
+    "[ANN D-5] Bifrost Right Coin Pot": LocationID.field02D4_2,
+    "[ANN E-5] Feathercross One-Way Pot": LocationID.field02E4,
+    "[ANN D-4] Ixtab Coin Pot": LocationID.field02D3,
+    "[ANN G-4] Death's Prison Hidden Coin Pot": LocationID.field02G3,
+    "[ANN F-3] Pre-Kujata Weight Pot": LocationID.field02F1,
+    # --- Immortal Battlefield Pots (field03) ---
+    "[IB E-1] Cetus Item Pot": LocationID.field03E0,
+    "[IB C-1] Top-Left Weapon Vault Item Pot": LocationID.field03C0,
+    "[IB B-2] Under Fake Wall Puzzle Item Pot": LocationID.field03B1,
+    "[IB C-2] Before Fake Wall Puzzle Item Pot": LocationID.field03C1,
+    "[IB D-2] Corridor of Wind Item Pot": LocationID.field03D1,
+    "[IB D-3] Left Altar Lower Item Pot": LocationID.field03D2_1,
+    "[IB D-3] Left Altar Upper Item Pot": LocationID.field03D2_2,
+    "[IB D-4] Left of Spiral Boat Coin Pot": LocationID.field03D2_3,
+    "[IB D-5] Above Backside Grail Coin Pot": LocationID.field03D4,
+    "[IB E-6] Jormungandr Mural Item Pot": LocationID.field03E5,
+    "[IB F-2] Map Chest Left Item Pot": LocationID.field03F1_2,
+    "[IB F-2] Map Chest Right Item Pot": LocationID.field03F1,
+    "[IB F-4] Right of Spiral Boat Coin Pot": LocationID.field03F3,
+    "[IB F-6] Submerged Sigil Weight Pot": LocationID.field03F5,
+    "[IB G-2] Above Frontside Grail Coin Pot": LocationID.field03G1,
+    "[IB G-3] Frontside Grail Upper Coin Pot": LocationID.field03G2_1,
+    "[IB G-3] Frontside Grail Lower Item Pot": LocationID.field03G2_2,
+    "[IB G-5] Below Hidden Sigil Item Pot": LocationID.field03G4,
+    "[IB G-6] Right of Hiro Roderick Item Pot": LocationID.field03G5,
+    "[IB H-5] Path of Destruction Dropdown Coin Pot": LocationID.field03H4g,
+    "[IB H-5] Path to Destruction Item Pot": LocationID.field03H4,
+    "[IB I-6] Corona Arsenal Right Item Pot": LocationID.field03I5,
+    "[IB I-6] Corona Arsenal Left Item Pot": LocationID.fieldL00W3,
+    "[IB B-6] Left of Lava Weapon Vault Weight Pot": LocationID.field03B5,
+    "[IB C-7] Inferno Corridor Weight Pot": LocationID.field03C6,
+    "[IB B-4] Time Altar Item Pot": LocationID.field03B3,
+    "[IB B-5] Path to Time Altar Coin Pot": LocationID.field03B4_1,
+    "[IB B-5] Path to Time Altar Hidden Coin Pot": LocationID.field03B4g,
+    "[IB B-5] Path to Time Altar Item Pot": LocationID.field03B4_2,
+    "[IB B-7] Left Soul Gate Weight Pot": LocationID.field03B6,
+    "[IB G-7] Alviss Item Pot": LocationID.field03G6,
+    "[IB E-7] Moon Altar Coin Pot": LocationID.field03E6,
+    "[IB E-7] Moon Altar Item Pot": LocationID.field03F6,
+    "[IB D-7] Inferno Corridor Coin Pot": LocationID.field03D6,
+    # --- Icefire Treetop Pots (field04) ---
+    "[IT C-4] Mino Center Item Pot": LocationID.field04C3_2,
+    "[IT C-4] Mino Bottom Left Coin Pot": LocationID.field04C3_3,
+    "[IT C-4] Mino Top Right Coin Pot": LocationID.field04C3_1,
+    "[IT C-4] Mino Bottom Right Weight Pot": LocationID.field04C3_4,
+    "[IT C-5] Bombable Wall Coin Pot": LocationID.field04C4,
+    "[IT D-5] Above Vidofnir Item Pot": LocationID.field04D4,
+    "[IT E-4] Skull in Background Upper Coin Pot": LocationID.field04E3,
+    "[IT B-3] Below Frontside Grail Coin Pot": LocationID.field04B2,
+    "[IT C-3] Surtr's Antechamber Item Pot": LocationID.field04C2,
+    "[IT A-1] BTK Coin Pot": LocationID.field04A0,
+    "[IT A-2] Altar of Life Item Pot": LocationID.field04A1,
+    "[IT A-3] Altar of Life Approach Coin Pot": LocationID.field04A2,
+    "[IT B-2] Fireside Elevator Coin Pot": LocationID.field04B1,
+    "[IT B-4] Vedfolnir Left Item Pot": LocationID.field04B3_1,
+    "[IT B-4] Vedfolnir Right Item Pot": LocationID.field04B3_2,
+    "[IT C-1] Ratatoskr Surprise Item Pot": LocationID.field04C0,
+    "[IT E-1] Lower Statue Item Pot": LocationID.field04E0,
+    "[IT E-2] Great Bird Nest Item Pot": LocationID.field04E1,
+    "[IT E-3] Niflheim Stalactites Item Pot": LocationID.field04E2,
+    "[IT F-1] Backside Grail Hidden Coin Pot #1": LocationID.field04F0g,
+    "[IT F-3] Iceside Elevator Item Pot": LocationID.field04F2,
+    "[IT G-1] Backside Grail Hidden Item Pot": LocationID.field04G0,
+    "[IT G-1] Backside Grail Hidden Coin Pot #2": LocationID.field04G0g,
+    "[IT F-1] Left Ladder Coin Pot": LocationID.field04F0,
+    # --- Divine Fortress Pots (field05) ---
+    "[DF C-5] Divine Soul Gate Item Pot": LocationID.field05C4_2,
+    "[DF D-3] Frey's Ship Coin Pot": LocationID.field05C4_1,
+    "[DF D-4] Odin's Corridor Hermod Coin Pot": LocationID.field05D3,
+    "[DF E-4] Origin Altar Approach Weight Pot": LocationID.field05E3,
+    "[DF A-3] Dwarves' Hideout Right Pot #2": LocationID.field05A2_2,
+    "[DF A-3] Dwarves' Hideout Right Pot #1": LocationID.field05A2_1,
+    "[DF A-4] Corridor to Gate Item Pot": LocationID.field05A3,
+    "[DF B-2] Moving Block Lower Item Pot": LocationID.field05D2,
+    "[DF B-4] Antechamber - Ledge Coin Pot": LocationID.field05B3_3,
+    "[DF B-4] Antechamber - Gullinbursti Item Pot": LocationID.field05B3_2,
+    "[DF B-4] Antechamber - Ladder Weight Pot": LocationID.field05B3_1,
+    "[DF B-5] Shuhoka Lower Weight Pot": LocationID.field05B4_2,
+    "[DF B-5] Shuhoka Upper Item Pot": LocationID.field05B4_1,
+    "[DF C-3] Footprint Coin Pot": LocationID.field05C2,
+    "[DF B-2] Moving Block Upper Coin Pot": LocationID.field05B1,
+    "[DF C-2] Breakable Push Block Coin Pot": LocationID.field05C1,
+    "[DF D-2] Yuga Wheel Item Pot": LocationID.field05D1,
+    # --- Shrine of the Frost Giants Pots (field06) ---
+    "[SFG C-3] Mantra Mural Exit Item Pot": LocationID.field06C2,
+    "[SFG C-4] Weapon Fairy - Upper Coin Pot": LocationID.field06C3g,
+    "[SFG C-4] Weapon Fairy - Lower Weight Pot": LocationID.field06C3,
+    "[SFG D-5] Titanomachy Monument Item Pot": LocationID.field06D4,
+    "[SFG E-3] Golden Altar Coin Pot": LocationID.field06E2,
+    "[SFG E-4] Path of Snow Coin Pot": LocationID.field06E3g,
+    "[SFG E-4] Path of Snow Weight Pot": LocationID.field06E3,
+    "[SFG E-5] Footprint Coin Pot": LocationID.field06E4g,
+    "[SFG E-5] Footprint Weight Pot": LocationID.field06E4,
+    "[SFG B-5] Weapon Vault Item Pot": LocationID.field06B4,
+    "[SFG C-5] Grail Coin Pot": LocationID.field06C4,
+    "[SFG C-6] Sacred Wine Corridor Coin Pot": LocationID.field06C5,
+    "[SFG D-6] Right Snow Drop Coin Pot": LocationID.field06D5g,
+    "[SFG D-7] Altar of Birth Approach Item Pot": LocationID.field06D6,
+    "[SFG A-4] Bergelmir Blocking Item Pot": LocationID.field06A3,
+    "[SFG A-4] Left Snow Drop Coin Pot": LocationID.field06add1,
+    "[SFG C-2] Mimics Left Item Pot": LocationID.field06C1f,
+    "[SFG C-2] Mimics Right Item Pot": LocationID.field06C1,
+    "[SFGB C-1] Corridor of Blood Right Weight Pot": LocationID.field06_2C0,
+    "[SFGB C-1] Corridor of Blood Left Coin Pot": LocationID.field06_2C0g,
+    "[SFGB A-1] Tezcatlipoca Reward Item Pot": LocationID.field06_2A0,
+    # --- Gate of the Dead Pots (field07) ---
+    "[GOTD B-3] Aytum's Coin Pot": LocationID.field07B2,
+    "[GOTD B-4] Death Trap Item Pot": LocationID.field07B3,
+    "[GOTD B-5] Thoth's Upper Coin Chest": LocationID.field07B4,
+    "[GOTD B-5] Thoth's Lower Item Chest": LocationID.field07B4y,
+    "[GOTD B-6] Dwarves' Puzzle Item Pot": LocationID.field07B5,
+    "[GOTD C-1] Unicorn Reward Coin Pot": LocationID.field07C0,
+    "[GOTD C-2] Pre-Unicorn Item Pot": LocationID.field07C1s,
+    "[GOTD C-2] Pre-Unicorn Weight Pot": LocationID.field07C1,
+    "[GOTD C-4] Soul Gate Coin Pot": LocationID.field07C3,
+    "[GOTD C-7] Laser Beams Item Pot": LocationID.field07C6,
+    "[GOTD C-7] Laser Beams Coin Pot": LocationID.field07C6g,
+    "[GOTD D-3] Below Grail Item Pot": LocationID.field07D2,
+    "[GOTD D-5] Pillar Pepper Puzzle Item Pot": LocationID.field07D4,
+    "[GOTD D-6] Room of the Dark Night Item Pot": LocationID.field07D5,
+    "[GOTD E-3] Flipped Push Block Item Pot": LocationID.field07E2,
+    "[GOTD E-5] Horus Item Pot": LocationID.field07E4,
+    "[GOTD F-5] Wedjet Gate Solo Item Pot #1": LocationID.field07F4,
+    "[GOTD F-5] Wedjet Gate Solo Item Pot #2": LocationID.field07F4f,
+    # --- Takamagahara Shrine Pots (field08) ---
+    "[TS C-5] Spinning Platforms Left Item Pot": LocationID.field08C4,
+    "[TS C-5] Spinning Platforms Right Weight Pot ": LocationID.field08C4g,
+    "[TS D-2] Next to Chest Coin Pot": LocationID.field08D1,
+    "[TS D-3] Amenominakanushi Top-Left Coin Pot": LocationID.field08D2,
+    "[TS D-4] Amenominakanushi Bottom Level Item Pot": LocationID.field08D3,
+    "[TS D-4] Amenominakanushi Pre-Ladder Coin Pot": LocationID.field08D3g,
+    "[TS D-5] Falling Platform Item Pot": LocationID.field08D4,
+    "[TS D-5] Falling Platform Weight Pot": LocationID.field08C4_2,
+    "[TS F-3] Raijin and Fujin Reward Item Pot": LocationID.field08F2,
+    "[TS B-4] Maze Top-Left Item Pot": LocationID.field08A0,
+    "[TS B-4] Maze Middle Coin Pot": LocationID.field08B3g,
+    "[TS B-4] Maze Bottom-Left Item Pot": LocationID.field08B3b,
+    "[TS C-2] Above Grail Item Pot": LocationID.field08C1,
+    "[TS C-3] Spirit Palace Hidden Coin Pot": LocationID.field08C2g,
+    "[TS C-3] Spirit Palace Right Item Pot": LocationID.field08C2f,
+    "[TS C-4] Left Dragon Path Weight Pot": LocationID.field08C3,
+    "[TS D-6] Breakable Pillar Coin Pot": LocationID.field08D5,
+    "[TS D-7] Upper Corridor Coin Pot": LocationID.field08D6f,
+    "[TS D-7] Stacked Item Pot": LocationID.field08D6g,
+    "[TS C-7] Amanoiwato Gate Item Pot": LocationID.field08C6,
+    "[TS A-1] Pre-Belial Coin Pot": LocationID.field08A0g,
+    "[TS B-1] Yuga Wheel Item Pot": LocationID.field08B0,
+    # --- Heaven's Labyrinth Pots (field09) ---
+    "[HL A-2] After Megarock Item Pot": LocationID.field09A1,
+    "[HL A-3] Below Megarock Coin Pot": LocationID.field09A2,
+    "[HL B-1] Ladder from B-2 Mural Item Pot": LocationID.field09B0,
+    "[HL C-3] Celestial Disk Coin Pot": LocationID.field09C2g,
+    "[HL C-3] Celestial Disk Item Pot": LocationID.field09C2,
+    "[HL C-4] Typhon's Room Item Pot": LocationID.field09C3,
+    "[HL D-5] Arachne's Corridor Coin Pot": LocationID.field09D4g,
+    "[HL D-5] Arachne's Corridor Item Pot": LocationID.field09D4,
+    "[HL E-5] Soul Gate Hidden Item Pot": LocationID.field09E1,
+    "[HL E-3] Spiral Mural Coin Pot": LocationID.field09E2,
+    "[HL B-1] Weapon Vault Coin Pot": LocationID.field09B0g,
+    "[HL C-2] Path to Chaos Item Pot": LocationID.field09C1,
+    "[HL B-5] Scylla's Breakable Wall Coin Pot": LocationID.field09B4,
+    "[HL A-5] Twin Vessel Weight Pot": LocationID.field09A4,
+    "[HL A-5] Twin Vessel Item Pot": LocationID.field09A4y,
+    # --- Valhalla Pots (field10) ---
+    "[VAL A-2] Entrance Gate Item Pot": LocationID.field10A1,
+    "[VAL A-3] Left of Grail Weight Pot": LocationID.field10A2,
+    "[VAL A-4] Near First Trickster Coin Pot": LocationID.field10A3_1,
+    "[VAL A-4] Near First Trickster Item Pot": LocationID.field10A3_3,
+    "[VAL A-4] Near First Trickster Weight Pot": LocationID.field10A3_2,
+    "[VAL B-3] Above Grail Coin Pot": LocationID.field10B2,
+    "[VAL B-4] Corridor above Jalandhara Item Pot": LocationID.field10_B3,
+    "[VAL C-2] Near Second Trickster Coin Pot": LocationID.field10C1,
+    "[VAL C-4] Warrior's Aqueduct Item Pot": LocationID.field10C3_2,
+    "[VAL C-4] Above Laser Statue Weight Pot": LocationID.field10C3_1,
+    "[VAL D-3] Near Third Trickster Item Pot": LocationID.field10D2,
+    "[VAL D-4] Below Zipakna Coin Pot": LocationID.field10D3,
+    "[VAL D-4] Below Bargain Duck Coin Pot": LocationID.field10D3_2,
+    "[VAL D-1] Mantra Mural Coin Pot": LocationID.fieldL00W1,
+    "[VAL E-2] Soul Gate Coin Pot": LocationID.field10E1,
+    # --- Dark Star Lord's Mausoleum Pots (field11) ---
+    "[DSLM B-4] Grail Top-Right Item Pot": LocationID.field11B3_2,
+    "[DSLM B-5] Double Staircases Weight Pot": LocationID.field11B4,
+    "[DSLM B-6] Left Winged Statue Item Pot": LocationID.field11B5,
+    "[DSLM B-7] Room of Judgement Left Coin Pot": LocationID.field11B64,
+    "[DSLM B-7] Room of Judgement Top Item Pot": LocationID.field11B65,
+    "[DSLM B-7] Room of Judgement Bottom Coin Pot": LocationID.field11B62,
+    "[DSLM C-2] Kero Coin Pot": LocationID.field11C1g,
+    "[DSLM C-3] Altar of Atum Item Pot": LocationID.field11C2,
+    "[DSLM C-4] Ladder to Atum Item Pot #1": LocationID.field11B3,
+    "[DSLM C-4] Ladder to Atum Item Pot #2": LocationID.field11C3,
+    "[DSLM C-5] Ra's Hideout Coin Pot": LocationID.field11C4g,
+    "[DSLM C-5] Ra's Hideout Item Pot": LocationID.field11C4,
+    "[DSLM C-6] Right Winged Statue Item Pot": LocationID.field11C5,
+    "[DSLM D-5] Thunder Antechamber Left Coin Pot": LocationID.field11D4g,
+    "[DSLM D-5] Thunder Antechamber Right Item Pot": LocationID.field11D4,
+    "[DSLM D-7] Entrance Gate Item Pot": LocationID.field11D6g,
+    "[DSLM D-7] Entrance Gate Coin Pot": LocationID.field11D6,
+    "[DSLM E-4] Right of Pyramid Stacked Coin Pot": LocationID.field11E3g,
+    "[DSLM E-4] Right of Pyramid Stacked Item Pot": LocationID.field11E3,
+    "[DSLM C-2] Left Ladder to Stars Coin Pot": LocationID.field11B1,
+    "[DSLM B-3] Use Crystal Skull Item Pot": LocationID.field11B2,
+    "[DSLM B-3] Bombable Wall Coin Pot": LocationID.field11B63,
+    "[DSLM C-2] Right Ladder to Stars Item Pot": LocationID.field11C1,
+    # --- Ancient Chaos Pots (field12 + minted Map pots) ---
+    "[AC D-6] Entrance Gate Item Pot": LocationID.field12D5,
+    "[AC D-7] Annunaki Hot Spring Item Pot": LocationID.field12D6,
+    "[AC D-7] Annunaki Hot Spring Coin Pot": LocationID.field12D6g,
+    "[AC B-6] Path to Inferno Coin Pot": LocationID.field12B5,
+    "[AC B-6] Abandon Your Desires Coin Pot #1": LocationID.ACMapPot1,
+    "[AC B-6] Abandon Your Desires Coin Pot #2": LocationID.ACMapPot2,
+    "[AC B-6] Abandon Your Desires Coin Pot #3": LocationID.ACMapPot3,
+    "[AC B-6] Abandon Your Desires Coin Pot #4": LocationID.ACMapPot4,
+    "[AC C-5] Shortcut Room Coin Pot": LocationID.field12C4g,
+    "[AC C-5] Shortcut Room Item Pot": LocationID.field12C4,
+    "[AC A-4] There's Nothing Here Coin Pot": LocationID.field12A3g,
+    "[AC B-4] Grail Item Pot": LocationID.field12A3,
+    "[AC A-5] Queen of the Night Coin Pot": LocationID.field12A4g,
+    "[AC A-5] Queen of the Night Weight Pot": LocationID.field12A4,
+    "[AC B-5] Nine Eyes Wrong Side Coin Pot": LocationID.field12B4,
+    "[AC C-4] Pre-Secret Shortcut Item Pot": LocationID.field12C3,
+    "[AC C-4] Post-Secret Shortcut Item Pot": LocationID.field12C3g,
+    "[AC D-3] Ziggurat of Destiny Item Pot": LocationID.field12D2,
+    "[AC D-5] Zhulong Blocked Item Pot": LocationID.field12D3,
+    "[AC D-4] Above Mantra Mural Item Pot": LocationID.field12D4,
+    "[AC C-1] Soul Gate Item Pot": LocationID.field12C0,
+    "[AC C-3] Corridor of Blood Upper Coin Pot": LocationID.field12C1,
+    "[AC C-3] Corridor of Blood Right Coin Pot": LocationID.field12C2,
+    # --- Hall of Malice Pots (field13) ---
+    "[HOM C-1] Below Entrance Gate Item Pot": LocationID.field13C0,
+    "[HOM B-3] Lernaean Hydra Room Coin Pot": LocationID.field13B22,
+    "[HOM B-4] Nemean Lion Right Item Pot": LocationID.field13B3,
+    "[HOM B-4] Nemean Lion Left Coin Pot": LocationID.field13B3g,
+    "[HOM C-2] Below Grail Coin Pot": LocationID.field13C1,
+    "[HOM C-3] Delphyne Room Coin Pot": LocationID.field13C2,
+    "[HOM D-2] Sphinx Room Coin Pot": LocationID.field13D1,
+    "[HOM E-2] Crusher Trap Hidden Coin Pot": LocationID.field13B2,
+    "[HOM F-5] Corridor of Blood Coin Pot": LocationID.field13F4,
+    "[HOM G-4] Fairylan Left Coin Pot": LocationID.field13G3g,
+    "[HOM G-4] Fairylan Bottom Item Pot": LocationID.field13G3,
+    "[HOM A-4] Time Serdab Coin Pot": LocationID.field13A3g,
+    "[HOM A-4] Time Serdab Item Pot": LocationID.field13A3,
+    "[HOM E-4] Phaia Room Coin Pot": LocationID.field13E3,
+    "[HOM E-5] Orthrus Approach Coin Pot": LocationID.field13E4,
+    "[HOM D-5] Orthrus Third Coin Pot": LocationID.field13D4,
+    # --- Eternal Prison Doom Pots (field15) ---
+    "[EPG B-6] Below Garm Statue Coin Pot": LocationID.field14B5,
+    "[EPG C-5] Mantra Mural Item Pot": LocationID.field14C4,
+    "[EPG C-6] Weapon Vault Item Pot #2": LocationID.field14C5b,
+    "[EPG C-6] Weapon Vault Item Pot #1": LocationID.field14C5,
+    "[EPG C-7] Software Mural Item Pot #2": LocationID.field14C6b,
+    "[EPG C-7] Software Mural Item Pot #1": LocationID.field14C6,
+    "[EPG D-1] Gate with Glowing Eyes Item Pot": LocationID.field14D0,
+    "[EPG D-2] Soul Gate Coin Pot": LocationID.field14D1,
+    "[EPG D-3] Under River Styx Item Pot": LocationID.field14D2,
+    "[EPG D-3] Under River Styx Coin Pot": LocationID.field14D2g,
+    "[EPG D-4] Leap of Faith Item Pot": LocationID.field14D3b,
+    "[EPG D-4] Next to Grail Item Pot": LocationID.field14D3,
+    "[EPG D-5] Fourth Hell Gate Approach Item Pot": LocationID.field14D4,
+    "[EPG D-6] Key Fairy Item Pot": LocationID.field14D5,
+    "[EPG D-6] Key Fairy Coin Pot": LocationID.field14D5g,
+    "[EPG E-1] Second Hell Gate Approach Item Pot": LocationID.field14E0,
+    "[EPG E-3] Fifth Hell Gate Exit Coin Pot": LocationID.field14E2,
+    "[EPG F-2] Right of Prison Cells Coin Pot": LocationID.field14F1,
+    # --- Eternal Prison Gloom Pots (field14) ---
+    "[EPD A-4] Maze Clear Coin Pot": LocationID.field15A3g,
+    "[EPD A-4] Maze Clear Item Pot #1": LocationID.field15A3b,
+    "[EPD A-4] Maze Clear Item Pot #2": LocationID.field15A3,
+    "[EPD C-6] Blikjandabol Lava Drop Coin Pot": LocationID.field15C5,
+    "[EPD C-7] Blikjandabol Lava Drop Item Pot": LocationID.field15C6,
+    "[EPD D-5] Yuga Wheel Coin Pot": LocationID.field15D4g,
+    "[EPD D-5] Left Ladder Weight Pot": LocationID.field15D4,
+    "[EPD E-4] Sixth Hell Gate Approach Item Pot": LocationID.field15E3,
+    "[EPD C-2] Seventh Hell Gate Approach Coin Pot": LocationID.field15B1g,
+    "[EPD C-2] Seventh Hell Gate Approach Item Pot": LocationID.field15B1,
+    "[EPD C-1] Sixth Hell Gate Exit Item Pot": LocationID.field15C0,
+    "[EPD C-1] Sixth Hell Gate Exit Coin Pot": LocationID.field15C0g,
 }  
 
 ITEM_MAP = {
@@ -2489,9 +2751,6 @@ ITEM_MAP = {
     "Pot Filler #47": ItemID.PotFiller47,
     "Pot Filler #48": ItemID.PotFiller48,
     "Pot Filler #49": ItemID.PotFiller49,
-}
-
-"""
     "Pot Filler #50": ItemID.PotFiller50,
     "Pot Filler #51": ItemID.PotFiller51,
     "Pot Filler #52": ItemID.PotFiller52,
@@ -2750,6 +3009,8 @@ ITEM_MAP = {
     "Pot Filler #305": ItemID.PotFiller305,
     "Pot Filler #306": ItemID.PotFiller306,
     "Pot Filler #307": ItemID.PotFiller307,
+}
+"""
     "Pot Filler #308": ItemID.PotFiller308,
     "Pot Filler #309": ItemID.PotFiller309,
     "Pot Filler #310": ItemID.PotFiller310,
