@@ -2346,13 +2346,13 @@
             "Logic": "HorizontalAttack and (Has(Origin Sigil) or CanReach(DFTop))"
         },
         {
-            "Name": "[DF D-4] Odin's Corridor Hermod Coin Pot",
+            "Name": "[DF D-4] Above Mantra Mural Coin Pot",
             "ID": "field05D3",
             "LocationType": "Pot",
             "Logic": "True"
         },
         {
-            "Name": "[DF E-4] Origin Altar Approach Weight Pot",
+            "Name": "[DF E-4] Pre-Hugin and Munin Weight Pot",
             "ID": "field05E3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -2529,7 +2529,7 @@
         {
             "Name": "Map Chest SotFG",
             "LocationType": "Chest",
-            "Logic": "Has(Origin Sigil) or HorizontalAttack"
+            "Logic": "Has(Origin Sigil) or Glitch(Costume Clip) or HorizontalAttack"
         },
         {
             "Name": "Pochette Key Chest",
