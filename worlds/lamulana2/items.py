@@ -539,7 +539,7 @@ def build_shop_item_ids(world) -> List[ItemID]:
     return result
 
 # ============================================================
-# AP-Facing Filler Definitions (IDs 300-309)
+# AP-Facing Filler Definitions (IDs 901-917, see ItemID "AP Trash")
 # ============================================================
 
 AP_FILLER: list[tuple[str, ItemID]] = [
@@ -600,8 +600,8 @@ def _build_internal_pools():
     Categorizes every unique internal game ID by its reward value 
     based on your distribution logic.
     """
-    # 1. Chests (40 items) & FakeItems (40 items)
-    for category, base_id in [(LocationType.Chest, ItemID.ChestWeight01), 
+    # 1. Chests (100 items) & FakeItems (100 items)
+    for category, base_id in [(LocationType.Chest, ItemID.ChestWeight01),
                              (LocationType.FreeStanding, ItemID.FakeItem01)]:
         idx = 0
         for name, count in FILLER_DISTRIBUTION:
@@ -628,7 +628,7 @@ def _build_internal_pools():
         key = (LocationType.Mural, ap_id)
         INTERNAL_POOL_BY_REWARD.setdefault(key, []).append(ItemID(ItemID.FakeScan01.value + i))
 
-    # 4. Pot Filler (30 items)
+    # 4. Pot Filler (one internal ID per pot)
     idx = 0
     for name, count in POT_FILLER_DISTRIBUTION:
         ap_id = next(iid for n, iid in AP_FILLER if n == name)
@@ -643,48 +643,19 @@ _build_internal_pools()
 # ============================================================
 # Reverse Lookup: Internal ID -> Reward Name & AP Filler ID
 # ============================================================
-# Built from the same distribution logic so the Python side can
-# determine what reward a given FakeItem/ChestWeight/etc. grants.
-# Used by _get_unique_filler_id to sync the AP item name after
-# a random pool pick.
+# Derived directly from INTERNAL_POOL_BY_REWARD so there is a single
+# source of truth for the distribution. Each internal ID appears under
+# exactly one (category, ap_id) key, and the reward name is uniquely
+# recoverable from the AP filler ID. Used by _get_unique_filler_id to
+# sync the AP item name after a random pool pick.
 
-INTERNAL_ID_TO_REWARD: dict[ItemID, tuple[str, ItemID]] = {}
+_AP_ID_TO_NAME: dict[ItemID, str] = {iid: name for name, iid in AP_FILLER}
 
-def _build_reverse_lookup():
-    """Maps every internal filler ID to its (reward_name, ap_filler_id)."""
-    # 40-item distribution for Chests and FakeItems
-    for base_id in [ItemID.ChestWeight01, ItemID.FakeItem01]:
-        idx = 0
-        for name, count in FILLER_DISTRIBUTION:
-            ap_id = next(iid for n, iid in AP_FILLER if n == name)
-            for _ in range(count):
-                INTERNAL_ID_TO_REWARD[ItemID(base_id.value + idx)] = (name, ap_id)
-                idx += 1
-
-    # 10-item distribution for NPCMoney
-    for i, (name, _) in enumerate(FILLER_DISTRIBUTION):
-        ap_id = next(iid for n, iid in AP_FILLER if n == name)
-        INTERNAL_ID_TO_REWARD[ItemID(ItemID.NPCMoney01.value + i)] = (name, ap_id)
-
-    # 15-item distribution for FakeScans
-    fs_names = [
-        "1 Coin", "10 Coins", "10 Coins", "30 Coins", "30 Coins",
-        "30 Coins", "50 Coins", "80 Coins", "100 Coins",
-        "1 Weight", "5 Weights", "5 Weights", "10 Weights", "10 Weights", "20 Weights"
-    ]
-    for i, name in enumerate(fs_names):
-        ap_id = next(iid for n, iid in AP_FILLER if n == name)
-        INTERNAL_ID_TO_REWARD[ItemID(ItemID.FakeScan01.value + i)] = (name, ap_id)
-
-    # 30-item distribution for PotFiller
-    idx = 0
-    for name, count in POT_FILLER_DISTRIBUTION:
-        ap_id = next(iid for n, iid in AP_FILLER if n == name)
-        for _ in range(count):
-            INTERNAL_ID_TO_REWARD[ItemID(ItemID.PotFiller01.value + idx)] = (name, ap_id)
-            idx += 1
-
-_build_reverse_lookup()
+INTERNAL_ID_TO_REWARD: dict[ItemID, tuple[str, ItemID]] = {
+    internal_id: (_AP_ID_TO_NAME[ap_id], ap_id)
+    for (_category, ap_id), internal_ids in INTERNAL_POOL_BY_REWARD.items()
+    for internal_id in internal_ids
+}
 
 # ============================================================
 # Generation Function
@@ -692,7 +663,7 @@ _build_reverse_lookup()
 
 def build_pot_filler_pool(world) -> list[Item]:
     """
-    Creates the 30 pot filler items using POT_FILLER_DISTRIBUTION.
+    Creates the pot filler items using POT_FILLER_DISTRIBUTION.
     These use AP-facing IDs (Coin10, ShurikenBundle, etc.) so the spoiler
     shows the correct reward names. The internal PotFiller IDs are assigned
     later by precompute_filler_ids when items land at Pot locations.
@@ -712,14 +683,14 @@ def build_pot_filler_pool(world) -> list[Item]:
 
 def build_pre_filler(world) -> Item:
     """
-    Creates a generic AP filler item (300-309) for placement.
+    Creates a generic AP filler item (IDs 901-917) for placement.
     Translation to unique internal IDs happens later in randomizer.py.
     """
     # Create a weighted list of names based on FILLER_DISTRIBUTION
     weighted_names = [name for name, weight in FILLER_DISTRIBUTION for _ in range(weight)]
     name = world.random.choice(weighted_names)
 
-    # Get the generic AP ItemID (300-309)
+    # Get the generic AP ItemID (901-917)
     item_id = next(iid for n, iid in AP_FILLER if n == name)
 
     return Item(

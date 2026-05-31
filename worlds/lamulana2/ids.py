@@ -448,7 +448,7 @@ class ItemID(IntEnum):
     BombBundle     = 917  # grant 3 bomb ammo
 
     # -------------------------------------------------------------------------
-    # Pot Filler (internal IDs, 30 pots for now)
+    # Pot Filler (internal IDs, one per Pot location)
     # -------------------------------------------------------------------------
     
     PotFiller01 = 1001
@@ -2325,8 +2325,8 @@ AP_LOCATION_NAMES = {
     # --- Divine Fortress Pots (field05) ---
     "[DF C-5] Divine Soul Gate Item Pot": LocationID.field05C4_2,
     "[DF D-3] Frey's Ship Coin Pot": LocationID.field05C4_1,
-    "[DF D-4] Odin's Corridor Hermod Coin Pot": LocationID.field05D3,
-    "[DF E-4] Origin Altar Approach Weight Pot": LocationID.field05E3,
+    "[DF D-4] Above Mantra Mural Coin Pot": LocationID.field05D3,
+    "[DF E-4] Pre-Hugin and Munin Weight Pot": LocationID.field05E3,
     "[DF A-3] Dwarves' Hideout Right Pot #2": LocationID.field05A2_2,
     "[DF A-3] Dwarves' Hideout Right Pot #1": LocationID.field05A2_1,
     "[DF A-4] Corridor to Gate Item Pot": LocationID.field05A3,
