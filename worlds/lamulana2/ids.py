@@ -237,93 +237,215 @@ class ItemID(IntEnum):
     ChestWeight38 = 228
     ChestWeight39 = 229
     ChestWeight40 = 230
-    FakeItem01 = 231
-    FakeItem02 = 232
-    FakeItem03 = 233
-    FakeItem04 = 234
-    FakeItem05 = 235
-    FakeItem06 = 236
-    FakeItem07 = 237
-    FakeItem08 = 238
-    FakeItem09 = 239
-    FakeItem10 = 240
-    FakeItem11 = 241
-    FakeItem12 = 242
-    FakeItem13 = 243
-    FakeItem14 = 244
-    FakeItem15 = 245
-    FakeItem16 = 246
-    FakeItem17 = 247
-    FakeItem18 = 248
-    FakeItem19 = 249
-    FakeItem20 = 250
-    FakeItem21 = 251
-    FakeItem22 = 252
-    FakeItem23 = 253
-    FakeItem24 = 254
-    FakeItem25 = 255
-    FakeItem26 = 256
-    FakeItem27 = 257
-    FakeItem28 = 258
-    FakeItem29 = 259
-    FakeItem30 = 260
-    FakeItem31 = 261
-    FakeItem32 = 262
-    FakeItem33 = 263
-    FakeItem34 = 264
-    FakeItem35 = 265
-    FakeItem36 = 266
-    FakeItem37 = 267
-    FakeItem38 = 268
-    FakeItem39 = 269
-    FakeItem40 = 270
-    NPCMoney01 = 271
-    NPCMoney02 = 272
-    NPCMoney03 = 273
-    NPCMoney04 = 274
-    NPCMoney05 = 275
-    NPCMoney06 = 276
-    NPCMoney07 = 277
-    NPCMoney08 = 278
-    NPCMoney09 = 279
-    NPCMoney10 = 280
-    FakeScan01 = 281
-    FakeScan02 = 282
-    FakeScan03 = 283
-    FakeScan04 = 284
-    FakeScan05 = 285
-    FakeScan06 = 286
-    FakeScan07 = 287
-    FakeScan08 = 288
-    FakeScan09 = 289
-    FakeScan10 = 290
-    FakeScan11 = 291
-    FakeScan12 = 292
-    FakeScan13 = 293
-    FakeScan14 = 294
-    FakeScan15 = 295
+    ChestWeight41 = 231
+    ChestWeight42 = 232
+    ChestWeight43 = 233
+    ChestWeight44 = 234
+    ChestWeight45 = 235
+    ChestWeight46 = 236
+    ChestWeight47 = 237
+    ChestWeight48 = 238
+    ChestWeight49 = 239
+    ChestWeight50 = 240
+    ChestWeight51 = 241
+    ChestWeight52 = 242
+    ChestWeight53 = 243
+    ChestWeight54 = 244
+    ChestWeight55 = 245
+    ChestWeight56 = 246
+    ChestWeight57 = 247
+    ChestWeight58 = 248
+    ChestWeight59 = 249
+    ChestWeight60 = 250
+    ChestWeight61 = 251
+    ChestWeight62 = 252
+    ChestWeight63 = 253
+    ChestWeight64 = 254
+    ChestWeight65 = 255
+    ChestWeight66 = 256
+    ChestWeight67 = 257
+    ChestWeight68 = 258
+    ChestWeight69 = 259
+    ChestWeight70 = 260
+    ChestWeight71 = 261
+    ChestWeight72 = 262
+    ChestWeight73 = 263
+    ChestWeight74 = 264
+    ChestWeight75 = 265
+    ChestWeight76 = 266
+    ChestWeight77 = 267
+    ChestWeight78 = 268
+    ChestWeight79 = 269
+    ChestWeight80 = 270
+    ChestWeight81 = 271
+    ChestWeight82 = 272
+    ChestWeight83 = 273
+    ChestWeight84 = 274
+    ChestWeight85 = 275
+    ChestWeight86 = 276
+    ChestWeight87 = 277
+    ChestWeight88 = 278
+    ChestWeight89 = 279
+    ChestWeight90 = 280
+    ChestWeight91 = 281
+    ChestWeight92 = 282
+    ChestWeight93 = 283
+    ChestWeight94 = 284
+    ChestWeight95 = 285
+    ChestWeight96 = 286
+    ChestWeight97 = 287
+    ChestWeight98 = 288
+    ChestWeight99 = 289
+    ChestWeight100 = 290
+    FakeItem01 = 291
+    FakeItem02 = 292
+    FakeItem03 = 293
+    FakeItem04 = 294
+    FakeItem05 = 295
+    FakeItem06 = 296
+    FakeItem07 = 297
+    FakeItem08 = 298
+    FakeItem09 = 299
+    FakeItem10 = 300
+    FakeItem11 = 301
+    FakeItem12 = 302
+    FakeItem13 = 303
+    FakeItem14 = 304
+    FakeItem15 = 305
+    FakeItem16 = 306
+    FakeItem17 = 307
+    FakeItem18 = 308
+    FakeItem19 = 309
+    FakeItem20 = 310
+    FakeItem21 = 311
+    FakeItem22 = 312
+    FakeItem23 = 313
+    FakeItem24 = 314
+    FakeItem25 = 315
+    FakeItem26 = 316
+    FakeItem27 = 317
+    FakeItem28 = 318
+    FakeItem29 = 319
+    FakeItem30 = 320
+    FakeItem31 = 321
+    FakeItem32 = 322
+    FakeItem33 = 323
+    FakeItem34 = 324
+    FakeItem35 = 325
+    FakeItem36 = 326
+    FakeItem37 = 327
+    FakeItem38 = 328
+    FakeItem39 = 329
+    FakeItem40 = 330
+    FakeItem41 = 331
+    FakeItem42 = 332
+    FakeItem43 = 333
+    FakeItem44 = 334
+    FakeItem45 = 335
+    FakeItem46 = 336
+    FakeItem47 = 337
+    FakeItem48 = 338
+    FakeItem49 = 339
+    FakeItem50 = 340
+    FakeItem51 = 341
+    FakeItem52 = 342
+    FakeItem53 = 343
+    FakeItem54 = 344
+    FakeItem55 = 345
+    FakeItem56 = 346
+    FakeItem57 = 347
+    FakeItem58 = 348
+    FakeItem59 = 349
+    FakeItem60 = 350
+    FakeItem61 = 351
+    FakeItem62 = 352
+    FakeItem63 = 353
+    FakeItem64 = 354
+    FakeItem65 = 355
+    FakeItem66 = 356
+    FakeItem67 = 357
+    FakeItem68 = 358
+    FakeItem69 = 359
+    FakeItem70 = 360
+    FakeItem71 = 361
+    FakeItem72 = 362
+    FakeItem73 = 363
+    FakeItem74 = 364
+    FakeItem75 = 365
+    FakeItem76 = 366
+    FakeItem77 = 367
+    FakeItem78 = 368
+    FakeItem79 = 369
+    FakeItem80 = 370
+    FakeItem81 = 371
+    FakeItem82 = 372
+    FakeItem83 = 373
+    FakeItem84 = 374
+    FakeItem85 = 375
+    FakeItem86 = 376
+    FakeItem87 = 377
+    FakeItem88 = 378
+    FakeItem89 = 379
+    FakeItem90 = 380
+    FakeItem91 = 381
+    FakeItem92 = 382
+    FakeItem93 = 383
+    FakeItem94 = 384
+    FakeItem95 = 385
+    FakeItem96 = 386
+    FakeItem97 = 387
+    FakeItem98 = 388
+    FakeItem99 = 389
+    FakeItem100 = 390
+    NPCMoney01 = 391
+    NPCMoney02 = 392
+    NPCMoney03 = 393
+    NPCMoney04 = 394
+    NPCMoney05 = 395
+    NPCMoney06 = 396
+    NPCMoney07 = 397
+    NPCMoney08 = 398
+    NPCMoney09 = 399
+    NPCMoney10 = 400
+    FakeScan01 = 401
+    FakeScan02 = 402
+    FakeScan03 = 403
+    FakeScan04 = 404
+    FakeScan05 = 405
+    FakeScan06 = 406
+    FakeScan07 = 407
+    FakeScan08 = 408
+    FakeScan09 = 409
+    FakeScan10 = 410
+    FakeScan11 = 411
+    FakeScan12 = 412
+    FakeScan13 = 413
+    FakeScan14 = 414
+    FakeScan15 = 415
 
     # -------------------------------------------------------------------------
     # AP Trash
     # -------------------------------------------------------------------------
 
-    Coin1   = 300   # grant 1 coin
-    Coin10  = 301   # grant 10 coins
-    Coin30  = 302   # grant 30 coins
-    Coin50  = 303   # grant 50 coins
-    Coin80  = 304   # grant 80 coins
-    Coin100  = 305   # grant 100 coins
-    Weight1  = 306  # grant 1 weight
-    Weight5  = 307  # grant 5 weights
-    Weight10 = 308  # grant 10 weights
-    Weight20 = 309  # grant 20 weights
-    ShurikenBundle = 310  # grant 10 shuriken ammo
-    RollingShurikenBundle = 311  # grant 10 rolling shuriken ammo
-    EarthSpearBundle = 312   # grant 10 earth spear ammo
-    FlareBundle = 313  # grant 10 flare ammo
-    CaltropsBundle = 314 # grant 10 caltrops ammo
-    ChakramBundle  = 315  # grant 1 chakram ammo
-    BombBundle     = 316  # grant 3 bomb ammo
+    Coin1   = 901   # grant 1 coin
+    Coin10  = 902   # grant 10 coins
+    Coin30  = 903   # grant 30 coins
+    Coin50  = 904   # grant 50 coins
+    Coin80  = 905   # grant 80 coins
+    Coin100  = 906   # grant 100 coins
+
+    Weight1  = 907  # grant 1 weight
+    Weight5  = 908  # grant 5 weights
+    Weight10 = 909  # grant 10 weights
+    Weight20 = 910  # grant 20 weights
+
+    ShurikenBundle = 911  # grant 10 shuriken ammo
+    RollingShurikenBundle = 912  # grant 10 rolling shuriken ammo
+    EarthSpearBundle = 913   # grant 10 earth spear ammo
+    FlareBundle = 914  # grant 10 flare ammo
+    CaltropsBundle = 915 # grant 10 caltrops ammo
+    ChakramBundle  = 916  # grant 1 chakram ammo
+    BombBundle     = 917  # grant 3 bomb ammo
 
     # -------------------------------------------------------------------------
     # Pot Filler (internal IDs, 30 pots for now)
@@ -2349,7 +2471,7 @@ AP_LOCATION_NAMES = {
     "[AC B-6] Abandon Your Desires Coin Pot #4": LocationID.ACMapPot4,
     "[AC C-5] Shortcut Room Coin Pot": LocationID.field12C4g,
     "[AC C-5] Shortcut Room Item Pot": LocationID.field12C4,
-    "[AC A-4] There's Nothing Here Coin Pot": LocationID.field12A3g,
+    "[AC A-4] There is Nothing Here Coin Pot": LocationID.field12A3g,
     "[AC B-4] Grail Item Pot": LocationID.field12A3,
     "[AC A-5] Queen of the Night Coin Pot": LocationID.field12A4g,
     "[AC A-5] Queen of the Night Weight Pot": LocationID.field12A4,
@@ -2636,6 +2758,66 @@ ITEM_MAP = {
     "Chest Weight #38": ItemID.ChestWeight38,
     "Chest Weight #39": ItemID.ChestWeight39,
     "Chest Weight #40": ItemID.ChestWeight40,
+    "Chest Weight #41": ItemID.ChestWeight41,
+    "Chest Weight #42": ItemID.ChestWeight42,
+    "Chest Weight #43": ItemID.ChestWeight43,
+    "Chest Weight #44": ItemID.ChestWeight44,
+    "Chest Weight #45": ItemID.ChestWeight45,
+    "Chest Weight #46": ItemID.ChestWeight46,
+    "Chest Weight #47": ItemID.ChestWeight47,
+    "Chest Weight #48": ItemID.ChestWeight48,
+    "Chest Weight #49": ItemID.ChestWeight49,
+    "Chest Weight #50": ItemID.ChestWeight50,
+    "Chest Weight #51": ItemID.ChestWeight51,
+    "Chest Weight #52": ItemID.ChestWeight52,
+    "Chest Weight #53": ItemID.ChestWeight53,
+    "Chest Weight #54": ItemID.ChestWeight54,
+    "Chest Weight #55": ItemID.ChestWeight55,
+    "Chest Weight #56": ItemID.ChestWeight56,
+    "Chest Weight #57": ItemID.ChestWeight57,
+    "Chest Weight #58": ItemID.ChestWeight58,
+    "Chest Weight #59": ItemID.ChestWeight59,
+    "Chest Weight #60": ItemID.ChestWeight60,
+    "Chest Weight #61": ItemID.ChestWeight61,
+    "Chest Weight #62": ItemID.ChestWeight62,
+    "Chest Weight #63": ItemID.ChestWeight63,
+    "Chest Weight #64": ItemID.ChestWeight64,
+    "Chest Weight #65": ItemID.ChestWeight65,
+    "Chest Weight #66": ItemID.ChestWeight66,
+    "Chest Weight #67": ItemID.ChestWeight67,
+    "Chest Weight #68": ItemID.ChestWeight68,
+    "Chest Weight #69": ItemID.ChestWeight69,
+    "Chest Weight #70": ItemID.ChestWeight70,
+    "Chest Weight #71": ItemID.ChestWeight71,
+    "Chest Weight #72": ItemID.ChestWeight72,
+    "Chest Weight #73": ItemID.ChestWeight73,
+    "Chest Weight #74": ItemID.ChestWeight74,
+    "Chest Weight #75": ItemID.ChestWeight75,
+    "Chest Weight #76": ItemID.ChestWeight76,
+    "Chest Weight #77": ItemID.ChestWeight77,
+    "Chest Weight #78": ItemID.ChestWeight78,
+    "Chest Weight #79": ItemID.ChestWeight79,
+    "Chest Weight #80": ItemID.ChestWeight80,
+    "Chest Weight #81": ItemID.ChestWeight81,
+    "Chest Weight #82": ItemID.ChestWeight82,
+    "Chest Weight #83": ItemID.ChestWeight83,
+    "Chest Weight #84": ItemID.ChestWeight84,
+    "Chest Weight #85": ItemID.ChestWeight85,
+    "Chest Weight #86": ItemID.ChestWeight86,
+    "Chest Weight #87": ItemID.ChestWeight87,
+    "Chest Weight #88": ItemID.ChestWeight88,
+    "Chest Weight #89": ItemID.ChestWeight89,
+    "Chest Weight #90": ItemID.ChestWeight90,
+    "Chest Weight #91": ItemID.ChestWeight91,
+    "Chest Weight #92": ItemID.ChestWeight92,
+    "Chest Weight #93": ItemID.ChestWeight93,
+    "Chest Weight #94": ItemID.ChestWeight94,
+    "Chest Weight #95": ItemID.ChestWeight95,
+    "Chest Weight #96": ItemID.ChestWeight96,
+    "Chest Weight #97": ItemID.ChestWeight97,
+    "Chest Weight #98": ItemID.ChestWeight98,
+    "Chest Weight #99": ItemID.ChestWeight99,
+    "Chest Weight #100": ItemID.ChestWeight100,
     "Fake Item #1": ItemID.FakeItem01,
     "Fake Item #2": ItemID.FakeItem02,
     "Fake Item #3": ItemID.FakeItem03,
@@ -2676,6 +2858,66 @@ ITEM_MAP = {
     "Fake Item #38": ItemID.FakeItem38,
     "Fake Item #39": ItemID.FakeItem39,
     "Fake Item #40": ItemID.FakeItem40,
+    "Fake Item #41": ItemID.FakeItem41,
+    "Fake Item #42": ItemID.FakeItem42,
+    "Fake Item #43": ItemID.FakeItem43,
+    "Fake Item #44": ItemID.FakeItem44,
+    "Fake Item #45": ItemID.FakeItem45,
+    "Fake Item #46": ItemID.FakeItem46,
+    "Fake Item #47": ItemID.FakeItem47,
+    "Fake Item #48": ItemID.FakeItem48,
+    "Fake Item #49": ItemID.FakeItem49,
+    "Fake Item #50": ItemID.FakeItem50,
+    "Fake Item #51": ItemID.FakeItem51,
+    "Fake Item #52": ItemID.FakeItem52,
+    "Fake Item #53": ItemID.FakeItem53,
+    "Fake Item #54": ItemID.FakeItem54,
+    "Fake Item #55": ItemID.FakeItem55,
+    "Fake Item #56": ItemID.FakeItem56,
+    "Fake Item #57": ItemID.FakeItem57,
+    "Fake Item #58": ItemID.FakeItem58,
+    "Fake Item #59": ItemID.FakeItem59,
+    "Fake Item #60": ItemID.FakeItem60,
+    "Fake Item #61": ItemID.FakeItem61,
+    "Fake Item #62": ItemID.FakeItem62,
+    "Fake Item #63": ItemID.FakeItem63,
+    "Fake Item #64": ItemID.FakeItem64,
+    "Fake Item #65": ItemID.FakeItem65,
+    "Fake Item #66": ItemID.FakeItem66,
+    "Fake Item #67": ItemID.FakeItem67,
+    "Fake Item #68": ItemID.FakeItem68,
+    "Fake Item #69": ItemID.FakeItem69,
+    "Fake Item #70": ItemID.FakeItem70,
+    "Fake Item #71": ItemID.FakeItem71,
+    "Fake Item #72": ItemID.FakeItem72,
+    "Fake Item #73": ItemID.FakeItem73,
+    "Fake Item #74": ItemID.FakeItem74,
+    "Fake Item #75": ItemID.FakeItem75,
+    "Fake Item #76": ItemID.FakeItem76,
+    "Fake Item #77": ItemID.FakeItem77,
+    "Fake Item #78": ItemID.FakeItem78,
+    "Fake Item #79": ItemID.FakeItem79,
+    "Fake Item #80": ItemID.FakeItem80,
+    "Fake Item #81": ItemID.FakeItem81,
+    "Fake Item #82": ItemID.FakeItem82,
+    "Fake Item #83": ItemID.FakeItem83,
+    "Fake Item #84": ItemID.FakeItem84,
+    "Fake Item #85": ItemID.FakeItem85,
+    "Fake Item #86": ItemID.FakeItem86,
+    "Fake Item #87": ItemID.FakeItem87,
+    "Fake Item #88": ItemID.FakeItem88,
+    "Fake Item #89": ItemID.FakeItem89,
+    "Fake Item #90": ItemID.FakeItem90,
+    "Fake Item #91": ItemID.FakeItem91,
+    "Fake Item #92": ItemID.FakeItem92,
+    "Fake Item #93": ItemID.FakeItem93,
+    "Fake Item #94": ItemID.FakeItem94,
+    "Fake Item #95": ItemID.FakeItem95,
+    "Fake Item #96": ItemID.FakeItem96,
+    "Fake Item #97": ItemID.FakeItem97,
+    "Fake Item #98": ItemID.FakeItem98,
+    "Fake Item #99": ItemID.FakeItem99,
+    "Fake Item #100": ItemID.FakeItem100,
     "NPC Money #1": ItemID.NPCMoney01,
     "NPC Money #2": ItemID.NPCMoney02,
     "NPC Money #3": ItemID.NPCMoney03,
@@ -3341,6 +3583,66 @@ FILLER_ITEM_IDS = {
     ItemID.ChestWeight38,
     ItemID.ChestWeight39,
     ItemID.ChestWeight40,
+    ItemID.ChestWeight41,
+    ItemID.ChestWeight42,
+    ItemID.ChestWeight43,
+    ItemID.ChestWeight44,
+    ItemID.ChestWeight45,
+    ItemID.ChestWeight46,
+    ItemID.ChestWeight47,
+    ItemID.ChestWeight48,
+    ItemID.ChestWeight49,
+    ItemID.ChestWeight50,
+    ItemID.ChestWeight51,
+    ItemID.ChestWeight52,
+    ItemID.ChestWeight53,
+    ItemID.ChestWeight54,
+    ItemID.ChestWeight55,
+    ItemID.ChestWeight56,
+    ItemID.ChestWeight57,
+    ItemID.ChestWeight58,
+    ItemID.ChestWeight59,
+    ItemID.ChestWeight60,
+    ItemID.ChestWeight61,
+    ItemID.ChestWeight62,
+    ItemID.ChestWeight63,
+    ItemID.ChestWeight64,
+    ItemID.ChestWeight65,
+    ItemID.ChestWeight66,
+    ItemID.ChestWeight67,
+    ItemID.ChestWeight68,
+    ItemID.ChestWeight69,
+    ItemID.ChestWeight70,
+    ItemID.ChestWeight71,
+    ItemID.ChestWeight72,
+    ItemID.ChestWeight73,
+    ItemID.ChestWeight74,
+    ItemID.ChestWeight75,
+    ItemID.ChestWeight76,
+    ItemID.ChestWeight77,
+    ItemID.ChestWeight78,
+    ItemID.ChestWeight79,
+    ItemID.ChestWeight80,
+    ItemID.ChestWeight81,
+    ItemID.ChestWeight82,
+    ItemID.ChestWeight83,
+    ItemID.ChestWeight84,
+    ItemID.ChestWeight85,
+    ItemID.ChestWeight86,
+    ItemID.ChestWeight87,
+    ItemID.ChestWeight88,
+    ItemID.ChestWeight89,
+    ItemID.ChestWeight90,
+    ItemID.ChestWeight91,
+    ItemID.ChestWeight92,
+    ItemID.ChestWeight93,
+    ItemID.ChestWeight94,
+    ItemID.ChestWeight95,
+    ItemID.ChestWeight96,
+    ItemID.ChestWeight97,
+    ItemID.ChestWeight98,
+    ItemID.ChestWeight99,
+    ItemID.ChestWeight100,
     ItemID.NPCMoney01,
     ItemID.NPCMoney02,
     ItemID.NPCMoney03,
@@ -3391,6 +3693,66 @@ FILLER_ITEM_IDS = {
     ItemID.FakeItem38,
     ItemID.FakeItem39,
     ItemID.FakeItem40,
+    ItemID.FakeItem41,
+    ItemID.FakeItem42,
+    ItemID.FakeItem43,
+    ItemID.FakeItem44,
+    ItemID.FakeItem45,
+    ItemID.FakeItem46,
+    ItemID.FakeItem47,
+    ItemID.FakeItem48,
+    ItemID.FakeItem49,
+    ItemID.FakeItem50,
+    ItemID.FakeItem51,
+    ItemID.FakeItem52,
+    ItemID.FakeItem53,
+    ItemID.FakeItem54,
+    ItemID.FakeItem55,
+    ItemID.FakeItem56,
+    ItemID.FakeItem57,
+    ItemID.FakeItem58,
+    ItemID.FakeItem59,
+    ItemID.FakeItem60,
+    ItemID.FakeItem61,
+    ItemID.FakeItem62,
+    ItemID.FakeItem63,
+    ItemID.FakeItem64,
+    ItemID.FakeItem65,
+    ItemID.FakeItem66,
+    ItemID.FakeItem67,
+    ItemID.FakeItem68,
+    ItemID.FakeItem69,
+    ItemID.FakeItem70,
+    ItemID.FakeItem71,
+    ItemID.FakeItem72,
+    ItemID.FakeItem73,
+    ItemID.FakeItem74,
+    ItemID.FakeItem75,
+    ItemID.FakeItem76,
+    ItemID.FakeItem77,
+    ItemID.FakeItem78,
+    ItemID.FakeItem79,
+    ItemID.FakeItem80,
+    ItemID.FakeItem81,
+    ItemID.FakeItem82,
+    ItemID.FakeItem83,
+    ItemID.FakeItem84,
+    ItemID.FakeItem85,
+    ItemID.FakeItem86,
+    ItemID.FakeItem87,
+    ItemID.FakeItem88,
+    ItemID.FakeItem89,
+    ItemID.FakeItem90,
+    ItemID.FakeItem91,
+    ItemID.FakeItem92,
+    ItemID.FakeItem93,
+    ItemID.FakeItem94,
+    ItemID.FakeItem95,
+    ItemID.FakeItem96,
+    ItemID.FakeItem97,
+    ItemID.FakeItem98,
+    ItemID.FakeItem99,
+    ItemID.FakeItem100,
     ItemID.FakeScan01,
     ItemID.FakeScan02,
     ItemID.FakeScan03,
@@ -3436,6 +3798,283 @@ FILLER_ITEM_IDS = {
     ItemID.PotFiller28,
     ItemID.PotFiller29,
     ItemID.PotFiller30,
+    ItemID.PotFiller31,
+    ItemID.PotFiller32,
+    ItemID.PotFiller33,
+    ItemID.PotFiller34,
+    ItemID.PotFiller35,
+    ItemID.PotFiller36,
+    ItemID.PotFiller37,
+    ItemID.PotFiller38,
+    ItemID.PotFiller39,
+    ItemID.PotFiller40,
+    ItemID.PotFiller41,
+    ItemID.PotFiller42,
+    ItemID.PotFiller43,
+    ItemID.PotFiller44,
+    ItemID.PotFiller45,
+    ItemID.PotFiller46,
+    ItemID.PotFiller47,
+    ItemID.PotFiller48,
+    ItemID.PotFiller49,
+    ItemID.PotFiller50,
+    ItemID.PotFiller51,
+    ItemID.PotFiller52,
+    ItemID.PotFiller53,
+    ItemID.PotFiller54,
+    ItemID.PotFiller55,
+    ItemID.PotFiller56,
+    ItemID.PotFiller57,
+    ItemID.PotFiller58,
+    ItemID.PotFiller59,
+    ItemID.PotFiller60,
+    ItemID.PotFiller61,
+    ItemID.PotFiller62,
+    ItemID.PotFiller63,
+    ItemID.PotFiller64,
+    ItemID.PotFiller65,
+    ItemID.PotFiller66,
+    ItemID.PotFiller67,
+    ItemID.PotFiller68,
+    ItemID.PotFiller69,
+    ItemID.PotFiller70,
+    ItemID.PotFiller71,
+    ItemID.PotFiller72,
+    ItemID.PotFiller73,
+    ItemID.PotFiller74,
+    ItemID.PotFiller75,
+    ItemID.PotFiller76,
+    ItemID.PotFiller77,
+    ItemID.PotFiller78,
+    ItemID.PotFiller79,
+    ItemID.PotFiller80,
+    ItemID.PotFiller81,
+    ItemID.PotFiller82,
+    ItemID.PotFiller83,
+    ItemID.PotFiller84,
+    ItemID.PotFiller85,
+    ItemID.PotFiller86,
+    ItemID.PotFiller87,
+    ItemID.PotFiller88,
+    ItemID.PotFiller89,
+    ItemID.PotFiller90,
+    ItemID.PotFiller91,
+    ItemID.PotFiller92,
+    ItemID.PotFiller93,
+    ItemID.PotFiller94,
+    ItemID.PotFiller95,
+    ItemID.PotFiller96,
+    ItemID.PotFiller97,
+    ItemID.PotFiller98,
+    ItemID.PotFiller99,
+    ItemID.PotFiller100,
+    ItemID.PotFiller101,
+    ItemID.PotFiller102,
+    ItemID.PotFiller103,
+    ItemID.PotFiller104,
+    ItemID.PotFiller105,
+    ItemID.PotFiller106,
+    ItemID.PotFiller107,
+    ItemID.PotFiller108,
+    ItemID.PotFiller109,
+    ItemID.PotFiller110,
+    ItemID.PotFiller111,
+    ItemID.PotFiller112,
+    ItemID.PotFiller113,
+    ItemID.PotFiller114,
+    ItemID.PotFiller115,
+    ItemID.PotFiller116,
+    ItemID.PotFiller117,
+    ItemID.PotFiller118,
+    ItemID.PotFiller119,
+    ItemID.PotFiller120,
+    ItemID.PotFiller121,
+    ItemID.PotFiller122,
+    ItemID.PotFiller123,
+    ItemID.PotFiller124,
+    ItemID.PotFiller125,
+    ItemID.PotFiller126,
+    ItemID.PotFiller127,
+    ItemID.PotFiller128,
+    ItemID.PotFiller129,
+    ItemID.PotFiller130,
+    ItemID.PotFiller131,
+    ItemID.PotFiller132,
+    ItemID.PotFiller133,
+    ItemID.PotFiller134,
+    ItemID.PotFiller135,
+    ItemID.PotFiller136,
+    ItemID.PotFiller137,
+    ItemID.PotFiller138,
+    ItemID.PotFiller139,
+    ItemID.PotFiller140,
+    ItemID.PotFiller141,
+    ItemID.PotFiller142,
+    ItemID.PotFiller143,
+    ItemID.PotFiller144,
+    ItemID.PotFiller145,
+    ItemID.PotFiller146,
+    ItemID.PotFiller147,
+    ItemID.PotFiller148,
+    ItemID.PotFiller149,
+    ItemID.PotFiller150,
+    ItemID.PotFiller151,
+    ItemID.PotFiller152,
+    ItemID.PotFiller153,
+    ItemID.PotFiller154,
+    ItemID.PotFiller155,
+    ItemID.PotFiller156,
+    ItemID.PotFiller157,
+    ItemID.PotFiller158,
+    ItemID.PotFiller159,
+    ItemID.PotFiller160,
+    ItemID.PotFiller161,
+    ItemID.PotFiller162,
+    ItemID.PotFiller163,
+    ItemID.PotFiller164,
+    ItemID.PotFiller165,
+    ItemID.PotFiller166,
+    ItemID.PotFiller167,
+    ItemID.PotFiller168,
+    ItemID.PotFiller169,
+    ItemID.PotFiller170,
+    ItemID.PotFiller171,
+    ItemID.PotFiller172,
+    ItemID.PotFiller173,
+    ItemID.PotFiller174,
+    ItemID.PotFiller175,
+    ItemID.PotFiller176,
+    ItemID.PotFiller177,
+    ItemID.PotFiller178,
+    ItemID.PotFiller179,
+    ItemID.PotFiller180,
+    ItemID.PotFiller181,
+    ItemID.PotFiller182,
+    ItemID.PotFiller183,
+    ItemID.PotFiller184,
+    ItemID.PotFiller185,
+    ItemID.PotFiller186,
+    ItemID.PotFiller187,
+    ItemID.PotFiller188,
+    ItemID.PotFiller189,
+    ItemID.PotFiller190,
+    ItemID.PotFiller191,
+    ItemID.PotFiller192,
+    ItemID.PotFiller193,
+    ItemID.PotFiller194,
+    ItemID.PotFiller195,
+    ItemID.PotFiller196,
+    ItemID.PotFiller197,
+    ItemID.PotFiller198,
+    ItemID.PotFiller199,
+    ItemID.PotFiller200,
+    ItemID.PotFiller201,
+    ItemID.PotFiller202,
+    ItemID.PotFiller203,
+    ItemID.PotFiller204,
+    ItemID.PotFiller205,
+    ItemID.PotFiller206,
+    ItemID.PotFiller207,
+    ItemID.PotFiller208,
+    ItemID.PotFiller209,
+    ItemID.PotFiller210,
+    ItemID.PotFiller211,
+    ItemID.PotFiller212,
+    ItemID.PotFiller213,
+    ItemID.PotFiller214,
+    ItemID.PotFiller215,
+    ItemID.PotFiller216,
+    ItemID.PotFiller217,
+    ItemID.PotFiller218,
+    ItemID.PotFiller219,
+    ItemID.PotFiller220,
+    ItemID.PotFiller221,
+    ItemID.PotFiller222,
+    ItemID.PotFiller223,
+    ItemID.PotFiller224,
+    ItemID.PotFiller225,
+    ItemID.PotFiller226,
+    ItemID.PotFiller227,
+    ItemID.PotFiller228,
+    ItemID.PotFiller229,
+    ItemID.PotFiller230,
+    ItemID.PotFiller231,
+    ItemID.PotFiller232,
+    ItemID.PotFiller233,
+    ItemID.PotFiller234,
+    ItemID.PotFiller235,
+    ItemID.PotFiller236,
+    ItemID.PotFiller237,
+    ItemID.PotFiller238,
+    ItemID.PotFiller239,
+    ItemID.PotFiller240,
+    ItemID.PotFiller241,
+    ItemID.PotFiller242,
+    ItemID.PotFiller243,
+    ItemID.PotFiller244,
+    ItemID.PotFiller245,
+    ItemID.PotFiller246,
+    ItemID.PotFiller247,
+    ItemID.PotFiller248,
+    ItemID.PotFiller249,
+    ItemID.PotFiller250,
+    ItemID.PotFiller251,
+    ItemID.PotFiller252,
+    ItemID.PotFiller253,
+    ItemID.PotFiller254,
+    ItemID.PotFiller255,
+    ItemID.PotFiller256,
+    ItemID.PotFiller257,
+    ItemID.PotFiller258,
+    ItemID.PotFiller259,
+    ItemID.PotFiller260,
+    ItemID.PotFiller261,
+    ItemID.PotFiller262,
+    ItemID.PotFiller263,
+    ItemID.PotFiller264,
+    ItemID.PotFiller265,
+    ItemID.PotFiller266,
+    ItemID.PotFiller267,
+    ItemID.PotFiller268,
+    ItemID.PotFiller269,
+    ItemID.PotFiller270,
+    ItemID.PotFiller271,
+    ItemID.PotFiller272,
+    ItemID.PotFiller273,
+    ItemID.PotFiller274,
+    ItemID.PotFiller275,
+    ItemID.PotFiller276,
+    ItemID.PotFiller277,
+    ItemID.PotFiller278,
+    ItemID.PotFiller279,
+    ItemID.PotFiller280,
+    ItemID.PotFiller281,
+    ItemID.PotFiller282,
+    ItemID.PotFiller283,
+    ItemID.PotFiller284,
+    ItemID.PotFiller285,
+    ItemID.PotFiller286,
+    ItemID.PotFiller287,
+    ItemID.PotFiller288,
+    ItemID.PotFiller289,
+    ItemID.PotFiller290,
+    ItemID.PotFiller291,
+    ItemID.PotFiller292,
+    ItemID.PotFiller293,
+    ItemID.PotFiller294,
+    ItemID.PotFiller295,
+    ItemID.PotFiller296,
+    ItemID.PotFiller297,
+    ItemID.PotFiller298,
+    ItemID.PotFiller299,
+    ItemID.PotFiller300,
+    ItemID.PotFiller301,
+    ItemID.PotFiller302,
+    ItemID.PotFiller303,
+    ItemID.PotFiller304,
+    ItemID.PotFiller305,
+    ItemID.PotFiller306,
+    ItemID.PotFiller307,
 }
 TRAP_ITEM_IDS = {
     ItemID.FakeItem01,
@@ -3478,6 +4117,66 @@ TRAP_ITEM_IDS = {
     ItemID.FakeItem38,
     ItemID.FakeItem39,
     ItemID.FakeItem40,
+    ItemID.FakeItem41,
+    ItemID.FakeItem42,
+    ItemID.FakeItem43,
+    ItemID.FakeItem44,
+    ItemID.FakeItem45,
+    ItemID.FakeItem46,
+    ItemID.FakeItem47,
+    ItemID.FakeItem48,
+    ItemID.FakeItem49,
+    ItemID.FakeItem50,
+    ItemID.FakeItem51,
+    ItemID.FakeItem52,
+    ItemID.FakeItem53,
+    ItemID.FakeItem54,
+    ItemID.FakeItem55,
+    ItemID.FakeItem56,
+    ItemID.FakeItem57,
+    ItemID.FakeItem58,
+    ItemID.FakeItem59,
+    ItemID.FakeItem60,
+    ItemID.FakeItem61,
+    ItemID.FakeItem62,
+    ItemID.FakeItem63,
+    ItemID.FakeItem64,
+    ItemID.FakeItem65,
+    ItemID.FakeItem66,
+    ItemID.FakeItem67,
+    ItemID.FakeItem68,
+    ItemID.FakeItem69,
+    ItemID.FakeItem70,
+    ItemID.FakeItem71,
+    ItemID.FakeItem72,
+    ItemID.FakeItem73,
+    ItemID.FakeItem74,
+    ItemID.FakeItem75,
+    ItemID.FakeItem76,
+    ItemID.FakeItem77,
+    ItemID.FakeItem78,
+    ItemID.FakeItem79,
+    ItemID.FakeItem80,
+    ItemID.FakeItem81,
+    ItemID.FakeItem82,
+    ItemID.FakeItem83,
+    ItemID.FakeItem84,
+    ItemID.FakeItem85,
+    ItemID.FakeItem86,
+    ItemID.FakeItem87,
+    ItemID.FakeItem88,
+    ItemID.FakeItem89,
+    ItemID.FakeItem90,
+    ItemID.FakeItem91,
+    ItemID.FakeItem92,
+    ItemID.FakeItem93,
+    ItemID.FakeItem94,
+    ItemID.FakeItem95,
+    ItemID.FakeItem96,
+    ItemID.FakeItem97,
+    ItemID.FakeItem98,
+    ItemID.FakeItem99,
+    ItemID.FakeItem100,
 }
 GUARDIAN_ANKHS_ITEMS: dict = {
     ItemID.AnkhJewel1: "Ankh Jewel (Fafnir)",

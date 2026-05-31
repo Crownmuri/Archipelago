@@ -4499,7 +4499,7 @@
             "Logic": "(CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or Has(Claydoll Suit)) or (Glitch(Costume Clip) and HorizontalAttack)"
         },
         {
-            "Name": "[AC A-4] There's Nothing Here Coin Pot",
+            "Name": "[AC A-4] There is Nothing Here Coin Pot",
             "ID": "field12A3g",
             "LocationType": "Pot",
             "Logic": "True"

@@ -564,16 +564,14 @@ AP_FILLER: list[tuple[str, ItemID]] = [
 
 AP_FILLER_NAMES: frozenset[str] = frozenset(name for name, _ in AP_FILLER)
 
-# The intended distribution per 40 items (Total = 40)
 FILLER_DISTRIBUTION = [
-    ("1 Coin", 3), ("10 Coins", 6), ("30 Coins", 8),
-    ("50 Coins", 3), ("80 Coins", 2), ("100 Coins", 1),
-    ("1 Weight", 4), ("5 Weights", 10), ("10 Weights", 2), ("20 Weights", 1)
+    ("1 Coin", 15), ("10 Coins", 20), ("30 Coins", 15),
+    ("50 Coins", 6), ("80 Coins", 3), ("100 Coins", 1),
+    ("1 Weight", 24), ("5 Weights", 12), ("10 Weights", 3), ("20 Weights", 1)
 ]
 
-# Pot filler distribution (49 pots up to Annwfn)
+# Pot filler distribution
 POT_FILLER_DISTRIBUTION = [
-    # ... + Hall of Malice 16 + Eternal Prison Gloom (field14, 18) + Doom (field15, 12) = 307
     ("1 Weight", 39),            # 38 + 1
     ("10 Coins", 74),           # 67 + 7
     ("30 Coins", 31),           # 30 + 1
