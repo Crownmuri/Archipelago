@@ -793,7 +793,7 @@ class ItemID(IntEnum):
     Scylla = 520
     GlasyaLabolas = 521
     Griffin = 522
-    VucubCaquiz = 523
+    VucubCaquix = 523
     Jalandhara = 524
     Sekhmet = 525
     AngraMainyu = 526
@@ -1082,7 +1082,7 @@ class LocationID(IntEnum):
     Scylla = 273
     GlasyaLabolas = 274
     Griffin = 275
-    VucubCaquiz = 276
+    VucubCaquix = 276
     Jalandhara = 277
     Sekhmet = 278
     AngraMainyu = 279
@@ -2143,7 +2143,7 @@ AP_LOCATION_NAMES = {
     "[IT C-4] Mino Shop 1": LocationID.MinoShop1,
     "[IT C-4] Mino Shop 2": LocationID.MinoShop2,
     "[IT C-4] Mino Shop 3": LocationID.MinoShop3,
-    "[IT E-1] Lower Statue Chest (S3)": LocationID.FairyGuildPassChest,
+    "[IT E-1] Lowering Statue Chest (S3)": LocationID.FairyGuildPassChest,
     "[IT E-3] IT Research Papers": LocationID.ResearchIT,
     "[IT E-4] Skull in Background Chest": LocationID.GrappleClawChest,
     "[IT F-4] Sunken Chest": LocationID.SacredOrbChestIT,
@@ -2305,7 +2305,7 @@ AP_LOCATION_NAMES = {
     "[IT C-5] Bombable Wall Coin Pot": LocationID.field04C4,
     "[IT D-5] Above Vidofnir Item Pot": LocationID.field04D4,
     "[IT E-4] Skull in Background Upper Coin Pot": LocationID.field04E3,
-    "[IT B-3] Below Frontside Grail Coin Pot": LocationID.field04B2,
+    "[IT B-3] Below Frontside Grail Item Pot": LocationID.field04B2,
     "[IT C-3] Surtr's Antechamber Item Pot": LocationID.field04C2,
     "[IT A-1] BTK Coin Pot": LocationID.field04A0,
     "[IT A-2] Altar of Life Item Pot": LocationID.field04A1,
@@ -2314,7 +2314,7 @@ AP_LOCATION_NAMES = {
     "[IT B-4] Vedfolnir Left Item Pot": LocationID.field04B3_1,
     "[IT B-4] Vedfolnir Right Item Pot": LocationID.field04B3_2,
     "[IT C-1] Ratatoskr Surprise Item Pot": LocationID.field04C0,
-    "[IT E-1] Lower Statue Item Pot": LocationID.field04E0,
+    "[IT E-1] Lowering Statue Item Pot": LocationID.field04E0,
     "[IT E-2] Great Bird Nest Item Pot": LocationID.field04E1,
     "[IT E-3] Niflheim Stalactites Item Pot": LocationID.field04E2,
     "[IT F-1] Backside Grail Hidden Coin Pot #1": LocationID.field04F0g,
@@ -2368,7 +2368,7 @@ AP_LOCATION_NAMES = {
     "[GOTD B-5] Thoth's Upper Coin Chest": LocationID.field07B4,
     "[GOTD B-5] Thoth's Lower Item Chest": LocationID.field07B4y,
     "[GOTD B-6] Dwarves' Puzzle Item Pot": LocationID.field07B5,
-    "[GOTD C-1] Unicorn Reward Coin Pot": LocationID.field07C0,
+    "[GOTD C-1] Unicorn Coin Pot": LocationID.field07C0,
     "[GOTD C-2] Pre-Unicorn Item Pot": LocationID.field07C1s,
     "[GOTD C-2] Pre-Unicorn Weight Pot": LocationID.field07C1,
     "[GOTD C-4] Soul Gate Coin Pot": LocationID.field07C3,
@@ -2518,7 +2518,7 @@ AP_LOCATION_NAMES = {
     "[EPG D-6] Key Fairy Item Pot": LocationID.field14D5,
     "[EPG D-6] Key Fairy Coin Pot": LocationID.field14D5g,
     "[EPG E-1] Second Hell Gate Approach Item Pot": LocationID.field14E0,
-    "[EPG E-3] Fifth Hell Gate Exit Coin Pot": LocationID.field14E2,
+    "[EPG E-3] Fourth Hell Gate Exit Coin Pot": LocationID.field14E2,
     "[EPG F-2] Right of Prison Cells Coin Pot": LocationID.field14F1,
     # --- Eternal Prison Gloom Pots (field14) ---
     "[EPD A-4] Maze Clear Coin Pot": LocationID.field15A3g,
@@ -4225,7 +4225,7 @@ LOGIC_FLAG_LOCATION_IDS = {
     LocationID.Scylla: "Scylla",
     LocationID.GlasyaLabolas: "Glasya Labolas",
     LocationID.Griffin: "Griffin",
-    LocationID.VucubCaquiz: "Vucub Caquiz",
+    LocationID.VucubCaquix: "Vucub Caquix",
     LocationID.Jalandhara: "Jalandhara",
     LocationID.Sekhmet: "Sekhmet",
     LocationID.AngraMainyu: "Angra Mainyu",
@@ -4300,7 +4300,7 @@ LOGIC_FLAG_ITEM_IDS = {
     ItemID.Scylla,
     ItemID.GlasyaLabolas,
     ItemID.Griffin,
-    ItemID.VucubCaquiz,
+    ItemID.VucubCaquix,
     ItemID.Jalandhara,
     ItemID.Sekhmet,
     ItemID.AngraMainyu,
@@ -4368,7 +4368,7 @@ LOGIC_FLAG_MAP = {
     "Scylla": ItemID.Scylla,
     "Glasya Labolas": ItemID.GlasyaLabolas,
     "Griffin": ItemID.Griffin,
-    "Vucub Caquiz": ItemID.VucubCaquiz,
+    "Vucub Caquix": ItemID.VucubCaquix,
     "Jalandhara": ItemID.Jalandhara,
     "Sekhmet": ItemID.Sekhmet,
     "Angra Mainyu": ItemID.AngraMainyu,

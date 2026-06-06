@@ -1042,7 +1042,7 @@
             "Name": "[ANN G-4] Death's Prison Hidden Coin Pot",
             "ID": "field02G3",
             "LocationType": "Pot",
-            "Logic": "HorizontalAttack and (Has(Feather) or IsDead(Ixtab))"
+            "Logic": "(MeleeAttack or CanUse(Earth Spear) or Has(Claydoll Suit)) and (Has(Feather) or IsDead(Ixtab))"
         },
         {
             "Name": "[ANN F-3] Pre-Kujata Weight Pot",
@@ -1160,7 +1160,7 @@
             "Name": "[IB C-1] Top-Left Weapon Vault Item Pot",
             "ID": "field03C0",
             "LocationType": "Pot",
-            "Logic": "True"
+            "Logic": "Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
         },
         {
             "Name": "[IB B-2] Under Fake Wall Puzzle Item Pot",
@@ -1350,7 +1350,8 @@
             "Name": "[IB F-6] Submerged Sigil Weight Pot",
             "ID": "field03F5",
             "LocationType": "Pot",
-            "Logic": "True"
+            "Logic": "Has(Feather) or Has(Grapple Claw) or IsDead(Cetus)",
+            "TrickyLogic": "True"
         },
         {
             "Name": "[IB G-2] Above Frontside Grail Coin Pot",
@@ -1991,7 +1992,7 @@
             }
         },
         {
-            "Name": "[IT B-3] Below Frontside Grail Coin Pot",
+            "Name": "[IT B-3] Below Frontside Grail Item Pot",
             "ID": "field04B2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
@@ -2000,7 +2001,7 @@
             "Name": "[IT C-3] Surtr's Antechamber Item Pot",
             "ID": "field04C2",
             "LocationType": "Pot",
-            "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(2)))"
+            "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(4)))"
         }
     ],
     "Exits": [
@@ -2043,17 +2044,20 @@
         {
             "Name": "BTK Shop 1",
             "LocationType": "Shop",
-            "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Pistol) or ((CanUse(Chakram) or CanUse(Flare Gun)) and Has(Feather))"
+            "Logic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Bomb) or Has(Claydoll Suit)",
+            "TrickyLogic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol) or Has(Claydoll Suit)"
         },
         {
             "Name": "BTK Shop 2",
             "LocationType": "Shop",
-            "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Pistol) or ((CanUse(Chakram) or CanUse(Flare Gun)) and Has(Feather))"
+            "Logic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Bomb) or Has(Claydoll Suit)",
+            "TrickyLogic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol) or Has(Claydoll Suit)"
         },
         {
             "Name": "BTK Shop 3",
             "LocationType": "Shop",
-            "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Pistol) or ((CanUse(Chakram) or CanUse(Flare Gun)) and Has(Feather))"
+            "Logic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Bomb) or Has(Claydoll Suit)",
+            "TrickyLogic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol) or Has(Claydoll Suit)"
         },
         {
             "Name": "Vedfolnir",
@@ -2159,7 +2163,7 @@
             }
         },
         {
-            "Name": "[IT E-1] Lower Statue Item Pot",
+            "Name": "[IT E-1] Lowering Statue Item Pot",
             "ID": "field04E0",
             "LocationType": "Pot",
             "Logic": "True"
@@ -2587,7 +2591,7 @@
             "Name": "[SFG D-5] Titanomachy Monument Item Pot",
             "ID": "field06D4",
             "LocationType": "Pot",
-            "Logic": "HorizontalAttack or Has(Origin Sigil)"
+            "Logic": "Has(Origin Sigil) or Glitch(Costume Clip) or HorizontalAttack"
         },
         {
             "Name": "[SFG E-3] Golden Altar Coin Pot",
@@ -2997,7 +3001,7 @@
         "Name": "[GOTD B-3] Aytum's Coin Pot",
         "ID": "field07B2",
         "LocationType": "Pot",
-        "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather))"
+        "Logic": "True"
       },
       {
         "Name": "[GOTD B-4] Death Trap Item Pot",
@@ -3015,7 +3019,7 @@
         "Name": "[GOTD B-5] Thoth's Lower Item Chest",
         "ID": "field07B4y",
         "LocationType": "Pot",
-        "Logic": "True"
+        "Logic": "HorizontalAttack or (Has(Feather) and Has(Bracelet))"
       },
       {
         "Name": "[GOTD B-6] Dwarves' Puzzle Item Pot",
@@ -3024,10 +3028,10 @@
         "Logic": "True"
       },
       {
-        "Name": "[GOTD C-1] Unicorn Reward Coin Pot",
+        "Name": "[GOTD C-1] Unicorn Coin Pot",
         "ID": "field07C0",
         "LocationType": "Pot",
-        "Logic": "IsDead(Unicorn)"
+        "Logic": "HorizontalAttack and (Has(Feather) or CanWarp)"
       },
       {
         "Name": "[GOTD C-2] Pre-Unicorn Item Pot",
@@ -3774,12 +3778,12 @@
         "Logic": "True"
       },
       {
-        "Name": "Vucub Caquiz",
+        "Name": "Vucub Caquix",
         "LocationType": "Miniboss",
         "Logic": "Has(Origin Sigil) and (((Has(Leather Whip) or CanUse(Rolling Shuriken)) and OrbCount(1)) or (Has(Chain Whip) or Has(Rapier) or Has(Axe) or Has(Katana) or Has(Claydoll Suit) or CanUse(Pistol) or CanUse(Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)))",
         "HardLogic": "Has(Origin Sigil)",
         "Item": {
-          "Name": "Vucub Caquiz",
+          "Name": "Vucub Caquix",
           "IsRequired": true
         }
       },
@@ -3796,8 +3800,8 @@
       {
         "Name": "Vritra",
         "LocationType": "Guardian",
-        "Logic": "CanReach(RoY) and (MeleeAttack or Glitch(Costume Clip)) and IsDead(Vucub Caquiz) and (((Has(Leather Whip) or Has(Knife) or Has(Rapier) or CanUse(Rolling Shuriken) or CanUse(Caltrops)) and OrbCount(2)) or ((Has(Chain Whip) or Has(Axe) or Has(Katana) or CanUse(Bomb) or CanUse(Earth Spear) or CanUse(Shuriken)) and OrbCount(1)) or CanUse(Pistol))",
-        "HardLogic": "CanReach(RoY) and (MeleeAttack or Glitch(Costume Clip)) and IsDead(Vucub Caquiz)",
+        "Logic": "CanReach(RoY) and (MeleeAttack or Glitch(Costume Clip)) and IsDead(Vucub Caquix) and (((Has(Leather Whip) or Has(Knife) or Has(Rapier) or CanUse(Rolling Shuriken) or CanUse(Caltrops)) and OrbCount(2)) or ((Has(Chain Whip) or Has(Axe) or Has(Katana) or CanUse(Bomb) or CanUse(Earth Spear) or CanUse(Shuriken)) and OrbCount(1)) or CanUse(Pistol))",
+        "HardLogic": "CanReach(RoY) and (MeleeAttack or Glitch(Costume Clip)) and IsDead(Vucub Caquix)",
         "Item": {
           "Name": "Vritra",
           "IsRequired": true
@@ -3866,7 +3870,7 @@
         "Name": "[VAL C-4] Above Laser Statue Weight Pot",
         "ID": "field10C3-1",
         "LocationType": "Pot",
-        "Logic": "HorizontalAttack"
+        "Logic": "True"
       },
       {
         "Name": "[VAL D-3] Near Third Trickster Item Pot",
@@ -4142,7 +4146,7 @@
             "Name": "[DSLM C-5] Ra's Hideout Item Pot",
             "ID": "field11C4",
             "LocationType": "Pot",
-            "Logic": "True"
+            "Logic": "HorizontalAttack or Has(Grapple Claw)"
         },
         {
             "Name": "[DSLM C-6] Right Winged Statue Item Pot",
@@ -4438,7 +4442,7 @@
             "Name": "[AC C-5] Shortcut Room Item Pot",
             "ID": "field12C4",
             "LocationType": "Pot",
-            "Logic": "True"
+            "Logic": "HorizontalAttack"
         }
     ],
     "Exits": [
@@ -4839,7 +4843,8 @@
         {
             "Name": "Nemean Fur Chest",
             "LocationType": "Chest",
-            "Logic": "IsDead(HoM Left Path) and Has(Feather) and CanStopTime"
+            "Logic": "IsDead(HoM Left Path) and Has(Feather) and CanStopTime",
+            "TrickyLogic": "IsDead(HoM Left Path)"
         },
         {
             "Name": "Crystal Skull Chest HoM",
@@ -5009,13 +5014,13 @@
             "Name": "[EPD C-6] Blikjandabol Lava Drop Coin Pot",
             "ID": "field15C5",
             "LocationType": "Pot",
-            "Logic": "(Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather)))"
+            "Logic": "(HorizontalAttack or OrbCount(3)) and ((Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather))))"
         },
         {
             "Name": "[EPD C-7] Blikjandabol Lava Drop Item Pot",
             "ID": "field15C6",
             "LocationType": "Pot",
-            "Logic": "(Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather)))"
+            "Logic": "(HorizontalAttack or OrbCount(3)) and ((Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather))))"
         },
         {
             "Name": "[EPD D-5] Yuga Wheel Coin Pot",
@@ -5087,7 +5092,7 @@
             "Name": "[EPD C-2] Seventh Hell Gate Approach Coin Pot",
             "ID": "field15B1g",
             "LocationType": "Pot",
-            "Logic": "True"
+            "Logic": "HorizontalAttack"
         },
         {
             "Name": "[EPD C-2] Seventh Hell Gate Approach Item Pot",
@@ -5255,7 +5260,7 @@
         "Name": "[EPG D-1] Gate with Glowing Eyes Item Pot",
         "ID": "field14D0",
         "LocationType": "Pot",
-        "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(6)))"
+        "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Feather) or Has(Ice Cloak) or OrbCount(6)))"
       },
       {
         "Name": "[EPG D-2] Soul Gate Coin Pot",
@@ -5312,7 +5317,7 @@
         "Logic": "Has(Grapple Claw)"
       },
       {
-        "Name": "[EPG E-3] Fifth Hell Gate Exit Coin Pot",
+        "Name": "[EPG E-3] Fourth Hell Gate Exit Coin Pot",
         "ID": "field14E2",
         "LocationType": "Pot",
         "Logic": "HorizontalAttack and (CanUse(Flare Gun) and Has(Feather) and Has(Glove))"
