@@ -329,20 +329,27 @@ class LaMulana2World(World):
         except Exception as e:
             _log(f"[ER-DIAG] diagnostic failed: {e}")
 
-        # ── Original pre_fill logic ───────────────────────────────────
+        # ── Item/location balancing ───────────────────────────────────
         # Count fillable locations for this player
-        locations = [
-            loc for loc in mw.get_unfilled_locations(player)
+        # Top up filler by counting LM2 locations and LM2 items.
+        all_locations = [
+            loc for loc in mw.get_locations(player)
             if loc.player == player
         ]
 
-        # Count items for this player
+        # Locations already holding one of OUR items (locked items + events).
+        own_placed = [
+            loc for loc in all_locations
+            if loc.item is not None and loc.item.player == player
+        ]
+
+        # Our items still waiting in the pool.
         items = [
             item for item in mw.itempool
             if item.player == player
         ]
 
-        missing = len(locations) - len(items)
+        missing = len(all_locations) - len(own_placed) - len(items)
 
         if missing > 0:
             from .items import build_pre_filler
