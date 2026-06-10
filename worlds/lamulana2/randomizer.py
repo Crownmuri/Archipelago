@@ -29,6 +29,7 @@ from .ids import (
     LOGIC_FLAG_LOCATION_IDS,
     LOGIC_FLAG_ITEM_IDS,
     AP_ITEM_PLACEHOLDER,
+    GLOSSARY_ITEM_IDS,
 )
 from .items import (
     build_item_pool,
@@ -1240,6 +1241,11 @@ class LM2RandomizerCore:
                 except KeyError:
                     _log(f"[WARN] Skipping item {loc.item.name} at {loc.name} - no game ID")
                     continue
+                # Own glossary ROM / pot filler: route through the per-location placeholder
+                # so the location's AP mechanism (NPC/Kataribe, mural, chest, …) fires the
+                # check + sold-out; the server echoes the real ROM → DeliverGlossaryRom.
+                if loc.game_location_id in ap_map:
+                    item_id = ap_map[loc.game_location_id]
 
             # Skip logic-only items
             if item_id in LOGIC_FLAG_ITEM_IDS:
@@ -1294,6 +1300,11 @@ class LM2RandomizerCore:
                     item_id = get_game_item_id(loc.item)
                 except:
                     continue
+                # Own glossary ROM / pot filler at a shop has no sold-out/check flag of its
+                # own — route it through the per-location placeholder so the shop's sheet-31
+                # mechanism fires the check + marks sold-out (server echoes the real item).
+                if loc_id in ap_map:
+                    item_id = ap_map[loc_id]
 
             # Skip ItemID.None
             if item_id == ItemID.None_:
@@ -1330,16 +1341,34 @@ class LM2RandomizerCore:
         if hasattr(self, '_cached_ap_placeholder_map'):
             return self._cached_ap_placeholder_map
 
-        foreign_loc_ids = sorted(
+        # Foreign items + our own glossary ROMs / pot filler (ANY location type). The
+        # latter have no per-item sold-out/check flag, so they ride the same sheet-31
+        # placeholder mechanism used for foreign items — the location's AP machinery
+        # (shop, NPC/Kataribe, mural, chest, …) fires the check and the server echoes
+        # the real ROM back → DeliverGlossaryRom. (Chip/freestanding/scan glossary also
+        # works via the scout-based MonsterChipGlossaryPatch; the echo is idempotent.)
+        relevant_loc_ids = sorted(
             (int(loc_id) for loc_id, loc in self.locations.items()
-             if loc.item is not None and loc.item.player != self.player),
+             if loc.item is not None and (
+                 loc.item.player != self.player
+                 or self._is_glosspot_own(loc))),
         )
 
         self._cached_ap_placeholder_map = {
             LocationID(loc_id): AP_ITEM_PLACEHOLDER + idx + 1
-            for idx, loc_id in enumerate(foreign_loc_ids)
+            for idx, loc_id in enumerate(relevant_loc_ids)
         }
         return self._cached_ap_placeholder_map
+
+    def _is_glosspot_own(self, loc) -> bool:
+        """This player's glossary ROM (2000-2251) or pot filler (1001-1307), any location."""
+        if loc.item is None or loc.item.player != self.player:
+            return False
+        code = getattr(loc.item, "code", None)
+        if not isinstance(code, int):
+            return False
+        gid = code - BASE_ITEM_ID
+        return (2000 <= gid <= 2251) or (1001 <= gid <= 1307)
 
     def get_starting_items(self) -> List[ItemID]:
         """

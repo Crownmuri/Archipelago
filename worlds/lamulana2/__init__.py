@@ -22,7 +22,7 @@ from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
 from .options import LM2Options, StartingArea, StartingWeapon
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_PLACED_ITEM_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
@@ -573,6 +573,13 @@ class LaMulana2World(World):
             "potsanity": int(self.options.potsanity),
             "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()} if self.options.potsanity else {},
 
+            # Glossanity — only the PLACED locations are live AP checks (the 173
+            # deferred entries unlock vanilla in-world; mapping their flags would make
+            # every enemy-drop / NPC glossary unlock report a bogus check).
+            "glossanity": int(self.options.glossanity),
+            "glossary_flag_map": {str(k): v for k, v in GLOSSARY_FLAG_MAP.items()
+                                  if k in GLOSSARY_PLACED_ITEM_IDS} if self.options.glossanity else {},
+
             # Per-location display names — see comment above the dict build.
             "location_labels": slot_location_labels,
 
@@ -590,7 +597,7 @@ class LaMulana2World(World):
                 "mantra_placement", "shop_placement",
                 "random_research", "remove_research", "remove_maps",
                 "required_skulls", "remove_excess_skulls", "random_dissonance",
-                "potsanity",
+                "potsanity", "glossanity",
                 "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
                 "game_difficulty",
                 "echidna_difficulty", "costume_clip", "require_fdc",
@@ -856,6 +863,10 @@ class LaMulana2World(World):
 
         # Skip pot locations unless potsanity is enabled
         if loc.location_type == LocationType.Pot and not self.options.potsanity:
+            return False
+
+        # Skip glossary locations unless glossanity is enabled
+        if loc.location_type == LocationType.Glossary and not self.options.glossanity:
             return False
 
         return True

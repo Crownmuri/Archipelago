@@ -867,5 +867,1265 @@
     "id": 190,
     "isRequired": false,
     "shop": true
+  },
+  {
+    "name": "[N] Bat (ROY#001)",
+    "id": 2000,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Skeleton (ROY#002)",
+    "id": 2001,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Carbuncle (ROY#003)",
+    "id": 2002,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fachan (ROY#004)",
+    "id": 2003,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Skvader (ROY#005)",
+    "id": 2004,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ratatoskr (ROY#006)",
+    "id": 2005,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Nidhogg (ROY#007)",
+    "id": 2006,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Fafnir (ROY#008)",
+    "id": 2007,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Black Carbuncle (ROY#009)",
+    "id": 2008,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Sigyn (ROY#010)",
+    "id": 2009,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Vili (ROY#011)",
+    "id": 2010,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ve (ROY#012)",
+    "id": 2011,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Korobock (ROY#013)",
+    "id": 2012,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Trickster (ROY#014)",
+    "id": 2013,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Apsara (ANN#001)",
+    "id": 2014,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Odontotyrannos (ANN#002)",
+    "id": 2015,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Makara (ANN#003)",
+    "id": 2016,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hanuman (ANN#004)",
+    "id": 2017,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Behemoth (ANN#005)",
+    "id": 2018,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Tog (ANN#006)",
+    "id": 2019,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Aghasura (ANN#007)",
+    "id": 2020,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Kaliya (ANN#008)",
+    "id": 2021,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ixtab (ANN#009)",
+    "id": 2022,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Heimdall (ANN#010)",
+    "id": 2023,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Kujata (ANN#011)",
+    "id": 2024,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Frey (ANN#012)",
+    "id": 2025,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Voluspa (ANN#013)",
+    "id": 2026,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Pym (ANN#014)",
+    "id": 2027,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kabandha (IB#001)",
+    "id": 2028,
+    "isRequired": false
+  },
+  {
+    "name": "[N] El Baul (IB#002)",
+    "id": 2029,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Lycanthrope (IB#003)",
+    "id": 2030,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Vimana (IB#004)",
+    "id": 2031,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kraken (IB#005)",
+    "id": 2032,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Cetus (IB#006)",
+    "id": 2033,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Svipdagr (IB#007)",
+    "id": 2034,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Jormungand (IB#008)",
+    "id": 2035,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kubera (IB#009)",
+    "id": 2036,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Soma (IB#010)",
+    "id": 2037,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Yama (IB#011)",
+    "id": 2038,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Alviss (IB#012)",
+    "id": 2039,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Indra (IB#013)",
+    "id": 2040,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Peibalusa (IB#014)",
+    "id": 2041,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hiro Roderick (IB#015)",
+    "id": 2042,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Haja (IB#016)",
+    "id": 2043,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Garm (IT#001)",
+    "id": 2044,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Lindworm (IT#002)",
+    "id": 2045,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Langsuir (IT#003)",
+    "id": 2046,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Muu Shuwuu (IT#004)",
+    "id": 2047,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Jotun (IT#005)",
+    "id": 2048,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Vedfolnir (IT#006)",
+    "id": 2049,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Vidofnir (IT#007)",
+    "id": 2050,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Surtr (IT#008)",
+    "id": 2051,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Sinmara (IT#009)",
+    "id": 2052,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Modgud (IT#010)",
+    "id": 2053,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Inanna (IT#011)",
+    "id": 2054,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Porque Item Shop (IT#012)",
+    "id": 2055,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Mino the Bomb Guy (IT#013)",
+    "id": 2056,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Enimul (IT#014)",
+    "id": 2057,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Einherjar (DF#001)",
+    "id": 2058,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Valkyrie (DF#002)",
+    "id": 2059,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Dokkalfar (DF#003)",
+    "id": 2060,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Vodyanoy (DF#004)",
+    "id": 2061,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gullinbursti (DF#005)",
+    "id": 2062,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Hugin & Munin (DF#006)",
+    "id": 2063,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hermod (DF#007)",
+    "id": 2064,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Brokkr (DF#008)",
+    "id": 2065,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Eitri (DF#009)",
+    "id": 2066,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Tyr (DF#010)",
+    "id": 2067,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Thor (DF#011)",
+    "id": 2068,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Shuhoka (DF#012)",
+    "id": 2069,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Yeti (SFG#001)",
+    "id": 2070,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Huallepen (SFG#002)",
+    "id": 2071,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ungur (SFG#003)",
+    "id": 2072,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Zorya (SFG#004)",
+    "id": 2073,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Baba Yaga (SFG#005)",
+    "id": 2074,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Morrigan (SFG#006)",
+    "id": 2075,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Macha (SFG#007)",
+    "id": 2076,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Nemain (SFG#008)",
+    "id": 2077,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Badhbh Cath (SFG#009)",
+    "id": 2078,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Tezcatlipoca (SFG#010)",
+    "id": 2079,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Balor (SFG#011)",
+    "id": 2080,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Fenrir (SFG#012)",
+    "id": 2081,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gerd (SFG#013)",
+    "id": 2082,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Thrymr (SFG#014)",
+    "id": 2083,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Mnemosyne's Remains (SFG#015)",
+    "id": 2084,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hydlit (SFG#016)",
+    "id": 2085,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fairy Guild General (SFG#017)",
+    "id": 2086,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Asp (GOTD#001)",
+    "id": 2087,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Red Cap (GOTD#002)",
+    "id": 2088,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Mask (GOTD#003)",
+    "id": 2089,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Medjed (GOTD#004)",
+    "id": 2090,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Unicorn (GOTD#005)",
+    "id": 2091,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Amen (GOTD#006)",
+    "id": 2092,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Nekhbet (GOTD#007)",
+    "id": 2093,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Isis (GOTD#008)",
+    "id": 2094,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Horus (GOTD#009)",
+    "id": 2095,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Neftis (GOTD#010)",
+    "id": 2096,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Thoth (GOTD#011)",
+    "id": 2097,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Aytum (GOTD#012)",
+    "id": 2098,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Edimmu (TS#001)",
+    "id": 2099,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Nurikabe (TS#002)",
+    "id": 2100,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Enenra (TS#003)",
+    "id": 2101,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Guhin (TS#004)",
+    "id": 2102,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kuda-gitsune (TS#005)",
+    "id": 2103,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Blue Skeleton (TS#006)",
+    "id": 2104,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Raijin & Fujin (TS#007)",
+    "id": 2105,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Daji (TS#008)",
+    "id": 2106,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Belial (TS#009)",
+    "id": 2107,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kami-musubi (TS#010)",
+    "id": 2108,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Izanagi (TS#011)",
+    "id": 2109,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Shitateruhime (TS#012)",
+    "id": 2110,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Amenotokotachi (TS#013)",
+    "id": 2111,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ash Geen (TS#014)",
+    "id": 2112,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Harpy (HL#001)",
+    "id": 2113,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Lizardman (HL#002)",
+    "id": 2114,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Andrealphus (HL#003)",
+    "id": 2115,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Arachne (HL#004)",
+    "id": 2116,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Scylla (HL#005)",
+    "id": 2117,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Glasya-Labolas (HL#006)",
+    "id": 2118,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Griffin (HL#007)",
+    "id": 2119,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Hermes (HL#008)",
+    "id": 2120,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Eros (HL#009)",
+    "id": 2121,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Orpheus (HL#010)",
+    "id": 2122,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Baphomet (HL#011)",
+    "id": 2123,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Megarock (HL#012)",
+    "id": 2124,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gandharv (VAL#001)",
+    "id": 2125,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kinnara (VAL#002)",
+    "id": 2126,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Rakshasa (VAL#003)",
+    "id": 2127,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Carbunco (VAL#004)",
+    "id": 2128,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Cabracan (VAL#005)",
+    "id": 2129,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Zipakna (VAL#006)",
+    "id": 2130,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Vucub Caquix (VAL#007)",
+    "id": 2131,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Jalandhara (VAL#008)",
+    "id": 2132,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Vritra (VAL#009)",
+    "id": 2133,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hoenir (VAL#010)",
+    "id": 2134,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Brihaspathi (VAL#011)",
+    "id": 2135,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Pushan (VAL#012)",
+    "id": 2136,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Bhaga (VAL#013)",
+    "id": 2137,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Bargain Duck (VAL#014)",
+    "id": 2138,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Anunnaki (DSLM#001)",
+    "id": 2139,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ba (DSLM#002)",
+    "id": 2140,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Basilisk (DSLM#003)",
+    "id": 2141,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Scarabaeus (DSLM#004)",
+    "id": 2142,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Sekhmet (DSLM#005)",
+    "id": 2143,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Angra Mainyu (DSLM#006)",
+    "id": 2144,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ammit (DSLM#007)",
+    "id": 2145,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Aten-Ra (DSLM#008)",
+    "id": 2146,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Set (DSLM#009)",
+    "id": 2147,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Amunet (DSLM#010)",
+    "id": 2148,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Nun (DSLM#011)",
+    "id": 2149,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ra (DSLM#012)",
+    "id": 2150,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Kero (DSLM#013)",
+    "id": 2151,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fairy Guild Lieutenant (DSLM#014)",
+    "id": 2152,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Soul (DSLM#015)",
+    "id": 2153,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Simurgh (AC#001)",
+    "id": 2154,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Zhulong (AC#002)",
+    "id": 2155,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Azhdaha (AC#003)",
+    "id": 2156,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Galla (AC#004)",
+    "id": 2157,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ki-sikil-lil-la-ke (AC#005)",
+    "id": 2158,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Anzu (AC#006)",
+    "id": 2159,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Anu (AC#007)",
+    "id": 2160,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Pangu (AC#008)",
+    "id": 2161,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Shennong (AC#009)",
+    "id": 2162,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Zhuanxu (AC#010)",
+    "id": 2163,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Venum (AC#011)",
+    "id": 2164,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Sykick (AC#012)",
+    "id": 2165,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Minotaur (HOM#001)",
+    "id": 2166,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Mammon (HOM#002)",
+    "id": 2167,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Wyvern (HOM#003)",
+    "id": 2168,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Sphinx (HOM#004)",
+    "id": 2169,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Delphyne (HOM#005)",
+    "id": 2170,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Lernaean Hydra (HOM#006)",
+    "id": 2171,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Nemean Lion (HOM#007)",
+    "id": 2172,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Colchian Dragon (HOM#008)",
+    "id": 2173,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ladon (HOM#009)",
+    "id": 2174,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Chimera (HOM#010)",
+    "id": 2175,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Phaia (HOM#011)",
+    "id": 2176,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Karkinos (HOM#012)",
+    "id": 2177,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Orthrus (HOM#013)",
+    "id": 2178,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Cerberus (HOM#014)",
+    "id": 2179,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Echidna (HOM#015)",
+    "id": 2180,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Eurytus (HOM#016)",
+    "id": 2181,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Porphyrion (HOM#017)",
+    "id": 2182,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Alcyoneus (HOM#018)",
+    "id": 2183,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fairylan (HOM#019)",
+    "id": 2184,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Hekatonkheires (EP#001)",
+    "id": 2185,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Avnas (EP#002)",
+    "id": 2186,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Erinyes (EP#003)",
+    "id": 2187,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Cacus (EP#004)",
+    "id": 2188,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Lucifer (EP#005)",
+    "id": 2189,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Lucifuge Rofocale (EP#006)",
+    "id": 2190,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Hraesvelgr (EP#007)",
+    "id": 2191,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Ajisukitakahikone (EP#008)",
+    "id": 2192,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Hel (EP#009)",
+    "id": 2193,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ereshkigal (EP#010)",
+    "id": 2194,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hades (EP#011)",
+    "id": 2195,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Charon (EP#012)",
+    "id": 2196,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Eurydice (EP#013)",
+    "id": 2197,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Izanami (EP#014)",
+    "id": 2198,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Sakit (EP#015)",
+    "id": 2199,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Neti (EP#016)",
+    "id": 2200,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Anubis (EP#017)",
+    "id": 2201,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Osiris (EP#018)",
+    "id": 2202,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fairy Guild Corporal (EP#019)",
+    "id": 2203,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Urd (SH#001)",
+    "id": 2204,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Verdandi (SH#002)",
+    "id": 2205,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Skuld (SH#003)",
+    "id": 2206,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Dvergr (SH#004)",
+    "id": 2207,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Ginnungagap (SH#005)",
+    "id": 2208,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Muspell (SH#006)",
+    "id": 2209,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Managarmr (SH#007)",
+    "id": 2210,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Berserker (SH#008)",
+    "id": 2211,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fjalar (SH#009)",
+    "id": 2212,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] 9th Child (SH#010)",
+    "id": 2213,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Lumisa Kosugi (MC#001)",
+    "id": 2214,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Mulbruk (MC#002)",
+    "id": 2215,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Elder Xelpud (MC#003)",
+    "id": 2216,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Lemeza Kosugi (MC#004)",
+    "id": 2217,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Shawn Kosugi (MC#005)",
+    "id": 2218,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Alsedana (MC#006)",
+    "id": 2219,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Giltoriyo (MC#007)",
+    "id": 2220,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Fobos (MC#008)",
+    "id": 2221,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Samaranta (MC#009)",
+    "id": 2222,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Nebur (MC#010)",
+    "id": 2223,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Sidro (MC#011)",
+    "id": 2224,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Modro (MC#012)",
+    "id": 2225,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Hiner (MC#013)",
+    "id": 2226,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Freya (MC#014)",
+    "id": 2227,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Eir (MC#015)",
+    "id": 2228,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Kara (MC#016)",
+    "id": 2229,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Alruna (MC#017)",
+    "id": 2230,
+    "isRequired": false
+  },
+  {
+    "name": "[SR] Herja (MC#018)",
+    "id": 2231,
+    "isRequired": false
+  },
+  {
+    "name": "[UR] Gyonin King (MC#019)",
+    "id": 2232,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Nijimasu (MC#020)",
+    "id": 2233,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Sanma (MC#021)",
+    "id": 2234,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Sawara (MC#022)",
+    "id": 2235,
+    "isRequired": false
+  },
+  {
+    "name": "[R] Nodoguro (MC#023)",
+    "id": 2236,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gyonin Tribe (DLC#001)",
+    "id": 2237,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gyonin the Vogue (DLC#002)",
+    "id": 2238,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gyonin Flight Test Model (DLC#003)",
+    "id": 2239,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fishbone Calcium (DLC#004)",
+    "id": 2240,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gyonin Pestirylium (DLC#005)",
+    "id": 2241,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Gyo-balloon ~Strawberry Flavor~ (DLC#006)",
+    "id": 2242,
+    "isRequired": false
+  },
+  {
+    "name": "[N] Fish Wall'22 (DLC#007)",
+    "id": 2243,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #008 (DLC#008)",
+    "id": 2244,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #009 (DLC#009)",
+    "id": 2245,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #010 (DLC#010)",
+    "id": 2246,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #011 (DLC#011)",
+    "id": 2247,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #012 (DLC#012)",
+    "id": 2248,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #013 (DLC#013)",
+    "id": 2249,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #014 (DLC#014)",
+    "id": 2250,
+    "isRequired": false
+  },
+  {
+    "name": "[?] Unknown extra #015 (DLC#015)",
+    "id": 2251,
+    "isRequired": false
   }
 ]

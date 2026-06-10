@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, GLOSSARY_PLACED_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP
 from .locations import LocationType
 
 # ============================================================
@@ -315,7 +315,7 @@ def get_game_item_id(item: Item) -> ItemID:
             f"Logic flag item '{item.name}' has no game ItemID (code=None)"
         )
     
-    # Normal LM2 items
+    # Normal LM2 items (glossary ROMs are now real ItemID members — no special-casing)
     for item_def in ITEM_DEFS:
         if item.code == BASE_ITEM_ID + item_def.game_id:
             return ItemID(item_def.game_id)
@@ -401,7 +401,16 @@ def build_item_pool(world) -> List[Item]:
         starting_items.add(world.starting_weapon)
 
     for item_def in ITEM_DEFS:
-        
+
+        # glossary ROMs: pool the placed (Freestanding+Scannable) ones as filler
+        # when glossanity is on; the rest stay defined-but-unpooled until placed.
+        if item_def.game_id in GLOSSARY_ITEM_IDS:
+            if world.options.glossanity and item_def.game_id in GLOSSARY_PLACED_ITEM_IDS:
+                pool.append(LM2Item(name=item_def.name,
+                                    classification=ItemClassification.filler,
+                                    code=item_def.ap_id, player=world.player))
+            continue
+
         game_item_id = ItemID(item_def.game_id)
         
         # Skip starting items

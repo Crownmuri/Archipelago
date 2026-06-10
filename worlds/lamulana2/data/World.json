@@ -135,6 +135,24 @@
             "ID": "field01E2-2",
             "LocationType": "Pot",
             "Logic": "Has(Feather)"
+        },
+        {
+            "Name": "[VOD C-4] Scannable Glossary Above Hot Spring",
+            "ID": "player3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[MC] NPC Glossary (Sidro)",
+            "ID": "talk79",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[MC] NPC Glossary (Modro)",
+            "ID": "talk80",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -181,7 +199,13 @@
         "Name": "Child Mantra Mural",
         "LocationType": "Mural",
         "Logic": "Has(Snapshot) and CanChant(Mother) and CanChant(Wind) and CanWarp"
-      }
+      },
+        {
+            "Name": "[IC B-1] Freestanding Glossary (next to spikes near)",
+            "ID": "charactor1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -249,6 +273,30 @@
             "ID": "fieldL00G2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[GG D-2] Freestanding Glossary (double jump up top)",
+            "ID": "player1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GG E-2] Freestanding Glossary (Far Right)",
+            "ID": "charactor3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GG] Freestanding Glossary (Door to Eden Lower)",
+            "ID": "charactor0",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[MC B-4] NPC Glossary (Hiner)",
+            "ID": "talk81",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -332,6 +380,12 @@
             "ID": "fieldL02C4",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[MOG C-3] Freestanding Glossary (Behind the pot double)",
+            "ID": "player2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -381,6 +435,12 @@
         "Name": "Freyas Item",
         "LocationType": "Dialogue",
         "Logic": "True"
+      },
+      {
+        "Name": "[EC B-1] Scannable Glossary Behind Rubble",
+        "ID": "charactor5",
+        "LocationType": "Glossary",
+        "Logic": "Has(Hand Scanner)"
       }
     ],
     "Exits": [
@@ -406,7 +466,13 @@
         "Name": "Fobos Item 2",
         "LocationType": "Dialogue",
         "Logic": "SkullCount(1)"
-      }
+      },
+        {
+            "Name": "[GI C-1] Freestanding Glossary (requires Feather)",
+            "ID": "charactor2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -537,6 +603,66 @@
             "ID": "field00G0",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Bat)",
+            "ID": "enemyC0",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Skeleton)",
+            "ID": "enemyC3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Carbuncle)",
+            "ID": "enemyF00-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Fachan)",
+            "ID": "enemyF00-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Skvader)",
+            "ID": "enemyF00-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY] Enemy Glossary (Black Carbuncle)",
+            "ID": "enemyC1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY B-3] NPC Glossary (Sigyn)",
+            "ID": "talk01",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY B-4] Scannable Glossary (inside wall above the)",
+            "ID": "charactor7",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH F-2] Scannable Glossary (DURING ESCAPE)",
+            "ID": "lastRG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EC B-1] Scannable Glossary Behind Rubble",
+            "ID": "charactor5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -633,6 +759,12 @@
             "ID": "field00E3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ROY E-4] NPC Glossary (Vili)",
+            "ID": "talk02",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -703,6 +835,36 @@
             "ID": "field00E5",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[ROY C-5] Freestanding Glossary in Breakable Wall",
+            "ID": "enemyRG",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY E-5] Freestanding Glossary (wall)",
+            "ID": "field00RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY C-4] Freestanding Glossary in Opened Wall",
+            "ID": "Guardian00",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY E-6] NPC Glossary (Ve)",
+            "ID": "talk03",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ROY C-5] NPC Glossary (Korobock)",
+            "ID": "talk04",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -824,7 +986,7 @@
             "Name": "[ANN D-1] Kaliya's Item Pot",
             "ID": "field02D0",
             "LocationType": "Pot",
-            "Logic": "IsDead(Kaliya) or (Has(Feather) and CanWarp)"
+            "Logic": "CanUse(Rolling Shuriken)"
         },
         {
             "Name": "[ANN C-3] Kukulkan's Grail Coin Pot",
@@ -891,6 +1053,84 @@
             "ID": "field02D4-2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Apsara)",
+            "ID": "enemyF02-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Odontotyrannos)",
+            "ID": "enemyF02-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Makara)",
+            "ID": "enemyF02-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Hanuman)",
+            "ID": "enemyF02-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Behemoth)",
+            "ID": "enemyF02-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Tog)",
+            "ID": "enemyF02-6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW] Enemy Glossary (Aghasura)",
+            "ID": "enemyF02-7",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW D-1] Freestanding Glossary (Lower Left)",
+            "ID": "field02RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW D-5] Freestanding Glossary (Behind Skull in the)",
+            "ID": "field02RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW B-5] Freestanding Glossary (wall top Right)",
+            "ID": "field02RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW F-2] Freestanding Glossary (wall lower left)",
+            "ID": "Guardian02",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW C-2] Freestanding Glossary (wall Lower Left)",
+            "ID": "charactor6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[ANW D-1] NPC Glossary (Pym)",
+            "ID": "talk06",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1049,6 +1289,12 @@
             "ID": "field02F1",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[ANW D-4] NPC Glossary (Voluspa)",
+            "ID": "talk05",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1117,6 +1363,12 @@
             "ID": "field03E0",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[IB E-1] NPC Glossary (Peibalusa)",
+            "ID": "talk12",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1173,6 +1425,12 @@
             "ID": "field03C1",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[IB B-2] NPC Glossary (Kubera)",
+            "ID": "talk07",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1377,7 +1635,73 @@
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
         }
-
+,
+        {
+            "Name": "[IB] Enemy Glossary (Kabandha)",
+            "ID": "enemyF03-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB] Enemy Glossary (El Baul)",
+            "ID": "enemyC2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB] Enemy Glossary (Lycanthrope)",
+            "ID": "enemyF03-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB] Enemy Glossary (Vimana)",
+            "ID": "enemyF03-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB] Enemy Glossary (Kraken)",
+            "ID": "enemyF04-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB G-1] Freestanding Glossary (Underwater lower left side)",
+            "ID": "field03RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB H-7] Freestanding Glossary (fall down the right)",
+            "ID": "Guardian04",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB F-2] NPC Glossary (Soma)",
+            "ID": "talk08",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB E-6] NPC Glossary (Yama)",
+            "ID": "talk09",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB D-3] Freestanding Glossary (on a platform)",
+            "ID": "talk11",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IB G-4] NPC Glossary (Haja)",
+            "ID": "talk14",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -1486,6 +1810,12 @@
             "ID": "fieldL00W3",
             "LocationType": "Pot",
             "Logic": "(IsDead(Svipdagr) and Has(Life Sigil) and CanUse(Earth Spear)) or Glitch(Costume Clip)"
+        },
+        {
+            "Name": "[IB G-6] NPC Glossary (Hiro Roderick)",
+            "ID": "talk13",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1552,6 +1882,12 @@
             "ID": "field03B4-2",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[IB B-6] Freestanding Glossary (wall on the right)",
+            "ID": "field03RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1676,6 +2012,12 @@
             "ID": "field03G6",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[IB G-7] NPC Glossary (Alviss)",
+            "ID": "talk10",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -1910,7 +2252,6 @@
             "LocationType": "Chest",
             "Logic": "True"
         },
-
         {
             "Name": "[IT C-4] Mino Center Item Pot",
             "ID": "field04C3-2",
@@ -1952,6 +2293,60 @@
             "ID": "field04E3",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[IT] Enemy Glossary (Garm)",
+            "ID": "enemyF04-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT] Enemy Glossary (Lindworm)",
+            "ID": "enemyF04-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT] Enemy Glossary (Langsuir)",
+            "ID": "enemyF04-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT] Enemy Glossary (Muu Shuwuu)",
+            "ID": "enemyF04-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT C-2] Scannable Glossary (foot of the left)",
+            "ID": "enemyF04-6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT B-1] Freestanding Glossary (ground on the left)",
+            "ID": "field04RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT C-5] Scannable Glossary (Skeleton in the poison)",
+            "ID": "field04RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT C-4] NPC Glossary (Mino the Bomb Guy)",
+            "ID": "talk19",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH E-4] Scannable Glossary (DURING ESCAPE)",
+            "ID": "lastRG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2002,6 +2397,12 @@
             "ID": "field04C2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(4)))"
+        },
+        {
+            "Name": "[IT C-3] NPC Glossary (Sinmara)",
+            "ID": "talk15",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2111,6 +2512,12 @@
             "ID": "field04C0",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[IT A-1] NPC Glossary (Porque Item Shop)",
+            "ID": "talk18",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2203,6 +2610,30 @@
             "ID": "field04G0g",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack or (CanUse(Flare Gun) and OrbCount(1) and (Has(Anchor) or Has(Fish Suit)))"
+        },
+        {
+            "Name": "[IT E-2] Scannable Glossary (left side of Hot)",
+            "ID": "Guardian06",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT F-3] NPC Glossary (Modgud)",
+            "ID": "talk16",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT E-1] NPC Glossary (Inanna)",
+            "ID": "talk17",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[IT E-2] NPC Glossary (Enimul)",
+            "ID": "talk20",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2360,6 +2791,24 @@
             "ID": "field05E3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[DF D-4] NPC Glossary (Hermod)",
+            "ID": "talk21",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF E-4] NPC Glossary (Tyr)",
+            "ID": "talk24",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF E-4] Freestanding Glossary (wall lower left)",
+            "ID": "charactor8",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2463,6 +2912,60 @@
             "ID": "field05C2",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[DF] Enemy Glossary (Einherjar)",
+            "ID": "enemyF05-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF] Enemy Glossary (Valkyrie)",
+            "ID": "enemyF05-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF] Enemy Glossary (Dokkalfar)",
+            "ID": "enemyF05-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF] Enemy Glossary (Vodyanoy)",
+            "ID": "enemyF05-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF] Enemy Glossary (Gullinbursti)",
+            "ID": "enemyF05-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF D-5] Freestanding Glossary (lower right wall)",
+            "ID": "field05RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF A-3] NPC Glossary (Brokkr)",
+            "ID": "talk22",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF A-3] NPC Glossary (Eitri)",
+            "ID": "talk23",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DF B-5] NPC Glossary (Shuhoka)",
+            "ID": "talk26",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2511,6 +3014,12 @@
             "ID": "field05D1",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[DF C-2] NPC Glossary (Thor)",
+            "ID": "talk25",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2622,6 +3131,90 @@
             "ID": "field06E4",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[SFG] Enemy Glossary (Yeti)",
+            "ID": "enemyF06-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG] Enemy Glossary (Huallepen)",
+            "ID": "enemyF06-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG] Enemy Glossary (Ungur)",
+            "ID": "enemyF06-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG] Enemy Glossary (Zorya)",
+            "ID": "enemyF06-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG] Enemy Glossary (Baba Yaga)",
+            "ID": "enemyF06-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG E-4] Freestanding Glossary (Right side of the)",
+            "ID": "enemyC4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG D-5] Freestanding Glossary (Inside the broken pillar)",
+            "ID": "enemyC6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG D-4] Freestanding Glossary (Inside the block in)",
+            "ID": "field06RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG A-1] Freestanding Glossary (Tezcatlipoca)",
+            "ID": "field06RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG E-4] NPC Glossary (Gerd)",
+            "ID": "talk27",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG D-5] NPC Glossary (Thrymr)",
+            "ID": "talk28",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG B-4] NPC Glossary (Mnemosyne's Remains)",
+            "ID": "talk29",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG A-5] NPC Glossary (Hydlit)",
+            "ID": "talk30",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG C-4] NPC Glossary (Fairy Guild General)",
+            "ID": "talk31",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2697,6 +3290,18 @@
             "ID": "field06D6",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Ring))"
+        },
+        {
+            "Name": "[SFG B-5] Freestanding Glossary (the snow crouch under)",
+            "ID": "enemyC5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SFG D-7] Freestanding Glossary (Wall above the spikes)",
+            "ID": "field06RG4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2751,6 +3356,12 @@
             "ID": "field06add1",
             "LocationType": "Pot",
             "Logic": "Has(Katana) or Has(Axe) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)) or (CanUse(Flare Gun) and (Has(Rapier) or Has(Knife) or CanUse(Rolling Shuriken)))"
+        },
+        {
+            "Name": "[SFG A-4] Freestanding Glossary (wall at bottom of)",
+            "ID": "charactor9",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -2798,6 +3409,12 @@
             "ID": "field06C1",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[SFG C-2] Freestanding Glossary (down inside pillar on)",
+            "ID": "field06RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3104,6 +3721,84 @@
             "ID": "field07F4f",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[GD] Enemy Glossary (Asp)",
+            "ID": "enemyF07-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD] Enemy Glossary (Red Cap)",
+            "ID": "enemyF07-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD] Enemy Glossary (Mask)",
+            "ID": "enemyF07-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD] Enemy Glossary (Medjed)",
+            "ID": "enemyF07-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD D-6] Freestanding Glossary (Wall in the Centre)",
+            "ID": "field07RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD B-2] NPC Glossary (Amen)",
+            "ID": "talk32",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD A-4] NPC Glossary (Nekhbet)",
+            "ID": "talk33",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD D-4] NPC Glossary (Isis)",
+            "ID": "talk34",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD E-5] NPC Glossary (Horus)",
+            "ID": "talk35",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD D-6] NPC Glossary (Neftis)",
+            "ID": "talk36",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD B-5] NPC Glossary (Thoth)",
+            "ID": "talk37",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD B-3] NPC Glossary (Aytum)",
+            "ID": "talk38",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[GD B-3] Freestanding Glossary (Bottom of spike pit)",
+            "ID": "charactor10",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3257,6 +3952,66 @@
             "ID": "field08F2",
             "LocationType": "Pot",
             "Logic": "IsDead(Raijin and Fujin)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Edimmu)",
+            "ID": "enemyF12-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Nurikabe)",
+            "ID": "enemyF08-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Enenra)",
+            "ID": "enemyF08-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Guhin)",
+            "ID": "enemyF08-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Kuda-gitsune)",
+            "ID": "enemyF08-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS] Enemy Glossary (Blue Skeleton)",
+            "ID": "enemyC7",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS E-3] Freestanding Glossary (Behind Dragon lower left)",
+            "ID": "field08RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS E-6] Freestanding Glossary (top left wall from)",
+            "ID": "field08RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS D-4] Freestanding Glossary (wall bottom right)",
+            "ID": "field08RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS D-1] NPC Glossary (Kami-musubi)",
+            "ID": "talk39",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3327,6 +4082,18 @@
             "ID": "field08C3",
             "LocationType": "Pot",
             "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
+        },
+        {
+            "Name": "[TS C-3] NPC Glossary (Izanagi)",
+            "ID": "talk40",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS C-4] NPC Glossary (Ash Geen)",
+            "ID": "talk43",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3426,6 +4193,18 @@
             "ID": "field08C6",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[TS D-7] NPC Glossary (Shitateruhime)",
+            "ID": "talk41",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[TS D-6] NPC Glossary (Amenotokotachi)",
+            "ID": "talk42",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3473,6 +4252,12 @@
             "ID": "field08B0",
             "LocationType": "Pot",
             "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(6))"
+        },
+        {
+            "Name": "[TS B-1] Scannable Glossary (chip in magma left)",
+            "ID": "player4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3586,7 +4371,61 @@
         "ID": "field09E1",
         "LocationType": "Pot",
         "Logic": "True"
-      }
+      },
+        {
+            "Name": "[HL] Enemy Glossary (Harpy)",
+            "ID": "enemyF09-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL] Enemy Glossary (Lizardman)",
+            "ID": "enemyF09-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL] Enemy Glossary (Andrealphus)",
+            "ID": "enemyF09-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL D-5] Freestanding Glossary (Behind face on the)",
+            "ID": "field09RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL C-5] NPC Glossary (Hermes)",
+            "ID": "talk44",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL A-3] NPC Glossary (Eros)",
+            "ID": "talk45",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL A-2] NPC Glossary (Orpheus)",
+            "ID": "talk46",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL B-1] NPC Glossary (Baphomet)",
+            "ID": "talk47",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL A-3] NPC Glossary (Megarock)",
+            "ID": "talk48",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -3689,6 +4528,18 @@
             "ID": "field09C1",
             "LocationType": "Pot",
             "Logic": "IsDead(Glasya Labolas) and HorizontalAttack"
+        },
+        {
+            "Name": "[HL C-2] Freestanding Glossary (Top right)",
+            "ID": "field09RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HL E-3] Scannable Glossary (down far right from)",
+            "ID": "field09RG4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3725,6 +4576,12 @@
             "ID": "field09A4y",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack and CanWarp"
+        },
+        {
+            "Name": "[HL B-5] Freestanding Glossary (wall lower left)",
+            "ID": "field09RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -3889,7 +4746,97 @@
         "ID": "field10D3-2",
         "LocationType": "Pot",
         "Logic": "HorizontalAttack"
-      }
+      },
+        {
+            "Name": "[VAL] Enemy Glossary (Gandharv)",
+            "ID": "enemyF10-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL] Enemy Glossary (Kinnara)",
+            "ID": "enemyF10-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL] Enemy Glossary (Rakshasa)",
+            "ID": "enemyF10-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL] Enemy Glossary (Carbunco)",
+            "ID": "enemyF10-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL] Enemy Glossary (Cabracan)",
+            "ID": "enemyF10-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL] Enemy Glossary (Zipakna)",
+            "ID": "enemyF10-6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL A-2] Freestanding Glossary (right wall just above)",
+            "ID": "field10RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL B-4] Scannable Glossary (chip just right of)",
+            "ID": "field10RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL D-3] Freestanding Glossary (Behind Pot top right)",
+            "ID": "Guardian01",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL A-3] NPC Glossary (Hoenir)",
+            "ID": "talk49",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL D-3] NPC Glossary (Brihaspathi)",
+            "ID": "talk50",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL C-1] NPC Glossary (Pushan)",
+            "ID": "talk51",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL A-4] NPC Glossary (Bhaga)",
+            "ID": "talk52",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL D-4] NPC Glossary (Bargain Duck)",
+            "ID": "talk53",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[VAL A-4] Freestanding Glossary (floor switch glossary in)",
+            "ID": "charactor4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -4189,6 +5136,96 @@
             "ID": "field11E3",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[DSLM C-1] Scannable Glossary (chip upper right of)",
+            "ID": "enemyF11-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] Enemy Glossary (Ba)",
+            "ID": "enemyF11-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] Enemy Glossary (Basilisk)",
+            "ID": "enemyF11-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] Enemy Glossary (Scarabaeus)",
+            "ID": "enemyF11-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM B-6] Freestanding Glossary (wall behind spikes lower)",
+            "ID": "field11RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM B-2] Freestanding Glossary (wall lower left)",
+            "ID": "field11RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM C-4] Freestanding Glossary (wall middle right double)",
+            "ID": "field11RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM C-6] Freestanding Glossary (door after boss dead)",
+            "ID": "Guardian03",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM B-5] NPC Glossary (Set)",
+            "ID": "talk54",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM B-2] NPC Glossary (Nun)",
+            "ID": "talk56",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] NPC Glossary (Ra)",
+            "ID": "talk57",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM C-2] NPC Glossary (Kero)",
+            "ID": "talk58",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM B-6] NPC Glossary (Fairy Guild Lieutenant)",
+            "ID": "talk59",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] Enemy Glossary (Soul)",
+            "ID": "enemyC9",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[DSLM] Scannable Glossary (Altar of Atum Scan)",
+            "ID": "charactor11",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -4289,6 +5326,12 @@
             "ID": "field11C1",
             "LocationType": "Pot",
             "Logic": "Has(Feather)"
+        },
+        {
+            "Name": "[DSLM B-3] NPC Glossary (Amunet)",
+            "ID": "talk55",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -4443,6 +5486,60 @@
             "ID": "field12C4",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[AC] Enemy Glossary (Simurgh)",
+            "ID": "enemyF12-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC] Enemy Glossary (Zhulong)",
+            "ID": "enemyF12-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC] Enemy Glossary (Azhdaha)",
+            "ID": "enemyF12-4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC] Enemy Glossary (Galla)",
+            "ID": "enemyF12-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC D-7] Freestanding Glossary (magma lower right)",
+            "ID": "field12RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC A-6] Freestanding Glossary (wall at the top)",
+            "ID": "field12RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC C-5] NPC Glossary (Pangu)",
+            "ID": "talk60",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC C-6] NPC Glossary (Venum)",
+            "ID": "talk63",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC D-7] NPC Glossary (Sykick)",
+            "ID": "talk64",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -4543,6 +5640,12 @@
             "ID": "field12C3g",
             "LocationType": "Pot",
             "Logic": "HorizontalAttack"
+        },
+        {
+            "Name": "[AC A-4] NPC Glossary (Shennong)",
+            "ID": "talk61",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -4604,6 +5707,18 @@
             "ID": "field12D4",
             "LocationType": "Pot",
             "Logic": "True"
+        },
+        {
+            "Name": "[AC D-3] Freestanding Glossary (wall at the top)",
+            "ID": "Guardian05",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[AC D-5] NPC Glossary (Zhuanxu)",
+            "ID": "talk62",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": [
@@ -4803,7 +5918,103 @@
         "ID": "field13G3",
         "LocationType": "Pot",
         "Logic": "True"
-      }
+      },
+        {
+            "Name": "[HM] Enemy Glossary (Minotaur)",
+            "ID": "enemyF13-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM] Enemy Glossary (Mammon)",
+            "ID": "enemyF13-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM] Enemy Glossary (Wyvern)",
+            "ID": "enemyF13-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM D-2] Scannable Glossary (Sphinx Statue bottom centre)",
+            "ID": "field13RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM C-3] Scannable Glossary (Delphyne statue centre of)",
+            "ID": "field13RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM B-3] Scannable Glossary (Hydra statue in the)",
+            "ID": "field13RG10",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM B-4] Scannable Glossary (statue bottom centre)",
+            "ID": "field13RG7",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM B-3] Freestanding Glossary (block in the upper)",
+            "ID": "field13RG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM E-3] Freestanding Glossary (on the ground right)",
+            "ID": "field13RG9",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM D-4] Scannable Glossary (Chimera Statue bottom left)",
+            "ID": "field13RG8",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM G-4] Scannable Glossary (inside the firebeam)",
+            "ID": "field13RG4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM C-4] Scannable Glossary (Typhon after collecting dissonance)",
+            "ID": "Guardian07",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM E-2] NPC Glossary (Eurytus)",
+            "ID": "talk65",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM B-4] NPC Glossary (Porphyrion)",
+            "ID": "talk66",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM F-3] NPC Glossary (Alcyoneus)",
+            "ID": "talk67",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM G-4] NPC Glossary (Fairylan)",
+            "ID": "talk68",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -4930,6 +6141,24 @@
             "ID": "field13D4",
             "LocationType": "Pot",
             "Logic": "IsDead(HoM Right Path)"
+        },
+        {
+            "Name": "[HM E-4] Scannable Glossary (Statue bottom left)",
+            "ID": "field13RG11",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM D-5] Scannable Glossary (Jump into the wall)",
+            "ID": "field13RG6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[HM E-5] Scannable Glossary (spikes lower left)",
+            "ID": "field13RG5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
         }
     ],
     "Exits": []
@@ -5327,7 +6556,127 @@
         "ID": "field14F1",
         "LocationType": "Pot",
         "Logic": "HorizontalAttack"
-      }
+      },
+        {
+            "Name": "[EP] Enemy Glossary (Hekatonkheires)",
+            "ID": "enemyF14-1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP] Enemy Glossary (Avnas)",
+            "ID": "enemyF14-2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP] Enemy Glossary (Erinyes)",
+            "ID": "enemyF14-3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP] Enemy Glossary (Cacus)",
+            "ID": "enemyC8",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP] Enemy Glossary (Lucifer)",
+            "ID": "enemyF14-5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP] Enemy Glossary (Lucifuge Rofocale)",
+            "ID": "enemyF14-6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP C-4] Freestanding Glossary (block under door)",
+            "ID": "field15RG1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP C-3] Scannable Glossary (door in the upper)",
+            "ID": "field15RG2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP A-3] Scannable Glossary (chip upper right corner)",
+            "ID": "Guardian08",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP F-2] NPC Glossary (Ereshkigal)",
+            "ID": "talk69",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP B-5] NPC Glossary (Hades)",
+            "ID": "talk70",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP D-3] Freestanding Glossary (Lower left corner jump)",
+            "ID": "talk71",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP D-5] NPC Glossary (Eurydice)",
+            "ID": "talk72",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP C-7] NPC Glossary (Izanami)",
+            "ID": "talk73",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP F-3] Freestanding Glossary (On the ground between)",
+            "ID": "talk74",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP D-4] NPC Glossary (Neti)",
+            "ID": "talk75",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP E-5] NPC Glossary (Anubis)",
+            "ID": "talk76",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP E-5] NPC Glossary (Osiris)",
+            "ID": "talk77",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP D-6] NPC Glossary (Fairy Guild Corporal)",
+            "ID": "talk78",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[EP C-7] Scannable Glossary (left side of top)",
+            "ID": "player0",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": [
       {
@@ -5382,7 +6731,55 @@
           "Name": "Ninth Child",
           "IsRequired": true
         }
-      }
+      },
+        {
+            "Name": "[SH C-5] Enemy Glossary (Skuld)",
+            "ID": "lastRG3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Dvergr)",
+            "ID": "enemyLast1",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Ginnungagap)",
+            "ID": "enemyLast2",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Muspell)",
+            "ID": "enemyLast3",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Managarmr)",
+            "ID": "enemyLast4",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Berserker)",
+            "ID": "enemyLast5",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH] Enemy Glossary (Fjalar)",
+            "ID": "enemyLast6",
+            "LocationType": "Glossary",
+            "Logic": "Has(Ruins Encyclopedia)"
+        },
+        {
+            "Name": "[SH C-4] Scannable Glossary (room above Skuld fight)",
+            "ID": "Guardian09",
+            "LocationType": "Glossary",
+            "Logic": "Has(Hand Scanner) and Has(Ruins Encyclopedia)"
+        }
     ],
     "Exits": []
   }

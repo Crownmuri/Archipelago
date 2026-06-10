@@ -165,6 +165,11 @@ class Potsanity(Toggle):
     Regular potsanity will add all 307 regular item pots to the pool (ammo, coins, weights)."""
     display_name = "Potsanity"
 
+class Glossanity(Toggle):
+    """Include glossary entries as randomized location checks.
+    (WIP - For development purposes only.)"""
+    display_name = "Glossanity"
+
 class GuardianSpecificAnkhJewels(DefaultOnToggle):
     """Makes Ankhs only usable at their designated bosses."""
     display_name = "Guardian Specific Ankh Jewels"
@@ -387,6 +392,7 @@ class LM2Options(PerGameCommonOptions):
 
     # Sanities
     potsanity: Potsanity
+    glossanity: Glossanity
 
     # Logic & Difficulty
     required_guardians: GuardianKills

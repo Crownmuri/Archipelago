@@ -828,6 +828,261 @@ class ItemID(IntEnum):
     GarmStatuePuzzle = 805
     SakitPuzzle = 806
 
+    # Glossary ROM items (match apworld game_id 2000+N; mirrors mod Data/ItemID.cs).
+    # Lets get_game_item_id / item_placements treat glossary ROMs as normal items.
+    Glossary000 = 2000
+    Glossary001 = 2001
+    Glossary002 = 2002
+    Glossary003 = 2003
+    Glossary004 = 2004
+    Glossary005 = 2005
+    Glossary006 = 2006
+    Glossary007 = 2007
+    Glossary008 = 2008
+    Glossary009 = 2009
+    Glossary010 = 2010
+    Glossary011 = 2011
+    Glossary012 = 2012
+    Glossary013 = 2013
+    Glossary014 = 2014
+    Glossary015 = 2015
+    Glossary016 = 2016
+    Glossary017 = 2017
+    Glossary018 = 2018
+    Glossary019 = 2019
+    Glossary020 = 2020
+    Glossary021 = 2021
+    Glossary022 = 2022
+    Glossary023 = 2023
+    Glossary024 = 2024
+    Glossary025 = 2025
+    Glossary026 = 2026
+    Glossary027 = 2027
+    Glossary028 = 2028
+    Glossary029 = 2029
+    Glossary030 = 2030
+    Glossary031 = 2031
+    Glossary032 = 2032
+    Glossary033 = 2033
+    Glossary034 = 2034
+    Glossary035 = 2035
+    Glossary036 = 2036
+    Glossary037 = 2037
+    Glossary038 = 2038
+    Glossary039 = 2039
+    Glossary040 = 2040
+    Glossary041 = 2041
+    Glossary042 = 2042
+    Glossary043 = 2043
+    Glossary044 = 2044
+    Glossary045 = 2045
+    Glossary046 = 2046
+    Glossary047 = 2047
+    Glossary048 = 2048
+    Glossary049 = 2049
+    Glossary050 = 2050
+    Glossary051 = 2051
+    Glossary052 = 2052
+    Glossary053 = 2053
+    Glossary054 = 2054
+    Glossary055 = 2055
+    Glossary056 = 2056
+    Glossary057 = 2057
+    Glossary058 = 2058
+    Glossary059 = 2059
+    Glossary060 = 2060
+    Glossary061 = 2061
+    Glossary062 = 2062
+    Glossary063 = 2063
+    Glossary064 = 2064
+    Glossary065 = 2065
+    Glossary066 = 2066
+    Glossary067 = 2067
+    Glossary068 = 2068
+    Glossary069 = 2069
+    Glossary070 = 2070
+    Glossary071 = 2071
+    Glossary072 = 2072
+    Glossary073 = 2073
+    Glossary074 = 2074
+    Glossary075 = 2075
+    Glossary076 = 2076
+    Glossary077 = 2077
+    Glossary078 = 2078
+    Glossary079 = 2079
+    Glossary080 = 2080
+    Glossary081 = 2081
+    Glossary082 = 2082
+    Glossary083 = 2083
+    Glossary084 = 2084
+    Glossary085 = 2085
+    Glossary086 = 2086
+    Glossary087 = 2087
+    Glossary088 = 2088
+    Glossary089 = 2089
+    Glossary090 = 2090
+    Glossary091 = 2091
+    Glossary092 = 2092
+    Glossary093 = 2093
+    Glossary094 = 2094
+    Glossary095 = 2095
+    Glossary096 = 2096
+    Glossary097 = 2097
+    Glossary098 = 2098
+    Glossary099 = 2099
+    Glossary100 = 2100
+    Glossary101 = 2101
+    Glossary102 = 2102
+    Glossary103 = 2103
+    Glossary104 = 2104
+    Glossary105 = 2105
+    Glossary106 = 2106
+    Glossary107 = 2107
+    Glossary108 = 2108
+    Glossary109 = 2109
+    Glossary110 = 2110
+    Glossary111 = 2111
+    Glossary112 = 2112
+    Glossary113 = 2113
+    Glossary114 = 2114
+    Glossary115 = 2115
+    Glossary116 = 2116
+    Glossary117 = 2117
+    Glossary118 = 2118
+    Glossary119 = 2119
+    Glossary120 = 2120
+    Glossary121 = 2121
+    Glossary122 = 2122
+    Glossary123 = 2123
+    Glossary124 = 2124
+    Glossary125 = 2125
+    Glossary126 = 2126
+    Glossary127 = 2127
+    Glossary128 = 2128
+    Glossary129 = 2129
+    Glossary130 = 2130
+    Glossary131 = 2131
+    Glossary132 = 2132
+    Glossary133 = 2133
+    Glossary134 = 2134
+    Glossary135 = 2135
+    Glossary136 = 2136
+    Glossary137 = 2137
+    Glossary138 = 2138
+    Glossary139 = 2139
+    Glossary140 = 2140
+    Glossary141 = 2141
+    Glossary142 = 2142
+    Glossary143 = 2143
+    Glossary144 = 2144
+    Glossary145 = 2145
+    Glossary146 = 2146
+    Glossary147 = 2147
+    Glossary148 = 2148
+    Glossary149 = 2149
+    Glossary150 = 2150
+    Glossary151 = 2151
+    Glossary152 = 2152
+    Glossary153 = 2153
+    Glossary154 = 2154
+    Glossary155 = 2155
+    Glossary156 = 2156
+    Glossary157 = 2157
+    Glossary158 = 2158
+    Glossary159 = 2159
+    Glossary160 = 2160
+    Glossary161 = 2161
+    Glossary162 = 2162
+    Glossary163 = 2163
+    Glossary164 = 2164
+    Glossary165 = 2165
+    Glossary166 = 2166
+    Glossary167 = 2167
+    Glossary168 = 2168
+    Glossary169 = 2169
+    Glossary170 = 2170
+    Glossary171 = 2171
+    Glossary172 = 2172
+    Glossary173 = 2173
+    Glossary174 = 2174
+    Glossary175 = 2175
+    Glossary176 = 2176
+    Glossary177 = 2177
+    Glossary178 = 2178
+    Glossary179 = 2179
+    Glossary180 = 2180
+    Glossary181 = 2181
+    Glossary182 = 2182
+    Glossary183 = 2183
+    Glossary184 = 2184
+    Glossary185 = 2185
+    Glossary186 = 2186
+    Glossary187 = 2187
+    Glossary188 = 2188
+    Glossary189 = 2189
+    Glossary190 = 2190
+    Glossary191 = 2191
+    Glossary192 = 2192
+    Glossary193 = 2193
+    Glossary194 = 2194
+    Glossary195 = 2195
+    Glossary196 = 2196
+    Glossary197 = 2197
+    Glossary198 = 2198
+    Glossary199 = 2199
+    Glossary200 = 2200
+    Glossary201 = 2201
+    Glossary202 = 2202
+    Glossary203 = 2203
+    Glossary204 = 2204
+    Glossary205 = 2205
+    Glossary206 = 2206
+    Glossary207 = 2207
+    Glossary208 = 2208
+    Glossary209 = 2209
+    Glossary210 = 2210
+    Glossary211 = 2211
+    Glossary212 = 2212
+    Glossary213 = 2213
+    Glossary214 = 2214
+    Glossary215 = 2215
+    Glossary216 = 2216
+    Glossary217 = 2217
+    Glossary218 = 2218
+    Glossary219 = 2219
+    Glossary220 = 2220
+    Glossary221 = 2221
+    Glossary222 = 2222
+    Glossary223 = 2223
+    Glossary224 = 2224
+    Glossary225 = 2225
+    Glossary226 = 2226
+    Glossary227 = 2227
+    Glossary228 = 2228
+    Glossary229 = 2229
+    Glossary230 = 2230
+    Glossary231 = 2231
+    Glossary232 = 2232
+    Glossary233 = 2233
+    Glossary234 = 2234
+    Glossary235 = 2235
+    Glossary236 = 2236
+    Glossary237 = 2237
+    Glossary238 = 2238
+    Glossary239 = 2239
+    Glossary240 = 2240
+    Glossary241 = 2241
+    Glossary242 = 2242
+    Glossary243 = 2243
+    Glossary244 = 2244
+    Glossary245 = 2245
+    Glossary246 = 2246
+    Glossary247 = 2247
+    Glossary248 = 2248
+    Glossary249 = 2249
+    Glossary250 = 2250
+    Glossary251 = 2251
+
 BASE_LOCATION_ID = 430000
 
 class LocationID(IntEnum):
@@ -1486,11 +1741,261 @@ class LocationID(IntEnum):
     fieldL023 = 712   # fieldL023, potFlag 310
     """
 
-# =========================================================================
-# PotID — maps World.json pot IDs to sheet 21 (itempot) flag numbers.
-# Only the 30 pots currently in World.json are active; the rest are
-# commented out and will be uncommented as more regions are added.
-# =========================================================================
+    # -------------------------------------------------------------------------
+    # Glossary Locations (glossanity) WIP
+    # -------------------------------------------------------------------------
+    Glossary000 = 2000  # enemyC0, flag 51 — Bat (N)
+    Glossary001 = 2001  # enemyC3, flag 54 — Skeleton (N)
+    Glossary002 = 2002  # enemyF00-1, flag 61 — Carbuncle (N)
+    Glossary003 = 2003  # enemyF00-2, flag 62 — Fachan (N)
+    Glossary004 = 2004  # enemyF00-3, flag 63 — Skvader (N)
+    Glossary005 = 2005  # enemyRG, flag 147 — Ratatoskr (R)
+    Glossary006 = 2006  # field00RG2, flag 10 — Nidhogg (R)
+    Glossary007 = 2007  # Guardian00, flag 0 — Fafnir (R)
+    Glossary008 = 2008  # enemyC1, flag 52 — Black Carbuncle (N)
+    Glossary009 = 2009  # talk01, flag 148 — Sigyn (N)
+    Glossary010 = 2010  # talk02, flag 149 — Vili (N)
+    Glossary011 = 2011  # talk03, flag 150 — Ve (N)
+    Glossary012 = 2012  # talk04, flag 151 — Korobock (N)
+    Glossary013 = 2013  # charactor7, flag 139 — Trickster (UR)
+    Glossary014 = 2014  # enemyF02-1, flag 64 — Apsara (N)
+    Glossary015 = 2015  # enemyF02-2, flag 65 — Odontotyrannos (N)
+    Glossary016 = 2016  # enemyF02-3, flag 66 — Makara (N)
+    Glossary017 = 2017  # enemyF02-4, flag 67 — Hanuman (N)
+    Glossary018 = 2018  # enemyF02-5, flag 68 — Behemoth (N)
+    Glossary019 = 2019  # enemyF02-6, flag 69 — Tog (N)
+    Glossary020 = 2020  # enemyF02-7, flag 70 — Aghasura (N)
+    Glossary021 = 2021  # field02RG1, flag 11 — Kaliya (R)
+    Glossary022 = 2022  # field02RG2, flag 12 — Ixtab (R)
+    Glossary023 = 2023  # field02RG3, flag 13 — Heimdall (SR)
+    Glossary024 = 2024  # Guardian02, flag 2 — Kujata (SR)
+    Glossary025 = 2025  # charactor6, flag 138 — Frey (R)
+    Glossary026 = 2026  # talk05, flag 152 — Voluspa (N)
+    Glossary027 = 2027  # talk06, flag 153 — Pym (N)
+    Glossary028 = 2028  # enemyF03-1, flag 71 — Kabandha (N)
+    Glossary029 = 2029  # enemyC2, flag 53 — El Baul (N)
+    Glossary030 = 2030  # enemyF03-2, flag 72 — Lycanthrope (N)
+    Glossary031 = 2031  # enemyF03-3, flag 73 — Vimana (N)
+    Glossary032 = 2032  # enemyF04-5, flag 78 — Kraken (N)
+    Glossary033 = 2033  # field03RG1, flag 14 — Cetus (R)
+    Glossary034 = 2034  # field03RG2, flag 15 — Svipdagr (R)
+    Glossary035 = 2035  # Guardian04, flag 4 — Jormungand (SR)
+    Glossary036 = 2036  # talk07, flag 154 — Kubera (N)
+    Glossary037 = 2037  # talk08, flag 155 — Soma (N)
+    Glossary038 = 2038  # talk09, flag 156 — Yama (N)
+    Glossary039 = 2039  # talk10, flag 157 — Alviss (N)
+    Glossary040 = 2040  # talk11, flag 158 — Indra (R)
+    Glossary041 = 2041  # talk12, flag 159 — Peibalusa (N)
+    Glossary042 = 2042  # talk13, flag 160 — Hiro Roderick (N)
+    Glossary043 = 2043  # talk14, flag 161 — Haja (N)
+    Glossary044 = 2044  # enemyF04-1, flag 74 — Garm (N)
+    Glossary045 = 2045  # enemyF04-2, flag 75 — Lindworm (N)
+    Glossary046 = 2046  # enemyF04-3, flag 76 — Langsuir (N)
+    Glossary047 = 2047  # enemyF04-4, flag 77 — Muu Shuwuu (N)
+    Glossary048 = 2048  # enemyF04-6, flag 79 — Jotun (SR)
+    Glossary049 = 2049  # field04RG2, flag 17 — Vedfolnir (R)
+    Glossary050 = 2050  # field04RG1, flag 16 — Vidofnir (R)
+    Glossary051 = 2051  # Guardian06, flag 6 — Surtr (SR)
+    Glossary052 = 2052  # talk15, flag 162 — Sinmara (N)
+    Glossary053 = 2053  # talk16, flag 163 — Modgud (N)
+    Glossary054 = 2054  # talk17, flag 164 — Inanna (N)
+    Glossary055 = 2055  # talk18, flag 165 — Porque Item Shop (N)
+    Glossary056 = 2056  # talk19, flag 166 — Mino the Bomb Guy (N)
+    Glossary057 = 2057  # talk20, flag 167 — Enimul (N)
+    Glossary058 = 2058  # enemyF05-1, flag 80 — Einherjar (N)
+    Glossary059 = 2059  # enemyF05-2, flag 81 — Valkyrie (N)
+    Glossary060 = 2060  # enemyF05-3, flag 82 — Dokkalfar (N)
+    Glossary061 = 2061  # enemyF05-4, flag 83 — Vodyanoy (N)
+    Glossary062 = 2062  # enemyF05-5, flag 84 — Gullinbursti (N)
+    Glossary063 = 2063  # field05RG1, flag 18 — Hugin & Munin (R)
+    Glossary064 = 2064  # talk21, flag 168 — Hermod (N)
+    Glossary065 = 2065  # talk22, flag 170 — Brokkr (N)
+    Glossary066 = 2066  # talk23, flag 171 — Eitri (N)
+    Glossary067 = 2067  # talk24, flag 172 — Tyr (N)
+    Glossary068 = 2068  # talk25, flag 173 — Thor (N)
+    Glossary069 = 2069  # talk26, flag 174 — Shuhoka (N)
+    Glossary070 = 2070  # enemyF06-1, flag 91 — Yeti (N)
+    Glossary071 = 2071  # enemyF06-2, flag 92 — Huallepen (N)
+    Glossary072 = 2072  # enemyF06-3, flag 93 — Ungur (N)
+    Glossary073 = 2073  # enemyF06-4, flag 94 — Zorya (N)
+    Glossary074 = 2074  # enemyF06-5, flag 95 — Baba Yaga (N)
+    Glossary075 = 2075  # enemyC4, flag 55 — Morrigan (R)
+    Glossary076 = 2076  # enemyC5, flag 56 — Macha (R)
+    Glossary077 = 2077  # enemyC6, flag 57 — Nemain (R)
+    Glossary078 = 2078  # field06RG1, flag 21 — Badhbh Cath (R)
+    Glossary079 = 2079  # field06RG3, flag 23 — Tezcatlipoca (R)
+    Glossary080 = 2080  # field06RG2, flag 22 — Balor (R)
+    Glossary081 = 2081  # field06RG4, flag 24 — Fenrir (SR)
+    Glossary082 = 2082  # talk27, flag 175 — Gerd (N)
+    Glossary083 = 2083  # talk28, flag 176 — Thrymr (N)
+    Glossary084 = 2084  # talk29, flag 177 — Mnemosyne's Remains (N)
+    Glossary085 = 2085  # talk30, flag 178 — Hydlit (N)
+    Glossary086 = 2086  # talk31, flag 179 — Fairy Guild General (N)
+    Glossary087 = 2087  # enemyF07-1, flag 96 — Asp (N)
+    Glossary088 = 2088  # enemyF07-2, flag 97 — Red Cap (N)
+    Glossary089 = 2089  # enemyF07-3, flag 98 — Mask (N)
+    Glossary090 = 2090  # enemyF07-4, flag 99 — Medjed (N)
+    Glossary091 = 2091  # field07RG1, flag 25 — Unicorn (R)
+    Glossary092 = 2092  # talk32, flag 180 — Amen (N)
+    Glossary093 = 2093  # talk33, flag 181 — Nekhbet (N)
+    Glossary094 = 2094  # talk34, flag 182 — Isis (N)
+    Glossary095 = 2095  # talk35, flag 183 — Horus (N)
+    Glossary096 = 2096  # talk36, flag 184 — Neftis (N)
+    Glossary097 = 2097  # talk37, flag 185 — Thoth (N)
+    Glossary098 = 2098  # talk38, flag 186 — Aytum (N)
+    Glossary099 = 2099  # enemyF12-1, flag 109 — Edimmu (N)
+    Glossary100 = 2100  # enemyF08-2, flag 105 — Nurikabe (N)
+    Glossary101 = 2101  # enemyF08-3, flag 106 — Enenra (N)
+    Glossary102 = 2102  # enemyF08-4, flag 107 — Guhin (N)
+    Glossary103 = 2103  # enemyF08-5, flag 108 — Kuda-gitsune (N)
+    Glossary104 = 2104  # enemyC7, flag 58 — Blue Skeleton (N)
+    Glossary105 = 2105  # field08RG1, flag 29 — Raijin & Fujin (R)
+    Glossary106 = 2106  # field08RG2, flag 30 — Daji (R)
+    Glossary107 = 2107  # field08RG3, flag 31 — Belial (R)
+    Glossary108 = 2108  # talk39, flag 187 — Kami-musubi (N)
+    Glossary109 = 2109  # talk40, flag 188 — Izanagi (N)
+    Glossary110 = 2110  # talk41, flag 189 — Shitateruhime (N)
+    Glossary111 = 2111  # talk42, flag 190 — Amenotokotachi (N)
+    Glossary112 = 2112  # talk43, flag 191 — Ash Geen (N)
+    Glossary113 = 2113  # enemyF09-4, flag 117 — Harpy (N)
+    Glossary114 = 2114  # enemyF09-1, flag 114 — Lizardman (N)
+    Glossary115 = 2115  # enemyF09-3, flag 116 — Andrealphus (N)
+    Glossary116 = 2116  # field09RG1, flag 34 — Arachne (N)
+    Glossary117 = 2117  # field09RG2, flag 35 — Scylla (N)
+    Glossary118 = 2118  # field09RG3, flag 36 — Glasya-Labolas (N)
+    Glossary119 = 2119  # field09RG4, flag 37 — Griffin (R)
+    Glossary120 = 2120  # talk44, flag 192 — Hermes (R)
+    Glossary121 = 2121  # talk45, flag 193 — Eros (R)
+    Glossary122 = 2122  # talk46, flag 194 — Orpheus (N)
+    Glossary123 = 2123  # talk47, flag 195 — Baphomet (N)
+    Glossary124 = 2124  # talk48, flag 196 — Megarock (N)
+    Glossary125 = 2125  # enemyF10-1, flag 85 — Gandharv (N)
+    Glossary126 = 2126  # enemyF10-2, flag 86 — Kinnara (N)
+    Glossary127 = 2127  # enemyF10-3, flag 87 — Rakshasa (N)
+    Glossary128 = 2128  # enemyF10-4, flag 88 — Carbunco (N)
+    Glossary129 = 2129  # enemyF10-5, flag 89 — Cabracan (N)
+    Glossary130 = 2130  # enemyF10-6, flag 90 — Zipakna (N)
+    Glossary131 = 2131  # field10RG1, flag 19 — Vucub Caquix (R)
+    Glossary132 = 2132  # field10RG2, flag 20 — Jalandhara (R)
+    Glossary133 = 2133  # Guardian01, flag 1 — Vritra (R)
+    Glossary134 = 2134  # talk49, flag 197 — Hoenir (N)
+    Glossary135 = 2135  # talk50, flag 198 — Brihaspathi (N)
+    Glossary136 = 2136  # talk51, flag 199 — Pushan (N)
+    Glossary137 = 2137  # talk52, flag 200 — Bhaga (N)
+    Glossary138 = 2138  # talk53, flag 201 — Bargain Duck (N)
+    Glossary139 = 2139  # enemyF11-1, flag 100 — Anunnaki (SR)
+    Glossary140 = 2140  # enemyF11-2, flag 101 — Ba (R)
+    Glossary141 = 2141  # enemyF11-3, flag 102 — Basilisk (N)
+    Glossary142 = 2142  # enemyF11-4, flag 103 — Scarabaeus (N)
+    Glossary143 = 2143  # field11RG1, flag 26 — Sekhmet (R)
+    Glossary144 = 2144  # field11RG3, flag 28 — Angra Mainyu (R)
+    Glossary145 = 2145  # field11RG2, flag 27 — Ammit (R)
+    Glossary146 = 2146  # Guardian03, flag 3 — Aten-Ra (SR)
+    Glossary147 = 2147  # talk54, flag 202 — Set (N)
+    Glossary148 = 2148  # talk55, flag 203 — Amunet (N)
+    Glossary149 = 2149  # talk56, flag 204 — Nun (N)
+    Glossary150 = 2150  # talk57, flag 205 — Ra (N)
+    Glossary151 = 2151  # talk58, flag 206 — Kero (N)
+    Glossary152 = 2152  # talk59, flag 207 — Fairy Guild Lieutenant (N)
+    Glossary153 = 2153  # enemyC9, flag 60 — Soul (N)
+    Glossary154 = 2154  # enemyF12-2, flag 110 — Simurgh (N)
+    Glossary155 = 2155  # enemyF12-3, flag 111 — Zhulong (N)
+    Glossary156 = 2156  # enemyF12-4, flag 112 — Azhdaha (N)
+    Glossary157 = 2157  # enemyF12-5, flag 113 — Galla (N)
+    Glossary158 = 2158  # field12RG1, flag 32 — Ki-sikil-lil-la-ke (R)
+    Glossary159 = 2159  # field12RG2, flag 33 — Anzu (SR)
+    Glossary160 = 2160  # Guardian05, flag 5 — Anu (SR)
+    Glossary161 = 2161  # talk60, flag 208 — Pangu (N)
+    Glossary162 = 2162  # talk61, flag 209 — Shennong (N)
+    Glossary163 = 2163  # talk62, flag 210 — Zhuanxu (N)
+    Glossary164 = 2164  # talk63, flag 211 — Venum (N)
+    Glossary165 = 2165  # talk64, flag 212 — Sykick (N)
+    Glossary166 = 2166  # enemyF13-1, flag 118 — Minotaur (N)
+    Glossary167 = 2167  # enemyF13-2, flag 119 — Mammon (N)
+    Glossary168 = 2168  # enemyF13-3, flag 120 — Wyvern (N)
+    Glossary169 = 2169  # field13RG2, flag 39 — Sphinx (R)
+    Glossary170 = 2170  # field13RG1, flag 38 — Delphyne (R)
+    Glossary171 = 2171  # field13RG10, flag 47 — Lernaean Hydra (R)
+    Glossary172 = 2172  # field13RG7, flag 44 — Nemean Lion (R)
+    Glossary173 = 2173  # field13RG3, flag 40 — Colchian Dragon (SR)
+    Glossary174 = 2174  # field13RG9, flag 46 — Ladon (R)
+    Glossary175 = 2175  # field13RG8, flag 45 — Chimera (SR)
+    Glossary176 = 2176  # field13RG11, flag 48 — Phaia (R)
+    Glossary177 = 2177  # field13RG4, flag 41 — Karkinos (SR)
+    Glossary178 = 2178  # field13RG6, flag 43 — Orthrus (SR)
+    Glossary179 = 2179  # field13RG5, flag 42 — Cerberus (SR)
+    Glossary180 = 2180  # Guardian07, flag 7 — Echidna (UR)
+    Glossary181 = 2181  # talk65, flag 213 — Eurytus (N)
+    Glossary182 = 2182  # talk66, flag 214 — Porphyrion (N)
+    Glossary183 = 2183  # talk67, flag 215 — Alcyoneus (N)
+    Glossary184 = 2184  # talk68, flag 216 — Fairylan (N)
+    Glossary185 = 2185  # enemyF14-1, flag 121 — Hekatonkheires (R)
+    Glossary186 = 2186  # enemyF14-2, flag 122 — Avnas (N)
+    Glossary187 = 2187  # enemyF14-3, flag 123 — Erinyes (N)
+    Glossary188 = 2188  # enemyC8, flag 59 — Cacus (N)
+    Glossary189 = 2189  # enemyF14-5, flag 125 — Lucifer (N)
+    Glossary190 = 2190  # enemyF14-6, flag 126 — Lucifuge Rofocale (N)
+    Glossary191 = 2191  # field15RG1, flag 49 — Hraesvelgr (SR)
+    Glossary192 = 2192  # field15RG2, flag 50 — Ajisukitakahikone (R)
+    Glossary193 = 2193  # Guardian08, flag 8 — Hel (UR)
+    Glossary194 = 2194  # talk69, flag 217 — Ereshkigal (N)
+    Glossary195 = 2195  # talk70, flag 218 — Hades (N)
+    Glossary196 = 2196  # talk71, flag 219 — Charon (R)
+    Glossary197 = 2197  # talk72, flag 220 — Eurydice (N)
+    Glossary198 = 2198  # talk73, flag 221 — Izanami (N)
+    Glossary199 = 2199  # talk74, flag 222 — Sakit (R)
+    Glossary200 = 2200  # talk75, flag 223 — Neti (N)
+    Glossary201 = 2201  # talk76, flag 224 — Anubis (N)
+    Glossary202 = 2202  # talk77, flag 225 — Osiris (N)
+    Glossary203 = 2203  # talk78, flag 226 — Fairy Guild Corporal (N)
+    Glossary204 = 2204  # lastRG1, flag 144 — Urd (UR)
+    Glossary205 = 2205  # lastRG2, flag 145 — Verdandi (UR)
+    Glossary206 = 2206  # lastRG3, flag 146 — Skuld (UR)
+    Glossary207 = 2207  # enemyLast1, flag 104 — Dvergr (N)
+    Glossary208 = 2208  # enemyLast2, flag 115 — Ginnungagap (N)
+    Glossary209 = 2209  # enemyLast3, flag 124 — Muspell (N)
+    Glossary210 = 2210  # enemyLast4, flag 169 — Managarmr (N)
+    Glossary211 = 2211  # enemyLast5, flag 231 — Berserker (N)
+    Glossary212 = 2212  # enemyLast6, flag 232 — Fjalar (N)
+    Glossary213 = 2213  # Guardian09, flag 9 — 9th Child (UR)
+    Glossary214 = 2214  # player0, flag 127 — Lumisa Kosugi (UR)
+    Glossary215 = 2215  # player4, flag 131 — Mulbruk (UR)
+    Glossary216 = 2216  # player3, flag 130 — Elder Xelpud (SR)
+    Glossary217 = 2217  # player1, flag 128 — Lemeza Kosugi (UR)
+    Glossary218 = 2218  # player2, flag 129 — Shawn Kosugi (SR)
+    Glossary219 = 2219  # charactor3, flag 135 — Alsedana (R)
+    Glossary220 = 2220  # charactor1, flag 133 — Giltoriyo (R)
+    Glossary221 = 2221  # charactor2, flag 134 — Fobos (R)
+    Glossary222 = 2222  # charactor0, flag 132 — Samaranta (R)
+    Glossary223 = 2223  # charactor4, flag 136 — Nebur (UR)
+    Glossary224 = 2224  # talk79, flag 227 — Sidro (N)
+    Glossary225 = 2225  # talk80, flag 228 — Modro (N)
+    Glossary226 = 2226  # talk81, flag 229 — Hiner (N)
+    Glossary227 = 2227  # charactor5, flag 137 — Freya (SR)
+    Glossary228 = 2228  # charactor8, flag 140 — Eir (SR)
+    Glossary229 = 2229  # charactor9, flag 141 — Kara (SR)
+    Glossary230 = 2230  # charactor10, flag 142 — Alruna (SR)
+    Glossary231 = 2231  # charactor11, flag 143 — Herja (SR)
+    Glossary232 = 2232  # talk82, flag 230 — Gyonin King (UR)
+    Glossary233 = 2233  # d233, flag 233 — Nijimasu (R)
+    Glossary234 = 2234  # d234, flag 234 — Sanma (R)
+    Glossary235 = 2235  # d235, flag 235 — Sawara (R)
+    Glossary236 = 2236  # d236, flag 236 — Nodoguro (R)
+    Glossary237 = 2237  # d237, flag 237 — Gyonin Tribe (N)
+    Glossary238 = 2238  # d238, flag 238 — Gyonin the Vogue (N)
+    Glossary239 = 2239  # d239, flag 239 — Gyonin Flight Test Model (N)
+    Glossary240 = 2240  # d240, flag 240 — Fishbone Calcium (N)
+    Glossary241 = 2241  # d241, flag 241 — Gyonin Pestirylium (N)
+    Glossary242 = 2242  # d242, flag 242 — Gyo-balloon ~Strawberry Flavor~ (N)
+    Glossary243 = 2243  # d243, flag 243 — Fish Wall'22 (N)
+    Glossary244 = 2244  # d244, flag 244 — Unknown extra #008 (?)
+    Glossary245 = 2245  # d245, flag 245 — Unknown extra #009 (?)
+    Glossary246 = 2246  # d246, flag 246 — Unknown extra #010 (?)
+    Glossary247 = 2247  # d247, flag 247 — Unknown extra #011 (?)
+    Glossary248 = 2248  # d248, flag 248 — Unknown extra #012 (?)
+    Glossary249 = 2249  # d249, flag 249 — Unknown extra #013 (?)
+    Glossary250 = 2250  # d250, flag 250 — Unknown extra #014 (?)
+    Glossary251 = 2251  # d251, flag 251 — Unknown extra #015 (?)
 
 POT_FLAG_MAP: dict[int, int] = {
     # LocationID.value -> sheet 21 potFlagNo
@@ -1834,6 +2339,269 @@ POT_FLAG_MAP: dict[int, int] = {
     711: 309, # xx (fieldL022) xx
     712: 310, # xx (fieldL023) xx
 """
+
+GLOSSARY_FLAG_MAP: dict[int, int] = {
+    # LocationID.value -> sheet 20 ("20book") flagNo
+    2000: 51,  # Glossary000 enemyC0 — Bat
+    2001: 54,  # Glossary001 enemyC3 — Skeleton
+    2002: 61,  # Glossary002 enemyF00-1 — Carbuncle
+    2003: 62,  # Glossary003 enemyF00-2 — Fachan
+    2004: 63,  # Glossary004 enemyF00-3 — Skvader
+    2005: 147,  # Glossary005 enemyRG — Ratatoskr
+    2006: 10,  # Glossary006 field00RG2 — Nidhogg
+    2007: 0,  # Glossary007 Guardian00 — Fafnir
+    2008: 52,  # Glossary008 enemyC1 — Black Carbuncle
+    2009: 148,  # Glossary009 talk01 — Sigyn
+    2010: 149,  # Glossary010 talk02 — Vili
+    2011: 150,  # Glossary011 talk03 — Ve
+    2012: 151,  # Glossary012 talk04 — Korobock
+    2013: 139,  # Glossary013 charactor7 — Trickster
+    2014: 64,  # Glossary014 enemyF02-1 — Apsara
+    2015: 65,  # Glossary015 enemyF02-2 — Odontotyrannos
+    2016: 66,  # Glossary016 enemyF02-3 — Makara
+    2017: 67,  # Glossary017 enemyF02-4 — Hanuman
+    2018: 68,  # Glossary018 enemyF02-5 — Behemoth
+    2019: 69,  # Glossary019 enemyF02-6 — Tog
+    2020: 70,  # Glossary020 enemyF02-7 — Aghasura
+    2021: 11,  # Glossary021 field02RG1 — Kaliya
+    2022: 12,  # Glossary022 field02RG2 — Ixtab
+    2023: 13,  # Glossary023 field02RG3 — Heimdall
+    2024: 2,  # Glossary024 Guardian02 — Kujata
+    2025: 138,  # Glossary025 charactor6 — Frey
+    2026: 152,  # Glossary026 talk05 — Voluspa
+    2027: 153,  # Glossary027 talk06 — Pym
+    2028: 71,  # Glossary028 enemyF03-1 — Kabandha
+    2029: 53,  # Glossary029 enemyC2 — El Baul
+    2030: 72,  # Glossary030 enemyF03-2 — Lycanthrope
+    2031: 73,  # Glossary031 enemyF03-3 — Vimana
+    2032: 78,  # Glossary032 enemyF04-5 — Kraken
+    2033: 14,  # Glossary033 field03RG1 — Cetus
+    2034: 15,  # Glossary034 field03RG2 — Svipdagr
+    2035: 4,  # Glossary035 Guardian04 — Jormungand
+    2036: 154,  # Glossary036 talk07 — Kubera
+    2037: 155,  # Glossary037 talk08 — Soma
+    2038: 156,  # Glossary038 talk09 — Yama
+    2039: 157,  # Glossary039 talk10 — Alviss
+    2040: 158,  # Glossary040 talk11 — Indra
+    2041: 159,  # Glossary041 talk12 — Peibalusa
+    2042: 160,  # Glossary042 talk13 — Hiro Roderick
+    2043: 161,  # Glossary043 talk14 — Haja
+    2044: 74,  # Glossary044 enemyF04-1 — Garm
+    2045: 75,  # Glossary045 enemyF04-2 — Lindworm
+    2046: 76,  # Glossary046 enemyF04-3 — Langsuir
+    2047: 77,  # Glossary047 enemyF04-4 — Muu Shuwuu
+    2048: 79,  # Glossary048 enemyF04-6 — Jotun
+    2049: 17,  # Glossary049 field04RG2 — Vedfolnir
+    2050: 16,  # Glossary050 field04RG1 — Vidofnir
+    2051: 6,  # Glossary051 Guardian06 — Surtr
+    2052: 162,  # Glossary052 talk15 — Sinmara
+    2053: 163,  # Glossary053 talk16 — Modgud
+    2054: 164,  # Glossary054 talk17 — Inanna
+    2055: 165,  # Glossary055 talk18 — Porque Item Shop
+    2056: 166,  # Glossary056 talk19 — Mino the Bomb Guy
+    2057: 167,  # Glossary057 talk20 — Enimul
+    2058: 80,  # Glossary058 enemyF05-1 — Einherjar
+    2059: 81,  # Glossary059 enemyF05-2 — Valkyrie
+    2060: 82,  # Glossary060 enemyF05-3 — Dokkalfar
+    2061: 83,  # Glossary061 enemyF05-4 — Vodyanoy
+    2062: 84,  # Glossary062 enemyF05-5 — Gullinbursti
+    2063: 18,  # Glossary063 field05RG1 — Hugin & Munin
+    2064: 168,  # Glossary064 talk21 — Hermod
+    2065: 170,  # Glossary065 talk22 — Brokkr
+    2066: 171,  # Glossary066 talk23 — Eitri
+    2067: 172,  # Glossary067 talk24 — Tyr
+    2068: 173,  # Glossary068 talk25 — Thor
+    2069: 174,  # Glossary069 talk26 — Shuhoka
+    2070: 91,  # Glossary070 enemyF06-1 — Yeti
+    2071: 92,  # Glossary071 enemyF06-2 — Huallepen
+    2072: 93,  # Glossary072 enemyF06-3 — Ungur
+    2073: 94,  # Glossary073 enemyF06-4 — Zorya
+    2074: 95,  # Glossary074 enemyF06-5 — Baba Yaga
+    2075: 55,  # Glossary075 enemyC4 — Morrigan
+    2076: 56,  # Glossary076 enemyC5 — Macha
+    2077: 57,  # Glossary077 enemyC6 — Nemain
+    2078: 21,  # Glossary078 field06RG1 — Badhbh Cath
+    2079: 23,  # Glossary079 field06RG3 — Tezcatlipoca
+    2080: 22,  # Glossary080 field06RG2 — Balor
+    2081: 24,  # Glossary081 field06RG4 — Fenrir
+    2082: 175,  # Glossary082 talk27 — Gerd
+    2083: 176,  # Glossary083 talk28 — Thrymr
+    2084: 177,  # Glossary084 talk29 — Mnemosyne's Remains
+    2085: 178,  # Glossary085 talk30 — Hydlit
+    2086: 179,  # Glossary086 talk31 — Fairy Guild General
+    2087: 96,  # Glossary087 enemyF07-1 — Asp
+    2088: 97,  # Glossary088 enemyF07-2 — Red Cap
+    2089: 98,  # Glossary089 enemyF07-3 — Mask
+    2090: 99,  # Glossary090 enemyF07-4 — Medjed
+    2091: 25,  # Glossary091 field07RG1 — Unicorn
+    2092: 180,  # Glossary092 talk32 — Amen
+    2093: 181,  # Glossary093 talk33 — Nekhbet
+    2094: 182,  # Glossary094 talk34 — Isis
+    2095: 183,  # Glossary095 talk35 — Horus
+    2096: 184,  # Glossary096 talk36 — Neftis
+    2097: 185,  # Glossary097 talk37 — Thoth
+    2098: 186,  # Glossary098 talk38 — Aytum
+    2099: 109,  # Glossary099 enemyF12-1 — Edimmu
+    2100: 105,  # Glossary100 enemyF08-2 — Nurikabe
+    2101: 106,  # Glossary101 enemyF08-3 — Enenra
+    2102: 107,  # Glossary102 enemyF08-4 — Guhin
+    2103: 108,  # Glossary103 enemyF08-5 — Kuda-gitsune
+    2104: 58,  # Glossary104 enemyC7 — Blue Skeleton
+    2105: 29,  # Glossary105 field08RG1 — Raijin & Fujin
+    2106: 30,  # Glossary106 field08RG2 — Daji
+    2107: 31,  # Glossary107 field08RG3 — Belial
+    2108: 187,  # Glossary108 talk39 — Kami-musubi
+    2109: 188,  # Glossary109 talk40 — Izanagi
+    2110: 189,  # Glossary110 talk41 — Shitateruhime
+    2111: 190,  # Glossary111 talk42 — Amenotokotachi
+    2112: 191,  # Glossary112 talk43 — Ash Geen
+    2113: 117,  # Glossary113 enemyF09-4 — Harpy
+    2114: 114,  # Glossary114 enemyF09-1 — Lizardman
+    2115: 116,  # Glossary115 enemyF09-3 — Andrealphus
+    2116: 34,  # Glossary116 field09RG1 — Arachne
+    2117: 35,  # Glossary117 field09RG2 — Scylla
+    2118: 36,  # Glossary118 field09RG3 — Glasya-Labolas
+    2119: 37,  # Glossary119 field09RG4 — Griffin
+    2120: 192,  # Glossary120 talk44 — Hermes
+    2121: 193,  # Glossary121 talk45 — Eros
+    2122: 194,  # Glossary122 talk46 — Orpheus
+    2123: 195,  # Glossary123 talk47 — Baphomet
+    2124: 196,  # Glossary124 talk48 — Megarock
+    2125: 85,  # Glossary125 enemyF10-1 — Gandharv
+    2126: 86,  # Glossary126 enemyF10-2 — Kinnara
+    2127: 87,  # Glossary127 enemyF10-3 — Rakshasa
+    2128: 88,  # Glossary128 enemyF10-4 — Carbunco
+    2129: 89,  # Glossary129 enemyF10-5 — Cabracan
+    2130: 90,  # Glossary130 enemyF10-6 — Zipakna
+    2131: 19,  # Glossary131 field10RG1 — Vucub Caquix
+    2132: 20,  # Glossary132 field10RG2 — Jalandhara
+    2133: 1,  # Glossary133 Guardian01 — Vritra
+    2134: 197,  # Glossary134 talk49 — Hoenir
+    2135: 198,  # Glossary135 talk50 — Brihaspathi
+    2136: 199,  # Glossary136 talk51 — Pushan
+    2137: 200,  # Glossary137 talk52 — Bhaga
+    2138: 201,  # Glossary138 talk53 — Bargain Duck
+    2139: 100,  # Glossary139 enemyF11-1 — Anunnaki
+    2140: 101,  # Glossary140 enemyF11-2 — Ba
+    2141: 102,  # Glossary141 enemyF11-3 — Basilisk
+    2142: 103,  # Glossary142 enemyF11-4 — Scarabaeus
+    2143: 26,  # Glossary143 field11RG1 — Sekhmet
+    2144: 28,  # Glossary144 field11RG3 — Angra Mainyu
+    2145: 27,  # Glossary145 field11RG2 — Ammit
+    2146: 3,  # Glossary146 Guardian03 — Aten-Ra
+    2147: 202,  # Glossary147 talk54 — Set
+    2148: 203,  # Glossary148 talk55 — Amunet
+    2149: 204,  # Glossary149 talk56 — Nun
+    2150: 205,  # Glossary150 talk57 — Ra
+    2151: 206,  # Glossary151 talk58 — Kero
+    2152: 207,  # Glossary152 talk59 — Fairy Guild Lieutenant
+    2153: 60,  # Glossary153 enemyC9 — Soul
+    2154: 110,  # Glossary154 enemyF12-2 — Simurgh
+    2155: 111,  # Glossary155 enemyF12-3 — Zhulong
+    2156: 112,  # Glossary156 enemyF12-4 — Azhdaha
+    2157: 113,  # Glossary157 enemyF12-5 — Galla
+    2158: 32,  # Glossary158 field12RG1 — Ki-sikil-lil-la-ke
+    2159: 33,  # Glossary159 field12RG2 — Anzu
+    2160: 5,  # Glossary160 Guardian05 — Anu
+    2161: 208,  # Glossary161 talk60 — Pangu
+    2162: 209,  # Glossary162 talk61 — Shennong
+    2163: 210,  # Glossary163 talk62 — Zhuanxu
+    2164: 211,  # Glossary164 talk63 — Venum
+    2165: 212,  # Glossary165 talk64 — Sykick
+    2166: 118,  # Glossary166 enemyF13-1 — Minotaur
+    2167: 119,  # Glossary167 enemyF13-2 — Mammon
+    2168: 120,  # Glossary168 enemyF13-3 — Wyvern
+    2169: 39,  # Glossary169 field13RG2 — Sphinx
+    2170: 38,  # Glossary170 field13RG1 — Delphyne
+    2171: 47,  # Glossary171 field13RG10 — Lernaean Hydra
+    2172: 44,  # Glossary172 field13RG7 — Nemean Lion
+    2173: 40,  # Glossary173 field13RG3 — Colchian Dragon
+    2174: 46,  # Glossary174 field13RG9 — Ladon
+    2175: 45,  # Glossary175 field13RG8 — Chimera
+    2176: 48,  # Glossary176 field13RG11 — Phaia
+    2177: 41,  # Glossary177 field13RG4 — Karkinos
+    2178: 43,  # Glossary178 field13RG6 — Orthrus
+    2179: 42,  # Glossary179 field13RG5 — Cerberus
+    2180: 7,  # Glossary180 Guardian07 — Echidna
+    2181: 213,  # Glossary181 talk65 — Eurytus
+    2182: 214,  # Glossary182 talk66 — Porphyrion
+    2183: 215,  # Glossary183 talk67 — Alcyoneus
+    2184: 216,  # Glossary184 talk68 — Fairylan
+    2185: 121,  # Glossary185 enemyF14-1 — Hekatonkheires
+    2186: 122,  # Glossary186 enemyF14-2 — Avnas
+    2187: 123,  # Glossary187 enemyF14-3 — Erinyes
+    2188: 59,  # Glossary188 enemyC8 — Cacus
+    2189: 125,  # Glossary189 enemyF14-5 — Lucifer
+    2190: 126,  # Glossary190 enemyF14-6 — Lucifuge Rofocale
+    2191: 49,  # Glossary191 field15RG1 — Hraesvelgr
+    2192: 50,  # Glossary192 field15RG2 — Ajisukitakahikone
+    2193: 8,  # Glossary193 Guardian08 — Hel
+    2194: 217,  # Glossary194 talk69 — Ereshkigal
+    2195: 218,  # Glossary195 talk70 — Hades
+    2196: 219,  # Glossary196 talk71 — Charon
+    2197: 220,  # Glossary197 talk72 — Eurydice
+    2198: 221,  # Glossary198 talk73 — Izanami
+    2199: 222,  # Glossary199 talk74 — Sakit
+    2200: 223,  # Glossary200 talk75 — Neti
+    2201: 224,  # Glossary201 talk76 — Anubis
+    2202: 225,  # Glossary202 talk77 — Osiris
+    2203: 226,  # Glossary203 talk78 — Fairy Guild Corporal
+    2204: 144,  # Glossary204 lastRG1 — Urd
+    2205: 145,  # Glossary205 lastRG2 — Verdandi
+    2206: 146,  # Glossary206 lastRG3 — Skuld
+    2207: 104,  # Glossary207 enemyLast1 — Dvergr
+    2208: 115,  # Glossary208 enemyLast2 — Ginnungagap
+    2209: 124,  # Glossary209 enemyLast3 — Muspell
+    2210: 169,  # Glossary210 enemyLast4 — Managarmr
+    2211: 231,  # Glossary211 enemyLast5 — Berserker
+    2212: 232,  # Glossary212 enemyLast6 — Fjalar
+    2213: 9,  # Glossary213 Guardian09 — 9th Child
+    2214: 127,  # Glossary214 player0 — Lumisa Kosugi
+    2215: 131,  # Glossary215 player4 — Mulbruk
+    2216: 130,  # Glossary216 player3 — Elder Xelpud
+    2217: 128,  # Glossary217 player1 — Lemeza Kosugi
+    2218: 129,  # Glossary218 player2 — Shawn Kosugi
+    2219: 135,  # Glossary219 charactor3 — Alsedana
+    2220: 133,  # Glossary220 charactor1 — Giltoriyo
+    2221: 134,  # Glossary221 charactor2 — Fobos
+    2222: 132,  # Glossary222 charactor0 — Samaranta
+    2223: 136,  # Glossary223 charactor4 — Nebur
+    2224: 227,  # Glossary224 talk79 — Sidro
+    2225: 228,  # Glossary225 talk80 — Modro
+    2226: 229,  # Glossary226 talk81 — Hiner
+    2227: 137,  # Glossary227 charactor5 — Freya
+    2228: 140,  # Glossary228 charactor8 — Eir
+    2229: 141,  # Glossary229 charactor9 — Kara
+    2230: 142,  # Glossary230 charactor10 — Alruna
+    2231: 143,  # Glossary231 charactor11 — Herja
+    2232: 230,  # Glossary232 talk82 — Gyonin King
+    2233: 233,  # Glossary233 d233 — Nijimasu
+    2234: 234,  # Glossary234 d234 — Sanma
+    2235: 235,  # Glossary235 d235 — Sawara
+    2236: 236,  # Glossary236 d236 — Nodoguro
+    2237: 237,  # Glossary237 d237 — Gyonin Tribe
+    2238: 238,  # Glossary238 d238 — Gyonin the Vogue
+    2239: 239,  # Glossary239 d239 — Gyonin Flight Test Model
+    2240: 240,  # Glossary240 d240 — Fishbone Calcium
+    2241: 241,  # Glossary241 d241 — Gyonin Pestirylium
+    2242: 242,  # Glossary242 d242 — Gyo-balloon ~Strawberry Flavor~
+    2243: 243,  # Glossary243 d243 — Fish Wall'22
+    2244: 244,  # Glossary244 d244 — Unknown extra #008
+    2245: 245,  # Glossary245 d245 — Unknown extra #009
+    2246: 246,  # Glossary246 d246 — Unknown extra #010
+    2247: 247,  # Glossary247 d247 — Unknown extra #011
+    2248: 248,  # Glossary248 d248 — Unknown extra #012
+    2249: 249,  # Glossary249 d249 — Unknown extra #013
+    2250: 250,  # Glossary250 d250 — Unknown extra #014
+    2251: 251,  # Glossary251 d251 — Unknown extra #015
+}
+
+# Glossary ROM item game_ids (2000..2251). Defined/named in Items.json but NOT
+# pooled yet (build_item_pool skips them) until their 252 locations are placed.
+GLOSSARY_ITEM_IDS: set[int] = set(range(2000, 2000 + 252))
+GLOSSARY_PLACED_ITEM_IDS: set[int] = {
+    2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067, 2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091, 2092, 2093, 2094, 2095, 2096, 2097, 2098, 2099, 2100, 2101, 2102, 2103, 2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119, 2120, 2121, 2122, 2123, 2124, 2125, 2126, 2127, 2128, 2129, 2130, 2131, 2132, 2133, 2134, 2135, 2136, 2137, 2138, 2139, 2140, 2141, 2142, 2143, 2144, 2145, 2146, 2147, 2148, 2149, 2150, 2151, 2152, 2153, 2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176, 2177, 2178, 2179, 2180, 2181, 2182, 2183, 2184, 2185, 2186, 2187, 2188, 2189, 2190, 2191, 2192, 2193, 2194, 2195, 2196, 2197, 2198, 2199, 2200, 2201, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 2209, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2219, 2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2228, 2229, 2230, 2231
+}  # Freestanding+Scannable ROMs — pooled (filler) when glossanity on
 
 class AreaID(IntEnum):
     None_ = 0
@@ -2213,6 +2981,7 @@ AP_LOCATION_NAMES = {
     "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD,
 
     # --- Pot Locations (potsanity) ---
+    # --- La-Mulana Pots (field01) ---
     "[START] Starting Coin Pot": LocationID.field01_2G,
     "[VOD B-3] Alsedana Coin Pot": LocationID.field01B2,
     "[VOD C-4] Nebur Coin Pot": LocationID.field01C3,
@@ -2230,6 +2999,7 @@ AP_LOCATION_NAMES = {
     "[MOG A-2] Breakable Wall Coin Pot": LocationID.fieldL02A1,
     "[MOG D-4] Futo Statue Coin Pot": LocationID.fieldL02D3,
     "[MOG C-5] Pre-Ratatoskr Weight Pot": LocationID.fieldL02C4,
+    # --- Roots of Yggdrasil Pots (field00) ---
     "[ROY E-4] First Room Coin Pot": LocationID.field00E3,
     "[ROY E-3] Second Room Weight Pot": LocationID.field00E2w,
     "[ROY C-3] Weapon Vault Coin Pot": LocationID.field00C2,
@@ -2244,6 +3014,7 @@ AP_LOCATION_NAMES = {
     "[ROY D-5] Candlestick of Time Weight Pot": LocationID.field00D4w,
     "[ROY E-5] Torch Room Item Pot": LocationID.field00E4,
     "[ROY E-6] Golden Rock Coin Pot": LocationID.field00E5,
+    # --- Annwfn Pots (field02) ---
     "[ANN C-2] Fairy Watchtower Item Pot": LocationID.field02C1,
     "[ANN D-2] Pre-Kaliya Hidden Coin Pot": LocationID.field02D1,
     "[ANN D-1] Kaliya's Item Pot": LocationID.field02D0,
@@ -2533,7 +3304,260 @@ AP_LOCATION_NAMES = {
     "[EPD C-2] Seventh Hell Gate Approach Item Pot": LocationID.field15B1,
     "[EPD C-1] Sixth Hell Gate Exit Item Pot": LocationID.field15C0,
     "[EPD C-1] Sixth Hell Gate Exit Coin Pot": LocationID.field15C0g,
-}  
+        # --- Glossary Locations (glossanity) ---
+    "[ROY] Enemy Glossary (Bat)": LocationID.Glossary000,
+    "[ROY] Enemy Glossary (Skeleton)": LocationID.Glossary001,
+    "[ROY] Enemy Glossary (Carbuncle)": LocationID.Glossary002,
+    "[ROY] Enemy Glossary (Fachan)": LocationID.Glossary003,
+    "[ROY] Enemy Glossary (Skvader)": LocationID.Glossary004,
+    "[ROY C-5] Freestanding Glossary in Breakable Wall": LocationID.Glossary005,
+    "[ROY E-5] Freestanding Glossary (wall)": LocationID.Glossary006,
+    "[ROY C-4] Freestanding Glossary in Opened Wall": LocationID.Glossary007,
+    "[ROY] Enemy Glossary (Black Carbuncle)": LocationID.Glossary008,
+    "[ROY B-3] NPC Glossary (Sigyn)": LocationID.Glossary009,
+    "[ROY E-4] NPC Glossary (Vili)": LocationID.Glossary010,
+    "[ROY E-6] NPC Glossary (Ve)": LocationID.Glossary011,
+    "[ROY C-5] NPC Glossary (Korobock)": LocationID.Glossary012,
+    "[ROY B-4] Scannable Glossary (inside wall above the)": LocationID.Glossary013,
+    "[ANW] Enemy Glossary (Apsara)": LocationID.Glossary014,
+    "[ANW] Enemy Glossary (Odontotyrannos)": LocationID.Glossary015,
+    "[ANW] Enemy Glossary (Makara)": LocationID.Glossary016,
+    "[ANW] Enemy Glossary (Hanuman)": LocationID.Glossary017,
+    "[ANW] Enemy Glossary (Behemoth)": LocationID.Glossary018,
+    "[ANW] Enemy Glossary (Tog)": LocationID.Glossary019,
+    "[ANW] Enemy Glossary (Aghasura)": LocationID.Glossary020,
+    "[ANW D-1] Freestanding Glossary (Lower Left)": LocationID.Glossary021,
+    "[ANW D-5] Freestanding Glossary (Behind Skull in the)": LocationID.Glossary022,
+    "[ANW B-5] Freestanding Glossary (wall top Right)": LocationID.Glossary023,
+    "[ANW F-2] Freestanding Glossary (wall lower left)": LocationID.Glossary024,
+    "[ANW C-2] Freestanding Glossary (wall Lower Left)": LocationID.Glossary025,
+    "[ANW D-4] NPC Glossary (Voluspa)": LocationID.Glossary026,
+    "[ANW D-1] NPC Glossary (Pym)": LocationID.Glossary027,
+    "[IB] Enemy Glossary (Kabandha)": LocationID.Glossary028,
+    "[IB] Enemy Glossary (El Baul)": LocationID.Glossary029,
+    "[IB] Enemy Glossary (Lycanthrope)": LocationID.Glossary030,
+    "[IB] Enemy Glossary (Vimana)": LocationID.Glossary031,
+    "[IB] Enemy Glossary (Kraken)": LocationID.Glossary032,
+    "[IB G-1] Freestanding Glossary (Underwater lower left side)": LocationID.Glossary033,
+    "[IB B-6] Freestanding Glossary (wall on the right)": LocationID.Glossary034,
+    "[IB H-7] Freestanding Glossary (fall down the right)": LocationID.Glossary035,
+    "[IB B-2] NPC Glossary (Kubera)": LocationID.Glossary036,
+    "[IB F-2] NPC Glossary (Soma)": LocationID.Glossary037,
+    "[IB E-6] NPC Glossary (Yama)": LocationID.Glossary038,
+    "[IB G-7] NPC Glossary (Alviss)": LocationID.Glossary039,
+    "[IB D-3] Freestanding Glossary (on a platform)": LocationID.Glossary040,
+    "[IB E-1] NPC Glossary (Peibalusa)": LocationID.Glossary041,
+    "[IB G-6] NPC Glossary (Hiro Roderick)": LocationID.Glossary042,
+    "[IB G-4] NPC Glossary (Haja)": LocationID.Glossary043,
+    "[IT] Enemy Glossary (Garm)": LocationID.Glossary044,
+    "[IT] Enemy Glossary (Lindworm)": LocationID.Glossary045,
+    "[IT] Enemy Glossary (Langsuir)": LocationID.Glossary046,
+    "[IT] Enemy Glossary (Muu Shuwuu)": LocationID.Glossary047,
+    "[IT C-2] Scannable Glossary (foot of the left)": LocationID.Glossary048,
+    "[IT B-1] Freestanding Glossary (ground on the left)": LocationID.Glossary049,
+    "[IT C-5] Scannable Glossary (Skeleton in the poison)": LocationID.Glossary050,
+    "[IT E-2] Scannable Glossary (left side of Hot)": LocationID.Glossary051,
+    "[IT C-3] NPC Glossary (Sinmara)": LocationID.Glossary052,
+    "[IT F-3] NPC Glossary (Modgud)": LocationID.Glossary053,
+    "[IT E-1] NPC Glossary (Inanna)": LocationID.Glossary054,
+    "[IT A-1] NPC Glossary (Porque Item Shop)": LocationID.Glossary055,
+    "[IT C-4] NPC Glossary (Mino the Bomb Guy)": LocationID.Glossary056,
+    "[IT E-2] NPC Glossary (Enimul)": LocationID.Glossary057,
+    "[DF] Enemy Glossary (Einherjar)": LocationID.Glossary058,
+    "[DF] Enemy Glossary (Valkyrie)": LocationID.Glossary059,
+    "[DF] Enemy Glossary (Dokkalfar)": LocationID.Glossary060,
+    "[DF] Enemy Glossary (Vodyanoy)": LocationID.Glossary061,
+    "[DF] Enemy Glossary (Gullinbursti)": LocationID.Glossary062,
+    "[DF D-5] Freestanding Glossary (lower right wall)": LocationID.Glossary063,
+    "[DF D-4] NPC Glossary (Hermod)": LocationID.Glossary064,
+    "[DF A-3] NPC Glossary (Brokkr)": LocationID.Glossary065,
+    "[DF A-3] NPC Glossary (Eitri)": LocationID.Glossary066,
+    "[DF E-4] NPC Glossary (Tyr)": LocationID.Glossary067,
+    "[DF C-2] NPC Glossary (Thor)": LocationID.Glossary068,
+    "[DF B-5] NPC Glossary (Shuhoka)": LocationID.Glossary069,
+    "[SFG] Enemy Glossary (Yeti)": LocationID.Glossary070,
+    "[SFG] Enemy Glossary (Huallepen)": LocationID.Glossary071,
+    "[SFG] Enemy Glossary (Ungur)": LocationID.Glossary072,
+    "[SFG] Enemy Glossary (Zorya)": LocationID.Glossary073,
+    "[SFG] Enemy Glossary (Baba Yaga)": LocationID.Glossary074,
+    "[SFG E-4] Freestanding Glossary (Right side of the)": LocationID.Glossary075,
+    "[SFG B-5] Freestanding Glossary (the snow crouch under)": LocationID.Glossary076,
+    "[SFG D-5] Freestanding Glossary (Inside the broken pillar)": LocationID.Glossary077,
+    "[SFG D-4] Freestanding Glossary (Inside the block in)": LocationID.Glossary078,
+    "[SFG A-1] Freestanding Glossary (Tezcatlipoca)": LocationID.Glossary079,
+    "[SFG C-2] Freestanding Glossary (down inside pillar on)": LocationID.Glossary080,
+    "[SFG D-7] Freestanding Glossary (Wall above the spikes)": LocationID.Glossary081,
+    "[SFG E-4] NPC Glossary (Gerd)": LocationID.Glossary082,
+    "[SFG D-5] NPC Glossary (Thrymr)": LocationID.Glossary083,
+    "[SFG B-4] NPC Glossary (Mnemosyne's Remains)": LocationID.Glossary084,
+    "[SFG A-5] NPC Glossary (Hydlit)": LocationID.Glossary085,
+    "[SFG C-4] NPC Glossary (Fairy Guild General)": LocationID.Glossary086,
+    "[GD] Enemy Glossary (Asp)": LocationID.Glossary087,
+    "[GD] Enemy Glossary (Red Cap)": LocationID.Glossary088,
+    "[GD] Enemy Glossary (Mask)": LocationID.Glossary089,
+    "[GD] Enemy Glossary (Medjed)": LocationID.Glossary090,
+    "[GD D-6] Freestanding Glossary (Wall in the Centre)": LocationID.Glossary091,
+    "[GD B-2] NPC Glossary (Amen)": LocationID.Glossary092,
+    "[GD A-4] NPC Glossary (Nekhbet)": LocationID.Glossary093,
+    "[GD D-4] NPC Glossary (Isis)": LocationID.Glossary094,
+    "[GD E-5] NPC Glossary (Horus)": LocationID.Glossary095,
+    "[GD D-6] NPC Glossary (Neftis)": LocationID.Glossary096,
+    "[GD B-5] NPC Glossary (Thoth)": LocationID.Glossary097,
+    "[GD B-3] NPC Glossary (Aytum)": LocationID.Glossary098,
+    "[TS] Enemy Glossary (Edimmu)": LocationID.Glossary099,
+    "[TS] Enemy Glossary (Nurikabe)": LocationID.Glossary100,
+    "[TS] Enemy Glossary (Enenra)": LocationID.Glossary101,
+    "[TS] Enemy Glossary (Guhin)": LocationID.Glossary102,
+    "[TS] Enemy Glossary (Kuda-gitsune)": LocationID.Glossary103,
+    "[TS] Enemy Glossary (Blue Skeleton)": LocationID.Glossary104,
+    "[TS E-3] Freestanding Glossary (Behind Dragon lower left)": LocationID.Glossary105,
+    "[TS E-6] Freestanding Glossary (top left wall from)": LocationID.Glossary106,
+    "[TS D-4] Freestanding Glossary (wall bottom right)": LocationID.Glossary107,
+    "[TS D-1] NPC Glossary (Kami-musubi)": LocationID.Glossary108,
+    "[TS C-3] NPC Glossary (Izanagi)": LocationID.Glossary109,
+    "[TS D-7] NPC Glossary (Shitateruhime)": LocationID.Glossary110,
+    "[TS D-6] NPC Glossary (Amenotokotachi)": LocationID.Glossary111,
+    "[TS C-4] NPC Glossary (Ash Geen)": LocationID.Glossary112,
+    "[HL] Enemy Glossary (Harpy)": LocationID.Glossary113,
+    "[HL] Enemy Glossary (Lizardman)": LocationID.Glossary114,
+    "[HL] Enemy Glossary (Andrealphus)": LocationID.Glossary115,
+    "[HL D-5] Freestanding Glossary (Behind face on the)": LocationID.Glossary116,
+    "[HL B-5] Freestanding Glossary (wall lower left)": LocationID.Glossary117,
+    "[HL C-2] Freestanding Glossary (Top right)": LocationID.Glossary118,
+    "[HL E-3] Scannable Glossary (down far right from)": LocationID.Glossary119,
+    "[HL C-5] NPC Glossary (Hermes)": LocationID.Glossary120,
+    "[HL A-3] NPC Glossary (Eros)": LocationID.Glossary121,
+    "[HL A-2] NPC Glossary (Orpheus)": LocationID.Glossary122,
+    "[HL B-1] NPC Glossary (Baphomet)": LocationID.Glossary123,
+    "[HL A-3] NPC Glossary (Megarock)": LocationID.Glossary124,
+    "[VAL] Enemy Glossary (Gandharv)": LocationID.Glossary125,
+    "[VAL] Enemy Glossary (Kinnara)": LocationID.Glossary126,
+    "[VAL] Enemy Glossary (Rakshasa)": LocationID.Glossary127,
+    "[VAL] Enemy Glossary (Carbunco)": LocationID.Glossary128,
+    "[VAL] Enemy Glossary (Cabracan)": LocationID.Glossary129,
+    "[VAL] Enemy Glossary (Zipakna)": LocationID.Glossary130,
+    "[VAL A-2] Freestanding Glossary (right wall just above)": LocationID.Glossary131,
+    "[VAL B-4] Scannable Glossary (chip just right of)": LocationID.Glossary132,
+    "[VAL D-3] Freestanding Glossary (Behind Pot top right)": LocationID.Glossary133,
+    "[VAL A-3] NPC Glossary (Hoenir)": LocationID.Glossary134,
+    "[VAL D-3] NPC Glossary (Brihaspathi)": LocationID.Glossary135,
+    "[VAL C-1] NPC Glossary (Pushan)": LocationID.Glossary136,
+    "[VAL A-4] NPC Glossary (Bhaga)": LocationID.Glossary137,
+    "[VAL D-4] NPC Glossary (Bargain Duck)": LocationID.Glossary138,
+    "[DSLM C-1] Scannable Glossary (chip upper right of)": LocationID.Glossary139,
+    "[DSLM] Enemy Glossary (Ba)": LocationID.Glossary140,
+    "[DSLM] Enemy Glossary (Basilisk)": LocationID.Glossary141,
+    "[DSLM] Enemy Glossary (Scarabaeus)": LocationID.Glossary142,
+    "[DSLM B-6] Freestanding Glossary (wall behind spikes lower)": LocationID.Glossary143,
+    "[DSLM B-2] Freestanding Glossary (wall lower left)": LocationID.Glossary144,
+    "[DSLM C-4] Freestanding Glossary (wall middle right double)": LocationID.Glossary145,
+    "[DSLM C-6] Freestanding Glossary (door after boss dead)": LocationID.Glossary146,
+    "[DSLM B-5] NPC Glossary (Set)": LocationID.Glossary147,
+    "[DSLM B-3] NPC Glossary (Amunet)": LocationID.Glossary148,
+    "[DSLM B-2] NPC Glossary (Nun)": LocationID.Glossary149,
+    "[DSLM] NPC Glossary (Ra)": LocationID.Glossary150,
+    "[DSLM C-2] NPC Glossary (Kero)": LocationID.Glossary151,
+    "[DSLM B-6] NPC Glossary (Fairy Guild Lieutenant)": LocationID.Glossary152,
+    "[DSLM] Enemy Glossary (Soul)": LocationID.Glossary153,
+    "[AC] Enemy Glossary (Simurgh)": LocationID.Glossary154,
+    "[AC] Enemy Glossary (Zhulong)": LocationID.Glossary155,
+    "[AC] Enemy Glossary (Azhdaha)": LocationID.Glossary156,
+    "[AC] Enemy Glossary (Galla)": LocationID.Glossary157,
+    "[AC D-7] Freestanding Glossary (magma lower right)": LocationID.Glossary158,
+    "[AC A-6] Freestanding Glossary (wall at the top)": LocationID.Glossary159,
+    "[AC D-3] Freestanding Glossary (wall at the top)": LocationID.Glossary160,
+    "[AC C-5] NPC Glossary (Pangu)": LocationID.Glossary161,
+    "[AC A-4] NPC Glossary (Shennong)": LocationID.Glossary162,
+    "[AC D-5] NPC Glossary (Zhuanxu)": LocationID.Glossary163,
+    "[AC C-6] NPC Glossary (Venum)": LocationID.Glossary164,
+    "[AC D-7] NPC Glossary (Sykick)": LocationID.Glossary165,
+    "[HM] Enemy Glossary (Minotaur)": LocationID.Glossary166,
+    "[HM] Enemy Glossary (Mammon)": LocationID.Glossary167,
+    "[HM] Enemy Glossary (Wyvern)": LocationID.Glossary168,
+    "[HM D-2] Scannable Glossary (Sphinx Statue bottom centre)": LocationID.Glossary169,
+    "[HM C-3] Scannable Glossary (Delphyne statue centre of)": LocationID.Glossary170,
+    "[HM B-3] Scannable Glossary (Hydra statue in the)": LocationID.Glossary171,
+    "[HM B-4] Scannable Glossary (statue bottom centre)": LocationID.Glossary172,
+    "[HM B-3] Freestanding Glossary (block in the upper)": LocationID.Glossary173,
+    "[HM E-3] Freestanding Glossary (on the ground right)": LocationID.Glossary174,
+    "[HM D-4] Scannable Glossary (Chimera Statue bottom left)": LocationID.Glossary175,
+    "[HM E-4] Scannable Glossary (Statue bottom left)": LocationID.Glossary176,
+    "[HM G-4] Scannable Glossary (inside the firebeam)": LocationID.Glossary177,
+    "[HM D-5] Scannable Glossary (Jump into the wall)": LocationID.Glossary178,
+    "[HM E-5] Scannable Glossary (spikes lower left)": LocationID.Glossary179,
+    "[HM C-4] Scannable Glossary (Typhon after collecting dissonance)": LocationID.Glossary180,
+    "[HM E-2] NPC Glossary (Eurytus)": LocationID.Glossary181,
+    "[HM B-4] NPC Glossary (Porphyrion)": LocationID.Glossary182,
+    "[HM F-3] NPC Glossary (Alcyoneus)": LocationID.Glossary183,
+    "[HM G-4] NPC Glossary (Fairylan)": LocationID.Glossary184,
+    "[EP] Enemy Glossary (Hekatonkheires)": LocationID.Glossary185,
+    "[EP] Enemy Glossary (Avnas)": LocationID.Glossary186,
+    "[EP] Enemy Glossary (Erinyes)": LocationID.Glossary187,
+    "[EP] Enemy Glossary (Cacus)": LocationID.Glossary188,
+    "[EP] Enemy Glossary (Lucifer)": LocationID.Glossary189,
+    "[EP] Enemy Glossary (Lucifuge Rofocale)": LocationID.Glossary190,
+    "[EP C-4] Freestanding Glossary (block under door)": LocationID.Glossary191,
+    "[EP C-3] Scannable Glossary (door in the upper)": LocationID.Glossary192,
+    "[EP A-3] Scannable Glossary (chip upper right corner)": LocationID.Glossary193,
+    "[EP F-2] NPC Glossary (Ereshkigal)": LocationID.Glossary194,
+    "[EP B-5] NPC Glossary (Hades)": LocationID.Glossary195,
+    "[EP D-3] Freestanding Glossary (Lower left corner jump)": LocationID.Glossary196,
+    "[EP D-5] NPC Glossary (Eurydice)": LocationID.Glossary197,
+    "[EP C-7] NPC Glossary (Izanami)": LocationID.Glossary198,
+    "[EP F-3] Freestanding Glossary (On the ground between)": LocationID.Glossary199,
+    "[EP D-4] NPC Glossary (Neti)": LocationID.Glossary200,
+    "[EP E-5] NPC Glossary (Anubis)": LocationID.Glossary201,
+    "[EP E-5] NPC Glossary (Osiris)": LocationID.Glossary202,
+    "[EP D-6] NPC Glossary (Fairy Guild Corporal)": LocationID.Glossary203,
+    "[SH E-4] Scannable Glossary (DURING ESCAPE)": LocationID.Glossary204,
+    "[SH F-2] Scannable Glossary (DURING ESCAPE)": LocationID.Glossary205,
+    "[SH C-5] Enemy Glossary (Skuld)": LocationID.Glossary206,
+    "[SH] Enemy Glossary (Dvergr)": LocationID.Glossary207,
+    "[SH] Enemy Glossary (Ginnungagap)": LocationID.Glossary208,
+    "[SH] Enemy Glossary (Muspell)": LocationID.Glossary209,
+    "[SH] Enemy Glossary (Managarmr)": LocationID.Glossary210,
+    "[SH] Enemy Glossary (Berserker)": LocationID.Glossary211,
+    "[SH] Enemy Glossary (Fjalar)": LocationID.Glossary212,
+    "[SH C-4] Scannable Glossary (room above Skuld fight)": LocationID.Glossary213,
+    "[EP C-7] Scannable Glossary (left side of top)": LocationID.Glossary214,
+    "[TS B-1] Scannable Glossary (chip in magma left)": LocationID.Glossary215,
+    "[VOD C-4] Scannable Glossary Above Hot Spring": LocationID.Glossary216,
+    "[GG D-2] Freestanding Glossary (double jump up top)": LocationID.Glossary217,
+    "[MOG C-3] Freestanding Glossary (Behind the pot double)": LocationID.Glossary218,
+    "[GG E-2] Freestanding Glossary (Far Right)": LocationID.Glossary219,
+    "[IC B-1] Freestanding Glossary (next to spikes near)": LocationID.Glossary220,
+    "[GI C-1] Freestanding Glossary (requires Feather)": LocationID.Glossary221,
+    "[GG] Freestanding Glossary (Door to Eden Lower)": LocationID.Glossary222,
+    "[VAL A-4] Freestanding Glossary (floor switch glossary in)": LocationID.Glossary223,
+    "[MC] NPC Glossary (Sidro)": LocationID.Glossary224,
+    "[MC] NPC Glossary (Modro)": LocationID.Glossary225,
+    "[MC B-4] NPC Glossary (Hiner)": LocationID.Glossary226,
+    "[EC B-1] Scannable Glossary Behind Rubble": LocationID.Glossary227,
+    "[DF E-4] Freestanding Glossary (wall lower left)": LocationID.Glossary228,
+    "[SFG A-4] Freestanding Glossary (wall at bottom of)": LocationID.Glossary229,
+    "[GD B-3] Freestanding Glossary (Bottom of spike pit)": LocationID.Glossary230,
+    "[DSLM] Scannable Glossary (Altar of Atum Scan)": LocationID.Glossary231,
+    "[MC] Freestanding Glossary (Tower of Oannes First)": LocationID.Glossary232,
+    "[MC F-2] Freestanding Glossary (fish)": LocationID.Glossary233,
+    "[MC F-4] Freestanding Glossary (fish)": LocationID.Glossary234,
+    "[MC D-4] Freestanding Glossary (fish)": LocationID.Glossary235,
+    "[MC C-6] Freestanding Glossary (fish)": LocationID.Glossary236,
+    "[TOO] Enemy Glossary (Gyonin Tribe)": LocationID.Glossary237,
+    "[TOO] Enemy Glossary (Gyonin the Vogue)": LocationID.Glossary238,
+    "[TOO] Enemy Glossary (Gyonin Flight Test Model)": LocationID.Glossary239,
+    "[TOO] Enemy Glossary (Fishbone Calcium)": LocationID.Glossary240,
+    "[TOO] Enemy Glossary (Gyonin Pestirylium)": LocationID.Glossary241,
+    "[TOO] Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)": LocationID.Glossary242,
+    "[TOO] Enemy Glossary (Fish Wall'22)": LocationID.Glossary243,
+    "[TOO] Freestanding Glossary (untraced extra slot)": LocationID.Glossary244,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #009) #009": LocationID.Glossary245,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #010) #010": LocationID.Glossary246,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #011) #011": LocationID.Glossary247,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #012) #012": LocationID.Glossary248,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #013) #013": LocationID.Glossary249,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #014) #014": LocationID.Glossary250,
+    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #015) #015": LocationID.Glossary251,
+}
 
 ITEM_MAP = {
     "Hand Scanner": ItemID.HandScanner,

@@ -31,6 +31,7 @@ class LocationType(Enum):
     Puzzle = "Puzzle"
     Dissonance = "Dissonance"
     Fairy = "Fairy"
+    Glossary = "Glossary"
 
 # ============================================================
 # JSON-backed definition (equivalent to JsonLocation + ctor)
