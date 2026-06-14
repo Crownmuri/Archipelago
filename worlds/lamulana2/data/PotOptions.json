@@ -1,0 +1,1231 @@
+{
+  "_README": "Pot pool/reward categorization for partitioned Potsanity. Keyed by LocationID enum-member name. 'pool' selects which Potsanity sub-toggle includes the pot; 'reward' is the AP filler item used. Generated from pots.json (root of GitRepos) joined to World.json by pot ID. Regenerate if pots change.",
+  "field01_2G": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field01B2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field01C3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field01D3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field01D3_2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field01E3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field01E2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field01E2_2": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "fieldL00W2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "fieldL00G30": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "fieldL00G2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "fieldL00P": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "fieldL02A0": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "fieldL02B0": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "fieldL02A1": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "fieldL02D3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "fieldL02C4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field00E2w": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field00C2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field00C2w": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field00B2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field00B1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field00C1": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field00E1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field00G0": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field00E3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field00C3": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field00C4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field00D4w": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field00E4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field00E5": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field02C1": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field02D1": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field02D0": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field02C2g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field02C2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field02B1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field02D2_1": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field02D2_2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field02E2": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field02E1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field02B3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field02B4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field02D4_1": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field02D4_2": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field02E4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field02D3": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field02G3": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field02F1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field03E0": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03C0": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03B1": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field03C1": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03D1": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03D2_1": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field03D2_2": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field03D2_3": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field03D4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field03E5": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field03F1_2": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field03F1": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field03F3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field03F5": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field03G1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field03G2_1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field03G2_2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field03G4": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03G5": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field03H4g": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field03H4": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field03I5": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "fieldL00W3": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field03B5": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field03C6": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field03B3": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field03B4_1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field03B4g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field03B4_2": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field03B6": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field03G6": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field03E6": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field03F6": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field03D6": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field04C3_2": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field04C3_3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field04C3_1": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field04C3_4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field04C4": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field04D4": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field04E3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field04B2": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field04C2": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field04A0": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field04A1": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field04A2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field04B1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field04B3_1": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field04B3_2": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field04C0": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field04E0": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field04E1": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field04E2": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field04F0g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field04F2": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field04G0": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field04G0g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field04F0": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05C4_2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field05C4_1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05D3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05E3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field05A2_2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field05A2_1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field05A3": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field05D2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field05B3_3": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field05B3_2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field05B3_1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field05B4_2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field05B4_1": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field05C2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05B1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05C1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field05D1": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field06C2": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field06C3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field06C3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field06D4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field06E2": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field06E3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field06E3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field06E4g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field06E4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field06B4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field06C4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field06C5": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field06D5g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field06D6": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field06A3": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field06add1": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field06C1f": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field06C1": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field06_2C0": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field06_2C0g": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field06_2A0": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field07B2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field07B3": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field07B4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field07B4y": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field07B5": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field07C0": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field07C1s": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field07C1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field07C3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field07C6": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field07C6g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field07D2": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field07D4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field07D5": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field07E2": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field07E4": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field07F4": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field07F4f": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08C4": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08C4g": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field08D1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field08D2": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field08D3": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08D3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field08D4": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field08C4_2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field08F2": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field08A0": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field08B3g": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field08B3b": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field08C1": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08C2g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field08C2f": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08C3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field08D5": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field08D6f": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field08D6g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field08C6": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field08A0g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field08B0": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field09A1": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field09A2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field09B0": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field09C2g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field09C2": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field09C3": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field09D4g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field09D4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field09E1": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field09E2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field09B0g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field09C1": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field09B4": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field09A4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field09A4y": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field10A1": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field10A2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field10A3_1": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field10A3_3": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field10A3_2": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field10B2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field10_B3": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field10C1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field10C3_2": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field10C3_1": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field10D2": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field10D3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field10D3_2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "fieldL00W1": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field10E1": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field11B3_2": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field11B4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field11B5": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field11B64": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field11B65": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field11B62": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field11C1g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field11C2": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field11B3": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field11C3": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field11C4g": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field11C4": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field11C5": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field11D4g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field11D4": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field11D6g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field11D6": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field11E3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field11E3": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field11B1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field11B2": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field11B63": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field11C1": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field12D5": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field12D6": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field12D6g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field12B5": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "ACMapPot1": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "ACMapPot2": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "ACMapPot3": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "ACMapPot4": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field12C4g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field12C4": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field12A3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field12A3": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field12A4g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field12A4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field12B4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field12C3": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field12C3g": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field12D2": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field12D3": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field12D4": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field12C0": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field12C1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field12C2": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field13C0": {
+    "pool": "shuriken",
+    "reward": "10 Shuriken"
+  },
+  "field13B22": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13B3": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field13B3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13C1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13C2": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field13D1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13B2": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field13F4": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field13G3g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13G3": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field13A3g": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field13A3": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field13E3": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field13E4": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field13D4": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field15A3g": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  },
+  "field15A3b": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field15A3": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field15C5": {
+    "pool": "high_value",
+    "reward": "100 Coins"
+  },
+  "field15C6": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field15D4g": {
+    "pool": "high_value",
+    "reward": "80 Coins"
+  },
+  "field15D4": {
+    "pool": "low_value",
+    "reward": "1 Weight"
+  },
+  "field15E3": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field15B1g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field15B1": {
+    "pool": "caltrops",
+    "reward": "10 Caltrops"
+  },
+  "field15C0": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field15C0g": {
+    "pool": "low_value",
+    "reward": "30 Coins"
+  },
+  "field14B5": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14C4": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14C5b": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14C5": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field14C6b": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14C6": {
+    "pool": "rolling_shuriken",
+    "reward": "10 Rolling Shuriken"
+  },
+  "field14D0": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14D1": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14D2": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14D2g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14D3b": {
+    "pool": "bomb",
+    "reward": "3 Bombs"
+  },
+  "field14D3": {
+    "pool": "earth_spear",
+    "reward": "10 Earth Spears"
+  },
+  "field14D4": {
+    "pool": "flare",
+    "reward": "10 Flares"
+  },
+  "field14D5": {
+    "pool": "chakram",
+    "reward": "1 Chakram"
+  },
+  "field14D5g": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14E0": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14E2": {
+    "pool": "low_value",
+    "reward": "10 Coins"
+  },
+  "field14F1": {
+    "pool": "high_value",
+    "reward": "50 Coins"
+  }
+}

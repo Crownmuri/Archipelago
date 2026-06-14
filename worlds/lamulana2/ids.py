@@ -64,8 +64,8 @@ class ItemID(IntEnum):
     DeathSigil = 55
     ClaydollSuit = 56
     KimonoCowgirl = 57
-    Valkyria = 58
-    LittleDevil = 59
+    Valkyrie = 58
+    LittleDemon = 59
     EasternEurope = 60
     Whip1 = 61
     Whip2 = 62
@@ -424,6 +424,79 @@ class ItemID(IntEnum):
     FakeScan15 = 415
 
     # -------------------------------------------------------------------------
+    # Logic Flags
+    # -------------------------------------------------------------------------
+
+    Ratatoskr1 = 500
+    Nidhogg = 501
+    Kaliya = 502
+    Ixtab = 503
+    Cetus = 504
+    Ratatoskr2 = 505
+    Svipdagr = 506
+    Vedfolnir = 507
+    Ratatoskr3 = 508
+    Vidofnir = 509
+    HuginandMunin = 510
+    BadhbhCath = 511
+    Fenrir = 512
+    Balor = 513
+    Tezcatlipoca = 514
+    Unicorn = 515
+    RaijinandFujin = 516
+    Daji = 517
+    Belial = 518
+    Arachne = 519
+    Scylla = 520
+    GlasyaLabolas = 521
+    Griffin = 522
+    VucubCaquix = 523
+    Jalandhara = 524
+    Sekhmet = 525
+    AngraMainyu = 526
+    Ammit = 527
+    Kisikillillake = 528
+    Anzu = 529
+    HoMLeftPath = 530
+    HoMMiddlePath = 531
+    HoMRightPath = 532
+    Hraesvelgr = 533
+    Ratatoskr4 = 534
+    Heimdall = 535
+    Fafnir = 600
+    Kujata = 601
+    Jormungand = 602
+    Surtr = 603
+    Vritra = 604
+    AtenRa = 605
+    Anu = 606
+    Echidna = 607
+    Hel = 608
+    NinthChild = 609
+    Dissonance = 666
+    WeaponFairy = 700
+    MoneyFairy = 701
+    KeyFairy = 702
+    AnnwfnRightShortcut = 800
+    IBLeftShortcut = 801
+    HoMLadder = 802
+    Bergelmir = 803
+    WhitePedestals = 804
+    GarmStatuePuzzle = 805
+    SakitPuzzle = 806
+
+    # -------------------------------------------------------------------------
+    # DLC
+    # -------------------------------------------------------------------------
+
+    FishValusaRegyoded = 807
+    FishSlimeZero = 808
+    EvilFishCrystal = 809
+    FishGearmk2turboR = 810
+    RebirthSigil = 811
+    FishSuit = 812          # DLC costume (clothbox 4); sheet 2, flag 61
+
+    # -------------------------------------------------------------------------
     # AP Trash
     # -------------------------------------------------------------------------
 
@@ -766,67 +839,7 @@ class ItemID(IntEnum):
     PotFiller312 = 1312
 
     """
-    # -------------------------------------------------------------------------
-    # Logic Flags
-    # -------------------------------------------------------------------------
 
-    Ratatoskr1 = 500
-    Nidhogg = 501
-    Kaliya = 502
-    Ixtab = 503
-    Cetus = 504
-    Ratatoskr2 = 505
-    Svipdagr = 506
-    Vedfolnir = 507
-    Ratatoskr3 = 508
-    Vidofnir = 509
-    HuginandMunin = 510
-    BadhbhCath = 511
-    Fenrir = 512
-    Balor = 513
-    Tezcatlipoca = 514
-    Unicorn = 515
-    RaijinandFujin = 516
-    Daji = 517
-    Belial = 518
-    Arachne = 519
-    Scylla = 520
-    GlasyaLabolas = 521
-    Griffin = 522
-    VucubCaquix = 523
-    Jalandhara = 524
-    Sekhmet = 525
-    AngraMainyu = 526
-    Ammit = 527
-    Kisikillillake = 528
-    Anzu = 529
-    HoMLeftPath = 530
-    HoMMiddlePath = 531
-    HoMRightPath = 532
-    Hraesvelgr = 533
-    Ratatoskr4 = 534
-    Heimdall = 535
-    Fafnir = 600
-    Kujata = 601
-    Jormungand = 602
-    Surtr = 603
-    Vritra = 604
-    AtenRa = 605
-    Anu = 606
-    Echidna = 607
-    Hel = 608
-    NinthChild = 609
-    Dissonance = 666
-    WeaponFairy = 700
-    MoneyFairy = 701
-    KeyFairy = 702
-    AnnwfnRightShortcut = 800
-    IBLeftShortcut = 801
-    HoMLadder = 802
-    Bergelmir = 803
-    WhitePedestals = 804
-    GarmStatuePuzzle = 805
-    SakitPuzzle = 806
 
     # Glossary ROM items (match apworld game_id 2000+N; mirrors mod Data/ItemID.cs).
     # Lets get_game_item_id / item_placements treat glossary ROMs as normal items.
@@ -1133,8 +1146,15 @@ class LocationID(IntEnum):
     BirthSigilChest = 52
     LifeSigilChest = 53
     DeathSigilChest = 54
+    RebirthSigilChest = 55  
 
     ClaydollChest = 56
+
+    CostumeChestKimono = 57
+    CostumeChestValkyrie = 58
+    CostumeChestLittleDemon = 59
+    CostumeChestEasternEurope = 60
+    CostumeChestFishSuit = 61   # DLC 
 
     KnifePuzzleReward = 63
     RapierPuzzleReward = 64
@@ -1385,6 +1405,15 @@ class LocationID(IntEnum):
     WhitePedestals = 307
     GarmStatuePuzzle = 308
     SakitPuzzle = 309
+
+    # -------------------------------------------------------------------------
+    # DLC
+    # -------------------------------------------------------------------------
+    
+    FishValusaRegyoded = 310
+    FishSlimeZero = 311
+    EvilFishCrystal = 312
+    FishGearmk2turboR = 313
 
     # -------------------------------------------------------------------------
     # Pot Locations (potsanity)
@@ -1988,14 +2017,6 @@ class LocationID(IntEnum):
     Glossary241 = 2241  # d241, flag 241 — Gyonin Pestirylium (N)
     Glossary242 = 2242  # d242, flag 242 — Gyo-balloon ~Strawberry Flavor~ (N)
     Glossary243 = 2243  # d243, flag 243 — Fish Wall'22 (N)
-    Glossary244 = 2244  # d244, flag 244 — Unknown extra #008 (?)
-    Glossary245 = 2245  # d245, flag 245 — Unknown extra #009 (?)
-    Glossary246 = 2246  # d246, flag 246 — Unknown extra #010 (?)
-    Glossary247 = 2247  # d247, flag 247 — Unknown extra #011 (?)
-    Glossary248 = 2248  # d248, flag 248 — Unknown extra #012 (?)
-    Glossary249 = 2249  # d249, flag 249 — Unknown extra #013 (?)
-    Glossary250 = 2250  # d250, flag 250 — Unknown extra #014 (?)
-    Glossary251 = 2251  # d251, flag 251 — Unknown extra #015 (?)
 
 POT_FLAG_MAP: dict[int, int] = {
     # LocationID.value -> sheet 21 potFlagNo
@@ -2586,22 +2607,33 @@ GLOSSARY_FLAG_MAP: dict[int, int] = {
     2241: 241,  # Glossary241 d241 — Gyonin Pestirylium
     2242: 242,  # Glossary242 d242 — Gyo-balloon ~Strawberry Flavor~
     2243: 243,  # Glossary243 d243 — Fish Wall'22
-    2244: 244,  # Glossary244 d244 — Unknown extra #008
-    2245: 245,  # Glossary245 d245 — Unknown extra #009
-    2246: 246,  # Glossary246 d246 — Unknown extra #010
-    2247: 247,  # Glossary247 d247 — Unknown extra #011
-    2248: 248,  # Glossary248 d248 — Unknown extra #012
-    2249: 249,  # Glossary249 d249 — Unknown extra #013
-    2250: 250,  # Glossary250 d250 — Unknown extra #014
-    2251: 251,  # Glossary251 d251 — Unknown extra #015
 }
 
-# Glossary ROM item game_ids (2000..2251). Defined/named in Items.json but NOT
-# pooled yet (build_item_pool skips them) until their 252 locations are placed.
-GLOSSARY_ITEM_IDS: set[int] = set(range(2000, 2000 + 252))
-GLOSSARY_PLACED_ITEM_IDS: set[int] = {
-    2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058, 2059, 2060, 2061, 2062, 2063, 2064, 2065, 2066, 2067, 2068, 2069, 2070, 2071, 2072, 2073, 2074, 2075, 2076, 2077, 2078, 2079, 2080, 2081, 2082, 2083, 2084, 2085, 2086, 2087, 2088, 2089, 2090, 2091, 2092, 2093, 2094, 2095, 2096, 2097, 2098, 2099, 2100, 2101, 2102, 2103, 2104, 2105, 2106, 2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114, 2115, 2116, 2117, 2118, 2119, 2120, 2121, 2122, 2123, 2124, 2125, 2126, 2127, 2128, 2129, 2130, 2131, 2132, 2133, 2134, 2135, 2136, 2137, 2138, 2139, 2140, 2141, 2142, 2143, 2144, 2145, 2146, 2147, 2148, 2149, 2150, 2151, 2152, 2153, 2154, 2155, 2156, 2157, 2158, 2159, 2160, 2161, 2162, 2163, 2164, 2165, 2166, 2167, 2168, 2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176, 2177, 2178, 2179, 2180, 2181, 2182, 2183, 2184, 2185, 2186, 2187, 2188, 2189, 2190, 2191, 2192, 2193, 2194, 2195, 2196, 2197, 2198, 2199, 2200, 2201, 2202, 2203, 2204, 2205, 2206, 2207, 2208, 2209, 2210, 2211, 2212, 2213, 2214, 2215, 2216, 2217, 2218, 2219, 2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2228, 2229, 2230, 2231
-}  # Freestanding+Scannable ROMs — pooled (filler) when glossanity on
+GLOSSARY_ITEM_IDS: set[int] = set(range(2000, 2244))         # 2000..2243, all wired glossary ROMs
+DLC_GLOSSARY_IDS: set[int] = set(range(2232, 2244))          # 2232..2243 inclusive
+DLC_ITEM_IDS: set = {ItemID.RebirthSigil, ItemID.FishSuit}
+
+# Costume closets (costumesanity). Fish Suit is additionally DLC (oannesanity).
+COSTUME_ITEM_IDS: set = {
+    ItemID.KimonoCowgirl, ItemID.Valkyrie, ItemID.LittleDemon,
+    ItemID.EasternEurope, ItemID.FishSuit,
+}
+COSTUME_LOCATION_IDS: set = {
+    LocationID.CostumeChestKimono, LocationID.CostumeChestValkyrie,
+    LocationID.CostumeChestLittleDemon, LocationID.CostumeChestEasternEurope,
+    LocationID.CostumeChestFishSuit,
+}
+
+# Wearable costumes that enable a Costume Clip (any one of these can be switched
+# into). Used by Glitch(Costume Clip) logic when Costumesanity is on. Item NAMES
+# (not IDs) since logic checks state.has(name). Claydoll Suit is always available
+# in the pool; the rest enter only with Costumesanity (Fish Suit also Oannesanity).
+COSTUME_CLIP_ITEMS: tuple = (
+    "Claydoll Suit", "Kimono Cowgirl", "Valkyrie", "Little Demon",
+    "Eastern Europe", "Fish Suit",
+)
+
+DLC_LOCATION_IDS: set = {LocationID.RebirthSigilChest, LocationID.CostumeChestFishSuit} | {LocationID(v) for v in DLC_GLOSSARY_IDS}
 
 class AreaID(IntEnum):
     None_ = 0
@@ -2697,6 +2729,32 @@ class AreaID(IntEnum):
     EPDHel = 90
     EPG = 91
     SpiralHell = 92
+    # --- DLC areas (Spring in the Sky / Tower of Oannes / Bailey / Eden) ---
+    SpringintheSky = 93
+    TowerOfOannesLeftA = 94
+    TowerOfOannesLeftB = 95
+    TowerOfOannesLeftC = 96
+    TowerOfOannesRight = 97
+    BaileyBottom = 98
+    BaileyLevel1 = 99
+    BaileyLevel2 = 100
+    BaileyLevel3 = 101
+    BaileyTopRight = 102
+    Eden = 103
+
+
+# All DLC regions (Spring in the Sky / Tower of Oannes / Bailey / Eden).
+# Every location in these areas — chests, glossaries, AND minibosses — is
+# gated behind oannesanity; without the DLC there is no path into them.
+DLC_AREA_IDS: set = {
+    AreaID.SpringintheSky,
+    AreaID.TowerOfOannesLeftA, AreaID.TowerOfOannesLeftB,
+    AreaID.TowerOfOannesLeftC, AreaID.TowerOfOannesRight,
+    AreaID.BaileyBottom, AreaID.BaileyLevel1, AreaID.BaileyLevel2,
+    AreaID.BaileyLevel3, AreaID.BaileyTopRight,
+    AreaID.Eden,
+}
+
 
 class ExitID(IntEnum):
     None_ = 0
@@ -2772,8 +2830,39 @@ class ExitID(IntEnum):
     fNibiru = 70
     fP01Left = 71
     fP01Right = 72
+    # --- DLC exits (Spring in the Sky / Tower of Oannes / Bailey) ---
+    fLUp = 73          # Gate of Guidance -> Spring in the Sky (up ladder)
+    fL04Down = 74      # Spring in the Sky -> Gate of Guidance (down ladder)
+    fL04Up = 75        # Spring in the Sky -> Tower of Oannes Left-A (up ladder)
+    fEx1Down = 76      # Tower of Oannes Left-A -> Spring in the Sky (down ladder)
+    fEx1_Lout = 77     # Tower of Oannes Left-C -> Bailey Bottom (oneway)
+    fEx1_L0 = 78       # Tower Left-A bottom  <-> Bailey Bottom   (gate)
+    fEx1_L1 = 79       # Tower Left-A top     <-> Bailey Level 1  (gate)
+    fEx1_L2 = 80       # Tower Left-B bottom  <-> Bailey Level 1  (gate)
+    fEx1_L3 = 81       # Tower Left-B top     <-> Bailey Level 2  (gate)
+    fEx1_L4 = 82       # Tower Left-C bottom  <-> Bailey Level 2  (gate)
+    fEx1_L5 = 83       # Tower Left-C top     <-> Bailey Level 3  (gate)
+    fEx1_R = 84        # Tower Right          <-> Bailey Top Right (gate)
+    fEx1_Rout = 85     # Tower Right -> Bailey Bottom (first oneway)
+    fEx1_Rout2 = 86    # Tower Right -> Bailey Bottom (second oneway)
+    fEx2_Lout = 87
+    fEx2_L0 = 88
+    fEx2_L1 = 89
+    fEx2_L2 = 90
+    fEx2_L3 = 91
+    fEx2_L4 = 92
+    fEx2_L5 = 93
+    fEx2_R = 94
+    fEx2_Rout = 95
+    fEx2_Rout2 = 96
 
 AP_LOCATION_NAMES = {
+    # Costume closets (costumesanity)
+    "[IT F-3] Kimono Cowgirl Costume Chest": LocationID.CostumeChestKimono,
+    "[CAVERN] Valkyrie Costume Chest": LocationID.CostumeChestValkyrie,
+    "[GOTD D-4] Little Demon Costume Chest": LocationID.CostumeChestLittleDemon,
+    "[AC C-3] Eastern Europe Costume Chest": LocationID.CostumeChestEasternEurope,
+    "[DLC D-1] DLC Boss Reward Chest": LocationID.CostumeChestFishSuit,
     "[AC A-4] There is Nothing Here": LocationID.AnkhChestAC,
     "[AC B-5] Simultaneous Strike Chest": LocationID.CrystalSkullChestAC,
     "[AC B-6] Map Chest": LocationID.MapChestAC,
@@ -2821,6 +2910,7 @@ AP_LOCATION_NAMES = {
     "[DSLM C-8] Aten-Ra's Dissonance": LocationID.DissonanceDSLM,
     "[DSLM E-3] Top-Right Grapple Chest": LocationID.AnkhChestDLM,
     "[EC A-1] Freya's Item": LocationID.FreyasItem,
+    "[DLC] Four Trials Reward Chest": LocationID.RebirthSigilChest,
     "[EPD A-3] Hel Reward": LocationID.BookoftheDeadChest,
     "[EPD A-3] Hel's Dissonance": LocationID.DissonanceEPG,
     "[EPD A-4] Lava Maze Chest": LocationID.CrystalSkullChestEPD,
@@ -2979,6 +3069,7 @@ AP_LOCATION_NAMES = {
     "[VOD E-4] Sidro Shop 2": LocationID.SidroShop2,
     "[VOD E-4] Sidro Shop 3": LocationID.SidroShop3,
     "[VOD G-3] Waterfall Sacred Orb": LocationID.SacredOrbVoD,
+
 
     # --- Pot Locations (potsanity) ---
     # --- La-Mulana Pots (field01) ---
@@ -3161,7 +3252,7 @@ AP_LOCATION_NAMES = {
     "[TS D-4] Amenominakanushi Pre-Ladder Coin Pot": LocationID.field08D3g,
     "[TS D-5] Falling Platform Item Pot": LocationID.field08D4,
     "[TS D-5] Falling Platform Weight Pot": LocationID.field08C4_2,
-    "[TS F-3] Raijin and Fujin Reward Item Pot": LocationID.field08F2,
+    "[TS F-3] Raijin and Fujin's Item Pot": LocationID.field08F2,
     "[TS B-4] Maze Top-Left Item Pot": LocationID.field08A0,
     "[TS B-4] Maze Middle Coin Pot": LocationID.field08B3g,
     "[TS B-4] Maze Bottom-Left Item Pot": LocationID.field08B3b,
@@ -3304,48 +3395,48 @@ AP_LOCATION_NAMES = {
     "[EPD C-2] Seventh Hell Gate Approach Item Pot": LocationID.field15B1,
     "[EPD C-1] Sixth Hell Gate Exit Item Pot": LocationID.field15C0,
     "[EPD C-1] Sixth Hell Gate Exit Coin Pot": LocationID.field15C0g,
-        # --- Glossary Locations (glossanity) ---
+    # --- Glossary Locations (glossanity) ---
     "[ROY] Enemy Glossary (Bat)": LocationID.Glossary000,
     "[ROY] Enemy Glossary (Skeleton)": LocationID.Glossary001,
     "[ROY] Enemy Glossary (Carbuncle)": LocationID.Glossary002,
     "[ROY] Enemy Glossary (Fachan)": LocationID.Glossary003,
     "[ROY] Enemy Glossary (Skvader)": LocationID.Glossary004,
-    "[ROY C-5] Freestanding Glossary in Breakable Wall": LocationID.Glossary005,
-    "[ROY E-5] Freestanding Glossary (wall)": LocationID.Glossary006,
-    "[ROY C-4] Freestanding Glossary in Opened Wall": LocationID.Glossary007,
+    "[ROY C-5] Glossary in Wall Above Korobock": LocationID.Glossary005,
+    "[ROY E-5] Glossary in Torch Room Wall": LocationID.Glossary006,
+    "[ROY C-4] Glossary in Opened Wall": LocationID.Glossary007,
     "[ROY] Enemy Glossary (Black Carbuncle)": LocationID.Glossary008,
     "[ROY B-3] NPC Glossary (Sigyn)": LocationID.Glossary009,
     "[ROY E-4] NPC Glossary (Vili)": LocationID.Glossary010,
     "[ROY E-6] NPC Glossary (Ve)": LocationID.Glossary011,
     "[ROY C-5] NPC Glossary (Korobock)": LocationID.Glossary012,
-    "[ROY B-4] Scannable Glossary (inside wall above the)": LocationID.Glossary013,
-    "[ANW] Enemy Glossary (Apsara)": LocationID.Glossary014,
-    "[ANW] Enemy Glossary (Odontotyrannos)": LocationID.Glossary015,
-    "[ANW] Enemy Glossary (Makara)": LocationID.Glossary016,
-    "[ANW] Enemy Glossary (Hanuman)": LocationID.Glossary017,
-    "[ANW] Enemy Glossary (Behemoth)": LocationID.Glossary018,
-    "[ANW] Enemy Glossary (Tog)": LocationID.Glossary019,
-    "[ANW] Enemy Glossary (Aghasura)": LocationID.Glossary020,
-    "[ANW D-1] Freestanding Glossary (Lower Left)": LocationID.Glossary021,
-    "[ANW D-5] Freestanding Glossary (Behind Skull in the)": LocationID.Glossary022,
-    "[ANW B-5] Freestanding Glossary (wall top Right)": LocationID.Glossary023,
-    "[ANW F-2] Freestanding Glossary (wall lower left)": LocationID.Glossary024,
-    "[ANW C-2] Freestanding Glossary (wall Lower Left)": LocationID.Glossary025,
-    "[ANW D-4] NPC Glossary (Voluspa)": LocationID.Glossary026,
-    "[ANW D-1] NPC Glossary (Pym)": LocationID.Glossary027,
+    "[SFG B-4] Glossary Behind Eye (Scan)": LocationID.Glossary013,
+    "[ANN] Enemy Glossary (Apsara)": LocationID.Glossary014,
+    "[ANN] Enemy Glossary (Odontotyrannos)": LocationID.Glossary015,
+    "[ANN] Enemy Glossary (Makara)": LocationID.Glossary016,
+    "[ANN] Enemy Glossary (Hanuman)": LocationID.Glossary017,
+    "[ANN] Enemy Glossary (Behemoth)": LocationID.Glossary018,
+    "[ANN] Enemy Glossary (Tog)": LocationID.Glossary019,
+    "[ANN] Enemy Glossary (Aghasura)": LocationID.Glossary020,
+    "[ANN D-1] Glossary in Kaliya's Room": LocationID.Glossary021,
+    "[ANN D-5] Glossary Behind Skull Underwater": LocationID.Glossary022,
+    "[ANN B-5] Glossary in Top-Right Breakable Wall": LocationID.Glossary023,
+    "[ANN F-2] Glossary in Bottom-Left Wall Past Kujata": LocationID.Glossary024,
+    "[ANN C-2] Glossary in Wall Approaching Frey": LocationID.Glossary025,
+    "[ANN D-4] NPC Glossary (Voluspa)": LocationID.Glossary026,
+    "[ANN D-1] NPC Glossary (Pym)": LocationID.Glossary027,
     "[IB] Enemy Glossary (Kabandha)": LocationID.Glossary028,
     "[IB] Enemy Glossary (El Baul)": LocationID.Glossary029,
     "[IB] Enemy Glossary (Lycanthrope)": LocationID.Glossary030,
     "[IB] Enemy Glossary (Vimana)": LocationID.Glossary031,
     "[IB] Enemy Glossary (Kraken)": LocationID.Glossary032,
-    "[IB G-1] Freestanding Glossary (Underwater lower left side)": LocationID.Glossary033,
-    "[IB B-6] Freestanding Glossary (wall on the right)": LocationID.Glossary034,
-    "[IB H-7] Freestanding Glossary (fall down the right)": LocationID.Glossary035,
+    "[IB G-1] Glossary Post Cetus Water Passage": LocationID.Glossary033,
+    "[IB B-6] Glossary at Left-side Long Ladder": LocationID.Glossary034,
+    "[IB H-7] Glossary in the Buried Fortress": LocationID.Glossary035,
     "[IB B-2] NPC Glossary (Kubera)": LocationID.Glossary036,
     "[IB F-2] NPC Glossary (Soma)": LocationID.Glossary037,
     "[IB E-6] NPC Glossary (Yama)": LocationID.Glossary038,
     "[IB G-7] NPC Glossary (Alviss)": LocationID.Glossary039,
-    "[IB D-3] Freestanding Glossary (on a platform)": LocationID.Glossary040,
+    "[ALTAR] Glossary on Left Platform": LocationID.Glossary040,
     "[IB E-1] NPC Glossary (Peibalusa)": LocationID.Glossary041,
     "[IB G-6] NPC Glossary (Hiro Roderick)": LocationID.Glossary042,
     "[IB G-4] NPC Glossary (Haja)": LocationID.Glossary043,
@@ -3353,10 +3444,10 @@ AP_LOCATION_NAMES = {
     "[IT] Enemy Glossary (Lindworm)": LocationID.Glossary045,
     "[IT] Enemy Glossary (Langsuir)": LocationID.Glossary046,
     "[IT] Enemy Glossary (Muu Shuwuu)": LocationID.Glossary047,
-    "[IT C-2] Scannable Glossary (foot of the left)": LocationID.Glossary048,
-    "[IT B-1] Freestanding Glossary (ground on the left)": LocationID.Glossary049,
-    "[IT C-5] Scannable Glossary (Skeleton in the poison)": LocationID.Glossary050,
-    "[IT E-2] Scannable Glossary (left side of Hot)": LocationID.Glossary051,
+    "[IT C-2] Glossary in Surtr's Room (Scan)": LocationID.Glossary048,
+    "[IT B-1] Glossary in Left Breakable Floor": LocationID.Glossary049,
+    "[IT C-5] Glossary at Poison Lava Skeleton (Scan)": LocationID.Glossary050,
+    "[IT E-2] Glossary in the Hot Spring (Scan)": LocationID.Glossary051,
     "[IT C-3] NPC Glossary (Sinmara)": LocationID.Glossary052,
     "[IT F-3] NPC Glossary (Modgud)": LocationID.Glossary053,
     "[IT E-1] NPC Glossary (Inanna)": LocationID.Glossary054,
@@ -3368,7 +3459,7 @@ AP_LOCATION_NAMES = {
     "[DF] Enemy Glossary (Dokkalfar)": LocationID.Glossary060,
     "[DF] Enemy Glossary (Vodyanoy)": LocationID.Glossary061,
     "[DF] Enemy Glossary (Gullinbursti)": LocationID.Glossary062,
-    "[DF D-5] Freestanding Glossary (lower right wall)": LocationID.Glossary063,
+    "[DF D-5] Glossary in Wall Right of Mural": LocationID.Glossary063,
     "[DF D-4] NPC Glossary (Hermod)": LocationID.Glossary064,
     "[DF A-3] NPC Glossary (Brokkr)": LocationID.Glossary065,
     "[DF A-3] NPC Glossary (Eitri)": LocationID.Glossary066,
@@ -3380,39 +3471,39 @@ AP_LOCATION_NAMES = {
     "[SFG] Enemy Glossary (Ungur)": LocationID.Glossary072,
     "[SFG] Enemy Glossary (Zorya)": LocationID.Glossary073,
     "[SFG] Enemy Glossary (Baba Yaga)": LocationID.Glossary074,
-    "[SFG E-4] Freestanding Glossary (Right side of the)": LocationID.Glossary075,
-    "[SFG B-5] Freestanding Glossary (the snow crouch under)": LocationID.Glossary076,
-    "[SFG D-5] Freestanding Glossary (Inside the broken pillar)": LocationID.Glossary077,
-    "[SFG D-4] Freestanding Glossary (Inside the block in)": LocationID.Glossary078,
-    "[SFG A-1] Freestanding Glossary (Tezcatlipoca)": LocationID.Glossary079,
-    "[SFG C-2] Freestanding Glossary (down inside pillar on)": LocationID.Glossary080,
-    "[SFG D-7] Freestanding Glossary (Wall above the spikes)": LocationID.Glossary081,
+    "[SFG E-4] Glossary in the Path of Snow": LocationID.Glossary075,
+    "[SFG B-5] Glossary in the Snow Below Skeleton": LocationID.Glossary076,
+    "[SFG D-5] Glossary in the Checkered Pillar": LocationID.Glossary077,
+    "[SFG D-4] Glossary in Between the Elevators": LocationID.Glossary078,
+    "[SFGB A-1] Glossary Post-Tezcatlipoca": LocationID.Glossary079,
+    "[SFG C-2] Glossary in Softlock Pillar Before Balor": LocationID.Glossary080,
+    "[SFG D-7] Glossary in Flame Torc Wall Above Spikes": LocationID.Glossary081,
     "[SFG E-4] NPC Glossary (Gerd)": LocationID.Glossary082,
     "[SFG D-5] NPC Glossary (Thrymr)": LocationID.Glossary083,
     "[SFG B-4] NPC Glossary (Mnemosyne's Remains)": LocationID.Glossary084,
     "[SFG A-5] NPC Glossary (Hydlit)": LocationID.Glossary085,
     "[SFG C-4] NPC Glossary (Fairy Guild General)": LocationID.Glossary086,
-    "[GD] Enemy Glossary (Asp)": LocationID.Glossary087,
-    "[GD] Enemy Glossary (Red Cap)": LocationID.Glossary088,
-    "[GD] Enemy Glossary (Mask)": LocationID.Glossary089,
-    "[GD] Enemy Glossary (Medjed)": LocationID.Glossary090,
-    "[GD D-6] Freestanding Glossary (Wall in the Centre)": LocationID.Glossary091,
-    "[GD B-2] NPC Glossary (Amen)": LocationID.Glossary092,
-    "[GD A-4] NPC Glossary (Nekhbet)": LocationID.Glossary093,
-    "[GD D-4] NPC Glossary (Isis)": LocationID.Glossary094,
-    "[GD E-5] NPC Glossary (Horus)": LocationID.Glossary095,
-    "[GD D-6] NPC Glossary (Neftis)": LocationID.Glossary096,
-    "[GD B-5] NPC Glossary (Thoth)": LocationID.Glossary097,
-    "[GD B-3] NPC Glossary (Aytum)": LocationID.Glossary098,
+    "[GOTD] Enemy Glossary (Asp)": LocationID.Glossary087,
+    "[GOTD] Enemy Glossary (Red Cap)": LocationID.Glossary088,
+    "[GOTD] Enemy Glossary (Mask)": LocationID.Glossary089,
+    "[GOTD] Enemy Glossary (Medjed)": LocationID.Glossary090,
+    "[GOTD D-6] Glossary in Center Breakable Wall": LocationID.Glossary091,
+    "[GOTD B-2] NPC Glossary (Amen)": LocationID.Glossary092,
+    "[GOTD A-4] NPC Glossary (Nekhbet)": LocationID.Glossary093,
+    "[GOTD D-4] NPC Glossary (Isis)": LocationID.Glossary094,
+    "[GOTD E-5] NPC Glossary (Horus)": LocationID.Glossary095,
+    "[GOTD D-6] NPC Glossary (Neftis)": LocationID.Glossary096,
+    "[GOTD B-5] NPC Glossary (Thoth)": LocationID.Glossary097,
+    "[GOTD B-3] NPC Glossary (Aytum)": LocationID.Glossary098,
     "[TS] Enemy Glossary (Edimmu)": LocationID.Glossary099,
     "[TS] Enemy Glossary (Nurikabe)": LocationID.Glossary100,
     "[TS] Enemy Glossary (Enenra)": LocationID.Glossary101,
     "[TS] Enemy Glossary (Guhin)": LocationID.Glossary102,
     "[TS] Enemy Glossary (Kuda-gitsune)": LocationID.Glossary103,
     "[TS] Enemy Glossary (Blue Skeleton)": LocationID.Glossary104,
-    "[TS E-3] Freestanding Glossary (Behind Dragon lower left)": LocationID.Glossary105,
-    "[TS E-6] Freestanding Glossary (top left wall from)": LocationID.Glossary106,
-    "[TS D-4] Freestanding Glossary (wall bottom right)": LocationID.Glossary107,
+    "[TS E-3] Glossary in Raijin and Fujin's Room": LocationID.Glossary105,
+    "[TS E-6] Glossary in Wall Flared Before Daji": LocationID.Glossary106,
+    "[TS D-4] Glossary in Bottom-Right Breakable Wall": LocationID.Glossary107,
     "[TS D-1] NPC Glossary (Kami-musubi)": LocationID.Glossary108,
     "[TS C-3] NPC Glossary (Izanagi)": LocationID.Glossary109,
     "[TS D-7] NPC Glossary (Shitateruhime)": LocationID.Glossary110,
@@ -3421,10 +3512,10 @@ AP_LOCATION_NAMES = {
     "[HL] Enemy Glossary (Harpy)": LocationID.Glossary113,
     "[HL] Enemy Glossary (Lizardman)": LocationID.Glossary114,
     "[HL] Enemy Glossary (Andrealphus)": LocationID.Glossary115,
-    "[HL D-5] Freestanding Glossary (Behind face on the)": LocationID.Glossary116,
-    "[HL B-5] Freestanding Glossary (wall lower left)": LocationID.Glossary117,
-    "[HL C-2] Freestanding Glossary (Top right)": LocationID.Glossary118,
-    "[HL E-3] Scannable Glossary (down far right from)": LocationID.Glossary119,
+    "[HL D-5] Glossary in Sphinx's Room": LocationID.Glossary116,
+    "[HL B-5] Glossary in Scylla's Breakable Wall": LocationID.Glossary117,
+    "[HL C-2] Glossary along the Path to Chaos": LocationID.Glossary118,
+    "[HL E-3] Glossary behind Griffin's Statue (Scan)": LocationID.Glossary119,
     "[HL C-5] NPC Glossary (Hermes)": LocationID.Glossary120,
     "[HL A-3] NPC Glossary (Eros)": LocationID.Glossary121,
     "[HL A-2] NPC Glossary (Orpheus)": LocationID.Glossary122,
@@ -3436,26 +3527,26 @@ AP_LOCATION_NAMES = {
     "[VAL] Enemy Glossary (Carbunco)": LocationID.Glossary128,
     "[VAL] Enemy Glossary (Cabracan)": LocationID.Glossary129,
     "[VAL] Enemy Glossary (Zipakna)": LocationID.Glossary130,
-    "[VAL A-2] Freestanding Glossary (right wall just above)": LocationID.Glossary131,
-    "[VAL B-4] Scannable Glossary (chip just right of)": LocationID.Glossary132,
-    "[VAL D-3] Freestanding Glossary (Behind Pot top right)": LocationID.Glossary133,
+    "[VAL A-2] Glossary in Breakable Wall Above Spikes": LocationID.Glossary131,
+    "[VAL B-4] Glossary in Jalandhara's Corridor (Scan)": LocationID.Glossary132,
+    "[VAL D-3] Glossary Behind Third Trickster Spot": LocationID.Glossary133,
     "[VAL A-3] NPC Glossary (Hoenir)": LocationID.Glossary134,
     "[VAL D-3] NPC Glossary (Brihaspathi)": LocationID.Glossary135,
     "[VAL C-1] NPC Glossary (Pushan)": LocationID.Glossary136,
     "[VAL A-4] NPC Glossary (Bhaga)": LocationID.Glossary137,
     "[VAL D-4] NPC Glossary (Bargain Duck)": LocationID.Glossary138,
-    "[DSLM C-1] Scannable Glossary (chip upper right of)": LocationID.Glossary139,
+    "[NIBIRU] Glossary in the Top-Right Corner (Scan)": LocationID.Glossary139,
     "[DSLM] Enemy Glossary (Ba)": LocationID.Glossary140,
     "[DSLM] Enemy Glossary (Basilisk)": LocationID.Glossary141,
     "[DSLM] Enemy Glossary (Scarabaeus)": LocationID.Glossary142,
-    "[DSLM B-6] Freestanding Glossary (wall behind spikes lower)": LocationID.Glossary143,
-    "[DSLM B-2] Freestanding Glossary (wall lower left)": LocationID.Glossary144,
-    "[DSLM C-4] Freestanding Glossary (wall middle right double)": LocationID.Glossary145,
-    "[DSLM C-6] Freestanding Glossary (door after boss dead)": LocationID.Glossary146,
+    "[DSLM B-6] Glossary in Wall Below Winged Statue": LocationID.Glossary143,
+    "[DSLM B-2] Glossary in Visibly Breakable Wall": LocationID.Glossary144,
+    "[DSLM C-4] Glossary in Breakable Wall to Atum": LocationID.Glossary145,
+    "[DSLM C-6] Glossary after Aten-Ra Defeated": LocationID.Glossary146,
     "[DSLM B-5] NPC Glossary (Set)": LocationID.Glossary147,
     "[DSLM B-3] NPC Glossary (Amunet)": LocationID.Glossary148,
     "[DSLM B-2] NPC Glossary (Nun)": LocationID.Glossary149,
-    "[DSLM] NPC Glossary (Ra)": LocationID.Glossary150,
+    "[DSLM C-6] NPC Glossary (Ra)": LocationID.Glossary150,
     "[DSLM C-2] NPC Glossary (Kero)": LocationID.Glossary151,
     "[DSLM B-6] NPC Glossary (Fairy Guild Lieutenant)": LocationID.Glossary152,
     "[DSLM] Enemy Glossary (Soul)": LocationID.Glossary153,
@@ -3463,54 +3554,54 @@ AP_LOCATION_NAMES = {
     "[AC] Enemy Glossary (Zhulong)": LocationID.Glossary155,
     "[AC] Enemy Glossary (Azhdaha)": LocationID.Glossary156,
     "[AC] Enemy Glossary (Galla)": LocationID.Glossary157,
-    "[AC D-7] Freestanding Glossary (magma lower right)": LocationID.Glossary158,
-    "[AC A-6] Freestanding Glossary (wall at the top)": LocationID.Glossary159,
-    "[AC D-3] Freestanding Glossary (wall at the top)": LocationID.Glossary160,
+    "[AC D-7] Glossary at the Bottom of Lava Funnel": LocationID.Glossary158,
+    "[AC A-6] Glossary in Wall Between The Eyes (Scan)": LocationID.Glossary159,
+    "[AC D-3] Glossary in Left Wall Before Anzu": LocationID.Glossary160,
     "[AC C-5] NPC Glossary (Pangu)": LocationID.Glossary161,
     "[AC A-4] NPC Glossary (Shennong)": LocationID.Glossary162,
     "[AC D-5] NPC Glossary (Zhuanxu)": LocationID.Glossary163,
     "[AC C-6] NPC Glossary (Venum)": LocationID.Glossary164,
     "[AC D-7] NPC Glossary (Sykick)": LocationID.Glossary165,
-    "[HM] Enemy Glossary (Minotaur)": LocationID.Glossary166,
-    "[HM] Enemy Glossary (Mammon)": LocationID.Glossary167,
-    "[HM] Enemy Glossary (Wyvern)": LocationID.Glossary168,
-    "[HM D-2] Scannable Glossary (Sphinx Statue bottom centre)": LocationID.Glossary169,
-    "[HM C-3] Scannable Glossary (Delphyne statue centre of)": LocationID.Glossary170,
-    "[HM B-3] Scannable Glossary (Hydra statue in the)": LocationID.Glossary171,
-    "[HM B-4] Scannable Glossary (statue bottom centre)": LocationID.Glossary172,
-    "[HM B-3] Freestanding Glossary (block in the upper)": LocationID.Glossary173,
-    "[HM E-3] Freestanding Glossary (on the ground right)": LocationID.Glossary174,
-    "[HM D-4] Scannable Glossary (Chimera Statue bottom left)": LocationID.Glossary175,
-    "[HM E-4] Scannable Glossary (Statue bottom left)": LocationID.Glossary176,
-    "[HM G-4] Scannable Glossary (inside the firebeam)": LocationID.Glossary177,
-    "[HM D-5] Scannable Glossary (Jump into the wall)": LocationID.Glossary178,
-    "[HM E-5] Scannable Glossary (spikes lower left)": LocationID.Glossary179,
-    "[HM C-4] Scannable Glossary (Typhon after collecting dissonance)": LocationID.Glossary180,
-    "[HM E-2] NPC Glossary (Eurytus)": LocationID.Glossary181,
-    "[HM B-4] NPC Glossary (Porphyrion)": LocationID.Glossary182,
-    "[HM F-3] NPC Glossary (Alcyoneus)": LocationID.Glossary183,
-    "[HM G-4] NPC Glossary (Fairylan)": LocationID.Glossary184,
+    "[HOM] Enemy Glossary (Minotaur)": LocationID.Glossary166,
+    "[HOM] Enemy Glossary (Mammon)": LocationID.Glossary167,
+    "[HOM] Enemy Glossary (Wyvern)": LocationID.Glossary168,
+    "[HOM D-2] Glossary at Sphynx Statue (Scan)": LocationID.Glossary169,
+    "[HOM C-3] Glossary at Delphyne Statue (Scan)": LocationID.Glossary170,
+    "[HOM B-3] Glossary at Lernaean Hydra Statue (Scan)": LocationID.Glossary171,
+    "[HOM B-4] Glossary at Nemean Lion Statue (Scan)": LocationID.Glossary172,
+    "[HOM B-3] Glossary at Lernaean Hydra's Wall": LocationID.Glossary173,
+    "[HOM E-3] Glossary at Ladon when Awoken": LocationID.Glossary174,
+    "[HOM D-4] Glossary at Chimera Statue (Scan)": LocationID.Glossary175,
+    "[HOM E-4] Glossary at Phaia Statue (Scan)": LocationID.Glossary176,
+    "[HOM G-4] Glossary in the Laser Beam (Scan)": LocationID.Glossary177,
+    "[HOM D-5] Glossary in Orthrus' Right Wall (Scan)": LocationID.Glossary178,
+    "[HOM E-5] Glossary at Spikes before Orthrus (Scan)": LocationID.Glossary179,
+    "[HL C-4] Glossary After Destroying Typhon (Scan)": LocationID.Glossary180,
+    "[HOM E-2] NPC Glossary (Eurytus)": LocationID.Glossary181,
+    "[HOM B-4] NPC Glossary (Porphyrion)": LocationID.Glossary182,
+    "[HOM F-3] NPC Glossary (Alcyoneus)": LocationID.Glossary183,
+    "[HOM G-4] NPC Glossary (Fairylan)": LocationID.Glossary184,
     "[EP] Enemy Glossary (Hekatonkheires)": LocationID.Glossary185,
     "[EP] Enemy Glossary (Avnas)": LocationID.Glossary186,
     "[EP] Enemy Glossary (Erinyes)": LocationID.Glossary187,
     "[EP] Enemy Glossary (Cacus)": LocationID.Glossary188,
     "[EP] Enemy Glossary (Lucifer)": LocationID.Glossary189,
     "[EP] Enemy Glossary (Lucifuge Rofocale)": LocationID.Glossary190,
-    "[EP C-4] Freestanding Glossary (block under door)": LocationID.Glossary191,
-    "[EP C-3] Scannable Glossary (door in the upper)": LocationID.Glossary192,
-    "[EP A-3] Scannable Glossary (chip upper right corner)": LocationID.Glossary193,
-    "[EP F-2] NPC Glossary (Ereshkigal)": LocationID.Glossary194,
-    "[EP B-5] NPC Glossary (Hades)": LocationID.Glossary195,
-    "[EP D-3] Freestanding Glossary (Lower left corner jump)": LocationID.Glossary196,
-    "[EP D-5] NPC Glossary (Eurydice)": LocationID.Glossary197,
-    "[EP C-7] NPC Glossary (Izanami)": LocationID.Glossary198,
-    "[EP F-3] Freestanding Glossary (On the ground between)": LocationID.Glossary199,
-    "[EP D-4] NPC Glossary (Neti)": LocationID.Glossary200,
-    "[EP E-5] NPC Glossary (Anubis)": LocationID.Glossary201,
-    "[EP E-5] NPC Glossary (Osiris)": LocationID.Glossary202,
-    "[EP D-6] NPC Glossary (Fairy Guild Corporal)": LocationID.Glossary203,
-    "[SH E-4] Scannable Glossary (DURING ESCAPE)": LocationID.Glossary204,
-    "[SH F-2] Scannable Glossary (DURING ESCAPE)": LocationID.Glossary205,
+    "[EPD C-4] Glossary in Wall Under Blood Corridor": LocationID.Glossary191,
+    "[EPD C-3] Glossary in Right Mirrored Door (Scan)": LocationID.Glossary192,
+    "[EPD A-3] Glossary in Hel's Preview Area (Scan)": LocationID.Glossary193,
+    "[EPG F-2] NPC Glossary (Ereshkigal)": LocationID.Glossary194,
+    "[EPG B-5] NPC Glossary (Hades)": LocationID.Glossary195,
+    "[EPG D-2] Glossary Past The River Styx": LocationID.Glossary196,
+    "[EPG D-5] NPC Glossary (Eurydice)": LocationID.Glossary197,
+    "[EPG C-7] NPC Glossary (Izanami)": LocationID.Glossary198,
+    "[EPG F-3] Glossary After Talking to Sakit": LocationID.Glossary199,
+    "[EPD D-4] NPC Glossary (Neti)": LocationID.Glossary200,
+    "[EPD E-5] NPC Glossary (Anubis)": LocationID.Glossary201,
+    "[EPD E-5] NPC Glossary (Osiris)": LocationID.Glossary202,
+    "[EPG D-6] NPC Glossary (Fairy Guild Corporal)": LocationID.Glossary203,
+    "[IT E-4] Enemy Glossary During Escape (Urd)": LocationID.Glossary204,
+    "[ROY F-2] Enemy Glossary During Escape (Verdandi)": LocationID.Glossary205,
     "[SH C-5] Enemy Glossary (Skuld)": LocationID.Glossary206,
     "[SH] Enemy Glossary (Dvergr)": LocationID.Glossary207,
     "[SH] Enemy Glossary (Ginnungagap)": LocationID.Glossary208,
@@ -3518,46 +3609,105 @@ AP_LOCATION_NAMES = {
     "[SH] Enemy Glossary (Managarmr)": LocationID.Glossary210,
     "[SH] Enemy Glossary (Berserker)": LocationID.Glossary211,
     "[SH] Enemy Glossary (Fjalar)": LocationID.Glossary212,
-    "[SH C-4] Scannable Glossary (room above Skuld fight)": LocationID.Glossary213,
-    "[EP C-7] Scannable Glossary (left side of top)": LocationID.Glossary214,
-    "[TS B-1] Scannable Glossary (chip in magma left)": LocationID.Glossary215,
-    "[VOD C-4] Scannable Glossary Above Hot Spring": LocationID.Glossary216,
-    "[GG D-2] Freestanding Glossary (double jump up top)": LocationID.Glossary217,
-    "[MOG C-3] Freestanding Glossary (Behind the pot double)": LocationID.Glossary218,
-    "[GG E-2] Freestanding Glossary (Far Right)": LocationID.Glossary219,
-    "[IC B-1] Freestanding Glossary (next to spikes near)": LocationID.Glossary220,
-    "[GI C-1] Freestanding Glossary (requires Feather)": LocationID.Glossary221,
-    "[GG] Freestanding Glossary (Door to Eden Lower)": LocationID.Glossary222,
-    "[VAL A-4] Freestanding Glossary (floor switch glossary in)": LocationID.Glossary223,
-    "[MC] NPC Glossary (Sidro)": LocationID.Glossary224,
-    "[MC] NPC Glossary (Modro)": LocationID.Glossary225,
-    "[MC B-4] NPC Glossary (Hiner)": LocationID.Glossary226,
-    "[EC B-1] Scannable Glossary Behind Rubble": LocationID.Glossary227,
-    "[DF E-4] Freestanding Glossary (wall lower left)": LocationID.Glossary228,
-    "[SFG A-4] Freestanding Glossary (wall at bottom of)": LocationID.Glossary229,
-    "[GD B-3] Freestanding Glossary (Bottom of spike pit)": LocationID.Glossary230,
-    "[DSLM] Scannable Glossary (Altar of Atum Scan)": LocationID.Glossary231,
-    "[MC] Freestanding Glossary (Tower of Oannes First)": LocationID.Glossary232,
-    "[MC F-2] Freestanding Glossary (fish)": LocationID.Glossary233,
-    "[MC F-4] Freestanding Glossary (fish)": LocationID.Glossary234,
-    "[MC D-4] Freestanding Glossary (fish)": LocationID.Glossary235,
-    "[MC C-6] Freestanding Glossary (fish)": LocationID.Glossary236,
-    "[TOO] Enemy Glossary (Gyonin Tribe)": LocationID.Glossary237,
-    "[TOO] Enemy Glossary (Gyonin the Vogue)": LocationID.Glossary238,
-    "[TOO] Enemy Glossary (Gyonin Flight Test Model)": LocationID.Glossary239,
-    "[TOO] Enemy Glossary (Fishbone Calcium)": LocationID.Glossary240,
-    "[TOO] Enemy Glossary (Gyonin Pestirylium)": LocationID.Glossary241,
-    "[TOO] Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)": LocationID.Glossary242,
-    "[TOO] Enemy Glossary (Fish Wall'22)": LocationID.Glossary243,
-    "[TOO] Freestanding Glossary (untraced extra slot)": LocationID.Glossary244,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #009) #009": LocationID.Glossary245,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #010) #010": LocationID.Glossary246,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #011) #011": LocationID.Glossary247,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #012) #012": LocationID.Glossary248,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #013) #013": LocationID.Glossary249,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #014) #014": LocationID.Glossary250,
-    "[TOO] Freestanding Glossary (untraced extra slot Unknown extra #015) #015": LocationID.Glossary251,
+    "[SH C-4] Glossary on the Escape Route (Scan)": LocationID.Glossary213,
+    "[EPG C-7] Glossary in Pillar next to NPC (Scan)": LocationID.Glossary214,
+    "[TS B-1] Glossary inside the Poison Lava (Scan)": LocationID.Glossary215,
+    "[VOD C-4] Glossary Above Hot Spring (Scan)": LocationID.Glossary216,
+    "[GOG D-2] Glossary Above Children": LocationID.Glossary217,
+    "[MOG C-3] Glossary Behind Pot": LocationID.Glossary218,
+    "[GOG E-2] Glossary at Spring in the Sky Entrance": LocationID.Glossary219,
+    "[IC B-1] Glossary Next to Spikes": LocationID.Glossary220,
+    "[GOI C-1] Glossary Next to Child's Statue": LocationID.Glossary221,
+    "[GOG A-3] Glossary Below Gate of Illusion Door": LocationID.Glossary222,
+    "[VAL A-4] Glossary Locked Behind Floor Switch": LocationID.Glossary223,
+    "[VOD E-4] NPC Glossary (Sidro)": LocationID.Glossary224,
+    "[VOD E-4] NPC Glossary (Modro)": LocationID.Glossary225,
+    "[GOG B-4] NPC Glossary (Hiner)": LocationID.Glossary226,
+    "[EC B-1] Glossary Behind Rubble (Scan)": LocationID.Glossary227,
+    "[DF E-4] Glossary in Pre-Hugin and Munin Wall": LocationID.Glossary228,
+    "[SFG A-4] Glossary at Left Snow Drop": LocationID.Glossary229,
+    "[GOTD B-3] Glossary at Bottom of Spike Pit": LocationID.Glossary230,
+    "[DSLM C-3] Glossary at Altar of Atum Statue (Scan)": LocationID.Glossary231,
+    "[DLC C-3] Glossary at the Top of the First Tower": LocationID.Glossary232,
+    "[ANN F-2] Fish Glossary (Nijimasu)": LocationID.Glossary233,
+    "[IT F-4] Fish Glossary (Sanma)": LocationID.Glossary234,
+    "[VAL D-4] Fish Glossary (Sawara)": LocationID.Glossary235,
+    "[AC C-6] Fish Glossary (Nodoguro)": LocationID.Glossary236,
+    "[DLC] Enemy Glossary (Gyonin Tribe)": LocationID.Glossary237,
+    "[DLC] Enemy Glossary (Gyonin the Vogue)": LocationID.Glossary238,
+    "[DLC] Enemy Glossary (Gyonin Flight Test Model)": LocationID.Glossary239,
+    "[DLC] Enemy Glossary (Fishbone Calcium)": LocationID.Glossary240,
+    "[DLC] Enemy Glossary (Gyonin Pestirylium)": LocationID.Glossary241,
+    "[DLC] Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)": LocationID.Glossary242,
+    "[DLC] Enemy Glossary (Fish Wall'22)": LocationID.Glossary243
 }
+
+# =============================================================================
+# Partitioned Potsanity / Glossanity pools
+# =============================================================================
+
+# Pot pools, in display order. Each maps to a `potsanity_<pool>` option.
+POT_POOLS: tuple[str, ...] = (
+    "low_value", "high_value", "shuriken", "rolling_shuriken", "earth_spear",
+    "flare", "caltrops", "chakram", "bomb",
+)
+
+# Glossary categories. Each maps to a `glossanity_<cat>` option.
+GLOSS_CATS: tuple[str, ...] = ("freestanding", "scannable", "npc", "enemy")
+
+
+def _load_pot_options():
+    """Load data/PotOptions.json -> {LocationID: pool}, {LocationID: reward name}."""
+    import json
+    from importlib import resources
+    with resources.files(__package__ + ".data").joinpath(
+        "PotOptions.json"
+    ).open("r", encoding="utf-8") as f:
+        raw = json.load(f)
+    pool_by_loc: dict = {}
+    reward_by_loc: dict = {}
+    for key, val in raw.items():
+        if key.startswith("_"):
+            continue
+        lid = LocationID[key]
+        pool_by_loc[lid] = val["pool"]
+        reward_by_loc[lid] = val["reward"]
+    return pool_by_loc, reward_by_loc
+
+
+POT_POOL_BY_LOC, POT_REWARD_BY_LOC = _load_pot_options()
+
+
+def _glossary_category(name: str) -> str:
+    """Categorize a glossary location by its display name."""
+    if "(Scan)" in name:
+        return "scannable"
+    if "Enemy Glossary" in name:
+        return "enemy"
+    if "NPC Glossary" in name:
+        return "npc"
+    return "freestanding"
+
+
+# Glossary game-id (shared by LocationID.GlossaryNNN and ItemID.GlossaryNNN,
+# both equal to 2000+N) -> category. Lets us filter both glossary locations and
+# their ROM filler items by the same category.
+GLOSSARY_CATEGORY_BY_ID: dict[int, str] = {
+    int(locid): _glossary_category(name)
+    for name, locid in AP_LOCATION_NAMES.items()
+    if int(locid) in GLOSSARY_ITEM_IDS
+}
+
+
+def potsanity_pools_enabled(options) -> set:
+    """Set of pot pool names whose `potsanity_<pool>` toggle is on."""
+    return {p for p in POT_POOLS if getattr(options, f"potsanity_{p}")}
+
+
+def glossanity_cats_enabled(options) -> set:
+    """Set of glossary category names whose `glossanity_<cat>` toggle is on."""
+    return {c for c in GLOSS_CATS if getattr(options, f"glossanity_{c}")}
+
 
 ITEM_MAP = {
     "Hand Scanner": ItemID.HandScanner,
@@ -3615,6 +3765,11 @@ ITEM_MAP = {
     "Life Sigil": ItemID.LifeSigil,
     "Death Sigil": ItemID.DeathSigil,
     "Claydoll Suit": ItemID.ClaydollSuit,
+    "Kimono Cowgirl": ItemID.KimonoCowgirl,
+    "Valkyrie": ItemID.Valkyrie,
+    "Little Demon": ItemID.LittleDemon,
+    "Eastern Europe": ItemID.EasternEurope,
+    "Fish Suit": ItemID.FishSuit,
     "Progressive Whip": ItemID.Whip1,
     "Knife": ItemID.Knife,
     "Rapier": ItemID.Rapier,
@@ -4546,6 +4701,10 @@ USELESS_ITEM_IDS = {
     ItemID.Research8,
     ItemID.Research9,
     ItemID.Research10,
+    ItemID.KimonoCowgirl,
+    ItemID.Valkyrie,
+    ItemID.LittleDemon,
+    ItemID.EasternEurope,
     # Adding Maps to filler to loosen AP restrictive fill
     ItemID.YagooMapReader,
     ItemID.YagooMapStreet,
@@ -5297,6 +5456,12 @@ LOGIC_FLAG_LOCATION_IDS = {
     LocationID.WhitePedestals: "White Pedestals",
     LocationID.GarmStatuePuzzle: "Garm Statue Puzzle",
     LocationID.SakitPuzzle: "Sakit Puzzle",
+
+    # DLC
+    LocationID.FishValusaRegyoded: "Fish-Valusa Re-gyo-ded",
+    LocationID.FishSlimeZero: "Fish-Slime Zero",
+    LocationID.EvilFishCrystal: "Evil Fish Crystal",
+    LocationID.FishGearmk2turboR: "Fish-Gear mk-2 turboR",
 }
 
 LOGIC_FLAG_ITEM_IDS = {
@@ -5366,6 +5531,12 @@ LOGIC_FLAG_ITEM_IDS = {
     ItemID.WhitePedestals,
     ItemID.GarmStatuePuzzle,
     ItemID.SakitPuzzle,
+    
+    # DLC
+    ItemID.FishValusaRegyoded,
+    ItemID.FishSlimeZero,
+    ItemID.EvilFishCrystal,
+    ItemID.FishGearmk2turboR,
 }
 
 LOGIC_FLAG_MAP = {
@@ -5434,6 +5605,12 @@ LOGIC_FLAG_MAP = {
     "White Pedestals": ItemID.WhitePedestals,
     "Garm Statue Puzzle": ItemID.GarmStatuePuzzle,
     "Sakit Puzzle": ItemID.SakitPuzzle,
+
+    # DLC
+    "Fish-Valusa Re-gyo-ded": ItemID.FishValusaRegyoded,
+    "Fish-Slime Zero": ItemID.FishSlimeZero,
+    "Evil Fish Crystal": ItemID.EvilFishCrystal,
+    "Fish-Gear mk-2 turboR": ItemID.FishGearmk2turboR,
 }
 ORIGINAL_SHOP_ITEMS = {
     ItemID.YagooMapReader, 

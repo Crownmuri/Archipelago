@@ -65,6 +65,21 @@ INCLUDE_DESPITE_FALSE = {
     ExitID.fP01Left,    # Altar Left Door (A-1)
     ExitID.fP02Left,    # Cliff (A-1) — user changed to True in World.json;
                         # kept here as safety net for older World.json versions
+    # DLC one-way drops: logic=False in vanilla but shuffled when include_dlc_entrances on
+    ExitID.fEx2_Rout,   # Bailey Top Right -> Bailey Bottom (forced fall slide)
+    ExitID.fEx2_Rout2,  # Bailey Top Right -> Bailey Bottom (forced fall slide)
+    ExitID.fEx2_Lout,   # Bailey Level 3 -> Bailey Bottom (forced fall slide)
+}
+
+# DLC exits (Spring in the Sky / Tower of Oannes / Bailey). Excluded from the
+# ER pool unless options.include_dlc_entrances is set.
+DLC_EXIT_IDS: Set[ExitID] = {
+    ExitID.fLUp, ExitID.fL04Down, ExitID.fL04Up, ExitID.fEx1Down,
+    ExitID.fEx1_L0, ExitID.fEx1_L1, ExitID.fEx1_L2, ExitID.fEx1_L3,
+    ExitID.fEx1_L4, ExitID.fEx1_L5, ExitID.fEx1_R, ExitID.fEx1_Rout,
+    ExitID.fEx2_L0, ExitID.fEx2_L1, ExitID.fEx2_L2, ExitID.fEx2_L3,
+    ExitID.fEx2_L4, ExitID.fEx2_L5, ExitID.fEx2_R, ExitID.fEx2_Rout,
+    ExitID.fEx1_Lout, ExitID.fEx1_Rout2, ExitID.fEx2_Lout, ExitID.fEx2_Rout2,
 }
 
 DEAD_END_EXITS = {

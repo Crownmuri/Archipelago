@@ -560,6 +560,8 @@ class PlayerStateAdapter:
         
         # Item checks
         if name == "Has":
+            if args[0] == "Fish Suit":
+                return self._fish_suit_in_logic()
             return self._has_item(args[0])
         
         # Count-based checks
@@ -737,8 +739,25 @@ class PlayerStateAdapter:
 
     def _glitch(self, glitch_name: str) -> bool:
         if glitch_name == "Costume Clip":
-            return bool(self.options.costume_clip)
+            if not self.options.costume_clip:
+                return False
+            # Without Costumesanity the player always has costumes to clip with.
+            if not self.options.costumesanity:
+                return True
+            # With Costumesanity, need at least one wearable costume found.
+            from ..ids import COSTUME_CLIP_ITEMS
+            return any(self._has_item(c) for c in COSTUME_CLIP_ITEMS)
         return False
+
+    def _fish_suit_in_logic(self) -> bool:
+        """Has(Fish Suit) gated by DLC Item Logic (see DLCItemLogic option)."""
+        if not self.options.dlc_item_logic:
+            return False
+        # Obtainable only when it's actually a randomized item
+        # (Oannesanity + Costumesanity); otherwise assumed from the start.
+        if self.options.oannesanity and self.options.costumesanity:
+            return self._has_item("Fish Suit")
+        return True
 
     def _dissonance(self, count: int) -> bool:
         # C# parity: prefer explicit Dissonance items if present,

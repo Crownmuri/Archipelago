@@ -160,15 +160,89 @@ class GuardianKills(Range):
     range_end = 9
     default = 5
 
-class Potsanity(Toggle):
-    """Include pots as randomized location checks.
-    Regular potsanity will add all 307 regular item pots to the pool (ammo, coins, weights)."""
-    display_name = "Potsanity"
+# --- Potsanity (partitioned into per-content sub-pools) ------------------------
+# Each toggle adds that subset of the 307 item pots as randomized checks.
 
-class Glossanity(Toggle):
-    """Include glossary entries as randomized location checks.
-    (WIP - For development purposes only.)"""
-    display_name = "Glossanity"
+class PotsanityLowValue(Toggle):
+    """Potsanity: add Low Value item pots as checks. (144 pots)
+    39 x 1 Weight Pots
+    74 x 10 Coins Pots
+    31 x 30 Coins Pots
+    """
+    display_name = "Potsanity - Low Value Pots"
+
+class PotsanityHighValue(Toggle):
+    """Potsanity: add High Value item pots as checks. (24 pots)
+    8 x 50 Coins Pots
+    7 x 80 Coins Pots
+    9 x 100 Coins Pots"""
+    display_name = "Potsanity - High Value Pots"
+
+class PotsanityShuriken(Toggle):
+    """Potsanity: add all Shuriken ammo pots as checks. (23 pots)"""
+    display_name = "Potsanity - Shuriken Pots"
+
+class PotsanityRollingShuriken(Toggle):
+    """Potsanity: add all Rolling Shuriken ammo pots as checks. (16 pots)"""
+    display_name = "Potsanity - Rolling Shuriken Pots"
+
+class PotsanityEarthSpear(Toggle):
+    """Potsanity: add all Earth Spear ammo pots as checks. (23 pots)"""
+    display_name = "Potsanity - Earth Spear Pots"
+
+class PotsanityFlare(Toggle):
+    """Potsanity: add all Flare ammo pots as checks. (24 pots)"""
+    display_name = "Potsanity - Flare Pots"
+
+class PotsanityCaltrops(Toggle):
+    """Potsanity: add all Caltrops ammo pots as checks. (17 pots)"""
+    display_name = "Potsanity - Caltrops Pots"
+
+class PotsanityChakram(Toggle):
+    """Potsanity: add all Chakram ammo pots as checks. (10 pots)"""
+    display_name = "Potsanity - Chakram Pots"
+
+class PotsanityBomb(Toggle):
+    """Potsanity: add all Bomb ammo pots as checks. (26 pots)"""
+    display_name = "Potsanity - Bomb Pots"
+
+# --- Glossanity (partitioned by glossary entry type) ---------------------------
+
+class GlossanityFreestanding(Toggle):
+    """Glossanity: add all Freestanding Glossary entries. (56 entries)
+    Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
+    display_name = "Glossanity - Freestanding"
+
+class GlossanityScannable(Toggle):
+    """Glossanity: add all Scannable Glossary entries that require Hand Scanner. (26 entries)"""
+    display_name = "Glossanity - Scannable"
+
+class GlossanityNPC(Toggle):
+    """Glossanity: add all NPC Glossary entries as checks. (78 entries)"""
+    display_name = "Glossanity - NPC"
+
+class GlossanityEnemy(Toggle):
+    """Glossanity: add all Enemy Glossary entries as checks. (84 entries)
+    Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
+    display_name = "Glossanity - Enemy"
+
+class Oannesanity(Toggle):
+    """DLC Required. Enabling this may add the following checks based off of other options:
+    - 1 Item Chest (Comes with this option)
+    - 5 Freestanding Glossary (Glossanity - Freestanding Required)
+    - 7 Enemy Glossary (Glossanity - Enemy Required)
+    - 1 Costume Chest (Costumesanity Required)
+    You can set this option separately from the entrance decoupling option.
+    """
+    display_name = "Oannesanity"
+
+class Costumesanity(Toggle):
+    """Add the costume chests and their correlating costumes into the pool.
+    At the start of the seed you will not have your costumes available.
+    The chests are openable by default and do not require a key.
+    This option will may impact logic relating to glitches and DLC. 
+    Note: DLC Item is only shuffled if Oannesanity is turned on."""
+    display_name = "Costumesanity"
 
 class GuardianSpecificAnkhJewels(DefaultOnToggle):
     """Makes Ankhs only usable at their designated bosses."""
@@ -217,7 +291,10 @@ class RequireFDC(DefaultOnToggle):
     display_name = "Require FDC"
 
 class DLCItemLogic(Toggle):
-    """Considers the DLC Item for accessibility."""
+    """Consider the DLC item in logic.
+    When enabled, the DLC item is assumed available from the start, unless it is
+    randomized by sanity options, in which case it must be obtained first.
+    When disabled, the DLC item is never considered in logic."""
     display_name = "DLC Item Logic"
 
 class LifeSigilToAwakenHoM(DefaultOnToggle):
@@ -267,6 +344,11 @@ class UniqueTransitions(Toggle):
 class FullRandomEntrances(Toggle):
     """Mix the enabled randomized entrances across area types."""
     display_name = "Full Random Entrances"
+
+class IncludeDLCEntrances(Toggle):
+    """Requires DLC. Include DLC entrances in the pool.
+    Note: Combat logic to survive in the DLC areas is not setup yet."""
+    display_name = "Include DLC Entrances"
 
 class PreventAreaLoops(Toggle):
     """Prevent entrance randomization from pairing exits within the same area.
@@ -391,8 +473,23 @@ class LM2Options(PerGameCommonOptions):
     random_dissonance: RandomDissonance
 
     # Sanities
-    potsanity: Potsanity
-    glossanity: Glossanity
+    # Potsanity is partitioned into per-content sub-pools (no single master toggle).
+    potsanity_low_value: PotsanityLowValue
+    potsanity_high_value: PotsanityHighValue
+    potsanity_shuriken: PotsanityShuriken
+    potsanity_rolling_shuriken: PotsanityRollingShuriken
+    potsanity_earth_spear: PotsanityEarthSpear
+    potsanity_flare: PotsanityFlare
+    potsanity_caltrops: PotsanityCaltrops
+    potsanity_chakram: PotsanityChakram
+    potsanity_bomb: PotsanityBomb
+    # Glossanity is partitioned by entry type (no single master toggle).
+    glossanity_freestanding: GlossanityFreestanding
+    glossanity_scannable: GlossanityScannable
+    glossanity_npc: GlossanityNPC
+    glossanity_enemy: GlossanityEnemy
+    oannesanity: Oannesanity
+    costumesanity: Costumesanity
 
     # Logic & Difficulty
     required_guardians: GuardianKills
@@ -414,6 +511,7 @@ class LM2Options(PerGameCommonOptions):
     gate_entrances: GateEntrances
     unique_transitions: UniqueTransitions
     full_random_entrances: FullRandomEntrances
+    include_dlc_entrances: IncludeDLCEntrances
     prevent_area_loops: PreventAreaLoops
     soul_gate_entrances: SoulGateEntrances
     include_nine_soul_gates: IncludeNineSoulGates

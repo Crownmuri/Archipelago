@@ -280,7 +280,9 @@ def _shuffleable_exits(world) -> list:
             shuffle_types |= {ExitType.OneWay, ExitType.Pyramid,
                                ExitType.Start, ExitType.Altar}
 
-    from .entrances import INCLUDE_DESPITE_FALSE
+    from .entrances import INCLUDE_DESPITE_FALSE, DLC_EXIT_IDS
+
+    include_dlc = bool(getattr(opts, "include_dlc_entrances", False))
 
     result = []
     for region in world.multiworld.get_regions(world.player):
@@ -288,6 +290,9 @@ def _shuffleable_exits(world) -> list:
             if not isinstance(exit_, LM2Entrance):
                 continue
             if exit_.exit_type not in shuffle_types:
+                continue
+            # DLC exits only enter the ER pool when the player opts in (owns the DLC).
+            if not include_dlc and exit_.game_exit_id in DLC_EXIT_IDS:
                 continue
             logic = (exit_._original_logic or '').strip().lower()
             # Skip logic=False exits UNLESS they are in INCLUDE_DESPITE_FALSE.

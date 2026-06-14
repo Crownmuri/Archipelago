@@ -3,7 +3,7 @@ from __future__ import annotations
 import struct
 from typing import BinaryIO, Dict, Iterable, List, Tuple
 
-from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID
+from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID, potsanity_pools_enabled
 
 # ============================================================
 # AP item -> LM2 seed encoding (write-time only)
@@ -293,7 +293,8 @@ def write_ap_seed_file(
 
         # --- AP-only settings -------------------------------------------
         _write_bool(f, settings.guardian_specific_ankhs)
-        _write_bool(f, settings.potsanity)
+        # Potsanity is partitioned; the mod only needs "any pool active".
+        _write_bool(f, bool(potsanity_pools_enabled(settings)))
         _write_i32(f, settings.ap_chest_color)
         _write_i32(f, settings.logic_difficulty)
         _write_bool(f, settings.costume_clip)

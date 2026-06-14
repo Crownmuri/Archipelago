@@ -270,8 +270,38 @@
     "isRequired": true
   },
   {
+    "name": "Rebirth Sigil",
+    "id": 811,
+    "isRequired": false
+  },
+  {
     "name": "Claydoll Suit",
     "id": 56,
+    "isRequired": true
+  },
+  {
+    "name": "Kimono Cowgirl",
+    "id": 57,
+    "isRequired": false
+  },
+  {
+    "name": "Valkyrie",
+    "id": 58,
+    "isRequired": false
+  },
+  {
+    "name": "Little Demon",
+    "id": 59,
+    "isRequired": false
+  },
+  {
+    "name": "Eastern Europe",
+    "id": 60,
+    "isRequired": false
+  },
+  {
+    "name": "Fish Suit",
+    "id": 812,
     "isRequired": true
   },
   {
@@ -2086,46 +2116,6 @@
   {
     "name": "[N] Fish Wall'22 (DLC#007)",
     "id": 2243,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #008 (DLC#008)",
-    "id": 2244,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #009 (DLC#009)",
-    "id": 2245,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #010 (DLC#010)",
-    "id": 2246,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #011 (DLC#011)",
-    "id": 2247,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #012 (DLC#012)",
-    "id": 2248,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #013 (DLC#013)",
-    "id": 2249,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #014 (DLC#014)",
-    "id": 2250,
-    "isRequired": false
-  },
-  {
-    "name": "[?] Unknown extra #015 (DLC#015)",
-    "id": 2251,
     "isRequired": false
   }
 ]

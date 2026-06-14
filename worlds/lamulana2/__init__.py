@@ -5,7 +5,7 @@ from __future__ import annotations
 # Set DEBUG = True to enable verbose logging during AP generation.
 # Leave False for public/alpha builds to suppress [ER], [DEBUG], etc. output.
 # =============================================================================
-DEBUG = False
+DEBUG = True
 
 def _log(*args, **kwargs):
     if DEBUG:
@@ -22,7 +22,7 @@ from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
 from .options import LM2Options, StartingArea, StartingWeapon
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_PLACED_ITEM_IDS
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_CATEGORY_BY_ID, potsanity_pools_enabled, glossanity_cats_enabled
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
@@ -259,8 +259,8 @@ class LaMulana2World(World):
         # Build the base item pool
         pool = build_item_pool(self)
 
-        # Add pot filler items when potsanity is enabled
-        if self.options.potsanity:
+        # Add pot filler items for whichever potsanity pools are enabled
+        if potsanity_pools_enabled(self.options):
             pool += build_pot_filler_pool(self)
 
         # Add items to multiworld's item pool
@@ -533,6 +533,9 @@ class LaMulana2World(World):
                 self._label_for_location(loc)
             )
 
+        _enabled_pot_pools = potsanity_pools_enabled(self.options)
+        _enabled_gloss_cats = glossanity_cats_enabled(self.options)
+
         return {
             # Existing fields
             "starting_area": int(self.starting_area),
@@ -557,6 +560,7 @@ class LaMulana2World(World):
             "logic_difficulty": int(self.options.logic_difficulty),
             "game_difficulty": int(self.options.game_difficulty),
             "costume_clip": int(self.options.costume_clip),
+            "costumesanity": int(self.options.costumesanity),
             "dlc_item_logic": int(self.options.dlc_item_logic),
             "life_sigil_to_awaken_hom": int(self.options.life_sigil_to_awaken_hom),
             "auto_place_skull": int(self.options.auto_skulls),
@@ -569,16 +573,18 @@ class LaMulana2World(World):
             # AP unique settings
             "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
 
-            # Potsanity
-            "potsanity": int(self.options.potsanity),
-            "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()} if self.options.potsanity else {},
+            # Potsanity (partitioned) — mod just needs "active"; the pot_flag_map
+            # is restricted to the pots whose pool is enabled.
+            "potsanity": int(bool(_enabled_pot_pools)),
+            "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()
+                             if POT_POOL_BY_LOC.get(k) in _enabled_pot_pools},
 
-            # Glossanity — only the PLACED locations are live AP checks (the 173
-            # deferred entries unlock vanilla in-world; mapping their flags would make
-            # every enemy-drop / NPC glossary unlock report a bogus check).
-            "glossanity": int(self.options.glossanity),
+            # Glossanity (partitioned) — only the PLACED locations are live AP checks.
+            # The flag map is restricted to entries whose category is enabled.
+            "glossanity": int(bool(_enabled_gloss_cats)),
             "glossary_flag_map": {str(k): v for k, v in GLOSSARY_FLAG_MAP.items()
-                                  if k in GLOSSARY_PLACED_ITEM_IDS} if self.options.glossanity else {},
+                                  if k in GLOSSARY_ITEM_IDS
+                                  and GLOSSARY_CATEGORY_BY_ID.get(int(k)) in _enabled_gloss_cats},
 
             # Per-location display names — see comment above the dict build.
             "location_labels": slot_location_labels,
@@ -597,7 +603,11 @@ class LaMulana2World(World):
                 "mantra_placement", "shop_placement",
                 "random_research", "remove_research", "remove_maps",
                 "required_skulls", "remove_excess_skulls", "random_dissonance",
-                "potsanity", "glossanity",
+                "potsanity_low_value", "potsanity_high_value", "potsanity_shuriken",
+                "potsanity_rolling_shuriken", "potsanity_earth_spear", "potsanity_flare",
+                "potsanity_caltrops", "potsanity_chakram", "potsanity_bomb",
+                "glossanity_freestanding", "glossanity_scannable",
+                "glossanity_npc", "glossanity_enemy", "oannesanity",
                 "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
                 "game_difficulty",
                 "echidna_difficulty", "costume_clip", "require_fdc",
@@ -765,10 +775,11 @@ class LaMulana2World(World):
                 # and pot LocationID -> in-game potFlagNo map. Pot data is
                 # only meaningful when potsanity is enabled, but settings
                 # are always worth carrying for solo replay.
-                pot_flag_map = (
-                    {int(k): int(v) for k, v in POT_FLAG_MAP.items()}
-                    if self.options.potsanity else {}
-                )
+                _seed_pot_pools = potsanity_pools_enabled(self.options)
+                pot_flag_map = {
+                    int(k): int(v) for k, v in POT_FLAG_MAP.items()
+                    if POT_POOL_BY_LOC.get(k) in _seed_pot_pools
+                }
 
                 # Display name per LocationID — captures every filled
                 # location (own + foreign) so the C# mod can label items
@@ -861,12 +872,32 @@ class LaMulana2World(World):
         if self.starting_area == AreaID.VoD and "Starting Shop" in loc.name:
             return False
 
-        # Skip pot locations unless potsanity is enabled
-        if loc.location_type == LocationType.Pot and not self.options.potsanity:
+        # Skip pot locations whose content pool's potsanity toggle is off
+        if loc.location_type == LocationType.Pot:
+            pool = POT_POOL_BY_LOC.get(loc.game_location_id)
+            if pool is None or not getattr(self.options, f"potsanity_{pool}"):
+                return False
+
+        # Skip glossary locations whose category's glossanity toggle is off
+        if loc.location_type == LocationType.Glossary:
+            cat = GLOSSARY_CATEGORY_BY_ID.get(int(loc.game_location_id))
+            if cat is None or not getattr(self.options, f"glossanity_{cat}"):
+                return False
+
+        # Skip DLC locations unless the player opts in
+        if loc.game_location_id in DLC_LOCATION_IDS and not self.options.oannesanity:
             return False
 
-        # Skip glossary locations unless glossanity is enabled
-        if loc.location_type == LocationType.Glossary and not self.options.glossanity:
+        # Skip every location in a DLC region (Spring in the Sky / Tower of
+        # Oannes / Bailey / Eden) unless oannesanity — covers DLC minibosses
+        # (logic-flag events) and any chest/glossary in those areas. Without
+        # the DLC there is no reachable path into these regions.
+        if loc.parent_area in DLC_AREA_IDS and not self.options.oannesanity:
+            return False
+
+        # Skip costume closets unless costumesanity is on. (Fish Suit is also in
+        # DLC_LOCATION_IDS above, so it additionally requires oannesanity.)
+        if loc.game_location_id in COSTUME_LOCATION_IDS and not self.options.costumesanity:
             return False
 
         return True

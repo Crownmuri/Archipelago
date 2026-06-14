@@ -145,8 +145,16 @@ class RuleNode(LogicNode):
         if name == "Glitch":
             glitch_name = args[0] if args else ""
             if glitch_name == "Costume Clip":
-                result = bool(options.costume_clip)
-                return lambda state, r=result: r
+                if not options.costume_clip:
+                    return lambda state: False
+                # Without Costumesanity the player always has costumes to clip with.
+                if not options.costumesanity:
+                    return lambda state: True
+                # With Costumesanity, need to have found at least one wearable costume.
+                from ..ids import COSTUME_CLIP_ITEMS
+                return lambda state, cs=COSTUME_CLIP_ITEMS, p=player: (
+                    any(state.has(c, p) for c in cs)
+                )
             return lambda state: False
 
         if name == "HasMap":
@@ -165,6 +173,18 @@ class RuleNode(LogicNode):
 
         if name in ("Has", "IsDead", "PuzzleFinished"):
             item = args[0] if args else ""
+
+            # DLC item (Fish Suit) traversal checks are gated by DLC Item Logic.
+            # Only the Has() spelling is remapped; IsDead/PuzzleFinished and the
+            # Costume Clip set use real possession.
+            if name == "Has" and item == "Fish Suit":
+                if not options.dlc_item_logic:
+                    return lambda state: False
+                # Obtainable only when it's actually a randomized item
+                # (Oannesanity + Costumesanity); otherwise assumed from the start.
+                if options.oannesanity and options.costumesanity:
+                    return lambda state, p=player: state.has("Fish Suit", p)
+                return lambda state: True
 
             # Progressive Whip
             if "Whip" in item:

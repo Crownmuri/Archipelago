@@ -1,0 +1,886 @@
+{
+    "enemyC0": {
+        "Name": "Enemy Glossary (Bat)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "RoY",
+            "RoYMiddle",
+            "RoYTopRight",
+            "RoYBottom",
+            "AnnwfnMain",
+            "IBTop",
+            "IBTopLeft",
+            "IBRight",
+            "IBMain",
+            "IBLadder",
+            "IBBottom",
+            "ITLeft",
+            "ITBottom",
+            "ITEntrance",
+            "DFRight",
+            "DFMain",
+            "DFTop",
+            "SotFGMain",
+            "GotD",
+            "ValhallaMain",
+            "ValhallaTop",
+            "EPG",
+            "EPDEntrance",
+            "EPDMain"
+        ]
+    },
+    "enemyC1": {
+        "Name": "Enemy Glossary (Black Carbuncle)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            {
+                "Area": "RoY",
+                "Logic": "HorizontalAttack and (IsDead(Ratatoskr 1) or IsDead(Nidhogg))"
+            }
+        ]
+    },
+    "enemyC2": {
+        "Name": "Enemy Glossary (El Baul)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "IBMain",
+            "IBRight",
+            "IBDinosaur"
+        ]
+    },
+    "enemyC3": {
+        "Name": "Enemy Glossary (Skeleton)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "RoY",
+            "RoYTopLeft",
+            "RoYTopRight",
+            {
+                "Area": "RoYBottom",
+                "Logic": "True"
+            },
+            {
+                "Area": "AnnwfnMain",
+                "Logic": "True"
+            },
+            "IBTopLeft",
+            "IBRight",
+            "IBMain",
+            "IBLadder",
+            "ITLeft",
+            {
+                "Area": "ITBottom",
+                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Claydoll Suit))"
+            },
+            "ITRight",
+            "ITEntrance",
+            {
+                "Area": "DFRight",
+                "Logic": "True"
+            },
+            {
+                "Area": "DFMain",
+                "Logic": "True"
+            },
+            {
+                "Area": "DFTop",
+                "Logic": "True"
+            },
+            {
+                "Area": "GotD",
+                "Logic": "True"
+            },
+            {
+                "Area": "ValhallaMain",
+                "Logic": "True"
+            },
+            {
+                "Area": "ValhallaTop",
+                "Logic": "True"
+            },
+            {
+                "Area": "DSLMMain",
+                "Logic": "True"
+            },
+            {
+                "Area": "DSLMPyramid",
+                "Logic": "True"
+            }
+        ]
+    },
+    "enemyC7": {
+        "Name": "Enemy Glossary (Blue Skeleton)",
+        "KillLogic": "Has(Perfume)",
+        "SpawnAreas": [
+            "IBRight",
+            "TSMain",
+            {
+                "Area": "TSEntrance",
+                "Logic": "Has(Perfume) and (Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Spaulder) or Has(Vajra))))"
+            },
+            "TSLeft",
+            "TSBottom",
+            "HL",
+            "HLCog",
+            "HLSpun",
+            "ACBottom",
+            "ACTablet",
+            "ACWind",
+            "ACMain",
+            "ACBlood"
+        ]
+    },
+    "enemyC8": {
+        "Name": "Enemy Glossary (Cacus)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "EPG"
+        ]
+    },
+    "enemyC9": {
+        "Name": "Enemy Glossary (Soul)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DSLMMain",
+            "DSLMTop",
+            "DSLMPyramid"
+        ]
+    },
+    "enemyF00-1": {
+        "Name": "Enemy Glossary (Carbuncle)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "RoY",
+            "RoYBottom"
+        ]
+    },
+    "enemyF00-2": {
+        "Name": "Enemy Glossary (Fachan)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "RoY",
+            "RoYMiddle",
+            "RoYBottom"
+        ]
+    },
+    "enemyF00-3": {
+        "Name": "Enemy Glossary (Skvader)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "RoY",
+            "RoYMiddle",
+            "RoYTopRight",
+            "RoYBottom"
+        ]
+    },
+    "enemyF02-1": {
+        "Name": "Enemy Glossary (Apsara)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnMain",
+            "AnnwfnRight"
+        ]
+    },
+    "enemyF02-2": {
+        "Name": "Enemy Glossary (Odontotyrannos)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnMain"
+        ]
+    },
+    "enemyF02-3": {
+        "Name": "Enemy Glossary (Makara)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnMain"
+        ]
+    },
+    "enemyF02-4": {
+        "Name": "Enemy Glossary (Hanuman)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnRight",
+            "IBMoon"
+        ]
+    },
+    "enemyF02-5": {
+        "Name": "Enemy Glossary (Behemoth)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnRight",
+            {
+                "Area": "AnnwfnMain",
+                "Logic": "HorizontalAttack"
+            }
+        ]
+    },
+    "enemyF02-6": {
+        "Name": "Enemy Glossary (Tog)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "AnnwfnMain",
+            "AnnwfnRight"
+        ]
+    },
+    "enemyF02-7": {
+        "Name": "Enemy Glossary (Aghasura)",
+        "KillLogic": "Has(Knife) or CanUse(Bomb) or CanUse(Pistol) or (Has(Vajra) and (Has(Rapier) or Has(Katana) or (Has(Gauntlet) and Has(Leather Whip)))) or (Has(Gauntlet) and (Has(Chain Whip) or Has(Rapier) or Has(Katana)))",
+        "SpawnAreas": [
+            "AnnwfnMain"
+        ]
+    },
+    "enemyF03-1": {
+        "Name": "Enemy Glossary (Kabandha)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "IBMain",
+            {
+                "Area": "IBRight",
+                "Logic": "HorizontalAttack"
+            },
+            "IBLeft",
+            "IBBottom"
+        ]
+    },
+    "enemyF03-2": {
+        "Name": "Enemy Glossary (Lycanthrope)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "IBMain",
+            "IBLeft",
+            "IBDinosaur",
+            "IBBottom"
+        ]
+    },
+    "enemyF03-3": {
+        "Name": "Enemy Glossary (Vimana)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "IBMain",
+            "IBRight",
+            "IBLeft",
+            "IBDinosaur",
+            {
+                "Area": "SotFGMain",
+                "Logic": "IsDead(Badhbh Cath) and Has(Grapple Claw) and ((Has(Feather) or Has(Life Sigil)) or CanUse(Flare Gun))"
+            }
+        ]
+    },
+    "enemyF04-1": {
+        "Name": "Enemy Glossary (Garm)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "ITLeft",
+            {
+                "Area": "ITSinmara",
+                "Logic": "True"
+            },
+            {
+                "Area": "ITBottom",
+                "Logic": "Has(Feather) or Glitch(Costume Clip)",
+                "TrickyLogic": "True"
+            },
+            {
+                "Area": "ITRight",
+                "Logic": "True"
+            },
+            "ITRightLeftLadder"
+        ]
+    },
+    "enemyF04-2": {
+        "Name": "Enemy Glossary (Lindworm)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ITLeft",
+            "ITBottom",
+            "ITRight"
+        ]
+    },
+    "enemyF04-3": {
+        "Name": "Enemy Glossary (Langsuir)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ITLeft",
+            "ITBottom",
+            "ITRight"
+        ]
+    },
+    "enemyF04-4": {
+        "Name": "Enemy Glossary (Muu Shuwuu)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ITLeft",
+            "ITBottom",
+            "ITRight"
+        ]
+    },
+    "enemyF04-5": {
+        "Name": "Enemy Glossary (Kraken)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            {
+                "Area": "IBMain",
+                "Logic": "(HorizontalAttack and CanWarp) or IsDead(Cetus)",
+                "TrickyLogic": "True"
+            },
+            "ITRight",
+            "ITRightLeftLadder"
+        ]
+    },
+    "enemyF05-1": {
+        "Name": "Enemy Glossary (Einherjar)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DFEntrance",
+            "DFRight",
+            "DFMain",
+            "DFTop"
+        ]
+    },
+    "enemyF05-2": {
+        "Name": "Enemy Glossary (Valkyrie)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DFMain",
+            "DFTop"
+        ]
+    },
+    "enemyF05-3": {
+        "Name": "Enemy Glossary (Dokkalfar)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DFMain",
+            "DFTop"
+        ]
+    },
+    "enemyF05-4": {
+        "Name": "Enemy Glossary (Vodyanoy)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DFRight",
+            "DFMain",
+            "DFTop"
+        ]
+    },
+    "enemyF05-5": {
+        "Name": "Enemy Glossary (Gullinbursti)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DFRight",
+            "DFMain",
+            {
+                "Area": "DFTop",
+                "Logic": "HorizontalAttack"
+            }
+        ]
+    },
+    "enemyF06-1": {
+        "Name": "Enemy Glossary (Yeti)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SotFGLeft",
+            "SotFGGrail",
+            "SotFGMain",
+            "SotFGTop",
+            {
+                "Area": "SotFGBalor",
+                "Logic": "HorizontalAttack"
+            },
+            {
+                "Area": "SotFGBlood",
+                "Logic": "HorizontalAttack"
+            }
+        ]
+    },
+    "enemyF06-2": {
+        "Name": "Enemy Glossary (Huallepen)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SotFGMain",
+            "SotFGLeft",
+            "SotFGGrail",
+            "SotFGTop",
+            {
+                "Area": "SotFGBalor",
+                "Logic": "IsDead(Balor)"
+            }
+        ]
+    },
+    "enemyF06-3": {
+        "Name": "Enemy Glossary (Ungur)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SotFGMain",
+            "SotFGLeft",
+            {
+                "Area": "SotFGBloodTez",
+                "Logic": "IsDead(Tezcatlipoca)"
+            }
+        ]
+    },
+    "enemyF06-4": {
+        "Name": "Enemy Glossary (Zorya)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "SotFGMain",
+            "SotFGLeft",
+            "SotFGBlood"
+        ]
+    },
+    "enemyF06-5": {
+        "Name": "Enemy Glossary (Baba Yaga)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "SotFGMain",
+            "SotFGLeft",
+            {
+                "Area": "SotFGTop",
+                "Logic": "True"
+            },
+            {
+                "Area": "SotFGBloodTez",
+                "Logic": "IsDead(Tezcatlipoca)"
+            }
+        ]
+    },
+    "enemyF07-1": {
+        "Name": "Enemy Glossary (Asp)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "GotD"
+        ]
+    },
+    "enemyF07-2": {
+        "Name": "Enemy Glossary (Red Cap)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "GotD"
+        ]
+    },
+    "enemyF07-3": {
+        "Name": "Enemy Glossary (Mask)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "GotD"
+        ]
+    },
+    "enemyF07-4": {
+        "Name": "Enemy Glossary (Medjed)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "GotD"
+        ]
+    },
+    "enemyF08-2": {
+        "Name": "Enemy Glossary (Nurikabe)",
+        "KillLogic": "(Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife)",
+        "SpawnAreas": [
+            "TSMain"
+        ]
+    },
+    "enemyF08-3": {
+        "Name": "Enemy Glossary (Enenra)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "TSMain",
+            "TSLeft",
+            "TSNeck",
+            "TSBottom"
+        ]
+    },
+    "enemyF08-4": {
+        "Name": "Enemy Glossary (Guhin)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "TSMain",
+            "TSLeft",
+            {
+                "Area": "TSBottom",
+                "Logic": "HorizontalAttack"
+            }
+
+        ]
+    },
+    "enemyF08-5": {
+        "Name": "Enemy Glossary (Kuda-gitsune)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "TSMain",
+            {
+                "Area": "TSEntrance",
+                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Spaulder) or Has(Vajra)))"
+            },
+            "TSLeft"
+        ]
+    },
+    "enemyF09-1": {
+        "Name": "Enemy Glossary (Lizardman)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "HL",
+            "HLCog",
+            "HLSpun"
+        ]
+    },
+    "enemyF09-3": {
+        "Name": "Enemy Glossary (Andrealphus)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "HL",
+            "HLSpun"
+        ]
+    },
+    "enemyF09-4": {
+        "Name": "Enemy Glossary (Harpy)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "HL",
+            "HLCog",
+            "HLSpun"
+        ]
+    },
+    "enemyF10-1": {
+        "Name": "Enemy Glossary (Gandharv)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ValhallaMain",
+            "ValhallaTop"
+        ]
+    },
+    "enemyF10-2": {
+        "Name": "Enemy Glossary (Kinnara)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ValhallaMain"
+        ]
+    },
+    "enemyF10-3": {
+        "Name": "Enemy Glossary (Rakshasa)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            {
+                "Area": "ValhallaMain",
+                "Logic": "True"
+            },
+            "ValhallaTop",
+            {
+                "Area": "ValhallaTopRight",
+                "Logic": "True"
+            }
+        ]
+    },
+    "enemyF10-4": {
+        "Name": "Enemy Glossary (Carbunco)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ValhallaMain",
+            "ValhallaTop",
+            "ValhallaTopRight"
+        ]
+    },
+    "enemyF10-5": {
+        "Name": "Enemy Glossary (Cabracan)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "ValhallaMain"
+        ]
+    },
+    "enemyF10-6": {
+        "Name": "Enemy Glossary (Zipakna)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ValhallaMain"
+        ]
+    },
+    "enemyF11-2": {
+        "Name": "Enemy Glossary (Ba)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "DSLMMain",
+            "DSLMTop",
+            "DSLMPyramid"
+        ]
+    },
+    "enemyF11-3": {
+        "Name": "Enemy Glossary (Basilisk)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DSLMMain",
+            "DSLMTop",
+            {
+                "Area": "DSLMPyramid",
+                "Logic": "HorizontalAttack"
+            }
+        ]
+    },
+    "enemyF11-4": {
+        "Name": "Enemy Glossary (Scarabaeus)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "DSLMMain",
+            {
+                "Area": "DSLMTop",
+                "Logic": "Has(Feather)"
+            },
+            {
+                "Area": "TowerOfOannesLeftB",
+                "Logic": "Has(Feather)"
+            }
+
+        ]
+    },
+    "enemyF12-1": {
+        "Name": "Enemy Glossary (Edimmu)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "TSMain",
+            {
+                "Area": "TSLeft",
+                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
+            },
+            "TSBottom",
+            {
+                "Area": "TSBlood",
+                "Logic": "HorizontalAttack or OrbCount(3) or Has(Egg of Creation)"
+            }
+        ]
+    },
+    "enemyF12-2": {
+        "Name": "Enemy Glossary (Simurgh)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ACBottom",
+            "ACTablet",
+            "ACWind",
+            "ACMain"
+        ]
+    },
+    "enemyF12-3": {
+        "Name": "Enemy Glossary (Zhulong)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ACBottom",
+            "ACTablet",
+            {
+                "Area": "ACWind",
+                "Logic": "CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear)"
+            },
+            "ACMain"
+        ]
+    },
+    "enemyF12-4": {
+        "Name": "Enemy Glossary (Azhdaha)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ACBottom",
+            "ACTablet",
+            "ACMain",
+            "ACBlood"
+        ]
+    },
+    "enemyF12-5": {
+        "Name": "Enemy Glossary (Galla)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "ACBottom",
+            "ACTablet",
+            "ACMain"
+        ]
+    },
+    "enemyF13-1": {
+        "Name": "Enemy Glossary (Minotaur)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "HoM",
+            "HoMAwoken"
+        ]
+    },
+    "enemyF13-2": {
+        "Name": "Enemy Glossary (Mammon)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "HoMTop",
+            "HoM",
+            "HoMAwoken"
+        ]
+    },
+    "enemyF13-3": {
+        "Name": "Enemy Glossary (Wyvern)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "HoMTop",
+            "HoM",
+            "HoMAwoken"
+        ]
+    },
+    "enemyF14-1": {
+        "Name": "Enemy Glossary (Hekatonkheires)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "EPG",
+            "EPDMain",
+            "EPDTop"
+        ]
+    },
+    "enemyF14-2": {
+        "Name": "Enemy Glossary (Avnas)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "EPG",
+            "EPDMain",
+            "EPDTop"
+        ]
+    },
+    "enemyF14-3": {
+        "Name": "Enemy Glossary (Erinyes)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "EPG",
+            "EPDEntrance",
+            "EPDMain",
+            "EPDTop"
+        ]
+    },
+    "enemyF14-5": {
+        "Name": "Enemy Glossary (Lucifer)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "EPG",
+            "EPDEntrance",
+            "EPDMain",
+            "EPDTop"
+        ]
+    },
+    "enemyF14-6": {
+        "Name": "Enemy Glossary (Lucifuge Rofocale)",
+        "KillLogic": "HorizontalAttack",
+        "SpawnAreas": [
+            "EPDEntrance",
+            {
+                "Area": "EPDMain",
+                "Logic": "True"
+            },
+            {
+                "Area": "EPDTop",
+                "Logic": "True"
+            }
+        ]
+    },
+    "enemyLast1": {
+        "Name": "Enemy Glossary (Dvergr)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "enemyLast2": {
+        "Name": "Enemy Glossary (Ginnungagap)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "enemyLast3": {
+        "Name": "Enemy Glossary (Muspell)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "enemyLast4": {
+        "Name": "Enemy Glossary (Managarmr)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "enemyLast5": {
+        "Name": "Enemy Glossary (Berserker)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "enemyLast6": {
+        "Name": "Enemy Glossary (Fjalar)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "SpiralHell"
+        ]
+    },
+    "d237": {
+        "Name": "Enemy Glossary (Gyonin Tribe)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            "TowerOfOannesLeftA",
+            {
+                "Area": "TowerOfOannesRight",
+                "Logic": "Has(Feather)"
+            }
+        ]
+    },
+    "d238": {
+        "Name": "Enemy Glossary (Gyonin the Vogue)",
+        "KillLogic": "HorizontalAttack and Has(Feather)",
+        "SpawnAreas": [
+            {
+                "Area": "TowerOfOannesLeftA",
+                "Logic": "CanReach(TowerOfOannesLeftB)"
+            },
+            "TowerOfOannesLeftB",
+            "TowerOfOannesRight"
+        ]
+    },
+    "d239": {
+        "Name": "Enemy Glossary (Gyonin Flight Test Model)",
+        "KillLogic": "Has(Feather)",
+        "SpawnAreas": [
+            "TowerOfOannesLeftA",
+            {
+                "Area": "TowerOfOannesLeftC",
+                "Logic": "Has(Feather) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
+            },
+            "TowerOfOannesRight"
+        ]
+    },
+    "d240": {
+        "Name": "Enemy Glossary (Fishbone Calcium)",
+        "KillLogic": "Has(Feather)",
+        "SpawnAreas": [
+            "TowerOfOannesLeftA",
+            {
+                "Area": "TowerOfOannesLeftC",
+                "Logic": "Has(Feather) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
+            }
+        ]
+    },
+    "d241": {
+        "Name": "Enemy Glossary (Gyonin Pestirylium)",
+        "KillLogic": "True",
+        "SpawnAreas": [
+            {
+                "Area": "TowerOfOannesLeftA",
+                "Logic": "CanReach(TowerOfOannesLeftB) and Has(Feather) and HorizontalAttack and CanUse(Flare Gun)"
+            },
+            {
+                "Area": "TowerOfOannesRight",
+                "Logic": "Has(Feather)"
+            }
+        ]
+    },
+    "d242": {
+        "Name": "Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)",
+        "KillLogic": "Has(Feather)",
+        "SpawnAreas": [
+            "TowerOfOannesRight"
+        ]
+    },
+    "d243": {
+        "Name": "Enemy Glossary (Fish Wall'22)",
+        "KillLogic": "Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))",
+        "SpawnAreas": [
+            "TowerOfOannesLeftA",
+            "TowerOfOannesLeftC"
+        ]
+    }
+}

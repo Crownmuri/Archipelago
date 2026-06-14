@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, GLOSSARY_PLACED_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_CATEGORY_BY_ID, potsanity_pools_enabled, glossanity_cats_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -402,17 +402,30 @@ def build_item_pool(world) -> List[Item]:
 
     for item_def in ITEM_DEFS:
 
-        # glossary ROMs: pool the placed (Freestanding+Scannable) ones as filler
-        # when glossanity is on; the rest stay defined-but-unpooled until placed.
+        # glossary ROMs: pool the placed ones as filler when that glossary
+        # category's glossanity toggle is on. DLC glossaries (fish + Gyonin)
+        # additionally require oannesanity.
         if item_def.game_id in GLOSSARY_ITEM_IDS:
-            if world.options.glossanity and item_def.game_id in GLOSSARY_PLACED_ITEM_IDS:
+            is_dlc_gloss = item_def.game_id in DLC_GLOSSARY_IDS
+            cat = GLOSSARY_CATEGORY_BY_ID.get(int(item_def.game_id))
+            cat_on = cat is not None and getattr(world.options, f"glossanity_{cat}")
+            if (cat_on and (not is_dlc_gloss or world.options.oannesanity)):
                 pool.append(LM2Item(name=item_def.name,
                                     classification=ItemClassification.filler,
                                     code=item_def.ap_id, player=world.player))
             continue
 
         game_item_id = ItemID(item_def.game_id)
-        
+
+        # Skip DLC items unless the player opts in.
+        if game_item_id in DLC_ITEM_IDS and not world.options.oannesanity:
+            continue
+
+        # Skip costume unlocks unless costumesanity is on. (Fish Suit is also in
+        # DLC_ITEM_IDS above, so it additionally requires oannesanity.)
+        if game_item_id in COSTUME_ITEM_IDS and not world.options.costumesanity:
+            continue
+
         # Skip starting items
         if game_item_id in starting_items:
             continue
@@ -672,21 +685,25 @@ INTERNAL_ID_TO_REWARD: dict[ItemID, tuple[str, ItemID]] = {
 
 def build_pot_filler_pool(world) -> list[Item]:
     """
-    Creates the pot filler items using POT_FILLER_DISTRIBUTION.
-    These use AP-facing IDs (Coin10, ShurikenBundle, etc.) so the spoiler
-    shows the correct reward names. The internal PotFiller IDs are assigned
-    later by precompute_filler_ids when items land at Pot locations.
+    Creates one pot filler item per INCLUDED pot location (i.e. pots whose
+    content pool's potsanity toggle is enabled), each using the pot's own
+    reward (Coin10, ShurikenBundle, etc.) so the spoiler shows the correct
+    name. Emitting exactly one filler per included pot keeps the item count
+    balanced with the included pot locations. The internal PotFiller IDs are
+    assigned later by precompute_filler_ids when items land at Pot locations.
     """
+    enabled = potsanity_pools_enabled(world.options)
     pool: list[Item] = []
-    for name, count in POT_FILLER_DISTRIBUTION:
-        item_id = next(iid for n, iid in AP_FILLER if n == name)
-        for _ in range(count):
-            pool.append(Item(
-                name=name,
-                classification=ItemClassification.filler,
-                code=BASE_ITEM_ID + int(item_id),
-                player=world.player,
-            ))
+    for loc_id, reward in POT_REWARD_BY_LOC.items():
+        if POT_POOL_BY_LOC.get(loc_id) not in enabled:
+            continue
+        item_id = next(iid for n, iid in AP_FILLER if n == reward)
+        pool.append(Item(
+            name=reward,
+            classification=ItemClassification.filler,
+            code=BASE_ITEM_ID + int(item_id),
+            player=world.player,
+        ))
     return pool
 
 

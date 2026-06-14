@@ -47,6 +47,53 @@ class LM2LocationDef:
     minimal_logic: Optional[str]
     parent_area: AreaID
     ap_id: int
+    # Enemy glossary entries roam across many areas; their reachability is fully
+    # expressed by CanReach(...) terms in `logic`, so the single-parent-area gate
+    # in can_access must be skipped (it would force the one area they're nested
+    # under in World.json).
+    bypass_parent_gate: bool = False
+
+
+# ============================================================
+# Enemy Glossary logic (data/EnemyGlossary.json)
+# ============================================================
+#
+# World.json marks roaming enemy-glossary locations with Logic "@EnemyGlossary".
+# EnemyGlossary.json (keyed by the World.json pot/glossary ID, e.g. "enemyC0")
+# lists every area the enemy can be fought in, so the glossary drops there. The
+# composed rule is an OR over those areas: reach any spawn area AND meet that
+# area's kill condition (its own override Logic, else the entry's KillLogic).
+
+ENEMY_GLOSSARY_MARKER = "@EnemyGlossary"
+
+
+def _compose_enemy_glossary_logic(entry: dict) -> str:
+    kill = entry.get("KillLogic", "True")
+    terms = []
+    for spawn in entry.get("SpawnAreas", []):
+        if isinstance(spawn, str):
+            area, area_logic = spawn, kill
+        else:
+            area, area_logic = spawn["Area"], spawn.get("Logic", kill)
+        terms.append(f"(CanReach({area}) and ({area_logic}))")
+    if not terms:
+        return "False"
+    return "(" + " or ".join(terms) + ")"
+
+
+def _load_enemy_glossary_logic() -> Dict[str, str]:
+    with resources.files(__package__ + ".data").joinpath(
+        "EnemyGlossary.json"
+    ).open("r", encoding="utf-8") as f:
+        raw = json.load(f)
+    return {
+        key: _compose_enemy_glossary_logic(val)
+        for key, val in raw.items()
+        if not key.startswith("_")
+    }
+
+
+ENEMY_GLOSSARY_LOGIC: Dict[str, str] = _load_enemy_glossary_logic()
 
 
 # ============================================================
@@ -100,17 +147,27 @@ def _load_locations() -> Dict[LocationID, LM2LocationDef]:
             
             # Calculate AP ID
             ap_id = BASE_LOCATION_ID + loc_id.value
-            
+
+            # Resolve the @EnemyGlossary marker to its composed multi-area logic
+            # (keyed by the World.json game ID, e.g. "enemyC0"). These locations
+            # bypass the parent-area gate since CanReach(...) covers reachability.
+            logic = loc.get("Logic", "True")
+            bypass_parent_gate = False
+            if logic.strip() == ENEMY_GLOSSARY_MARKER:
+                logic = ENEMY_GLOSSARY_LOGIC.get(loc.get("ID"), "False")
+                bypass_parent_gate = True
+
             # Create location definition
             loc_def = LM2LocationDef(
                 name=name,
                 game_id=loc_id,
                 location_type=loc_type,
-                logic=loc.get("Logic", "True"),
+                logic=logic,
                 tricky_logic=loc.get("TrickyLogic"),
                 minimal_logic=loc.get("HardLogic"),
                 parent_area=parent_area,
                 ap_id=ap_id,
+                bypass_parent_gate=bypass_parent_gate,
             )
 
             locations[loc_id] = loc_def
@@ -157,6 +214,9 @@ class LM2Location(Location):
         self.game_location_id: LocationID = loc_def.game_id
         self.location_type: LocationType = loc_def.location_type
         self.parent_area: AreaID = loc_def.parent_area
+        # Roaming enemy-glossary locations express reachability entirely via
+        # CanReach(...) in their logic, so skip the single-parent-area gate.
+        self.bypass_parent_gate: bool = loc_def.bypass_parent_gate
 
         self.is_locked: bool = False
         self.random_placement: bool = False
@@ -274,12 +334,14 @@ class LM2Location(Location):
 
         if self._compiled_rule is not None:
             # Fast path: check parent-area reachability via AP's region graph
-            # directly (no PlayerStateAdapter allocation).
-            regions_by_area = getattr(world, 'regions_by_area_id', None)
-            if regions_by_area:
-                region = regions_by_area.get(self.parent_area)
-                if region is not None and not state.can_reach(region, "Region", self.player):
-                    return False
+            # directly (no PlayerStateAdapter allocation). Roaming enemy-glossary
+            # locations skip this — their logic's CanReach(...) covers it.
+            if not self.bypass_parent_gate:
+                regions_by_area = getattr(world, 'regions_by_area_id', None)
+                if regions_by_area:
+                    region = regions_by_area.get(self.parent_area)
+                    if region is not None and not state.can_reach(region, "Region", self.player):
+                        return False
             return self._compiled_rule(state)
 
         # Slow path: full adapter (only hit when compile() returned None,
@@ -294,6 +356,10 @@ class LM2Location(Location):
 
 
     def can_access_with_adapter(self, lm2_state: PlayerStateAdapter) -> bool:
+        if self.bypass_parent_gate:
+            if self._compiled_rule is not None:
+                return self._compiled_rule(lm2_state.state)
+            return self._logic_tree.evaluate(lm2_state)
         if self._compiled_rule is not None:
             return (
                 lm2_state.can_reach(self.parent_area)
