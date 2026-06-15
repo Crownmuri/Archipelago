@@ -274,7 +274,16 @@ class LaMulana2World(World):
         # First, do any special pre-placements
         self.randomizer = LM2RandomizerCore(self)
         self.randomizer.setup_preplaced_items()
-        
+
+        # Glossary entries can only be read with the Ruins Encyclopedia, so when
+        # any glossanity category is enabled every included glossary check gains
+        # a Has(Ruins Encyclopedia) requirement (the item is promoted to
+        # progression in build_item_pool so Has() can see it).
+        if glossanity_cats_enabled(self.options):
+            for loc in self.locations.values():
+                if loc.location_type == LocationType.Glossary:
+                    loc.append_logic_string("and Has(Ruins Encyclopedia)")
+
         # Set access rules using our logic trees
         set_rules(self)
 

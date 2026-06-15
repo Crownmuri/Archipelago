@@ -526,8 +526,24 @@ def build_item_pool(world) -> List[Item]:
 
         # Add to pool
         for _ in range(item_def.count):
-            pool.append(create_item(world, item_def.name, game_id=item_def.game_id))
-    
+            item = create_item(world, item_def.name, game_id=item_def.game_id)
+            # Glossary gating: Has() only sees progression items, so the items
+            # that gate glossary checks must be progression when the relevant
+            # glossanity is on (otherwise those checks are never reachable).
+            # Ruins Encyclopedia gates every glossary check (any glossanity cat);
+            # Perfume gates the single Blue Skeleton enemy-glossary check.
+            if item_def.name == "Ruins Encyclopedia" and glossanity_cats_enabled(world.options):
+                item.classification = ItemClassification.progression
+            elif item_def.name == "Perfume" and world.options.glossanity_enemy:
+                item.classification = ItemClassification.progression
+            # Rebirth Sigil gates the only path into the Tower of Oannes
+            # (Spring in the Sky ladder up) and Fish-Gear mk-2 turboR. It is a
+            # DLC item, so it is only pooled when oannesanity is on, and it must
+            # be progression there or the entire DLC area is unreachable.
+            elif item_def.name == "Rebirth Sigil" and world.options.oannesanity:
+                item.classification = ItemClassification.progression
+            pool.append(item)
+
     return pool
 
 

@@ -3134,7 +3134,7 @@ AP_LOCATION_NAMES = {
     "[IB D-3] Left Altar Upper Item Pot": LocationID.field03D2_2,
     "[IB D-4] Left of Spiral Boat Coin Pot": LocationID.field03D2_3,
     "[IB D-5] Above Backside Grail Coin Pot": LocationID.field03D4,
-    "[IB E-6] Jormungandr Mural Item Pot": LocationID.field03E5,
+    "[IB E-6] Jormungand Mural Item Pot": LocationID.field03E5,
     "[IB F-2] Map Chest Left Item Pot": LocationID.field03F1_2,
     "[IB F-2] Map Chest Right Item Pot": LocationID.field03F1,
     "[IB F-4] Right of Spiral Boat Coin Pot": LocationID.field03F3,

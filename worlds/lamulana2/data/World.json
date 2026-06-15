@@ -1606,7 +1606,7 @@
                 "Logic": "HorizontalAttack and Has(Birth Sigil)"
             },
             {
-                "Name": "[IB E-6] Jormungandr Mural Item Pot",
+                "Name": "[IB E-6] Jormungand Mural Item Pot",
                 "ID": "field03E5",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Feather) or IsDead(Cetus)))"

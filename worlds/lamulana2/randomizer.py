@@ -438,6 +438,25 @@ class LM2RandomizerCore:
     # Shop randomization
     # ============================================================
 
+    def _plando_reserved_location_names(self) -> set:
+        """
+        Location names targeted by item plando.
+
+        The custom shop fill runs during World.set_rules(), long before AP runs
+        item plando (Main.distribute_planned_blocks). If the shop fill claimed a
+        slot first, a plando placement into that shop would silently fail. So we
+        leave any plando-targeted location open for AP to fill later.
+        """
+        reserved: set = set()
+        try:
+            blocks = self.world.options.plando_items.value
+        except Exception:
+            return reserved
+        for block in blocks or []:
+            for name in getattr(block, "locations", None) or []:
+                reserved.add(name)
+        return reserved
+
     def _place_starting_shop_items(self):
         """
         C# parity: always place Weights + starting subweapon ammo into the starting shop,
@@ -446,6 +465,7 @@ class LM2RandomizerCore:
         _log("[DEBUG] Placing starting shop items (weights/ammo)")
 
         mw = self.multiworld
+        reserved = self._plando_reserved_location_names()
 
         def safe_remove(game_item_id: ItemID, name: str) -> None:
             try:
@@ -456,7 +476,7 @@ class LM2RandomizerCore:
         if self.starting_area == AreaID.VoD:
             # Always place Weights in Nebur Shop 1
             neburs_shop1 = self.locations.get(LocationID.NeburShop1)
-            if neburs_shop1 and neburs_shop1.item is None:
+            if neburs_shop1 and neburs_shop1.item is None and neburs_shop1.name not in reserved:
                 safe_remove(ItemID.Weights, "Weights")
                 mw.push_item(neburs_shop1, create_item(self.world, "Weights"), collect=False)
                 neburs_shop1.locked = True
@@ -464,7 +484,7 @@ class LM2RandomizerCore:
             # Always place starting subweapon ammo in Nebur Shop 2 (if subweapon start)
             if self.starting_weapon > ItemID.Katana:
                 neburs_shop2 = self.locations.get(LocationID.NeburShop2)
-                if neburs_shop2 and neburs_shop2.item is None:
+                if neburs_shop2 and neburs_shop2.item is None and neburs_shop2.name not in reserved:
                     ammo_item_id = self._get_ammo_for_weapon(self.starting_weapon)
                     ammo_name = get_item_name_from_id(ammo_item_id)
                     safe_remove(ammo_item_id, ammo_name)
@@ -473,7 +493,7 @@ class LM2RandomizerCore:
         else:
             # Non-VoD start: place Weights in StartingShop1
             starting_shop1 = self.locations.get(LocationID.StartingShop1)
-            if starting_shop1 and starting_shop1.item is None:
+            if starting_shop1 and starting_shop1.item is None and starting_shop1.name not in reserved:
                 safe_remove(ItemID.Weights, "Weights")
                 mw.push_item(starting_shop1, create_item(self.world, "Weights"), collect=False)
                 starting_shop1.locked = True
@@ -481,7 +501,7 @@ class LM2RandomizerCore:
             # Place starting subweapon ammo in StartingShop2 (if subweapon start)
             if self.starting_weapon > ItemID.Katana:
                 starting_shop2 = self.locations.get(LocationID.StartingShop2)
-                if starting_shop2 and starting_shop2.item is None:
+                if starting_shop2 and starting_shop2.item is None and starting_shop2.name not in reserved:
                     ammo_item_id = self._get_ammo_for_weapon(self.starting_weapon)
                     ammo_name = get_item_name_from_id(ammo_item_id)
                     safe_remove(ammo_item_id, ammo_name)
@@ -516,10 +536,14 @@ class LM2RandomizerCore:
         if self.starting_area != AreaID.VoD:
             free_slots += 3
 
-        # Collect shop locations
+        # Collect shop locations. Skip any slot targeted by item plando so it
+        # stays open for AP's later plando placement (see
+        # _plando_reserved_location_names).
+        reserved = self._plando_reserved_location_names()
         shop_locations = [
             loc for loc in self.locations.values()
             if loc.location_type == LocationType.Shop and not loc.locked
+            and loc.name not in reserved
         ]
 
         if placement == self.options.shop_placement.option_shuffled:
