@@ -4229,13 +4229,13 @@
             },
             {
                 "Name": "[TS D-7] Upper Corridor Coin Pot",
-                "ID": "field08D6f",
+                "ID": "field08D6g",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
             {
                 "Name": "[TS D-7] Stacked Item Pot",
-                "ID": "field08D6g",
+                "ID": "field08D6f",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
