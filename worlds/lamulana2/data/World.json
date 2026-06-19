@@ -5178,13 +5178,13 @@
             },
             {
                 "Name": "[DSLM D-7] Entrance Gate Item Pot",
-                "ID": "field11D6g",
+                "ID": "field11D6",
                 "LocationType": "Pot",
                 "Logic": "True"
             },
             {
                 "Name": "[DSLM D-7] Entrance Gate Coin Pot",
-                "ID": "field11D6",
+                "ID": "field11D6g",
                 "LocationType": "Pot",
                 "Logic": "True"
             },
