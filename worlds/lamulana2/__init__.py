@@ -275,15 +275,6 @@ class LaMulana2World(World):
         self.randomizer = LM2RandomizerCore(self)
         self.randomizer.setup_preplaced_items()
 
-        # Glossary entries can only be read with the Ruins Encyclopedia, so when
-        # any glossanity category is enabled every included glossary check gains
-        # a Has(Ruins Encyclopedia) requirement (the item is promoted to
-        # progression in build_item_pool so Has() can see it).
-        if glossanity_cats_enabled(self.options):
-            for loc in self.locations.values():
-                if loc.location_type == LocationType.Glossary:
-                    loc.append_logic_string("and Has(Ruins Encyclopedia)")
-
         # Set access rules using our logic trees
         set_rules(self)
 
@@ -616,7 +607,7 @@ class LaMulana2World(World):
                 "potsanity_rolling_shuriken", "potsanity_earth_spear", "potsanity_flare",
                 "potsanity_caltrops", "potsanity_chakram", "potsanity_bomb",
                 "glossanity_freestanding", "glossanity_scannable",
-                "glossanity_npc", "glossanity_enemy", "oannesanity",
+                "glossanity_npc", "glossanity_enemy", "oannesanity", "costumesanity",
                 "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
                 "game_difficulty",
                 "echidna_difficulty", "costume_clip", "require_fdc",

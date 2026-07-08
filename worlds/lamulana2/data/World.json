@@ -7053,7 +7053,7 @@
                 "ID": "fEx1_R",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyTopRight",
-                "Logic": "True"
+                "Logic": "Has(Feather)"
             },
             {
                 "Name": "Tower of Oannes Moving Tiles Escape (D-10)",
