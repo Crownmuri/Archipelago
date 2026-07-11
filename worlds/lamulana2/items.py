@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_CATEGORY_BY_ID, potsanity_pools_enabled, glossanity_cats_enabled
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -407,7 +407,7 @@ def build_item_pool(world) -> List[Item]:
         # additionally require oannesanity.
         if item_def.game_id in GLOSSARY_ITEM_IDS:
             is_dlc_gloss = item_def.game_id in DLC_GLOSSARY_IDS
-            cat = GLOSSARY_CATEGORY_BY_ID.get(int(item_def.game_id))
+            cat = GLOSSARY_POOLS_BY_ID.get(int(item_def.game_id))
             cat_on = cat is not None and getattr(world.options, f"glossanity_{cat}")
             if (cat_on and (not is_dlc_gloss or world.options.oannesanity)):
                 pool.append(LM2Item(name=item_def.name,
@@ -532,7 +532,7 @@ def build_item_pool(world) -> List[Item]:
             # glossanity is on (otherwise those checks are never reachable).
             # Ruins Encyclopedia gates every glossary check (any glossanity cat);
             # Perfume gates the single Blue Skeleton enemy-glossary check.
-            if item_def.name == "Ruins Encyclopedia" and glossanity_cats_enabled(world.options):
+            if item_def.name == "Ruins Encyclopedia" and glossanity_pools_enabled(world.options):
                 item.classification = ItemClassification.progression
             elif item_def.name == "Perfume" and world.options.glossanity_enemy:
                 item.classification = ItemClassification.progression

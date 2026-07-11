@@ -16,13 +16,13 @@ import os
 import zipfile
 from typing import Dict, List, Tuple
 
-from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
+from BaseClasses import Region, ItemClassification, Tutorial, CollectionState, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
 from .options import LM2Options, StartingArea, StartingWeapon
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_CATEGORY_BY_ID, potsanity_pools_enabled, glossanity_cats_enabled
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
@@ -239,6 +239,11 @@ class LaMulana2World(World):
             region = regions[loc.parent_area]
             region.locations.append(loc)
             loc.parent_region = region
+
+            # Missable one-time glossary spawns must never hold progression —
+            # if the check despawns, the seed would be uncompletable.
+            if loc.game_location_id in MISSABLE_LOCATION_IDS:
+                loc.progress_type = LocationProgressType.EXCLUDED
 
             included_locations[key] = loc
 
@@ -534,7 +539,7 @@ class LaMulana2World(World):
             )
 
         _enabled_pot_pools = potsanity_pools_enabled(self.options)
-        _enabled_gloss_cats = glossanity_cats_enabled(self.options)
+        _enabled_gloss_cats = glossanity_pools_enabled(self.options)
 
         return {
             # Existing fields
@@ -584,7 +589,7 @@ class LaMulana2World(World):
             "glossanity": int(bool(_enabled_gloss_cats)),
             "glossary_flag_map": {str(k): v for k, v in GLOSSARY_FLAG_MAP.items()
                                   if k in GLOSSARY_ITEM_IDS
-                                  and GLOSSARY_CATEGORY_BY_ID.get(int(k)) in _enabled_gloss_cats},
+                                  and GLOSSARY_POOLS_BY_ID.get(int(k)) in _enabled_gloss_cats},
 
             # Per-location display names — see comment above the dict build.
             "location_labels": slot_location_labels,
@@ -880,7 +885,7 @@ class LaMulana2World(World):
 
         # Skip glossary locations whose category's glossanity toggle is off
         if loc.location_type == LocationType.Glossary:
-            cat = GLOSSARY_CATEGORY_BY_ID.get(int(loc.game_location_id))
+            cat = GLOSSARY_POOLS_BY_ID.get(int(loc.game_location_id))
             if cat is None or not getattr(self.options, f"glossanity_{cat}"):
                 return False
 

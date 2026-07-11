@@ -140,7 +140,7 @@
                 "Name": "[VOD C-4] Glossary Above Hot Spring (Scan)",
                 "ID": "player3",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "Has(Hand Scanner) and Has(Feather)"
             },
             {
                 "Name": "[VOD E-4] NPC Glossary (Sidro)",
@@ -278,19 +278,19 @@
                 "Name": "[GOG D-2] Glossary Above Children",
                 "ID": "player1",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather)"
+                "Logic": "Has(Ruins Encyclopedia) and Has(Feather)"
             },
             {
                 "Name": "[GOG E-2] Glossary at Spring in the Sky Entrance",
                 "ID": "charactor3",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Ruins Encyclopedia)"
             },
             {
                 "Name": "[GOG B-4] NPC Glossary (Hiner)",
                 "ID": "talk81",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Ruins Encyclopedia)"
             }
         ],
         "Exits": [
@@ -307,6 +307,13 @@
                 "ConnectionType": "DownLadder",
                 "ConnectingAreaID": "MausoleumofGiants",
                 "Logic": "True"
+            },
+            {
+                "Name": "Gate of Guidance Right Ladder (E-2)",
+                "ID": "fLUp",
+                "ConnectionType": "UpLadder",
+                "ConnectingAreaID": "SpringintheSky",
+                "Logic": "IsDead(Heimdall)"
             }
         ]
     },
@@ -324,7 +331,7 @@
                 "Name": "[GOG A-3] Glossary Below Gate of Illusion Door",
                 "ID": "charactor0",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Ruins Encyclopedia)"
             }
         ],
         "Exits": [
@@ -334,13 +341,6 @@
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "GateofIllusion",
                 "Logic": "True"
-            },
-            {
-                "Name": "Gate of Guidance Right Ladder (E-2)",
-                "ID": "fLUp",
-                "ConnectionType": "UpLadder",
-                "ConnectingAreaID": "SpringintheSky",
-                "Logic": "IsDead(Heimdall)"
             },
             {
                 "ConnectionType": "Internal",
@@ -392,7 +392,7 @@
                 "Name": "[MOG C-3] Glossary Behind Pot",
                 "ID": "player2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather)"
+                "Logic": "Has(Ruins Encyclopedia) and Has(Feather)"
             }
         ],
         "Exits": [
@@ -478,7 +478,7 @@
                 "Name": "[GOI C-1] Glossary Next to Child's Statue",
                 "ID": "charactor2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather)"
+                "Logic": "Has(Ruins Encyclopedia) and Has(Feather)"
             }
         ],
         "Exits": [
@@ -1296,7 +1296,7 @@
                 "Name": "[ANN F-2] Fish Glossary (Nijimasu)",
                 "ID": "d233",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Heimdall)"
+                "Logic": "IsDead(Heimdall) and CanReach(Eden)"
             }
         ],
         "Exits": [
@@ -1706,13 +1706,14 @@
                 "Name": "[IB E-6] NPC Glossary (Yama)",
                 "ID": "talk09",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather) or Has(Grapple Claw) or IsDead(Cetus)",
+                "TrickyLogic": "True"
             },
             {
                 "Name": "[IB G-4] NPC Glossary (Haja)",
                 "ID": "talk14",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "CanUse(Earth Spear)"
             }
         ],
         "Exits": [
@@ -1827,13 +1828,13 @@
                 "Name": "[IB G-6] NPC Glossary (Hiro Roderick)",
                 "ID": "talk13",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "IsDead(Cetus)"
             },
             {
                 "Name": "[IB H-7] Glossary in the Buried Fortress",
                 "ID": "Guardian04",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Svipdagr) and CanWarp and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or (Has(Claydoll Suit) and Glitch(Costume Clip)))"
+                "Logic": "IsDead(Svipdagr) and CanWarp and Has(Claydoll Suit) and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or Glitch(Costume Clip))"
             }
         ],
         "Exits": [
@@ -2035,7 +2036,7 @@
                 "Name": "[IB G-7] NPC Glossary (Alviss)",
                 "ID": "talk10",
                 "LocationType": "Glossary",
-                "Logic": "CanStopTime"
+                "Logic": "True"
             }
         ],
         "Exits": [
@@ -2348,18 +2349,6 @@
                 "Logic": "@EnemyGlossary"
             },
             {
-                "Name": "[IT C-2] Glossary in Surtr's Room (Scan)",
-                "ID": "enemyF04-6",
-                "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
-            },
-            {
-                "Name": "[IT B-1] Glossary in Left Breakable Floor",
-                "ID": "field04RG2",
-                "LocationType": "Glossary",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)))"
-            },
-            {
                 "Name": "[IT C-5] Glossary at Poison Lava Skeleton (Scan)",
                 "ID": "field04RG1",
                 "LocationType": "Glossary",
@@ -2369,7 +2358,7 @@
                 "Name": "[IT C-4] NPC Glossary (Mino the Bomb Guy)",
                 "ID": "talk19",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather) or Glitch(Costume Clip)"
             },
             {
                 "Name": "[IT E-4] Enemy Glossary During Escape (Urd)",
@@ -2426,6 +2415,12 @@
                 "ID": "field04C2",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(4)))"
+            },
+            {
+                "Name": "[IT C-2] Glossary in Surtr's Room (Scan)",
+                "ID": "enemyF04-6",
+                "LocationType": "Glossary",
+                "Logic": "Has(Hand Scanner) and Has(Light Scythe)"
             },
             {
                 "Name": "[IT C-3] NPC Glossary (Sinmara)",
@@ -2543,10 +2538,17 @@
                 "Logic": "HorizontalAttack"
             },
             {
+                "Name": "[IT B-1] Glossary in Left Breakable Floor",
+                "ID": "field04RG2",
+                "LocationType": "Glossary",
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)))"
+            },
+            {
                 "Name": "[IT A-1] NPC Glossary (Porque Item Shop)",
                 "ID": "talk18",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Bomb) or Has(Claydoll Suit)",
+                "TrickyLogic": "(HorizontalAttack and Has(Feather)) or MeleeAttack or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or (CanUse(Flare Gun) and (CanWarp or Has(Feather))) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol) or Has(Claydoll Suit)"
             }
         ],
         "Exits": [
@@ -2655,13 +2657,13 @@
                 "Name": "[IT F-3] NPC Glossary (Modgud)",
                 "ID": "talk16",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance))"
             },
             {
                 "Name": "[IT E-1] NPC Glossary (Inanna)",
                 "ID": "talk17",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Life Sigil)"
             },
             {
                 "Name": "[IT E-2] NPC Glossary (Enimul)",
@@ -2673,7 +2675,7 @@
                 "Name": "[IT F-4] Fish Glossary (Sanma)",
                 "ID": "d234",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Heimdall)"
+                "Logic": "IsDead(Heimdall) and CanReach(Eden)"
             }
         ],
         "Exits": [
@@ -2845,6 +2847,12 @@
                 "Logic": "True"
             },
             {
+                "Name": "[DF D-5] Glossary in Wall Right of Mural",
+                "ID": "field05RG1",
+                "LocationType": "Glossary",
+                "Logic": "HorizontalAttack"
+            },
+            {
                 "Name": "[DF E-4] Glossary in Pre-Hugin and Munin Wall",
                 "ID": "charactor8",
                 "LocationType": "Glossary",
@@ -2983,12 +2991,7 @@
                 "LocationType": "Glossary",
                 "Logic": "@EnemyGlossary"
             },
-            {
-                "Name": "[DF D-5] Glossary in Wall Right of Mural",
-                "ID": "field05RG1",
-                "LocationType": "Glossary",
-                "Logic": "HorizontalAttack"
-            },
+
             {
                 "Name": "[DF A-3] NPC Glossary (Brokkr)",
                 "ID": "talk22",
@@ -3005,7 +3008,7 @@
                 "Name": "[DF B-5] NPC Glossary (Shuhoka)",
                 "ID": "talk26",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Birth Sigil)"
             }
         ],
         "Exits": [
@@ -3230,7 +3233,7 @@
                 "Name": "[SFG D-5] NPC Glossary (Thrymr)",
                 "ID": "talk28",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Birth Sigil)"
             },
             {
                 "Name": "[SFG C-4] NPC Glossary (Fairy Guild General)",
@@ -3317,7 +3320,7 @@
                 "Name": "[SFG B-5] Glossary in the Snow Below Skeleton",
                 "ID": "enemyC5",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime)))"
+                "Logic": "True"
             },
             {
                 "Name": "[SFG D-7] Glossary in Flame Torc Wall Above Spikes",
@@ -3383,13 +3386,13 @@
                 "Name": "[SFG A-4] Glossary at Left Snow Drop",
                 "ID": "charactor9",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Katana) or Has(Axe) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)) or (CanUse(Flare Gun) and (Has(Rapier) or Has(Knife) or CanUse(Rolling Shuriken))))"
+                "Logic": "Has(Katana) or Has(Axe) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)) or (CanUse(Flare Gun) and (Has(Rapier) or Has(Knife) or CanUse(Rolling Shuriken)))"
             },
             {
                 "Name": "[SFG A-5] NPC Glossary (Hydlit)",
                 "ID": "talk30",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "((Has(Snow Shoes) and Has(Gale Fibula)) or CanStopTime) and PuzzleFinished(Bergelmir)"
             },
             {
                 "Name": "[SFG B-4] NPC Glossary (Mnemosyne's Remains)",
@@ -3479,10 +3482,10 @@
                 }
             },
             {
-                "Name": "[SFG C-2] Glossary in Softlock Pillar Before Balor",
+                "Name": "[SFG C-2] Glossary in Hollow Pillar Before Balor",
                 "ID": "field06RG2",
                 "LocationType": "Glossary",
-                "Logic": "PuzzleFinished(Bergelmir) and CanWarp"
+                "Logic": "Has(Feather) and PuzzleFinished(Bergelmir) and CanWarp"
             }
         ],
         "Exits": [
@@ -3828,7 +3831,7 @@
                 "Logic": "True"
             },
             {
-                "Name": "[GOTD D-6] NPC Glossary (Neftis)",
+                "Name": "[GOTD D-6] NPC Glossary (Nephthys)",
                 "ID": "talk36",
                 "LocationType": "Glossary",
                 "Logic": "True"
@@ -4044,7 +4047,7 @@
                 "Name": "[TS E-3] Glossary in Raijin and Fujin's Room",
                 "ID": "field08RG1",
                 "LocationType": "Glossary",
-                "Logic": "(CanKill(Raijin and Fujin) or CanWarp)"
+                "Logic": "CanKill(Raijin and Fujin) or CanWarp"
             },
             {
                 "Name": "[TS E-6] Glossary in Wall Flared Before Daji",
@@ -4056,11 +4059,17 @@
                 "Name": "[TS D-4] Glossary in Bottom-Right Breakable Wall",
                 "ID": "field08RG3",
                 "LocationType": "Glossary",
-                "Logic": "CanWarp"
+                "Logic": "CanWarp or ((Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife))"
             },
             {
                 "Name": "[TS D-1] NPC Glossary (Kami-musubi)",
                 "ID": "talk39",
+                "LocationType": "Glossary",
+                "Logic": "Has(Katana) or CanUse(Earth Spear) or CanUse(Bomb)"
+            },
+            {
+                "Name": "[TS C-4] NPC Glossary (Ash Geen)",
+                "ID": "talk43",
                 "LocationType": "Glossary",
                 "Logic": "True"
             }
@@ -4137,12 +4146,6 @@
             {
                 "Name": "[TS C-3] NPC Glossary (Izanagi)",
                 "ID": "talk40",
-                "LocationType": "Glossary",
-                "Logic": "True"
-            },
-            {
-                "Name": "[TS C-4] NPC Glossary (Ash Geen)",
-                "ID": "talk43",
                 "LocationType": "Glossary",
                 "Logic": "True"
             }
@@ -4442,7 +4445,7 @@
                 "Logic": "@EnemyGlossary"
             },
             {
-                "Name": "[HL D-5] Glossary in Sphinx's Room",
+                "Name": "[HL D-5] Glossary in Arachne's Room",
                 "ID": "field09RG1",
                 "LocationType": "Glossary",
                 "Logic": "True"
@@ -4475,7 +4478,7 @@
                 "Name": "[HL A-3] NPC Glossary (Megarock)",
                 "ID": "talk48",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Grapple Claw) and Has(Feather)"
             }
         ],
         "Exits": [
@@ -4566,31 +4569,31 @@
                 "Name": "[HL E-3] Spiral Mural Coin Pot",
                 "ID": "field09E2",
                 "LocationType": "Pot",
-                "Logic": "IsDead(Glasya Labolas) and HorizontalAttack"
+                "Logic": "IsDead(Glasya Labolas)"
             },
             {
                 "Name": "[HL B-1] Weapon Vault Coin Pot",
                 "ID": "field09B0g",
                 "LocationType": "Pot",
-                "Logic": "IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))"
+                "Logic": "(IsDead(Glasya Labolas) or CanReach(HLGate)) and (Has(Feather) or Has(Grapple Claw))"
             },
             {
                 "Name": "[HL C-2] Path to Chaos Item Pot",
                 "ID": "field09C1",
                 "LocationType": "Pot",
-                "Logic": "IsDead(Glasya Labolas) and HorizontalAttack"
+                "Logic": "(IsDead(Glasya Labolas) or CanReach(HLGate)) and HorizontalAttack"
             },
             {
                 "Name": "[HL C-2] Glossary along the Path to Chaos",
                 "ID": "field09RG3",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "IsDead(Glasya Labolas) or CanReach(HLGate)"
             },
             {
                 "Name": "[HL E-3] Glossary behind Griffin's Statue (Scan)",
                 "ID": "field09RG4",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "IsDead(Glasya Labolas) and Has(Hand Scanner)"
             },
             {
                 "Name": "[HL C-4] Glossary After Destroying Typhon (Scan)",
@@ -4850,7 +4853,7 @@
                 "Name": "[VAL B-4] Glossary in Jalandhara's Corridor (Scan)",
                 "ID": "field10RG2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "HorizontalAttack and Has(Hand Scanner)"
             },
             {
                 "Name": "[VAL D-3] Glossary Behind Third Trickster Spot",
@@ -4898,7 +4901,7 @@
                 "Name": "[VAL D-4] Fish Glossary (Sawara)",
                 "ID": "d235",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Heimdall)"
+                "Logic": "IsDead(Heimdall) and CanReach(Eden)"
             }
         ],
         "Exits": [
@@ -5055,7 +5058,8 @@
             {
                 "Name": "Money Fairy",
                 "LocationType": "Fairy",
-                "Logic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and (Has(Gale Fibula) or CanStopTime)",
+                "Logic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and (CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime)",
+                "TrickyLogic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and HorizontalAttack and (Has(Gale Fibula) or CanStopTime)",
                 "Item": {
                     "Name": "Money Fairy",
                     "IsRequired": true
@@ -5253,7 +5257,7 @@
                 "Name": "[DSLM B-2] NPC Glossary (Nun)",
                 "ID": "talk56",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather)"
             },
             {
                 "Name": "[DSLM C-6] NPC Glossary (Ra)",
@@ -5265,13 +5269,14 @@
                 "Name": "[DSLM C-2] NPC Glossary (Kero)",
                 "ID": "talk58",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather)"
             },
             {
                 "Name": "[DSLM B-6] NPC Glossary (Fairy Guild Lieutenant)",
                 "ID": "talk59",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "(CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime)",
+                "TrickyLogic": "HorizontalAttack and (Has(Gale Fibula) or CanStopTime)"
             },
             {
                 "Name": "[DSLM] Enemy Glossary (Soul)",
@@ -5389,7 +5394,7 @@
                 "Name": "[DSLM B-3] NPC Glossary (Amunet)",
                 "ID": "talk55",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather) or CanWarp"
             }
         ],
         "Exits": [
@@ -5443,7 +5448,7 @@
                 "Name": "[NIBIRU] Glossary in the Top-Right Corner (Scan)",
                 "ID": "enemyF11-1",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "Has(Hand Scanner) and Has(Claydoll Suit)"
             }
         ],
         "Exits": [
@@ -5603,13 +5608,13 @@
                 "Name": "[AC D-7] NPC Glossary (Sykick)",
                 "ID": "talk64",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))"
             },
             {
                 "Name": "[AC C-6] Fish Glossary (Nodoguro)",
                 "ID": "d236",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Heimdall)"
+                "Logic": "IsDead(Heimdall) and CanReach(Eden) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)))"
             }
         ],
         "Exits": [
@@ -5640,6 +5645,24 @@
                 "Name": "Wind Mantra Mural",
                 "LocationType": "Mural",
                 "Logic": "Has(Snapshot)"
+            },
+            {
+                "Name": "[AC D-5] Zhulong Blocked Item Pot",
+                "ID": "field12D3",
+                "LocationType": "Pot",
+                "Logic": "True"
+            },
+            {
+                "Name": "[AC D-4] Above Mantra Mural Item Pot",
+                "ID": "field12D4",
+                "LocationType": "Pot",
+                "Logic": "True"
+            },
+            {
+                "Name": "[AC D-5] NPC Glossary (Zhuanxu)",
+                "ID": "talk62",
+                "LocationType": "Glossary",
+                "Logic": "True"
             }
         ],
         "Exits": [
@@ -5767,28 +5790,10 @@
                 "Logic": "True"
             },
             {
-                "Name": "[AC D-5] Zhulong Blocked Item Pot",
-                "ID": "field12D3",
-                "LocationType": "Pot",
-                "Logic": "True"
-            },
-            {
-                "Name": "[AC D-4] Above Mantra Mural Item Pot",
-                "ID": "field12D4",
-                "LocationType": "Pot",
-                "Logic": "True"
-            },
-            {
                 "Name": "[AC D-3] Glossary in Left Wall Before Anzu",
                 "ID": "Guardian05",
                 "LocationType": "Glossary",
                 "Logic": "HorizontalAttack"
-            },
-            {
-                "Name": "[AC D-5] NPC Glossary (Zhuanxu)",
-                "ID": "talk62",
-                "LocationType": "Glossary",
-                "Logic": "True"
             }
         ],
         "Exits": [
@@ -6040,11 +6045,17 @@
                 "Name": "[HOM B-3] Glossary at Lernaean Hydra's Wall",
                 "ID": "field13RG3",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather)"
             },
             {
                 "Name": "[HOM D-4] Glossary at Chimera Statue (Scan)",
                 "ID": "field13RG8",
+                "LocationType": "Glossary",
+                "Logic": "Has(Hand Scanner) and CanWarp"
+            },
+            {
+                "Name": "[HOM E-4] Glossary at Phaia Statue (Scan)",
+                "ID": "field13RG11",
                 "LocationType": "Glossary",
                 "Logic": "Has(Hand Scanner)"
             },
@@ -6067,16 +6078,10 @@
                 "Logic": "True"
             },
             {
-                "Name": "[HOM F-3] NPC Glossary (Alcyoneus)",
-                "ID": "talk67",
-                "LocationType": "Glossary",
-                "Logic": "True"
-            },
-            {
                 "Name": "[HOM G-4] NPC Glossary (Fairylan)",
                 "ID": "talk68",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Claydoll Suit)"
             }
         ],
         "Exits": [
@@ -6208,13 +6213,8 @@
                 "Name": "[HOM E-3] Glossary at Ladon when Awoken",
                 "ID": "field13RG9",
                 "LocationType": "Glossary",
-                "Logic": "True"
-            },
-            {
-                "Name": "[HOM E-4] Glossary at Phaia Statue (Scan)",
-                "ID": "field13RG11",
-                "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "Has(Silver Shield) and ((Has(Chain Whip) and OrbCount(7)) or ((Has(Flail Whip) or Has(Axe) or Has(Katana)) and OrbCount(6)))",
+                "HardLogic": "MeleeAttack"
             },
             {
                 "Name": "[HOM D-5] Glossary in Orthrus' Right Wall (Scan)",
@@ -6227,6 +6227,13 @@
                 "ID": "field13RG5",
                 "LocationType": "Glossary",
                 "Logic": "Has(Hand Scanner)"
+            },
+            {
+                "Name": "[HOM F-3] NPC Glossary (Alcyoneus)",
+                "ID": "talk67",
+                "LocationType": "Glossary",
+                "Logic": "Has(Silver Shield) and ((Has(Chain Whip) and OrbCount(7)) or ((Has(Flail Whip) or Has(Axe) or Has(Katana)) and OrbCount(6)))",
+                "HardLogic": "MeleeAttack"
             }
         ],
         "Exits": []
@@ -6653,7 +6660,7 @@
                 "Name": "[EPG F-2] Right of Prison Cells Coin Pot",
                 "ID": "field14F1",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
+                "Logic": "((Has(Feather) and HorizontalAttack) or IsDead(Vidofnir))"
             },
             {
                 "Name": "[EP] Enemy Glossary (Hekatonkheires)",
@@ -6701,13 +6708,13 @@
                 "Name": "[EPG B-5] NPC Glossary (Hades)",
                 "ID": "talk70",
                 "LocationType": "Glossary",
-                "Logic": "Has(Enga Musica)"
+                "Logic": "Has(Enga Musica) and Has(Feather)"
             },
             {
                 "Name": "[EPG D-2] Glossary Past The River Styx",
                 "ID": "talk71",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Feather)"
             },
             {
                 "Name": "[EPG D-5] NPC Glossary (Eurydice)",
@@ -6734,7 +6741,7 @@
                 "Logic": "True"
             },
             {
-                "Name": "[EPG C-7] Glossary in Pillar next to NPC (Scan)",
+                "Name": "[EPG C-7] Glossary in Izanami's Pillar (Scan)",
                 "ID": "player0",
                 "LocationType": "Glossary",
                 "Logic": "Has(Hand Scanner)"
@@ -6743,7 +6750,7 @@
                 "Name": "[EPD C-3] Glossary in Right Mirrored Door (Scan)",
                 "ID": "field15RG2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "Has(Hand Scanner) and ((Has(Death Sigil) and Has(Feather)) or (Has(Future Development Company) and CanWarp))"
             }
         ],
         "Exits": [
@@ -6846,7 +6853,7 @@
                 "Name": "[SH C-4] Glossary on the Escape Route (Scan)",
                 "ID": "Guardian09",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "IsDead(Ninth Child)"
             }
         ],
         "Exits": []
@@ -6860,7 +6867,7 @@
                 "Name": "Spring in the Sky Ladder Down (A-6)",
                 "ID": "fL04Down",
                 "ConnectionType": "DownLadder",
-                "ConnectingAreaID": "GateofGuidanceLeft",
+                "ConnectingAreaID": "GateofGuidance",
                 "Logic": "True"
             },
             {
@@ -7107,7 +7114,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "True"
+                "Logic": "CanWarp"
             }
         ]
     },
@@ -7133,7 +7140,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyLevel1",
-                "Logic": "True"
+                "Logic": "CanWarp"
             }
         ]
     },
@@ -7152,12 +7159,12 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyLevel2",
-                "Logic": "True"
+                "Logic": "CanWarp"
             },
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyTopRight",
-                "Logic": "Has(Gale Fibula)"
+                "Logic": "Has(Gale Fibula) and CanWarp"
             },
             {
                 "Name": "Tower of Oannes Left Gyonin Drop (B-1)",
@@ -7183,7 +7190,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "True"
+                "Logic": "CanWarp"
             },
             {
                 "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",

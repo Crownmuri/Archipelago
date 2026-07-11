@@ -1869,7 +1869,7 @@ class LocationID(IntEnum):
     Glossary093 = 2093  # talk33, flag 181 — Nekhbet (N)
     Glossary094 = 2094  # talk34, flag 182 — Isis (N)
     Glossary095 = 2095  # talk35, flag 183 — Horus (N)
-    Glossary096 = 2096  # talk36, flag 184 — Neftis (N)
+    Glossary096 = 2096  # talk36, flag 184 — Nephthys (N)
     Glossary097 = 2097  # talk37, flag 185 — Thoth (N)
     Glossary098 = 2098  # talk38, flag 186 — Aytum (N)
     Glossary099 = 2099  # enemyF12-1, flag 109 — Edimmu (N)
@@ -2459,7 +2459,7 @@ GLOSSARY_FLAG_MAP: dict[int, int] = {
     2093: 181,  # Glossary093 talk33 — Nekhbet
     2094: 182,  # Glossary094 talk34 — Isis
     2095: 183,  # Glossary095 talk35 — Horus
-    2096: 184,  # Glossary096 talk36 — Neftis
+    2096: 184,  # Glossary096 talk36 — Nephthys
     2097: 185,  # Glossary097 talk37 — Thoth
     2098: 186,  # Glossary098 talk38 — Aytum
     2099: 109,  # Glossary099 enemyF12-1 — Edimmu
@@ -2634,6 +2634,17 @@ COSTUME_CLIP_ITEMS: tuple = (
 )
 
 DLC_LOCATION_IDS: set = {LocationID.RebirthSigilChest, LocationID.CostumeChestFishSuit} | {LocationID(v) for v in DLC_GLOSSARY_IDS}
+
+# Missable locations: one-time glossary spawns that despawn permanently if the
+# player fails to grab them. AP must never place progression here.
+# Marked LocationProgressType.EXCLUDED at region-build time.
+MISSABLE_LOCATION_IDS: set = {
+    LocationID.Glossary129,  # [VAL] Cabracan
+    LocationID.Glossary130,  # [VAL] Zipakna
+    LocationID.Glossary204,  # [IT E-4] Urd
+    LocationID.Glossary205,  # [ROY F-2] Verdandi
+    LocationID.Glossary206,  # [SH C-5] Skuld
+}
 
 class AreaID(IntEnum):
     None_ = 0
@@ -3476,7 +3487,7 @@ AP_LOCATION_NAMES = {
     "[SFG D-5] Glossary in the Checkered Pillar": LocationID.Glossary077,
     "[SFG D-4] Glossary in Between the Elevators": LocationID.Glossary078,
     "[SFGB A-1] Glossary Post-Tezcatlipoca": LocationID.Glossary079,
-    "[SFG C-2] Glossary in Softlock Pillar Before Balor": LocationID.Glossary080,
+    "[SFG C-2] Glossary in Hollow Pillar Before Balor": LocationID.Glossary080,
     "[SFG D-7] Glossary in Flame Torc Wall Above Spikes": LocationID.Glossary081,
     "[SFG E-4] NPC Glossary (Gerd)": LocationID.Glossary082,
     "[SFG D-5] NPC Glossary (Thrymr)": LocationID.Glossary083,
@@ -3492,7 +3503,7 @@ AP_LOCATION_NAMES = {
     "[GOTD A-4] NPC Glossary (Nekhbet)": LocationID.Glossary093,
     "[GOTD D-4] NPC Glossary (Isis)": LocationID.Glossary094,
     "[GOTD E-5] NPC Glossary (Horus)": LocationID.Glossary095,
-    "[GOTD D-6] NPC Glossary (Neftis)": LocationID.Glossary096,
+    "[GOTD D-6] NPC Glossary (Nephthys)": LocationID.Glossary096,
     "[GOTD B-5] NPC Glossary (Thoth)": LocationID.Glossary097,
     "[GOTD B-3] NPC Glossary (Aytum)": LocationID.Glossary098,
     "[TS] Enemy Glossary (Edimmu)": LocationID.Glossary099,
@@ -3512,7 +3523,7 @@ AP_LOCATION_NAMES = {
     "[HL] Enemy Glossary (Harpy)": LocationID.Glossary113,
     "[HL] Enemy Glossary (Lizardman)": LocationID.Glossary114,
     "[HL] Enemy Glossary (Andrealphus)": LocationID.Glossary115,
-    "[HL D-5] Glossary in Sphinx's Room": LocationID.Glossary116,
+    "[HL D-5] Glossary in Arachne's Room": LocationID.Glossary116,
     "[HL B-5] Glossary in Scylla's Breakable Wall": LocationID.Glossary117,
     "[HL C-2] Glossary along the Path to Chaos": LocationID.Glossary118,
     "[HL E-3] Glossary behind Griffin's Statue (Scan)": LocationID.Glossary119,
@@ -3610,7 +3621,7 @@ AP_LOCATION_NAMES = {
     "[SH] Enemy Glossary (Berserker)": LocationID.Glossary211,
     "[SH] Enemy Glossary (Fjalar)": LocationID.Glossary212,
     "[SH C-4] Glossary on the Escape Route (Scan)": LocationID.Glossary213,
-    "[EPG C-7] Glossary in Pillar next to NPC (Scan)": LocationID.Glossary214,
+    "[EPG C-7] Glossary in Izanami's Pillar (Scan)": LocationID.Glossary214,
     "[TS B-1] Glossary inside the Poison Lava (Scan)": LocationID.Glossary215,
     "[VOD C-4] Glossary Above Hot Spring (Scan)": LocationID.Glossary216,
     "[GOG D-2] Glossary Above Children": LocationID.Glossary217,
@@ -3641,73 +3652,6 @@ AP_LOCATION_NAMES = {
     "[DLC] Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)": LocationID.Glossary242,
     "[DLC] Enemy Glossary (Fish Wall'22)": LocationID.Glossary243
 }
-
-# =============================================================================
-# Partitioned Potsanity / Glossanity pools
-# =============================================================================
-
-# Pot pools, in display order. Each maps to a `potsanity_<pool>` option.
-POT_POOLS: tuple[str, ...] = (
-    "low_value", "high_value", "shuriken", "rolling_shuriken", "earth_spear",
-    "flare", "caltrops", "chakram", "bomb",
-)
-
-# Glossary categories. Each maps to a `glossanity_<cat>` option.
-GLOSS_CATS: tuple[str, ...] = ("freestanding", "scannable", "npc", "enemy")
-
-
-def _load_pot_options():
-    """Load data/PotOptions.json -> {LocationID: pool}, {LocationID: reward name}."""
-    import json
-    from importlib import resources
-    with resources.files(__package__ + ".data").joinpath(
-        "PotOptions.json"
-    ).open("r", encoding="utf-8") as f:
-        raw = json.load(f)
-    pool_by_loc: dict = {}
-    reward_by_loc: dict = {}
-    for key, val in raw.items():
-        if key.startswith("_"):
-            continue
-        lid = LocationID[key]
-        pool_by_loc[lid] = val["pool"]
-        reward_by_loc[lid] = val["reward"]
-    return pool_by_loc, reward_by_loc
-
-
-POT_POOL_BY_LOC, POT_REWARD_BY_LOC = _load_pot_options()
-
-
-def _glossary_category(name: str) -> str:
-    """Categorize a glossary location by its display name."""
-    if "(Scan)" in name:
-        return "scannable"
-    if "Enemy Glossary" in name:
-        return "enemy"
-    if "NPC Glossary" in name:
-        return "npc"
-    return "freestanding"
-
-
-# Glossary game-id (shared by LocationID.GlossaryNNN and ItemID.GlossaryNNN,
-# both equal to 2000+N) -> category. Lets us filter both glossary locations and
-# their ROM filler items by the same category.
-GLOSSARY_CATEGORY_BY_ID: dict[int, str] = {
-    int(locid): _glossary_category(name)
-    for name, locid in AP_LOCATION_NAMES.items()
-    if int(locid) in GLOSSARY_ITEM_IDS
-}
-
-
-def potsanity_pools_enabled(options) -> set:
-    """Set of pot pool names whose `potsanity_<pool>` toggle is on."""
-    return {p for p in POT_POOLS if getattr(options, f"potsanity_{p}")}
-
-
-def glossanity_cats_enabled(options) -> set:
-    """Set of glossary category names whose `glossanity_<cat>` toggle is on."""
-    return {c for c in GLOSS_CATS if getattr(options, f"glossanity_{c}")}
-
 
 ITEM_MAP = {
     "Hand Scanner": ItemID.HandScanner,
@@ -5654,6 +5598,73 @@ ORIGINAL_SHOP_PRICES = {
     ItemID.PistolAmmo: 10,
     # Most other items default to 10
 }
+
+
+# =============================================================================
+# Partitioned Potsanity / Glossanity pools
+# =============================================================================
+
+# Pot pools, in display order. Each maps to a `potsanity_<pool>` option.
+POT_POOLS: tuple[str, ...] = (
+    "low_value", "high_value", "shuriken", "rolling_shuriken", "earth_spear",
+    "flare", "caltrops", "chakram", "bomb",
+)
+
+# Glossary pools. Each maps to a `glossanity_<pool>` option.
+GLOSS_POOLS: tuple[str, ...] = ("freestanding", "scannable", "npc", "enemy")
+
+
+def _load_pot_options():
+    """Load data/PotOptions.json -> {LocationID: pool}, {LocationID: reward name}."""
+    import json
+    from importlib import resources
+    with resources.files(__package__ + ".data").joinpath(
+        "PotOptions.json"
+    ).open("r", encoding="utf-8") as f:
+        raw = json.load(f)
+    pool_by_loc: dict = {}
+    reward_by_loc: dict = {}
+    for key, val in raw.items():
+        if key.startswith("_"):
+            continue
+        lid = LocationID[key]
+        pool_by_loc[lid] = val["pool"]
+        reward_by_loc[lid] = val["reward"]
+    return pool_by_loc, reward_by_loc
+
+
+POT_POOL_BY_LOC, POT_REWARD_BY_LOC = _load_pot_options()
+
+
+def _load_glossary_options(name: str) -> str:
+    """Categorize a glossary location by its display name."""
+    if "(Scan)" in name:
+        return "scannable"
+    if "Enemy Glossary" in name:
+        return "enemy"
+    if "NPC Glossary" in name:
+        return "npc"
+    return "freestanding"
+
+
+# Glossary game-id (shared by LocationID.GlossaryNNN and ItemID.GlossaryNNN,
+# both equal to 2000+N) -> category. Lets us filter both glossary locations and
+# their ROM filler items by the same category.
+GLOSSARY_POOLS_BY_ID: dict[int, str] = {
+    int(locid): _load_glossary_options(name)
+    for name, locid in AP_LOCATION_NAMES.items()
+    if int(locid) in GLOSSARY_ITEM_IDS
+}
+
+
+def potsanity_pools_enabled(options) -> set:
+    """Set of pot pool names whose `potsanity_<pool>` toggle is on."""
+    return {p for p in POT_POOLS if getattr(options, f"potsanity_{p}")}
+
+
+def glossanity_pools_enabled(options) -> set:
+    """Set of glossary category names whose `glossanity_<pool>` toggle is on."""
+    return {c for c in GLOSS_POOLS if getattr(options, f"glossanity_{c}")}
 
 # Inverse of ITEM_MAP: game ItemID → display label.
 # Built from ITEM_MAP so the area-specific labels (e.g. "Map (Roots of Yggdrasil)",
