@@ -222,6 +222,11 @@ class LaMulana2World(World):
 
         apply_starting_inventory(self)
 
+        # Resolve the victory condition (validates prereqs + clamps the
+        # glossary-hunt count). Deterministic from options, so the UT regen
+        # path re-derives the same result from restored options.
+        self._resolve_goal()
+
     def create_regions(self) -> None:
         regions = create_regions(self)
         self.regions_by_area_id = regions
@@ -545,6 +550,8 @@ class LaMulana2World(World):
             # Existing fields
             "starting_area": int(self.starting_area),
             "starting_weapon": int(self.starting_weapon),
+            "goal": int(getattr(self, "goal", 0)),
+            "glossary_hunt_count": int(getattr(self, "glossary_hunt_count", 0)),
             "starting_items": [int(item_id) for item_id in self.randomizer.get_starting_items()],
             "cursed_locations": [int(loc_id) for loc_id in self.randomizer.cursed_locations],
             "item_placements": item_placements,
@@ -602,6 +609,7 @@ class LaMulana2World(World):
             # Read back in generate_early() via re_gen_passthrough.
             "options": self.options.as_dict(
                 "accessibility",
+                "goal", "glossary_hunt_count",
                 "starting_area", "starting_weapon",
                 "random_grail", "random_scanner", "random_codices", "random_fdc",
                 "random_ring", "random_shell_horn", "random_maps_software",
@@ -1048,6 +1056,61 @@ class LaMulana2World(World):
                 soul_amount=soul_amount,
             ))
         self._sg_pairs = applied_sg
+
+    def _available_glossary_count(self) -> int:
+        """Number of Glossary ROM entries that will actually be shuffled, given
+        the enabled Glossanity categories (and Oannesanity for DLC glossary).
+        Mirrors the pool-building filter in items.build_item_pool so the
+        glossary-hunt count can be clamped to something achievable."""
+        from .ids import GLOSSARY_ITEM_IDS, DLC_GLOSSARY_IDS, GLOSSARY_POOLS_BY_ID
+        count = 0
+        for gid in GLOSSARY_ITEM_IDS:
+            cat = GLOSSARY_POOLS_BY_ID.get(gid)
+            if cat is None or not getattr(self.options, f"glossanity_{cat}"):
+                continue
+            if gid in DLC_GLOSSARY_IDS and not self.options.oannesanity:
+                continue
+            count += 1
+        return count
+
+    def _resolve_goal(self) -> None:
+        """Resolve and validate the goal option.
+
+        Sets self.goal (int, possibly downgraded to beat_the_game) and
+        self.glossary_hunt_count (int, clamped to the achievable glossary
+        count; 0 when the goal isn't glossary_hunt). Both are echoed into
+        slot_data so the client knows which victory condition to send.
+        """
+        from .options import Goal
+        goal = self.options.goal.value
+        self.glossary_hunt_count = 0
+
+        if goal == Goal.option_beat_the_dlc and not self.options.oannesanity:
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: goal 'beat_the_dlc' requires "
+                f"Oannesanity, which is disabled. Falling back to 'beat_the_game'."
+            )
+            goal = Goal.option_beat_the_game
+        elif goal == Goal.option_glossary_hunt:
+            available = self._available_glossary_count()
+            if available <= 0:
+                logging.warning(
+                    f"[La-Mulana 2] {self.player_name}: goal 'glossary_hunt' requires "
+                    f"at least one Glossanity category, but none are enabled. "
+                    f"Falling back to 'beat_the_game'."
+                )
+                goal = Goal.option_beat_the_game
+            else:
+                requested = self.options.glossary_hunt_count.value
+                self.glossary_hunt_count = min(requested, available)
+                if self.glossary_hunt_count < requested:
+                    logging.warning(
+                        f"[La-Mulana 2] {self.player_name}: glossary_hunt_count "
+                        f"{requested} exceeds the {available} Glossary entries shuffled "
+                        f"by the enabled Glossanity options. Lowered to {available}."
+                    )
+
+        self.goal = goal
 
     def _starting_area_prereqs_met(self, area_value: int) -> bool:
         prereqs = _STARTING_AREA_PREREQS.get(area_value, ())

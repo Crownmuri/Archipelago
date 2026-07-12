@@ -4,6 +4,29 @@ from Options import Choice, Toggle, DefaultOnToggle, Range, ItemsAccessibility, 
 
 # --- Choice Definitions ---
 
+class Goal(Choice):
+    """Victory condition for the seed.
+    - beat_the_game: Defeat the Ninth Child and escape (default, vanilla goal).
+    - beat_the_dlc: Defeat the final boss in the in the Tower of Oannes DLC.
+      Requires Oannesanity.
+    - glossary_hunt: Collect a set number of Glossary entries 
+      Requires at least one Glossanity category to be enabled.
+    If the chosen goal's prerequisites aren't met, falls back to beat_the_game."""
+    display_name = "Goal"
+    option_beat_the_game = 0
+    option_beat_the_dlc = 1
+    option_glossary_hunt = 2
+    default = 0
+
+class GlossaryHuntCount(Range):
+    """Number of Glossary entries required to win when the goal is glossary_hunt.
+    The maximum value is automatically lowered to the number of Glossary entries
+    shuffled based on the enabled Glossanity options (and Oannesanity, for DLC glossary)"""
+    display_name = "Glossary Hunt Count"
+    range_start = 1
+    range_end = 244
+    default = 50
+
 class StartingArea(Choice):
     """Starting area for the player.
     Some areas require specific entrance randomizer options to be enabled. If the chosen area's
@@ -450,6 +473,10 @@ class WriteSeedFile(Toggle):
 class LM2Options(PerGameCommonOptions):
 
     accessibility: ItemsAccessibility
+
+    # Goal
+    goal: Goal
+    glossary_hunt_count: GlossaryHuntCount
 
     # Starting Location & Items
     starting_area: StartingArea

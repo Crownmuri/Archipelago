@@ -28,16 +28,32 @@ def set_rules(world):
 
 def can_complete_game(state, player: int, world) -> bool:
     """
-    Check if the player can complete the game.
+    Check if the player can complete the game, based on the resolved goal.
 
-    "Ninth Child" is a code=None event item placed at the Ninth Child location.
-    AP's sweep_for_advancements only auto-collects it when the location is
-    reachable via the AP region graph (which already encodes ER connections and
-    all location access rules including mantras, dissonances, items, and area
-    reachability via soul gates). Therefore state.has("Ninth Child") is
-    sufficient — it is True if and only if the player can reach and beat the
-    final boss.
+    - beat_the_game (default): reach and defeat the Ninth Child.
+    - beat_the_dlc: reach and defeat Fish-Gear mk-2 turboR (Tower of Oannes).
+    - glossary_hunt: collect `world.glossary_hunt_count` Glossary entries.
+
+    "Ninth Child" and "Fish-Gear mk-2 turboR" are code=None event items placed
+    at their boss locations. AP's sweep_for_advancements only auto-collects them
+    when the location is reachable via the AP region graph (which already
+    encodes ER connections and all location access rules including mantras,
+    dissonances, items, and area reachability via soul gates). So state.has(...)
+    is True if and only if the player can reach and beat that boss.
+
+    For glossary_hunt, the enabled Glossary ROM items are made progression (see
+    items.build_item_pool) and grouped as "Glossary", so has_group counts them.
     """
+    from .options import Goal
+    goal = getattr(world, "goal", Goal.option_beat_the_game)
+
+    if goal == Goal.option_beat_the_dlc:
+        return state.has("Fish-Gear mk-2 turboR", player)
+
+    if goal == Goal.option_glossary_hunt:
+        required = getattr(world, "glossary_hunt_count", 0)
+        return state.has_group("Glossary", player, required)
+
     return state.has("Ninth Child", player)
 
 

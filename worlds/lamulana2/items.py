@@ -410,8 +410,18 @@ def build_item_pool(world) -> List[Item]:
             cat = GLOSSARY_POOLS_BY_ID.get(int(item_def.game_id))
             cat_on = cat is not None and getattr(world.options, f"glossanity_{cat}")
             if (cat_on and (not is_dlc_gloss or world.options.oannesanity)):
+                # For the glossary_hunt goal the ROMs are MacGuffins, so they
+                # must be progression (collected into state → has_group counts
+                # them). Same pattern as ALTTP Triforce Piece / Celeste Strawberry. 
+                from .options import Goal
+                gloss_class = (
+                    ItemClassification.progression_skip_balancing
+                    if getattr(world, "goal", Goal.option_beat_the_game)
+                    == Goal.option_glossary_hunt
+                    else ItemClassification.filler
+                )
                 pool.append(LM2Item(name=item_def.name,
-                                    classification=ItemClassification.filler,
+                                    classification=gloss_class,
                                     code=item_def.ap_id, player=world.player))
             continue
 
@@ -795,10 +805,12 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
         "Crystal Skulls": {"Crystal Skull"},
         "Skulls":{"Crystal Skull"},
         "Ankh Jewels": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
+        "Ankhs": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
         "Mantras": set(_MANTRA_NAMES),
         "Sacred Orbs": {"Sacred Orb"},
         "HP":{"Sacred Orb"},
         "Software": set(_SOFTWARE_NAMES),
         "Sigils": set(_SIGIL_NAMES),
         "Seals": set(_SIGIL_NAMES),
+        "Glossary": {d.name for d in ITEM_DEFS if int(d.game_id) in GLOSSARY_ITEM_IDS},
     }
