@@ -6886,8 +6886,8 @@
             {
                 "Name": "Fish-Valusa Re-gyo-ded",
                 "LocationType": "Miniboss",
-                "Logic": "(Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))) and OrbCount(2)",
-                "HardLogic": "True",
+                "Logic": "Has(Feather) and CanUse(Flare Gun) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))) and OrbCount(2)",
+                "HardLogic": "Has(Feather) and CanUse(Flare Gun)",
                 "Item": {
                     "Name": "Fish-Valusa Re-gyo-ded",
                     "IsRequired": false
@@ -6950,7 +6950,7 @@
                 "ID": "fEx1_L1",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel1",
-                "Logic": "Has(Feather)"
+                "Logic": "Has(Feather) or CanWarp"
             }
         ]
     },
@@ -6971,7 +6971,7 @@
                 "ID": "fEx1_L3",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel2",
-                "Logic": "Has(Feather) and IsDead(Fish-Valusa Re-gyo-ded)"
+                "Logic": "IsDead(Fish-Valusa Re-gyo-ded) or CanWarp"
             }
         ]
     },
@@ -7002,14 +7002,14 @@
                 "ID": "fEx1_L4",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel2",
-                "Logic": "Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))"
+                "Logic": "True"
             },
             {
                 "Name": "Tower of Oannes Left-C Top Gate (C-5)",
                 "ID": "fEx1_L5",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel3",
-                "Logic": "(Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))) and IsDead(Fish-Slime Zero)"
+                "Logic": "IsDead(Fish-Slime Zero) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
             },
             {
                 "Name": "Tower of Oannes Fish-Slime Zero Escape (C-1)",
@@ -7032,7 +7032,7 @@
             {
                 "Name": "Evil Fish Crystal",
                 "LocationType": "Miniboss",
-                "Logic": "CanReach(BaileyTopRight) and IsDead(Fish-Slime Zero) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6)",
+                "Logic": "CanReach(BaileyTopRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or (Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
                 "Item": {
                     "Name": "Evil Fish Crystal",
                     "IsRequired": false
@@ -7041,7 +7041,7 @@
             {
                 "Name": "Fish-Gear mk-2 turboR",
                 "LocationType": "Miniboss",
-                "Logic": "IsDead(Evil Fish Crystal) and Has(Rebirth Sigil) and CanReach(TowerOfOannesLeftA) and CanReach(TowerOfOannesLeftB) and (Has(Gale Fibula) or CanStopTime) and CanUse(Bomb) and CanUse(Pistol) and Has(Feather) and CanWarp and Has(Flail Whip) and OrbCount(10)",
+                "Logic": "IsDead(Evil Fish Crystal) and Has(Rebirth Sigil) and CanReach(TowerOfOannesLeftA) and (Has(Gale Fibula) or CanStopTime) and CanUse(Bomb) and CanUse(Pistol) and Has(Grapple Claw) and Has(Feather) and CanWarp and Has(Flail Whip) and OrbCount(10)",
                 "Item": {
                     "Name": "Fish-Gear mk-2 turboR",
                     "IsRequired": false
@@ -7074,7 +7074,7 @@
                 "ID": "fEx1_Rout2",
                 "ConnectionType": "OneWay",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "CanReach(BaileyTopRight) and IsDead(Fish-Slime Zero)"
+                "Logic": "CanReach(BaileyTopRight) and Has(Feather)"
             }
         ]
     },
