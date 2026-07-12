@@ -9,7 +9,8 @@ class Goal(Choice):
     - beat_the_game: Defeat the Ninth Child and escape (default, vanilla goal).
     - beat_the_dlc: Defeat the final boss in the in the Tower of Oannes DLC.
       Requires Oannesanity.
-    - glossary_hunt: Collect a set number of Glossary entries 
+    - glossary_hunt: Collect a set number of AP shuffled Glossary entries. 
+      You will start off with the Ruins Encyclopedia which tracks your progress.
       Requires at least one Glossanity category to be enabled.
     If the chosen goal's prerequisites aren't met, falls back to beat_the_game."""
     display_name = "Goal"
@@ -145,10 +146,21 @@ class RandomResearch(DefaultOnToggle):
     If disabled, they will be static untracked locations in-game."""
     display_name = "Random Research"
 
+class ReplaceResearchWithOrbs(Range):
+    """Replace X Kosugi Research Papers with additional Sacred Orbs (max. 10)
+    Requires Random Research to be enabled (otherwise research isn't in the pool)
+    The remaining research items stay in the pool as normal.
+    Remove Research Notes will not remove Sacred Orbs; only remaining research items."""
+    display_name = "Research to Sacred Orbs"
+    range_start = 0
+    range_end = 10
+    default = 0
+
 class RemoveResearch(Toggle):
     """Remove Kosugi Research Notes from the item pool.
-    This means that 10 filler items will take their place."""
+    Any remaining research item will be converted to filler."""
     display_name = "Remove Research Notes"
+
 
 class RemoveMaps(Toggle):
     """Removes maps from the item pool.
@@ -230,9 +242,10 @@ class PotsanityBomb(Toggle):
     display_name = "Potsanity - Bomb Pots"
 
 # --- Glossanity (partitioned by glossary entry type) ---------------------------
+# Each toggle adds that subset of the 244 glossary chips as randomized checks.
 
 class GlossanityFreestanding(Toggle):
-    """Glossanity: add all Freestanding Glossary entries. (56 entries)
+    """Glossanity: add all Freestanding Glossary entries. (51+5 entries)
     Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
     display_name = "Glossanity - Freestanding"
 
@@ -245,9 +258,17 @@ class GlossanityNPC(Toggle):
     display_name = "Glossanity - NPC"
 
 class GlossanityEnemy(Toggle):
-    """Glossanity: add all Enemy Glossary entries as checks. (84 entries)
+    """Glossanity: add all Enemy Glossary entries as checks. (77+7 entries)
     Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
     display_name = "Glossanity - Enemy"
+
+class Costumesanity(Toggle):
+    """Add the costume chests (4+1) and their correlating costumes into the pool.
+    At the start of the seed you will not have your costumes available.
+    The chests are openable by default and do not require a key.
+    This option will impact logic relating to glitches and DLC. 
+    Note: DLC Item is only shuffled if Oannesanity is turned on."""
+    display_name = "Costumesanity"
 
 class Oannesanity(Toggle):
     """DLC Required. Enabling this may add the following checks based off of other options:
@@ -255,17 +276,10 @@ class Oannesanity(Toggle):
     - 5 Freestanding Glossary (Glossanity - Freestanding Required)
     - 7 Enemy Glossary (Glossanity - Enemy Required)
     - 1 Costume Chest (Costumesanity Required)
-    You can set this option separately from the entrance decoupling option.
+    You can set this option separately from the DLC entrance shuffling option.
     """
     display_name = "Oannesanity"
 
-class Costumesanity(Toggle):
-    """Add the costume chests and their correlating costumes into the pool.
-    At the start of the seed you will not have your costumes available.
-    The chests are openable by default and do not require a key.
-    This option will may impact logic relating to glitches and DLC. 
-    Note: DLC Item is only shuffled if Oannesanity is turned on."""
-    display_name = "Costumesanity"
 
 class GuardianSpecificAnkhJewels(DefaultOnToggle):
     """Makes Ankhs only usable at their designated bosses."""
@@ -315,8 +329,8 @@ class RequireFDC(DefaultOnToggle):
 
 class DLCItemLogic(Toggle):
     """Consider the DLC item in logic.
-    When enabled, the DLC item is assumed available from the start, unless it is
-    randomized by sanity options, in which case it must be obtained first.
+    When enabled, the DLC item is assumed as collected from the start, unless it is
+    randomized by Costumesanity, in which case it must be obtained first.
     When disabled, the DLC item is never considered in logic."""
     display_name = "DLC Item Logic"
 
@@ -370,7 +384,7 @@ class FullRandomEntrances(Toggle):
 
 class IncludeDLCEntrances(Toggle):
     """Requires DLC. Include DLC entrances in the pool.
-    Note: Combat logic to survive in the DLC areas is not setup yet."""
+    Note: Combat logic to survive in the DLC areas is still minimal."""
     display_name = "Include DLC Entrances"
 
 class PreventAreaLoops(Toggle):
@@ -494,12 +508,14 @@ class LM2Options(PerGameCommonOptions):
     # Item Pool Adjustments
     random_research: RandomResearch
     remove_research: RemoveResearch
+    replace_research_with_orbs: ReplaceResearchWithOrbs
     remove_maps: RemoveMaps
     required_skulls: RequiredSkulls
     remove_excess_skulls: RemoveSkulls
     random_dissonance: RandomDissonance
 
     # Sanities
+    costumesanity: Costumesanity
     # Potsanity is partitioned into per-content sub-pools (no single master toggle).
     potsanity_low_value: PotsanityLowValue
     potsanity_high_value: PotsanityHighValue
@@ -516,7 +532,6 @@ class LM2Options(PerGameCommonOptions):
     glossanity_npc: GlossanityNPC
     glossanity_enemy: GlossanityEnemy
     oannesanity: Oannesanity
-    costumesanity: Costumesanity
 
     # Logic & Difficulty
     required_guardians: GuardianKills

@@ -400,6 +400,10 @@ def build_item_pool(world) -> List[Item]:
     if hasattr(world, "starting_weapon"):
         starting_items.add(world.starting_weapon)
 
+    # replace_research_with_orbs: replace the first N research papers encountered with
+    # bonus Sacred Orbs. Counter tracks how many are still to be converted.
+    research_orbs_remaining = int(getattr(world.options, "replace_research_with_orbs", 0))
+
     for item_def in ITEM_DEFS:
 
         # glossary ROMs: pool the placed ones as filler when that glossary
@@ -438,6 +442,15 @@ def build_item_pool(world) -> List[Item]:
 
         # Skip starting items
         if game_item_id in starting_items:
+            continue
+
+        # glossary_hunt goal starts with the Ruins Encyclopedia precollected
+        # (see generate_early), so keep it out of the placeable pool. The
+        # pre_fill filler balancing backfills the freed location.
+        from .options import Goal
+        if (item_def.name == "Ruins Encyclopedia"
+                and getattr(world, "goal", Goal.option_beat_the_game)
+                == Goal.option_glossary_hunt):
             continue
 
         # Handle dissonance
@@ -507,6 +520,15 @@ def build_item_pool(world) -> List[Item]:
         # Handle research
         if "Research" in item_def.name:
             if not world.options.random_research:
+                continue
+            # replace_research_with_orbs wins over remove_research for the converted papers:
+            # swap this research item for a bonus Sacred Orb (reuses SacredOrb0's
+            # game id — the game applies the +HP effect per pickup, so duplicate
+            # Sacred Orb ids are safe). The area label is cosmetic only.
+            if research_orbs_remaining > 0:
+                research_orbs_remaining -= 1
+                pool.append(create_item(world, "Sacred Orb",
+                                        game_id=ItemID.SacredOrb0.value))
                 continue
             if world.options.remove_research:
                 continue

@@ -227,6 +227,19 @@ class LaMulana2World(World):
         # path re-derives the same result from restored options.
         self._resolve_goal()
 
+        # The glossary_hunt goal begins with the Ruins Encyclopedia already in
+        # inventory: it gates every glossary check and tracks hunt progress, so
+        # the player should be able to collect entries from the start. It is
+        # kept out of the placeable pool in build_item_pool (the pre_fill filler
+        # balancing backfills the freed slot). _resolve_goal downgrades to
+        # beat_the_game when no glossanity category is enabled, so this only
+        # fires when glossary checks actually exist.
+        from .options import Goal
+        if self.goal == Goal.option_glossary_hunt:
+            self.multiworld.push_precollected(
+                create_item(self, "Ruins Encyclopedia")
+            )
+
     def create_regions(self) -> None:
         regions = create_regions(self)
         self.regions_by_area_id = regions
@@ -614,7 +627,7 @@ class LaMulana2World(World):
                 "random_grail", "random_scanner", "random_codices", "random_fdc",
                 "random_ring", "random_shell_horn", "random_maps_software",
                 "mantra_placement", "shop_placement",
-                "random_research", "remove_research", "remove_maps",
+                "random_research", "remove_research", "replace_research_with_orbs", "remove_maps",
                 "required_skulls", "remove_excess_skulls", "random_dissonance",
                 "potsanity_low_value", "potsanity_high_value", "potsanity_shuriken",
                 "potsanity_rolling_shuriken", "potsanity_earth_spear", "potsanity_flare",
@@ -860,6 +873,13 @@ class LaMulana2World(World):
                 except ValueError:
                     game_id = None
         if game_id is not None:
+            # Sacred Orbs / Crystal Skulls all stack identically in-game, so drop
+            # the per-area suffix ("Sacred Orb (VoD)" -> "Sacred Orb"). Otherwise
+            # ITEM_LABEL_BY_ID returns the area-specific label for these ids.
+            if ItemID.SacredOrb0.value <= int(game_id) <= ItemID.SacredOrb9.value:
+                return "Sacred Orb"
+            if ItemID.CrystalSkull1.value <= int(game_id) <= ItemID.CrystalSkull12.value:
+                return "Crystal Skull"
             label = ITEM_LABEL_BY_ID.get(game_id)
             if label:
                 return label
@@ -1218,6 +1238,7 @@ class LaMulana2World(World):
         _log("\n[ITEM POOL]")
         _log(f"  Random Research: {opt('random_research')}")
         _log(f"  Remove Research: {opt('remove_research')}")
+        _log(f"  Research to Sacred Orbs: {opt('replace_research_with_orbs')}")
         _log(f"  Remove Maps: {opt('remove_maps')}")
         _log(f"  Random Dissonance: {opt('random_dissonance')}")
         _log(f"  Required Guardians: {opt('required_guardians')}")
