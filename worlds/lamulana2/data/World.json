@@ -7066,7 +7066,7 @@
                 "Name": "Tower of Oannes Moving Tiles Escape (D-10)",
                 "ID": "fEx1_Rout",
                 "ConnectionType": "LeftDoor",
-                "ConnectingAreaID": "BaileyTopRight",
+                "ConnectingAreaID": "BaileyBottom",
                 "Logic": "Has(Feather)"
             },
             {
@@ -7089,6 +7089,27 @@
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "TowerOfOannesLeftA",
                 "Logic": "True"
+            },
+            {
+                "Name": "Tower of Oannes Left Gyonin Drop (B-1)",
+                "ID": "fEx2_Lout",
+                "ConnectionType": "OneWay",
+                "ConnectingAreaID": "TowerOfOannesLeftC",
+                "Logic": "False"
+            },
+            {
+                "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",
+                "ID": "fEx2_Rout",
+                "ConnectionType": "OneWay",
+                "ConnectingAreaID": "TowerOfOannesRight",
+                "Logic": "False"
+            },
+            {
+                "Name": "Tower of Oannes Right Gyonin Drop (E-1)",
+                "ID": "fEx2_Rout2",
+                "ConnectionType": "OneWay",
+                "ConnectingAreaID": "TowerOfOannesRight",
+                "Logic": "False"
             }
         ]
     },
@@ -7165,13 +7186,6 @@
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyTopRight",
                 "Logic": "Has(Gale Fibula) and CanWarp"
-            },
-            {
-                "Name": "Tower of Oannes Left Gyonin Drop (B-1)",
-                "ID": "fEx2_Lout",
-                "ConnectionType": "OneWay",
-                "ConnectingAreaID": "BaileyBottom",
-                "Logic": "False"
             }
         ]
     },
@@ -7191,20 +7205,6 @@
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "BaileyBottom",
                 "Logic": "CanWarp"
-            },
-            {
-                "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",
-                "ID": "fEx2_Rout",
-                "ConnectionType": "OneWay",
-                "ConnectingAreaID": "BaileyBottom",
-                "Logic": "False"
-            },
-            {
-                "Name": "Tower of Oannes Right Gyonin Drop (E-1)",
-                "ID": "fEx2_Rout2",
-                "ConnectionType": "OneWay",
-                "ConnectingAreaID": "BaileyBottom",
-                "Logic": "False"
             }
         ]
     }

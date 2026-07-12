@@ -213,6 +213,19 @@ class LaMulana2World(World):
             # Resolve starting weapon
             self.starting_weapon = self._choose_starting_weapon()
 
+        # DLC entrances may only be shuffled when Oannesanity is enabled.
+        # Without Oannesanity the DLC areas contain no reachable locations
+        # (see the DLC_AREA_IDS skip in create_items / build_location_pool),
+        # so folding their entrances into the ER pool produces dead regions
+        # and unsolvable seeds. Force the option off when the prerequisite
+        # is missing rather than generate a broken world.
+        if self.options.include_dlc_entrances and not self.options.oannesanity:
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: 'Include DLC Entrances' requires "
+                f"Oannesanity, which is disabled. Disabling DLC entrance shuffling."
+            )
+            self.options.include_dlc_entrances.value = 0
+
         # Add starting weapon to precollected items
         starting_weapon_name = self._get_weapon_name(self.starting_weapon)
         if starting_weapon_name:
@@ -641,6 +654,7 @@ class LaMulana2World(World):
                 "remove_icefire_treetop_statue", "random_cursed_chests", "cursed_chests",
                 "horizontal_entrances", "vertical_entrances", "gate_entrances",
                 "unique_transitions", "full_random_entrances", "prevent_area_loops",
+                "include_dlc_entrances",
                 "soul_gate_entrances", "include_nine_soul_gates", "random_soul_gate_value",
                 "auto_scan", "auto_skulls", "greedy_charon",
                 "starting_money", "starting_weights",

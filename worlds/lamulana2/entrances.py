@@ -1853,31 +1853,11 @@ def _disconnect_exit(exit_: LM2Entrance) -> None:
         exit_.connected_region = None
 
 
-def _apply_pairings(pairings: List[Tuple[LM2Entrance, LM2Entrance]],
-                    world=None) -> None:
-    """Connect each paired exit to its partner's arrival region (coupled).
-
-    For a normal two-way exit, arriving "through" it drops you at the exit's
-    own location — its parent_region.  For a ONE-WAY drop/slide, arriving
-    through it means falling to where the drop LANDS, not where the drop
-    starts.  A Gyonin drop (e.g. fEx2_Lout) lives in BaileyLevel3 but
-    deposits the player in BaileyBottom, so a partner routed into it must
-    land in BaileyBottom.  Using parent_region here would instead grant the
-    top of the drop and — via grail-warp between Bailey levels — the whole
-    Bailey.
-    """
-    def _arrival_region(exit_):
-        if world is not None and exit_.exit_type == ExitType.OneWay:
-            dest = getattr(world, 'regions_by_area_id', {}).get(
-                exit_.connecting_area)
-            if dest is not None:
-                return dest
-        return exit_.parent_region
-
+def _apply_pairings(pairings: List[Tuple[LM2Entrance, LM2Entrance]]) -> None:
+    """Connect each paired exit to its partner's parent region (coupled)."""
     for e1, e2 in pairings:
-        e1.connect(_arrival_region(e2))
-        e2.connect(_arrival_region(e1))
-
+        e1.connect(e2.parent_region)
+        e2.connect(e1.parent_region)
 
 def _build_pairing_records(world, pairings):
     """Store pairing data on the world for seed writing and spoiler log."""
@@ -2036,7 +2016,7 @@ def custom_structural_er(world) -> None:
         else:
             pairings = _generate_separate_pairings(candidates, rng, world)
 
-        _apply_pairings(pairings, world)
+        _apply_pairings(pairings)
 
         # In separate-pool mode, some exits may be unpaired (odd counts
         # or unmatched bipartite pools).  Restore those to vanilla so

@@ -276,7 +276,7 @@ class Oannesanity(Toggle):
     - 5 Freestanding Glossary (Glossanity - Freestanding Required)
     - 7 Enemy Glossary (Glossanity - Enemy Required)
     - 1 Costume Chest (Costumesanity Required)
-    You can set this option separately from the DLC entrance shuffling option.
+    - 12 Entrance Pairs (Include DLC Entrances Required)
     """
     display_name = "Oannesanity"
 
