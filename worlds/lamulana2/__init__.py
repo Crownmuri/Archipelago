@@ -240,18 +240,13 @@ class LaMulana2World(World):
         # path re-derives the same result from restored options.
         self._resolve_goal()
 
-        # The glossary_hunt goal begins with the Ruins Encyclopedia already in
-        # inventory: it gates every glossary check and tracks hunt progress, so
-        # the player should be able to collect entries from the start. It is
-        # kept out of the placeable pool in build_item_pool (the pre_fill filler
-        # balancing backfills the freed slot). _resolve_goal downgrades to
-        # beat_the_game when no glossanity category is enabled, so this only
-        # fires when glossary checks actually exist.
+        # The glossary_hunt goal begins with the Ruins Encyclopedia already in inventory.
+        # _resolve_goal downgrades to beat_the_game when no glossanity category is enabled.
         from .options import Goal
         if self.goal == Goal.option_glossary_hunt:
-            self.multiworld.push_precollected(
-                create_item(self, "Ruins Encyclopedia")
-            )
+            ruins_enc = create_item(self, "Ruins Encyclopedia")
+            ruins_enc.classification = ItemClassification.progression
+            self.multiworld.push_precollected(ruins_enc)
 
     def create_regions(self) -> None:
         regions = create_regions(self)
@@ -887,13 +882,6 @@ class LaMulana2World(World):
                 except ValueError:
                     game_id = None
         if game_id is not None:
-            # Sacred Orbs / Crystal Skulls all stack identically in-game, so drop
-            # the per-area suffix ("Sacred Orb (VoD)" -> "Sacred Orb"). Otherwise
-            # ITEM_LABEL_BY_ID returns the area-specific label for these ids.
-            if ItemID.SacredOrb0.value <= int(game_id) <= ItemID.SacredOrb9.value:
-                return "Sacred Orb"
-            if ItemID.CrystalSkull1.value <= int(game_id) <= ItemID.CrystalSkull12.value:
-                return "Crystal Skull"
             label = ITEM_LABEL_BY_ID.get(game_id)
             if label:
                 return label

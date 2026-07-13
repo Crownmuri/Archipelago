@@ -1898,6 +1898,34 @@ def custom_structural_er(world) -> None:
 
     MAX_ATTEMPTS = 100
 
+    # ── Minimal-accessibility partition tolerance ────────────────────
+    # For minimal/none accessibility we may accept a layout that leaves
+    # some locations permanently unreachable, but only within sane
+    # bounds.  The old heuristic (reachable >= progression + 10) accepted
+    # the first passing attempt, which let through layouts with 300+ dead
+    # locations that then knife-edged the fill into intermittent
+    # accessibility failures.  These bounds reject implausible partitions;
+    # the loop additionally prefers a fully-connected layout and only
+    # falls back to the least-partitioned one it saw.
+    #
+    # All bounds are PROPORTIONAL, not absolute counts, because the number
+    # of locations/items varies hugely with settings (potsanity, glossanity,
+    # costumesanity, oannesanity, ...).  The core fillability test compares
+    # reachable *placeable* (non-event) slots against the *progression*
+    # item count — both scale together — with a proportional headroom for
+    # shop/mantra/dissonance/research pre-fills that consume reachable slots.
+    #  - PREFILL_HEADROOM_FRACTION / _MIN: reachable placeable slots must
+    #    exceed progression by this fraction of progression (min floor).
+    #  - MAX_DEAD_FRACTION / MIN_TOLERANCE: cap on how much of the map may
+    #    be unreachable at all (quality floor).
+    #  - EARLY_ACCEPT: a partition this small is accepted immediately to
+    #    bound runtime; larger ones are remembered but the search continues.
+    _MINIMAL_PREFILL_HEADROOM_FRACTION = 0.60
+    _MINIMAL_PREFILL_HEADROOM_MIN = 20
+    _MINIMAL_MAX_DEAD_FRACTION = 0.40
+    _MINIMAL_MIN_TOLERANCE = 20
+    _MINIMAL_EARLY_ACCEPT = 15
+
     opts = world.options
     full_random = bool(opts.full_random_entrances)
 
@@ -1985,6 +2013,9 @@ def custom_structural_er(world) -> None:
     last_pairings = None
     last_unreachable: List[str] = []
     last_cluster_msg: str = ""
+    # Best (fewest-unreachable) viable partition seen, for the minimal
+    # fallback: (unreachable_count, pairings_snapshot, unreachable_list).
+    best_tolerable = None
 
     # Build base connectivity UF from non-shuffled connections (built once,
     # cloned per attempt).  This tells pairing functions which areas are
@@ -2033,38 +2064,15 @@ def custom_structural_er(world) -> None:
                                                            base_state=items_only_base)
         last_unreachable = unreachable
 
-        if unreachable:
-            accessibility = world.options.accessibility
-            if accessibility == accessibility.option_minimal:
-                # Minimal: tolerate unreachable if enough locations
-                # remain for progression items to be placed.
-                progression_count = sum(
-                    1 for item in world.multiworld.itempool
-                    if item.player == world.player and item.advancement
-                )
-                total_locs = sum(
-                    1 for _ in world.multiworld.get_locations(world.player)
-                )
-                reachable_count = total_locs - len(unreachable)
-                if reachable_count < progression_count + 10:
-                    if attempt < 5 or attempt % 25 == 0:
-                        _log(f"[ER] Attempt {attempt + 1}: only "
-                              f"{reachable_count} reachable locations for "
-                              f"{progression_count} progression items, "
-                              f"retrying...")
-                    continue
-                # Enough reachable — accept with warning
-                if attempt < 5 or attempt % 25 == 0:
-                    _log(f"[ER] Attempt {attempt + 1}: tolerating "
-                          f"{len(unreachable)} unreachable "
-                          f"({reachable_count} reachable for "
-                          f"{progression_count} progression)")
-            else:
-                # Full/Items: zero unreachable locations allowed
-                if attempt < 5 or attempt % 25 == 0:
-                    _log(f"[ER] Attempt {attempt + 1}: {len(unreachable)} "
-                          f"unreachable (e.g. {unreachable[:3]}), retrying...")
-                continue
+        accessibility = world.options.accessibility
+        is_minimal = (accessibility == accessibility.option_minimal)
+
+        if unreachable and not is_minimal:
+            # Full/Items/Locations: zero unreachable locations allowed.
+            if attempt < 5 or attempt % 25 == 0:
+                _log(f"[ER] Attempt {attempt + 1}: {len(unreachable)} "
+                      f"unreachable (e.g. {unreachable[:3]}), retrying...")
+            continue
 
         # ── Validation 2: starting cluster viability ──────────────────
         # With ONLY precollected items, is the reachable cluster large
@@ -2080,17 +2088,93 @@ def custom_structural_er(world) -> None:
                 _log(f"[ER] Attempt {attempt + 1}: {cluster_msg}, retrying...")
             continue
 
-        # Both checks passed
-        if attempt > 0:
-            _log(f"[ER] Structural ER succeeded on attempt {attempt + 1} "
-                  f"({cluster_msg})")
-        break
-    else:
-        raise RuntimeError(
-            f"Structural ER failed after {MAX_ATTEMPTS} attempts. "
-            f"Last: {len(last_unreachable)} unreachable, "
-            f"cluster: {last_cluster_msg}"
+        if not unreachable:
+            # Fully connected + viable cluster — the ideal outcome.
+            if attempt > 0:
+                _log(f"[ER] Structural ER succeeded on attempt {attempt + 1} "
+                      f"({cluster_msg})")
+            break
+
+        # ── Minimal accessibility: partition tolerance ────────────────
+        # unreachable > 0 and is_minimal here.  Reject implausible
+        # partitions outright, remember the least-partitioned viable
+        # layout, and keep searching for a fully-connected one.  The best
+        # remembered layout is used after the loop only if no perfect
+        # layout appears.
+        progression_count = sum(
+            1 for item in world.multiworld.itempool
+            if item.player == world.player and item.advancement
         )
+        # Count REACHABLE PLACEABLE slots (real locations that can hold a
+        # pool item — event/logic-flag locations have no address and don't
+        # count) rather than all reachable locations.  This, compared to
+        # the progression count, is the true fillability constraint and
+        # scales automatically with settings (potsanity/glossanity/etc).
+        unreachable_set = set(unreachable)
+        reachable_placeable = 0
+        total_placeable = 0
+        for loc in world.multiworld.get_locations(world.player):
+            if loc.address is None:
+                continue
+            total_placeable += 1
+            if loc.name not in unreachable_set:
+                reachable_placeable += 1
+
+        headroom = max(_MINIMAL_PREFILL_HEADROOM_MIN,
+                       int(progression_count * _MINIMAL_PREFILL_HEADROOM_FRACTION))
+        dead_cap = max(_MINIMAL_MIN_TOLERANCE,
+                       int(total_placeable * _MINIMAL_MAX_DEAD_FRACTION))
+        acceptable = (
+            reachable_placeable >= progression_count + headroom
+            and len(unreachable) <= dead_cap
+        )
+        if not acceptable:
+            if attempt < 5 or attempt % 25 == 0:
+                _log(f"[ER] Attempt {attempt + 1}: rejecting partition of "
+                      f"{len(unreachable)} unreachable "
+                      f"({reachable_placeable} reachable slots for "
+                      f"{progression_count} progression), retrying...")
+            continue
+
+        # Viable partition — remember the best (fewest unreachable) seen.
+        if best_tolerable is None or len(unreachable) < best_tolerable[0]:
+            best_tolerable = (len(unreachable), list(pairings), list(unreachable))
+
+        # A genuinely minor partition is accepted immediately to bound
+        # runtime; larger viable ones keep searching for something better.
+        if len(unreachable) <= _MINIMAL_EARLY_ACCEPT:
+            _log(f"[ER] Attempt {attempt + 1}: accepting minor partition of "
+                  f"{len(unreachable)} unreachable "
+                  f"({reachable_placeable} reachable slots for "
+                  f"{progression_count} progression)")
+            break
+
+        if attempt < 5 or attempt % 25 == 0:
+            _log(f"[ER] Attempt {attempt + 1}: viable partition of "
+                  f"{len(unreachable)} unreachable remembered; seeking a "
+                  f"fully-connected layout...")
+        continue
+    else:
+        # No fully-connected (or minor-partition) layout found.  For
+        # minimal accessibility, fall back to the least-partitioned viable
+        # layout if one was remembered; otherwise this config is unshuffle-
+        # able within the attempt budget.
+        if best_tolerable is not None:
+            _disconnect_all()
+            _apply_pairings(best_tolerable[1])
+            if not full_random:
+                _restore_unpaired(best_tolerable[1])
+            last_pairings = best_tolerable[1]
+            last_unreachable = best_tolerable[2]
+            _log(f"[ER] No fully-connected layout in {MAX_ATTEMPTS} attempts; "
+                  f"accepting best remembered partition of "
+                  f"{best_tolerable[0]} unreachable.")
+        else:
+            raise RuntimeError(
+                f"Structural ER failed after {MAX_ATTEMPTS} attempts. "
+                f"Last: {len(last_unreachable)} unreachable, "
+                f"cluster: {last_cluster_msg}"
+            )
 
     # ── Build pairing records for seed file & spoiler log ────────────
     _build_pairing_records(world, last_pairings)
@@ -2176,7 +2260,7 @@ class SoulGateRandomizer:
         if gate1.game_exit_id == ExitID.f14GateN6:
             self._append_logic_outside_parens(gate2, 'and CanWarp')
         elif gate1.game_exit_id == ExitID.f06GateN7:
-            self._append_logic_outside_parens(gate2, 'and Has(Feather) and Has(Claydoll Suit)')
+            self._append_logic_outside_parens(gate2, 'and (CanWarp or Has(Feather)) and Has(Claydoll Suit)')
         elif gate1.game_exit_id == ExitID.f12GateN8:
             self._append_logic_outside_parens(gate2, 'and (CanWarp or Has(Feather))')
         elif gate1.game_exit_id == ExitID.f13GateN9:

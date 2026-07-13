@@ -3469,7 +3469,7 @@
             {
                 "Name": "Claydoll Chest",
                 "LocationType": "Chest",
-                "Logic": "Has(Life Sigil) and Has(Feather) and IsDead(Balor)"
+                "Logic": "Has(Life Sigil) and IsDead(Balor)"
             },
             {
                 "Name": "Balor",
@@ -3485,7 +3485,7 @@
                 "Name": "[SFG C-2] Glossary in Hollow Pillar Before Balor",
                 "ID": "field06RG2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather) and PuzzleFinished(Bergelmir) and CanWarp"
+                "Logic": "PuzzleFinished(Bergelmir) and CanWarp"
             }
         ],
         "Exits": [

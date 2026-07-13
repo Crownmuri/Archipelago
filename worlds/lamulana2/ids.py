@@ -497,6 +497,22 @@ class ItemID(IntEnum):
     FishSuit = 812          # DLC costume (clothbox 4); sheet 2, flag 61
 
     # -------------------------------------------------------------------------
+    # Extra Sacred Orbs (>10 orbs). Distinct ids so each placed orb gets its
+    # own unique game flag (client ItemDB sheet 2, flags 162-169/177/178)
+    # Grant the standard orb effect (HP via total count). See client ItemID.cs.
+    # -------------------------------------------------------------------------
+    SacredOrb10 = 813
+    SacredOrb11 = 814
+    SacredOrb12 = 815
+    SacredOrb13 = 816
+    SacredOrb14 = 817
+    SacredOrb15 = 818
+    SacredOrb16 = 819
+    SacredOrb17 = 820
+    SacredOrb18 = 821
+    SacredOrb19 = 822
+
+    # -------------------------------------------------------------------------
     # AP Trash
     # -------------------------------------------------------------------------
 
@@ -3779,28 +3795,38 @@ ITEM_MAP = {
     "Ankh Jewel (Surtr)": ItemID.AnkhJewel7,
     "Ankh Jewel (Echidna)": ItemID.AnkhJewel8,
     "Ankh Jewel (Hel)": ItemID.AnkhJewel9,
-#    "Sacred Orb (VoD)": ItemID.SacredOrb0,              # Village of Departure
-#    "Sacred Orb (RoY)": ItemID.SacredOrb1,              # Roots of Yggdrasil
-#    "Sacred Orb (Annwfn)": ItemID.SacredOrb2,           # Annwfn
-#    "Sacred Orb (IB)": ItemID.SacredOrb3,               # Immortal Battlefield
-#    "Sacred Orb (IT)": ItemID.SacredOrb4,               # Icefire Treetop
-#    "Sacred Orb (DF)": ItemID.SacredOrb5,               # Divine Fortress
-#    "Sacred Orb (SotFG)": ItemID.SacredOrb6,            # Shrine of the Frost Giants
-#    "Sacred Orb (GotD)": ItemID.SacredOrb7,             # Gate of the Dead
-#    "Sacred Orb (TS)": ItemID.SacredOrb8,               # Takamagahara Shrine
-#    "Sacred Orb (HL)": ItemID.SacredOrb9,               # Heaven's Labyrinth
-#    "Crystal Skull (RoY)": ItemID.CrystalSkull1,        # Roots of Yggdrasil
-#    "Crystal Skull (Annwfn)": ItemID.CrystalSkull2,     # Annwfn
-#    "Crystal Skull (IB)": ItemID.CrystalSkull3,         # Immortal Battlefield
-#    "Crystal Skull (IT)": ItemID.CrystalSkull4,         # Icefire Treetop
-#    "Crystal Skull (Valhalla)": ItemID.CrystalSkull5,   # Valhalla
-#    "Crystal Skull (GotD)": ItemID.CrystalSkull6,       # Gate of the Dead
-#    "Crystal Skull (TS)": ItemID.CrystalSkull7,         # Takamagahara Shrine
-#    "Crystal Skull (DSLM)": ItemID.CrystalSkull8,       # Dark Star Lord's Mausoleum
-#    "Crystal Skull (AC)": ItemID.CrystalSkull9,         # Ancient Chaos
-#    "Crystal Skull (HL)": ItemID.CrystalSkull10,        # Heaven's Labyrinth
-#    "Crystal Skull (HoM)": ItemID.CrystalSkull11,       # Hall of Malice
-#    "Crystal Skull (EPD)": ItemID.CrystalSkull12,       # Eternal Prison Doom
+    "Sacred Orb (VoD)": ItemID.SacredOrb0,              # Village of Departure
+    "Sacred Orb (RoY)": ItemID.SacredOrb1,              # Roots of Yggdrasil
+    "Sacred Orb (Annwfn)": ItemID.SacredOrb2,           # Annwfn
+    "Sacred Orb (IB)": ItemID.SacredOrb3,               # Immortal Battlefield
+    "Sacred Orb (IT)": ItemID.SacredOrb4,               # Icefire Treetop
+    "Sacred Orb (DF)": ItemID.SacredOrb5,               # Divine Fortress
+    "Sacred Orb (SotFG)": ItemID.SacredOrb6,            # Shrine of the Frost Giants
+    "Sacred Orb (GotD)": ItemID.SacredOrb7,             # Gate of the Dead
+    "Sacred Orb (TS)": ItemID.SacredOrb8,               # Takamagahara Shrine
+    "Sacred Orb (HL)": ItemID.SacredOrb9,               # Heaven's Labyrinth
+    "Sacred Orb (Bonus #1)": ItemID.SacredOrb10,              
+    "Sacred Orb (Bonus #2)": ItemID.SacredOrb11,              
+    "Sacred Orb (Bonus #3)": ItemID.SacredOrb12,           
+    "Sacred Orb (Bonus #4)": ItemID.SacredOrb13,               
+    "Sacred Orb (Bonus #5)": ItemID.SacredOrb14,               
+    "Sacred Orb (Bonus #6)": ItemID.SacredOrb15,               
+    "Sacred Orb (Bonus #7)": ItemID.SacredOrb16,            
+    "Sacred Orb (Bonus #8)": ItemID.SacredOrb17,             
+    "Sacred Orb (Bonus #9)": ItemID.SacredOrb18,
+    "Sacred Orb (Bonus #10)": ItemID.SacredOrb19,               
+    "Crystal Skull (RoY)": ItemID.CrystalSkull1,        # Roots of Yggdrasil
+    "Crystal Skull (Annwfn)": ItemID.CrystalSkull2,     # Annwfn
+    "Crystal Skull (IB)": ItemID.CrystalSkull3,         # Immortal Battlefield
+    "Crystal Skull (IT)": ItemID.CrystalSkull4,         # Icefire Treetop
+    "Crystal Skull (Valhalla)": ItemID.CrystalSkull5,   # Valhalla
+    "Crystal Skull (GotD)": ItemID.CrystalSkull6,       # Gate of the Dead
+    "Crystal Skull (TS)": ItemID.CrystalSkull7,         # Takamagahara Shrine
+    "Crystal Skull (DSLM)": ItemID.CrystalSkull8,       # Dark Star Lord's Mausoleum
+    "Crystal Skull (AC)": ItemID.CrystalSkull9,         # Ancient Chaos
+    "Crystal Skull (HL)": ItemID.CrystalSkull10,        # Heaven's Labyrinth
+    "Crystal Skull (HoM)": ItemID.CrystalSkull11,       # Hall of Malice
+    "Crystal Skull (EPD)": ItemID.CrystalSkull12,       # Eternal Prison Doom
     "Map (Roots of Yggdrasil)": ItemID.Map1,
     "Map (Annwfn)": ItemID.Map2,
     "Map (Immortal Battlefield)": ItemID.Map3,

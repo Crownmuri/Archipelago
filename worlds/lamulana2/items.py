@@ -403,6 +403,12 @@ def build_item_pool(world) -> List[Item]:
     # replace_research_with_orbs: replace the first N research papers encountered with
     # bonus Sacred Orbs. Counter tracks how many are still to be converted.
     research_orbs_remaining = int(getattr(world.options, "replace_research_with_orbs", 0))
+    # Each bonus orb must use a DISTINCT game id (SacredOrb10..SacredOrb19) so its
+    # client flag is unique and the locations stay independently trackable — reusing
+    # SacredOrb0 made every bonus orb collide on flag (2,101). 10 ids for the max-10
+    # option; effect is identical (HP via total count).
+    EXTRA_ORB_IDS = [getattr(ItemID, f"SacredOrb{n}") for n in range(10, 20)]
+    bonus_orbs_assigned = 0
 
     for item_def in ITEM_DEFS:
 
@@ -522,13 +528,14 @@ def build_item_pool(world) -> List[Item]:
             if not world.options.random_research:
                 continue
             # replace_research_with_orbs wins over remove_research for the converted papers:
-            # swap this research item for a bonus Sacred Orb (reuses SacredOrb0's
-            # game id — the game applies the +HP effect per pickup, so duplicate
-            # Sacred Orb ids are safe). The area label is cosmetic only.
+            # swap this research item for a bonus Sacred Orb using a UNIQUE game id
+            # (SacredOrb10..19) so each has its own client flag and stays trackable.
+            # The game applies the +HP effect per pickup regardless.
             if research_orbs_remaining > 0:
                 research_orbs_remaining -= 1
-                pool.append(create_item(world, "Sacred Orb",
-                                        game_id=ItemID.SacredOrb0.value))
+                orb_id = EXTRA_ORB_IDS[bonus_orbs_assigned % len(EXTRA_ORB_IDS)]
+                bonus_orbs_assigned += 1
+                pool.append(create_item(world, "Sacred Orb", game_id=orb_id.value))
                 continue
             if world.options.remove_research:
                 continue
