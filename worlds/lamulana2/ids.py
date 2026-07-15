@@ -2757,28 +2757,35 @@ class AreaID(IntEnum):
     EPG = 91
     SpiralHell = 92
     # --- DLC areas (Spring in the Sky / Tower of Oannes / Bailey / Eden) ---
-    SpringintheSky = 93
-    TowerOfOannesLeftA = 94
-    TowerOfOannesLeftB = 95
-    TowerOfOannesLeftC = 96
-    TowerOfOannesRight = 97
-    BaileyBottom = 98
-    BaileyLevel1 = 99
-    BaileyLevel2 = 100
-    BaileyLevel3 = 101
-    BaileyTopRight = 102
-    Eden = 103
+    Eden = 93
+    SpringintheSky = 94
+    SpringintheSkyTop = 95
+    TowerOfOannesLeftA = 96
+    TowerOfOannesLeftATopGate = 97
+    TowerOfOannesLeftB = 98
+    TowerOfOannesLeftBTopGate = 99
+    TowerOfOannesLeftC = 100
+    TowerOfOannesRightA = 101
+    TowerOfOannesRightASlide = 102
+    TowerOfOannesRightB = 103
+    BaileyBottom = 104
+    BaileyLevel1 = 105
+    BaileyLevel2 = 106
+    BaileyLevel3 = 107
+    BaileyRight = 108
 
 
 # All DLC regions (Spring in the Sky / Tower of Oannes / Bailey / Eden).
 # Every location in these areas — chests, glossaries, AND minibosses — is
 # gated behind oannesanity; without the DLC there is no path into them.
 DLC_AREA_IDS: set = {
-    AreaID.SpringintheSky,
+    AreaID.SpringintheSky, AreaID.SpringintheSkyTop,
     AreaID.TowerOfOannesLeftA, AreaID.TowerOfOannesLeftB,
-    AreaID.TowerOfOannesLeftC, AreaID.TowerOfOannesRight,
+    AreaID.TowerOfOannesLeftC, AreaID.TowerOfOannesRightA,
+    AreaID.TowerOfOannesRightB, AreaID.TowerOfOannesRightASlide,
+    AreaID.TowerOfOannesLeftATopGate, AreaID.TowerOfOannesLeftBTopGate,
     AreaID.BaileyBottom, AreaID.BaileyLevel1, AreaID.BaileyLevel2,
-    AreaID.BaileyLevel3, AreaID.BaileyTopRight,
+    AreaID.BaileyLevel3, AreaID.BaileyRight,
     AreaID.Eden,
 }
 
@@ -2869,7 +2876,7 @@ class ExitID(IntEnum):
     fEx1_L3 = 81       # Tower Left-B top     <-> Bailey Level 2  (gate)
     fEx1_L4 = 82       # Tower Left-C bottom  <-> Bailey Level 2  (gate)
     fEx1_L5 = 83       # Tower Left-C top     <-> Bailey Level 3  (gate)
-    fEx1_R = 84        # Tower Right          <-> Bailey Top Right (gate)
+    fEx1_R = 84        # Tower Right          <-> Bailey Right (gate)
     fEx1_Rout = 85     # Tower Right -> Bailey Bottom (first oneway)
     fEx1_Rout2 = 86    # Tower Right -> Bailey Bottom (second oneway)
     fEx2_Lout = 87

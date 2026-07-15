@@ -813,22 +813,15 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "TowerOfOannesLeftA",
-            {
-                "Area": "TowerOfOannesRight",
-                "Logic": "Has(Feather)"
-            }
+            "TowerOfOannesRightB"
         ]
     },
     "d238": {
         "Name": "Enemy Glossary (Gyonin the Vogue)",
         "KillLogic": "HorizontalAttack and Has(Feather)",
         "SpawnAreas": [
-            {
-                "Area": "TowerOfOannesLeftA",
-                "Logic": "CanReach(TowerOfOannesLeftB)"
-            },
             "TowerOfOannesLeftB",
-            "TowerOfOannesRight"
+            "TowerOfOannesRightB"
         ]
     },
     "d239": {
@@ -840,7 +833,7 @@
                 "Area": "TowerOfOannesLeftC",
                 "Logic": "Has(Feather) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
             },
-            "TowerOfOannesRight"
+            "TowerOfOannesRightB"
         ]
     },
     "d240": {
@@ -856,23 +849,21 @@
     },
     "d241": {
         "Name": "Enemy Glossary (Gyonin Pestirylium)",
-        "KillLogic": "True",
+        "KillLogic": "Has(Feather)",
         "SpawnAreas": [
             {
                 "Area": "TowerOfOannesLeftA",
                 "Logic": "CanReach(TowerOfOannesLeftB) and Has(Feather) and HorizontalAttack and CanUse(Flare Gun)"
             },
-            {
-                "Area": "TowerOfOannesRight",
-                "Logic": "Has(Feather)"
-            }
+        "TowerOfOannesRightA",
+        "TowerOfOannesRightB"
         ]
     },
     "d242": {
         "Name": "Enemy Glossary (Gyo-balloon ~Strawberry Flavor~)",
         "KillLogic": "Has(Feather)",
         "SpawnAreas": [
-            "TowerOfOannesRight"
+            "TowerOfOannesRightB"
         ]
     },
     "d243": {

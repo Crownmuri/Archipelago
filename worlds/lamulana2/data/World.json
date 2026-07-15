@@ -6871,17 +6871,35 @@
                 "Logic": "True"
             },
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "SpringintheSkyTop",
+                "Logic": "Has(Feather)"
+            }
+        ]
+    },
+    {
+        "ID": "SpringintheSkyTop",
+        "Name": "Spring in the Sky Top",
+        "Locations": [],
+        "Exits": [
+            {
                 "Name": "Spring in the Sky Ladder Up (C-1)",
                 "ID": "fL04Up",
                 "ConnectionType": "UpLadder",
                 "ConnectingAreaID": "TowerOfOannesLeftA",
                 "Logic": "Has(Feather) and Has(Rebirth Sigil)"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "SpringintheSky",
+                "Logic": "CanWarp or Has(Feather)"
             }
         ]
     },
     {
         "ID": "TowerOfOannesLeftA",
         "Name": "Tower of Oannes Left A",
+        "IsBackside": true,
         "Locations": [
             {
                 "Name": "Fish-Valusa Re-gyo-ded",
@@ -6935,7 +6953,7 @@
                 "Name": "Tower of Oannes Left-A Ladder Down (B-16)",
                 "ID": "fEx1Down",
                 "ConnectionType": "DownLadder",
-                "ConnectingAreaID": "SpringintheSky",
+                "ConnectingAreaID": "SpringintheSkyTop",
                 "Logic": "True"
             },
             {
@@ -6946,17 +6964,35 @@
                 "Logic": "True"
             },
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftATopGate",
+                "Logic": "Has(Feather)"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesLeftATopGate",
+        "Name": "Tower of Oannes Left A Top Gate",
+        "Locations": [],
+        "Exits": [
+            {
                 "Name": "Tower of Oannes Left-A Top Gate (C-10)",
                 "ID": "fEx1_L1",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel1",
-                "Logic": "Has(Feather) or CanWarp"
+                "Logic": "True"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftA",
+                "Logic": "CanWarp or Has(Feather)"
             }
         ]
     },
     {
         "ID": "TowerOfOannesLeftB",
         "Name": "Tower of Oannes Left B",
+        "IsBackside": true,
         "Locations": [],
         "Exits": [
             {
@@ -6967,17 +7003,35 @@
                 "Logic": "True"
             },
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftBTopGate",
+                "Logic": "Has(Feather)"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesLeftBTopGate",
+        "Name": "Tower of Oannes Left B Top Gate",
+        "Locations": [],
+        "Exits": [
+            {
                 "Name": "Tower of Oannes Left-B Top Gate (C-7)",
                 "ID": "fEx1_L3",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel2",
-                "Logic": "IsDead(Fish-Valusa Re-gyo-ded) or CanWarp"
+                "Logic": "IsDead(Fish-Valusa Re-gyo-ded)"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftB",
+                "Logic": "CanWarp or IsDead(Fish-Valusa Re-gyo-ded)"
             }
         ]
     },
     {
         "ID": "TowerOfOannesLeftC",
         "Name": "Tower of Oannes Left C",
+        "IsBackside": true,
         "Locations": [
             {
                 "Name": "Fish-Slime Zero",
@@ -7021,8 +7075,54 @@
         ]
     },
     {
-        "ID": "TowerOfOannesRight",
-        "Name": "Tower of Oannes Right",
+        "ID": "TowerOfOannesRightA",
+        "Name": "Tower of Oannes Right A",
+        "IsBackside": true,
+        "Locations": [],
+        "Exits": [
+            {
+                "Name": "Tower of Oannes Right Entrance Gate (D-12)",
+                "ID": "fEx1_R",
+                "ConnectionType": "Gate",
+                "ConnectingAreaID": "BaileyRight",
+                "Logic": "Has(Feather) or CanWarp"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightASlide",
+                "Logic": "Has(Feather) and CanWarp"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightB",
+                "Logic": "Has(Feather) and CanWarp"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesRightASlide",
+        "Name": "Tower of Oannes Right A Slide",
+        "IsBackside": true,
+        "Locations": [],
+        "Exits": [
+            {
+                "Name": "Tower of Oannes Moving Tiles Escape (D-10)",
+                "ID": "fEx1_Rout",
+                "ConnectionType": "LeftDoor",
+                "ConnectingAreaID": "BaileyBottom",
+                "Logic": "HorizontalAttack"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightA",
+                "Logic": "CanWarp"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesRightB",
+        "Name": "Tower of Oannes Right B",
+        "IsBackside": true,
         "Locations": [
             {
                 "Name": "[DLC D-1] DLC Boss Reward Chest",
@@ -7032,7 +7132,7 @@
             {
                 "Name": "Evil Fish Crystal",
                 "LocationType": "Miniboss",
-                "Logic": "CanReach(BaileyTopRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
+                "Logic": "CanReach(BaileyRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
                 "Item": {
                     "Name": "Evil Fish Crystal",
                     "IsRequired": false
@@ -7056,25 +7156,16 @@
         ],
         "Exits": [
             {
-                "Name": "Tower of Oannes Right Entrance Gate (D-12)",
-                "ID": "fEx1_R",
-                "ConnectionType": "Gate",
-                "ConnectingAreaID": "BaileyTopRight",
-                "Logic": "Has(Feather)"
-            },
-            {
-                "Name": "Tower of Oannes Moving Tiles Escape (D-10)",
-                "ID": "fEx1_Rout",
-                "ConnectionType": "LeftDoor",
-                "ConnectingAreaID": "BaileyBottom",
-                "Logic": "Has(Feather)"
-            },
-            {
                 "Name": "Tower of Oannes Dark Fish Crystal Escape (E-6)",
                 "ID": "fEx1_Rout2",
                 "ConnectionType": "OneWay",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "CanReach(BaileyTopRight) and Has(Feather)"
+                "Logic": "CanReach(BaileyRight)"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightA",
+                "Logic": "CanWarp"
             }
         ]
     },
@@ -7101,14 +7192,14 @@
                 "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",
                 "ID": "fEx2_Rout",
                 "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TowerOfOannesRight",
+                "ConnectingAreaID": "TowerOfOannesRightB",
                 "Logic": "False"
             },
             {
                 "Name": "Tower of Oannes Right Gyonin Drop (E-1)",
                 "ID": "fEx2_Rout2",
                 "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TowerOfOannesRight",
+                "ConnectingAreaID": "TowerOfOannesRightA",
                 "Logic": "False"
             }
         ]
@@ -7184,21 +7275,22 @@
             },
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "BaileyTopRight",
+                "ConnectingAreaID": "BaileyRight",
                 "Logic": "Has(Gale Fibula) and CanWarp"
             }
         ]
     },
     {
-        "ID": "BaileyTopRight",
-        "Name": "Bailey Top Right",
+        "ID": "BaileyRight",
+        "Name": "Bailey Right",
+        "IsBackside": true,
         "Locations": [],
         "Exits": [
             {
-                "Name": "Bailey Top Right Gate (F-8)",
+                "Name": "Bailey Right Gate (F-8)",
                 "ID": "fEx2_R",
                 "ConnectionType": "Gate",
-                "ConnectingAreaID": "TowerOfOannesRight",
+                "ConnectingAreaID": "TowerOfOannesRightA",
                 "Logic": "True"
             },
             {

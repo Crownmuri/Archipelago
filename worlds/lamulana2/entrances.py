@@ -66,8 +66,8 @@ INCLUDE_DESPITE_FALSE = {
     ExitID.fP02Left,    # Cliff (A-1) — user changed to True in World.json;
                         # kept here as safety net for older World.json versions
     # DLC one-way drops: logic=False in vanilla but shuffled when include_dlc_entrances on
-    ExitID.fEx2_Rout,   # Bailey Top Right -> Bailey Bottom (forced fall slide)
-    ExitID.fEx2_Rout2,  # Bailey Top Right -> Bailey Bottom (forced fall slide)
+    ExitID.fEx2_Rout,   # Bailey Right -> Bailey Bottom (forced fall slide)
+    ExitID.fEx2_Rout2,  # Bailey Right -> Bailey Bottom (forced fall slide)
     ExitID.fEx2_Lout,   # Bailey Level 3 -> Bailey Bottom (forced fall slide)
 }
 
