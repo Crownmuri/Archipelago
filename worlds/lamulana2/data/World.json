@@ -1050,6 +1050,12 @@
                 "Logic": "HorizontalAttack"
             },
             {
+                "Name": "[ANN E-5] Feathercross One-Way Pot",
+                "ID": "field02E4",
+                "LocationType": "Pot",
+                "Logic": "HorizontalAttack"
+            },
+            {
                 "Name": "[ANN] Enemy Glossary (Apsara)",
                 "ID": "enemyF02-1",
                 "LocationType": "Glossary",
@@ -1158,14 +1164,7 @@
     {
         "ID": "AnnwfnOneWay",
         "Name": "Annwfn One Way Corridor",
-        "Locations": [
-            {
-                "Name": "[ANN E-5] Feathercross One-Way Pot",
-                "ID": "field02E4",
-                "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
-            }
-        ],
+        "Locations": [],
         "Exits": [
             {
                 "ConnectionType": "Internal",
@@ -4895,7 +4894,7 @@
                 "Name": "[VAL A-4] Glossary Locked Behind Floor Switch",
                 "ID": "charactor4",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Earth Spear) or Has(Bomb))"
+                "Logic": "CanUse(Earth Spear) or CanUse(Bomb)"
             },
             {
                 "Name": "[VAL D-4] Fish Glossary (Sawara)",

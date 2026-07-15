@@ -224,7 +224,7 @@
     },
     "enemyF02-7": {
         "Name": "Enemy Glossary (Aghasura)",
-        "KillLogic": "Has(Knife) or CanUse(Bomb) or CanUse(Pistol) or (Has(Vajra) and (Has(Rapier) or Has(Katana) or (Has(Gauntlet) and Has(Leather Whip)))) or (Has(Gauntlet) and (Has(Chain Whip) or Has(Rapier) or Has(Katana)))",
+        "KillLogic": "Has(Knife) or CanUse(Bomb) or CanUse(Pistol) or (Has(Vajra) and (Has(Rapier) or Has(Katana)) or (Has(Gauntlet) and Has(Leather Whip))) or (Has(Gauntlet) and (Has(Chain Whip) or Has(Rapier) or Has(Katana)))",
         "SpawnAreas": [
             "AnnwfnMain"
         ]
