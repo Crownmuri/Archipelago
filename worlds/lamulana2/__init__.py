@@ -590,6 +590,7 @@ class LaMulana2World(World):
             "echidna": int(self.options.echidna_difficulty),
             "auto_scan_tablets": int(self.options.auto_scan),
             "greedy_charon": int(self.options.greedy_charon),
+            "persistent_inventory": int(self.options.persistent_inventory),
             "logic_difficulty": int(self.options.logic_difficulty),
             "game_difficulty": int(self.options.game_difficulty),
             "costume_clip": int(self.options.costume_clip),
@@ -651,7 +652,7 @@ class LaMulana2World(World):
                 "unique_transitions", "full_random_entrances", "prevent_area_loops",
                 "include_dlc_entrances",
                 "soul_gate_entrances", "include_nine_soul_gates", "random_soul_gate_value",
-                "auto_scan", "auto_skulls", "greedy_charon",
+                "auto_scan", "auto_skulls", "greedy_charon", "persistent_inventory",
                 "starting_money", "starting_weights",
                 "item_chest_color", "filler_chest_color", "ap_chest_color",
                 "write_seed_file", "death_link",
@@ -1263,6 +1264,7 @@ class LaMulana2World(World):
         _log(f"  Auto Scan: {opt('auto_scan')}")
         _log(f"  Auto Skulls: {opt('auto_skulls')}")
         _log(f"  Greedy Charon: {opt('greedy_charon')}")
+        _log(f"  Persistent Inventory: {opt('persistent_inventory')}")
         _log(f"  Starting Money: {opt('starting_money')}")
         _log(f"  Starting Weights: {opt('starting_weights')}")
 

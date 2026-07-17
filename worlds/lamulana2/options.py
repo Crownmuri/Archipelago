@@ -442,6 +442,14 @@ class GreedyCharon(DefaultOnToggle):
     so you don't get bricked with additional coins while trying to get to Charon."""
     display_name = "Greedy Charon"
 
+class PersistentInventory(Toggle):
+    """Keep everything you have locally collected after a death or a save load.
+    Normally only AP items get regranted upon loading; this option extends to ALL items.
+    In other words, turning this on keeps your inventory fully synced with AP's CollectionState.
+    Own world items are silently recovered and checked locations remain checked.
+    Note: Puzzle progression flags will not persist."""
+    display_name = "Persistent Inventory"
+
 class ItemChestColor(Choice):
     """Color for item chests."""
     display_name = "Item Chest Color"
@@ -563,6 +571,7 @@ class LM2Options(PerGameCommonOptions):
     auto_scan: AutoScan
     auto_skulls: AutoSkulls
     greedy_charon: GreedyCharon
+    persistent_inventory: PersistentInventory
     starting_money: StartingMoney
     starting_weights: StartingWeights
     item_chest_color: ItemChestColor
