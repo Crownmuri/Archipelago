@@ -2419,7 +2419,7 @@
                 "Name": "[IT C-2] Glossary in Surtr's Room (Scan)",
                 "ID": "enemyF04-6",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner) and Has(Light Scythe)"
+                "Logic": "Has(Hand Scanner) and (Has(Light Scythe) or Has(Claydoll Suit))"
             },
             {
                 "Name": "[IT C-3] NPC Glossary (Sinmara)",
@@ -3571,7 +3571,7 @@
                 "Name": "[SFGB A-1] Glossary Post-Tezcatlipoca",
                 "ID": "field06RG3",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Tezcatlipoca)"
+                "Logic": "(Has(Feather) or CanWarp) and IsDead(Tezcatlipoca)"
             }
         ],
         "Exits": [
@@ -5262,7 +5262,7 @@
                 "Name": "[DSLM C-6] NPC Glossary (Ra)",
                 "ID": "talk57",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "PuzzleFinished(White Pedestals)"
             },
             {
                 "Name": "[DSLM C-2] NPC Glossary (Kero)",
@@ -7031,6 +7031,33 @@
         "ID": "TowerOfOannesLeftC",
         "Name": "Tower of Oannes Left C",
         "IsBackside": true,
+        "Locations": [],
+        "Exits": [
+            {
+                "Name": "Tower of Oannes Left-C Bottom Gate (C-6)",
+                "ID": "fEx1_L4",
+                "ConnectionType": "Gate",
+                "ConnectingAreaID": "BaileyLevel2",
+                "Logic": "True"
+            },
+            {
+                "Name": "Tower of Oannes Left-C Top Gate (C-5)",
+                "ID": "fEx1_L5",
+                "ConnectionType": "Gate",
+                "ConnectingAreaID": "BaileyLevel3",
+                "Logic": "IsDead(Fish-Slime Zero) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftCTop",
+                "Logic": "Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesLeftCTop",
+        "Name": "Tower of Oannes Left C Top",
+        "IsBackside": true,
         "Locations": [
             {
                 "Name": "Fish-Slime Zero",
@@ -7051,25 +7078,16 @@
         ],
         "Exits": [
             {
-                "Name": "Tower of Oannes Left-C Bottom Gate (C-6)",
-                "ID": "fEx1_L4",
-                "ConnectionType": "Gate",
-                "ConnectingAreaID": "BaileyLevel2",
-                "Logic": "True"
-            },
-            {
-                "Name": "Tower of Oannes Left-C Top Gate (C-5)",
-                "ID": "fEx1_L5",
-                "ConnectionType": "Gate",
-                "ConnectingAreaID": "BaileyLevel3",
-                "Logic": "IsDead(Fish-Slime Zero) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
-            },
-            {
                 "Name": "Tower of Oannes Fish-Slime Zero Escape (C-1)",
                 "ID": "fEx1_Lout",
                 "ConnectionType": "OneWay",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "IsDead(Fish-Valusa Re-gyo-ded) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
+                "Logic": "True"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesLeftC",
+                "Logic": "Has(Feather)"
             }
         ]
     },
@@ -7129,15 +7147,6 @@
                 "Logic": "IsDead(Fish-Gear mk-2 turboR)"
             },
             {
-                "Name": "Evil Fish Crystal",
-                "LocationType": "Miniboss",
-                "Logic": "CanReach(BaileyRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
-                "Item": {
-                    "Name": "Evil Fish Crystal",
-                    "IsRequired": false
-                }
-            },
-            {
                 "Name": "Fish-Gear mk-2 turboR",
                 "LocationType": "Miniboss",
                 "Logic": "IsDead(Evil Fish Crystal) and Has(Rebirth Sigil) and CanReach(TowerOfOannesLeftA) and (Has(Gale Fibula) or CanStopTime) and CanUse(Bomb) and CanUse(Pistol) and Has(Grapple Claw) and Has(Feather) and CanWarp and Has(Flail Whip) and OrbCount(10)",
@@ -7155,16 +7164,44 @@
         ],
         "Exits": [
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightA",
+                "Logic": "False"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "TowerOfOannesRightBCrystal",
+                "Logic": "CanWarp or Has(Feather)"
+            }
+        ]
+    },
+    {
+        "ID": "TowerOfOannesRightBCrystal",
+        "Name": "Tower of Oannes Right B Crystal",
+        "IsBackside": true,
+        "Locations": [
+            {
+                "Name": "Evil Fish Crystal",
+                "LocationType": "Miniboss",
+                "Logic": "CanReach(BaileyRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
+                "Item": {
+                    "Name": "Evil Fish Crystal",
+                    "IsRequired": false
+                }
+            }
+        ],
+        "Exits": [
+            {
                 "Name": "Tower of Oannes Dark Fish Crystal Escape (E-6)",
                 "ID": "fEx1_Rout2",
                 "ConnectionType": "OneWay",
                 "ConnectingAreaID": "BaileyBottom",
-                "Logic": "CanReach(BaileyRight)"
+                "Logic": "True"
             },
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "TowerOfOannesRightA",
-                "Logic": "CanWarp"
+                "ConnectingAreaID": "TowerOfOannesRightB",
+                "Logic": "True"
             }
         ]
     },
@@ -7184,21 +7221,21 @@
                 "Name": "Tower of Oannes Left Gyonin Drop (B-1)",
                 "ID": "fEx2_Lout",
                 "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TowerOfOannesLeftC",
+                "ConnectingAreaID": "TowerOfOannesLeftCTop",
                 "Logic": "False"
             },
             {
                 "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",
                 "ID": "fEx2_Rout",
                 "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TowerOfOannesRightB",
+                "ConnectingAreaID": "TowerOfOannesRightASlide",
                 "Logic": "False"
             },
             {
                 "Name": "Tower of Oannes Right Gyonin Drop (E-1)",
                 "ID": "fEx2_Rout2",
                 "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TowerOfOannesRightA",
+                "ConnectingAreaID": "TowerOfOannesRightBCrystal",
                 "Logic": "False"
             }
         ]

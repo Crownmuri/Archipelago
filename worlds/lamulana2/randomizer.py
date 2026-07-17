@@ -1267,7 +1267,7 @@ class LM2RandomizerCore:
                     continue
                 # Own glossary ROM / pot filler: route through the per-location placeholder
                 # so the location's AP mechanism (NPC/Kataribe, mural, chest, …) fires the
-                # check + sold-out; the server echoes the real ROM → DeliverGlossaryRom.
+                # check + sold-out.
                 if loc.game_location_id in ap_map:
                     item_id = ap_map[loc.game_location_id]
 

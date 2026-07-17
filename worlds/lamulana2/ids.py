@@ -2765,14 +2765,17 @@ class AreaID(IntEnum):
     TowerOfOannesLeftB = 98
     TowerOfOannesLeftBTopGate = 99
     TowerOfOannesLeftC = 100
+    TowerOfOannesLeftCTop = 110
     TowerOfOannesRightA = 101
     TowerOfOannesRightASlide = 102
     TowerOfOannesRightB = 103
+    TowerOfOannesRightBCrystal = 109
     BaileyBottom = 104
     BaileyLevel1 = 105
     BaileyLevel2 = 106
     BaileyLevel3 = 107
     BaileyRight = 108
+    
 
 
 # All DLC regions (Spring in the Sky / Tower of Oannes / Bailey / Eden).
@@ -2783,6 +2786,7 @@ DLC_AREA_IDS: set = {
     AreaID.TowerOfOannesLeftA, AreaID.TowerOfOannesLeftB,
     AreaID.TowerOfOannesLeftC, AreaID.TowerOfOannesRightA,
     AreaID.TowerOfOannesRightB, AreaID.TowerOfOannesRightASlide,
+    AreaID.TowerOfOannesRightBCrystal, AreaID.TowerOfOannesLeftCTop,
     AreaID.TowerOfOannesLeftATopGate, AreaID.TowerOfOannesLeftBTopGate,
     AreaID.BaileyBottom, AreaID.BaileyLevel1, AreaID.BaileyLevel2,
     AreaID.BaileyLevel3, AreaID.BaileyRight,
