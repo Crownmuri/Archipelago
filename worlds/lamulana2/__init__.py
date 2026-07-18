@@ -5,7 +5,7 @@ from __future__ import annotations
 # Set DEBUG = True to enable verbose logging during AP generation.
 # Leave False for public/alpha builds to suppress [ER], [DEBUG], etc. output.
 # =============================================================================
-DEBUG = True
+DEBUG = False
 
 def _log(*args, **kwargs):
     if DEBUG:
