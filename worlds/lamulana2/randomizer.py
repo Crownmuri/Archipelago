@@ -1046,6 +1046,16 @@ class LM2RandomizerCore:
         """
         Cursed chest randomization (unchanged from original)
         """
+        # Universal Tracker regen: the cursed set is RNG-selected at generation
+        # time and cannot be reproduced from options alone (UT does not replay
+        # the server's RNG state). Replay the exact set recorded in slot_data so
+        # the '... and Has(Mulana Talisman)' logic append matches the real seed;
+        # otherwise UT would treat a cursed chest as freely accessible.
+        ut_data = self.world._ut_passthrough()
+        if ut_data is not None:
+            self._apply_ut_cursed_locations(ut_data)
+            return
+
         if not self.options.random_cursed_chests:
             default_cursed = [
                 LocationID.FlameTorcChest,
@@ -1067,6 +1077,24 @@ class LM2RandomizerCore:
             for loc in cursed:
                 if loc.append_logic_string("and Has(Mulana Talisman)"):
                     self.cursed_locations.append(loc.game_location_id)
+
+    def _apply_ut_cursed_locations(self, ut_data: dict):
+        """Replay the server-recorded cursed set (UT regen path).
+
+        slot_data["cursed_locations"] holds the exact LocationIDs that were
+        cursed at generation time. Append the Mulana Talisman requirement to
+        each so UT's logic matches the real seed.
+        """
+        for raw in ut_data.get("cursed_locations") or []:
+            try:
+                loc_id = LocationID(int(raw))
+            except (TypeError, ValueError):
+                continue
+            loc = self.locations.get(loc_id)
+            if loc is None:
+                continue
+            if loc.append_logic_string("and Has(Mulana Talisman)"):
+                self.cursed_locations.append(loc_id)
 
     # ============================================================
     # Fill empty locations with filler
