@@ -1654,12 +1654,6 @@
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[IB G-5] Below Hidden Sigil Item Pot",
-                "ID": "field03G4",
-                "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
-            },
-            {
                 "Name": "[IB] Enemy Glossary (Kabandha)",
                 "ID": "enemyF03-1",
                 "LocationType": "Glossary",
@@ -1792,6 +1786,12 @@
                     "Name": "Svipdagr",
                     "IsRequired": true
                 }
+            },
+            {
+                "Name": "[IB G-5] Below Hidden Sigil Item Pot",
+                "ID": "field03G4",
+                "LocationType": "Pot",
+                "Logic": "HorizontalAttack"
             },
             {
                 "Name": "[IB G-6] Right of Hiro Roderick Item Pot",

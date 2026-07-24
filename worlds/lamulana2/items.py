@@ -175,6 +175,29 @@ _register_logic_items()
 # Item creation helpers
 # ============================================================
 
+def _apply_option_classification(world, item: Item) -> Item:
+    """Bump items that only gate logic under certain options to progression.
+
+    build_item_pool applies the same bumps to the pooled copies, but every
+    other caller of create_item must agree with it:
+
+    - Universal Tracker rebuilds the player's start inventory from the item
+      NAME alone (it drops the multiworld's precollected items, and the server
+      sends start inventory as NetworkItem(code, -2, flags=0), so there are no
+      classification flags to restore). A non-progression Ruins Encyclopedia
+      there means state.has("Ruins Encyclopedia") is False forever and every
+      glossary check shows out of logic in the tracker.
+    - plando / create_filler go through world.create_item as well.
+    """
+    if item.name == "Ruins Encyclopedia" and glossanity_pools_enabled(world.options):
+        item.classification = ItemClassification.progression
+    elif item.name == "Perfume" and world.options.glossanity_enemy:
+        item.classification = ItemClassification.progression
+    elif item.name == "Rebirth Sigil" and world.options.oannesanity:
+        item.classification = ItemClassification.progression
+    return item
+
+
 def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
     """Create an Archipelago Item from an item name."""
     # If game_id is provided, use it directly
@@ -184,12 +207,12 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
         for item_def in ITEM_DEFS:
             if item_def.game_id == game_id:
                 classification = _get_classification(item_def)
-                return Item(
+                return _apply_option_classification(world, Item(
                     name=item_def.name,
                     classification=classification,
                     code=ap_id,
                     player=world.player,
-                )
+                ))
         # If not found, create with default
         return Item(
             name=name,
@@ -235,7 +258,7 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
                 player=world.player,
             )
             item.lm2_game_id = mapped_id
-            return item
+            return _apply_option_classification(world, item)
 
     matching_defs = [d for d in ITEM_DEFS if d.name == name]
 
@@ -245,13 +268,13 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
     # Use the first definition
     selected_def = matching_defs[0]
     classification = _get_classification(selected_def)
-    
-    return Item(
+
+    return _apply_option_classification(world, Item(
         name=selected_def.name,
         classification=classification,
         code=selected_def.ap_id,
         player=world.player,
-    )
+    ))
 
 def _get_classification(item_def: ItemDef) -> ItemClassification:
     """Get classification for an item definition."""
