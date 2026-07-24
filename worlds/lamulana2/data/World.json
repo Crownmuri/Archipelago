@@ -2626,7 +2626,7 @@
                 "Name": "[IT F-1] Backside Grail Hidden Coin Pot #1",
                 "ID": "field04F0g",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Anchor) or Has(Fish Suit)))"
+                "Logic": "(Has(Feather) and HorizontalAttack) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Pistol) or (CanUse(Flare Gun) and (Has(Anchor) or Has(Fish Suit)))"
             },
             {
                 "Name": "[IT F-3] Iceside Elevator Item Pot",
@@ -2638,13 +2638,13 @@
                 "Name": "[IT G-1] Backside Grail Hidden Item Pot",
                 "ID": "field04G0",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and OrbCount(1) and (Has(Anchor) or Has(Fish Suit)))"
+                "Logic": "(Has(Feather) and HorizontalAttack) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Pistol) or (CanUse(Flare Gun) and OrbCount(1) and (Has(Anchor) or Has(Fish Suit)))"
             },
             {
                 "Name": "[IT G-1] Backside Grail Hidden Coin Pot #2",
                 "ID": "field04G0g",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and OrbCount(1) and (Has(Anchor) or Has(Fish Suit)))"
+                "Logic": "(Has(Feather) and HorizontalAttack) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Pistol) or (CanUse(Flare Gun) and OrbCount(1) and (Has(Anchor) or Has(Fish Suit)))"
             },
             {
                 "Name": "[IT E-2] Glossary in the Hot Spring (Scan)",
@@ -2656,13 +2656,13 @@
                 "Name": "[IT F-3] NPC Glossary (Modgud)",
                 "ID": "talk16",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance))"
+                "Logic": "Has(Life Sigil)"
             },
             {
                 "Name": "[IT E-1] NPC Glossary (Inanna)",
                 "ID": "talk17",
                 "LocationType": "Glossary",
-                "Logic": "Has(Life Sigil)"
+                "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance))"
             },
             {
                 "Name": "[IT E-2] NPC Glossary (Enimul)",
@@ -5129,13 +5129,13 @@
                 "Name": "[DSLM C-2] Kero Coin Pot",
                 "ID": "field11C1g",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and (Has(Grapple Claw) or Has(Feather))"
+                "Logic": "HorizontalAttack and (CanReach(DSLMTop) or Has(Grapple Claw) or Has(Feather))"
             },
             {
                 "Name": "[DSLM C-3] Altar of Atum Item Pot",
                 "ID": "field11C2",
                 "LocationType": "Pot",
-                "Logic": "(HorizontalAttack and (Has(Grapple Claw) or Has(Feather))) or (CanUse(Flare Gun) and Has(Feather))"
+                "Logic": "(HorizontalAttack and (CanReach(DSLMTop) or Has(Grapple Claw) or Has(Feather))) or (CanUse(Flare Gun) and Has(Feather))"
             },
             {
                 "Name": "[DSLM C-4] Ladder to Atum Item Pot #1",
@@ -6903,7 +6903,7 @@
             {
                 "Name": "Fish-Valusa Re-gyo-ded",
                 "LocationType": "Miniboss",
-                "Logic": "Has(Feather) and CanUse(Flare Gun) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))) and OrbCount(2)",
+                "Logic": "Has(Feather) and CanUse(Flare Gun) and (MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))) and OrbCount(2)",
                 "HardLogic": "Has(Feather) and CanUse(Flare Gun)",
                 "Item": {
                     "Name": "Fish-Valusa Re-gyo-ded",
@@ -7045,12 +7045,12 @@
                 "ID": "fEx1_L5",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel3",
-                "Logic": "IsDead(Fish-Slime Zero) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
+                "Logic": "IsDead(Fish-Slime Zero) and (MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))"
             },
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TowerOfOannesLeftCTop",
-                "Logic": "Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))"
+                "Logic": "MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))"
             }
         ]
     },
