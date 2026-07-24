@@ -134,7 +134,9 @@
         "Name": "Enemy Glossary (Cacus)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "EPG"
+            "EPG",
+            "EPDMain",
+            "EPDTop"
         ]
     },
     "enemyC9": {
@@ -200,7 +202,10 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "AnnwfnRight",
-            "IBMoon"
+            {
+                "Area": "IBMoon",
+                "Logic": "Has(Life Sigil) and HorizontalAttack"
+            }
         ]
     },
     "enemyF02-5": {
@@ -726,9 +731,7 @@
         "Name": "Enemy Glossary (Avnas)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "EPG",
-            "EPDMain",
-            "EPDTop"
+            "EPG"
         ]
     },
     "enemyF14-3": {
@@ -829,10 +832,7 @@
         "KillLogic": "Has(Feather)",
         "SpawnAreas": [
             "TowerOfOannesLeftA",
-            {
-                "Area": "TowerOfOannesLeftC",
-                "Logic": "Has(Feather) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
-            },
+            "TowerOfOannesLeftCTop",
             "TowerOfOannesRightB"
         ]
     },
@@ -841,10 +841,7 @@
         "KillLogic": "Has(Feather)",
         "SpawnAreas": [
             "TowerOfOannesLeftA",
-            {
-                "Area": "TowerOfOannesLeftC",
-                "Logic": "Has(Feather) and (Has(Flail Whip) or (Has(Chain Whip) and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))))"
-            }
+            "TowerOfOannesLeftCTop"
         ]
     },
     "d241": {

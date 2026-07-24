@@ -3322,10 +3322,10 @@
                 "Logic": "True"
             },
             {
-                "Name": "[SFG D-7] Glossary in Flame Torc Wall Above Spikes",
+                "Name": "[SFG D-7] Glossary in Flame Torc Wall Above Spikes (Scan)",
                 "ID": "field06RG4",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather)"
+                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather) amd Has(Hand Scanner)"
             }
         ],
         "Exits": [
@@ -3571,7 +3571,7 @@
                 "Name": "[SFGB A-1] Glossary Post-Tezcatlipoca",
                 "ID": "field06RG3",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Feather) or CanWarp) and IsDead(Tezcatlipoca)"
+                "Logic": "CanWarp and IsDead(Tezcatlipoca)"
             }
         ],
         "Exits": [
@@ -3959,7 +3959,7 @@
                 "Logic": "True"
             },
             {
-                "Name": "[TS C-5] Spinning Platforms Right Weight Pot ",
+                "Name": "[TS C-5] Spinning Platforms Right Weight Pot",
                 "ID": "field08C4g",
                 "LocationType": "Pot",
                 "Logic": "True"
@@ -4064,7 +4064,7 @@
                 "Name": "[TS D-1] NPC Glossary (Kami-musubi)",
                 "ID": "talk39",
                 "LocationType": "Glossary",
-                "Logic": "Has(Katana) or CanUse(Earth Spear) or CanUse(Bomb)"
+                "Logic": "(CanReach(TSEntrance) and Has(Katana) or CanUse(Earth Spear) or CanUse(Bomb)) or (CanReach(TSMain) and Has(Leather Whip) or Has(Axe) or CanUse(Earth Spear) or (Has(Katana) and Has(Vajra)) or (CanUse(Flare Gun) and HorizontalAttack))"
             },
             {
                 "Name": "[TS C-4] NPC Glossary (Ash Geen)",
@@ -6377,7 +6377,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "EPDTop",
-                "Logic": "Has(Feather) and Has(Glove)"
+                "Logic": "Has(Feather) and Has(Grapple Claw)"
             },
             {
                 "ConnectionType": "PrisonGate",
@@ -6416,18 +6416,6 @@
                 "Logic": "Has(Key Fairy) and (Has(Feather) or (Has(Snow Shoes) and Has(Gale Fibula)))"
             },
             {
-                "Name": "[EPD C-2] Seventh Hell Gate Approach Coin Pot",
-                "ID": "field15B1g",
-                "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
-            },
-            {
-                "Name": "[EPD C-2] Seventh Hell Gate Approach Item Pot",
-                "ID": "field15B1",
-                "LocationType": "Pot",
-                "Logic": "True"
-            },
-            {
                 "Name": "[EPD C-1] Sixth Hell Gate Exit Item Pot",
                 "ID": "field15C0",
                 "LocationType": "Pot",
@@ -6440,10 +6428,22 @@
                 "Logic": "True"
             },
             {
+                "Name": "[EPD C-2] Seventh Hell Gate Approach Coin Pot",
+                "ID": "field15B1g",
+                "LocationType": "Pot",
+                "Logic": "(OrbCount(3) or Has(Ice Cloak) or Has(Claydoll Suit)) and HorizontalAttack"
+            },
+            {
+                "Name": "[EPD C-2] Seventh Hell Gate Approach Item Pot",
+                "ID": "field15B1",
+                "LocationType": "Pot",
+                "Logic": "(OrbCount(3) or Has(Ice Cloak) or Has(Claydoll Suit))"
+            },
+            {
                 "Name": "[EPD A-3] Glossary in Hel's Preview Area (Scan)",
                 "ID": "Guardian08",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner) and Has(Feather) and HorizontalAttack"
+                "Logic": "(OrbCount(3) or Has(Ice Cloak) or Has(Claydoll Suit)) and Has(Hand Scanner) and Has(Feather) and HorizontalAttack"
             }
         ],
         "Exits": [
