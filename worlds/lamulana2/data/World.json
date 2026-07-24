@@ -3325,7 +3325,7 @@
                 "Name": "[SFG D-7] Glossary in Flame Torc Wall Above Spikes (Scan)",
                 "ID": "field06RG4",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather) amd Has(Hand Scanner)"
+                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather) and Has(Hand Scanner)"
             }
         ],
         "Exits": [
