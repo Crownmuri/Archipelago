@@ -245,12 +245,12 @@ class PotsanityBomb(Toggle):
 # Each toggle adds that subset of the 244 glossary chips as randomized checks.
 
 class GlossanityFreestanding(Toggle):
-    """Glossanity: add all Freestanding Glossary entries. (51+5 entries)
+    """Glossanity: add all Freestanding Glossary entries. (50+5 entries)
     Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
     display_name = "Glossanity - Freestanding"
 
 class GlossanityScannable(Toggle):
-    """Glossanity: add all Scannable Glossary entries that require Hand Scanner. (26 entries)"""
+    """Glossanity: add all Scannable Glossary entries that require Hand Scanner. (27 entries)"""
     display_name = "Glossanity - Scannable"
 
 class GlossanityNPC(Toggle):
@@ -353,10 +353,12 @@ class RandomCursedChests(DefaultOnToggle):
     display_name = "Random Cursed Chests"
 
 class CursedChestCount(Range):
-    """Number of Cursed Chests to randomize."""
+    """Number of Cursed Chests to randomize (only used when Random Cursed Chests is on).
+    Base game has 86 regular chests, boosted to 92 through various sanity settings.
+    The max is automatically clamped down if set to higher than the actual amount of chests."""
     display_name = "Cursed Chests"
     range_start = 0
-    range_end = 86
+    range_end = 92
     default = 4
 
 # --- Entrance Randomizer ---
@@ -383,7 +385,7 @@ class FullRandomEntrances(Toggle):
     display_name = "Full Random Entrances"
 
 class IncludeDLCEntrances(Toggle):
-    """Requires DLC. Include DLC entrances in the pool.
+    """Requires Oannesanity toggled on. Include DLC entrances in the entrance pool.
     Note: Combat logic to survive in the DLC areas is still minimal."""
     display_name = "Include DLC Entrances"
 

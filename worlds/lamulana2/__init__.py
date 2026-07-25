@@ -173,6 +173,17 @@ class LaMulana2World(World):
     # Lifecycle
     # -------------------------------------------------------------------------
 
+    def _max_cursed_chests(self) -> int:
+        """Dynamic number of Chest-type locations eligible to be cursed for this world."""
+        total = 86
+        if self.options.costumesanity:
+            total += 4
+        if self.options.oannesanity:
+            total += 1
+        if self.options.costumesanity and self.options.oannesanity:
+            total += 1
+        return total
+
     def generate_early(self) -> None:
         """
         Called before any item or location creation.
@@ -225,6 +236,20 @@ class LaMulana2World(World):
                 f"Oannesanity, which is disabled. Disabling DLC entrance shuffling."
             )
             self.options.include_dlc_entrances.value = 0
+
+        # Cursed Chests may target any Chest-type location, and the number of
+        # those grows with Costumesanity / Oannesanity. The option's static
+        # range_end is the absolute maximum (all sanities on); clamp the value
+        # down to what this world actually contains so the request is honoured
+        # exactly and slot_data reflects the real count.
+        max_cursed = self._max_cursed_chests()
+        if self.options.cursed_chests.value > max_cursed:
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: 'Cursed Chests' "
+                f"({self.options.cursed_chests.value}) exceeds the {max_cursed} chest "
+                f"locations available with the current options; clamping to {max_cursed}."
+            )
+            self.options.cursed_chests.value = max_cursed
 
         # Add starting weapon to precollected items
         starting_weapon_name = self._get_weapon_name(self.starting_weapon)
