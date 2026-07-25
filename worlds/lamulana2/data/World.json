@@ -7183,7 +7183,7 @@
             {
                 "Name": "Evil Fish Crystal",
                 "LocationType": "Miniboss",
-                "Logic": "CanReach(BaileyRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
+                "Logic": "IsDead(Fish-Slime Zero) and CanReach(BaileyRight) and Has(Ice Cloak) and Has(Anchor) and Has(Feather) and OrbCount(6) and (CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Earth Spear) or Has(Leather Whip) or Has(Axe) or ((Has(Knife) or Has(Rapier)) and Has(Spaulder)))",
                 "Item": {
                     "Name": "Evil Fish Crystal",
                     "IsRequired": false
