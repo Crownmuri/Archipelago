@@ -1282,20 +1282,20 @@
                 "Name": "[ANN F-3] Pre-Kujata Weight Pot",
                 "ID": "field02F1",
                 "LocationType": "Pot",
-                "Logic": "True"
+                "Logic": "IsDead(Ixtab)"
             },
             {
                 "Name": "[ANN F-2] Glossary in Bottom-Left Wall Past Kujata",
                 "ID": "Guardian02",
                 "LocationType": "Glossary",
-                "Logic": "MeleeAttack",
-                "TrickyLogic": "HorizontalAttack"
+                "Logic": "IsDead(Ixtab) and MeleeAttack",
+                "TrickyLogic": "IsDead(Ixtab) and HorizontalAttack"
             },
             {
                 "Name": "[ANN F-2] Fish Glossary (Nijimasu)",
                 "ID": "d233",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Heimdall) and CanReach(Eden)"
+                "Logic": "IsDead(Ixtab) and IsDead(Heimdall) and CanReach(Eden)"
             }
         ],
         "Exits": [
@@ -2822,7 +2822,7 @@
                 "Logic": "HorizontalAttack and (Has(Origin Sigil) or CanReach(DFTop))"
             },
             {
-                "Name": "[DF D-4] Above Mantra Mural Coin Pot",
+                "Name": "[DF D-4] Hermod's Coin Pot",
                 "ID": "field05D3",
                 "LocationType": "Pot",
                 "Logic": "True"
@@ -2901,13 +2901,13 @@
                 "Logic": "Has(Birth Sigil)"
             },
             {
-                "Name": "[DF A-3] Dwarves' Hideout Right Pot #2",
+                "Name": "[DF A-3] Dwarves' Hideout Lower Right Pot",
                 "ID": "field05A2-2",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather))"
             },
             {
-                "Name": "[DF A-3] Dwarves' Hideout Right Pot #1",
+                "Name": "[DF A-3] Dwarves' Hideout Upper Right Pot",
                 "ID": "field05A2-1",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather))"
@@ -3692,7 +3692,7 @@
                 "Logic": "HorizontalAttack or (Has(Feather) and Has(Bracelet))"
             },
             {
-                "Name": "[GOTD B-6] Dwarves' Puzzle Item Pot",
+                "Name": "[GOTD B-6] Dwarves' Missing Block Item Pot",
                 "ID": "field07B5",
                 "LocationType": "Pot",
                 "Logic": "True"
@@ -3764,13 +3764,13 @@
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[GOTD F-5] Wedjet Gate Solo Item Pot #1",
+                "Name": "[GOTD F-5] Wedjet Gate Single Upper Item Pot",
                 "ID": "field07F4",
                 "LocationType": "Pot",
                 "Logic": "True"
             },
             {
-                "Name": "[GOTD F-5] Wedjet Gate Solo Item Pot #2",
+                "Name": "[GOTD F-5] Wedjet Gate Single Lower Item Pot",
                 "ID": "field07F4f",
                 "LocationType": "Pot",
                 "Logic": "True"
@@ -4384,7 +4384,7 @@
                 "Logic": "Has(Grapple Claw)"
             },
             {
-                "Name": "[HL B-1] Ladder from B-2 Mural Item Pot",
+                "Name": "[HL B-1] Baphomet's Item Pot",
                 "ID": "field09B0",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
@@ -5138,13 +5138,13 @@
                 "Logic": "(HorizontalAttack and (CanReach(DSLMTop) or Has(Grapple Claw) or Has(Feather))) or (CanUse(Flare Gun) and Has(Feather))"
             },
             {
-                "Name": "[DSLM C-4] Ladder to Atum Item Pot #1",
+                "Name": "[DSLM C-4] Ladder to Atum Lower Item Pot",
                 "ID": "field11B3",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[DSLM C-4] Ladder to Atum Item Pot #2",
+                "Name": "[DSLM C-4] Ladder to Atum Upper Item Pot",
                 "ID": "field11C3",
                 "LocationType": "Pot",
                 "Logic": "True"
@@ -6254,14 +6254,14 @@
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[EPD A-4] Maze Clear Item Pot #1",
-                "ID": "field15A3b",
+                "Name": "[EPD A-4] Maze Clear Left Item Pot",
+                "ID": "field15A3",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[EPD A-4] Maze Clear Item Pot #2",
-                "ID": "field15A3",
+                "Name": "[EPD A-4] Maze Clear Right Item Pot",
+                "ID": "field15A3b",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
@@ -6566,25 +6566,25 @@
                 "Logic": "HorizontalAttack and Has(Enga Musica)"
             },
             {
-                "Name": "[EPG C-6] Weapon Vault Item Pot #2",
+                "Name": "[EPG C-6] Weapon Vault Upper Item Pot",
                 "ID": "field14C5b",
                 "LocationType": "Pot",
                 "Logic": "PuzzleFinished(Garm Statue Puzzle)"
             },
             {
-                "Name": "[EPG C-6] Weapon Vault Item Pot #1",
+                "Name": "[EPG C-6] Weapon Vault Lower Item Pot",
                 "ID": "field14C5",
                 "LocationType": "Pot",
                 "Logic": "PuzzleFinished(Garm Statue Puzzle) and HorizontalAttack"
             },
             {
-                "Name": "[EPG C-7] Software Mural Item Pot #2",
+                "Name": "[EPG C-7] Software Mural Left Item Pot",
                 "ID": "field14C6b",
                 "LocationType": "Pot",
                 "Logic": "HorizontalAttack"
             },
             {
-                "Name": "[EPG C-7] Software Mural Item Pot #1",
+                "Name": "[EPG C-7] Software Mural Right Item Pot",
                 "ID": "field14C6",
                 "LocationType": "Pot",
                 "Logic": "True"
