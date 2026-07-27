@@ -2758,6 +2758,7 @@ class AreaID(IntEnum):
     SpiralHell = 92
     # --- DLC areas (Spring in the Sky / Tower of Oannes / Bailey / Eden) ---
     Eden = 93
+    GateofGuidanceRightLadder = 111
     SpringintheSky = 94
     SpringintheSkyTop = 95
     TowerOfOannesLeftA = 96
@@ -2775,7 +2776,7 @@ class AreaID(IntEnum):
     BaileyLevel2 = 106
     BaileyLevel3 = 107
     BaileyRight = 108
-    
+
 
 
 # All DLC regions (Spring in the Sky / Tower of Oannes / Bailey / Eden).

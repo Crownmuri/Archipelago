@@ -309,10 +309,27 @@
                 "Logic": "True"
             },
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "GateofGuidanceRightLadder",
+                "Logic": "IsDead(Heimdall)"
+            }
+        ]
+    },
+    {
+        "ID": "GateofGuidanceRightLadder",
+        "Name": "Gate of Guidance Right Ladder",
+        "Locations": [],
+        "Exits": [
+            {
                 "Name": "Gate of Guidance Right Ladder (E-2)",
                 "ID": "fLUp",
                 "ConnectionType": "UpLadder",
                 "ConnectingAreaID": "SpringintheSky",
+                "Logic": "True"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "GateofGuidance",
                 "Logic": "IsDead(Heimdall)"
             }
         ]
@@ -6866,7 +6883,7 @@
                 "Name": "Spring in the Sky Ladder Down (A-6)",
                 "ID": "fL04Down",
                 "ConnectionType": "DownLadder",
-                "ConnectingAreaID": "GateofGuidance",
+                "ConnectingAreaID": "GateofGuidanceRightLadder",
                 "Logic": "True"
             },
             {
