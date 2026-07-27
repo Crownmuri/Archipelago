@@ -7209,7 +7209,7 @@
         ],
         "Exits": [
             {
-                "Name": "Tower of Oannes Dark Fish Crystal Escape (E-6)",
+                "Name": "Tower of Oannes Evil Fish Crystal Escape (E-6)",
                 "ID": "fEx1_Rout2",
                 "ConnectionType": "OneWay",
                 "ConnectingAreaID": "BaileyBottom",
