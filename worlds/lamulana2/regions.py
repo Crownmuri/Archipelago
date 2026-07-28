@@ -235,7 +235,8 @@ class LM2Entrance(Entrance):
         return self.can_access_with_adapter(lm2_state)
 
     def can_access_with_adapter(self, lm2_state) -> bool:
-        if self._compiled_rule is not None:
+        if (self._compiled_rule is not None
+                and not getattr(lm2_state, "force_tree_eval", False)):
             return (
                 lm2_state.can_reach(self.parent_area)
                 and self._compiled_rule(lm2_state.state)

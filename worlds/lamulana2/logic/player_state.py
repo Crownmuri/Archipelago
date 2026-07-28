@@ -82,7 +82,8 @@ class PlayerStateAdapter:
         self.ignore_false_checks = False
         self.ignore_guardians = False
         self.escape_check = False
-        
+        self.force_tree_eval = False
+
         self.starting_area = None
         
         world = multiworld.worlds[player]

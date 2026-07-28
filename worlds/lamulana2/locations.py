@@ -356,11 +356,13 @@ class LM2Location(Location):
 
 
     def can_access_with_adapter(self, lm2_state: PlayerStateAdapter) -> bool:
+        use_compiled = (self._compiled_rule is not None
+                        and not getattr(lm2_state, "force_tree_eval", False))
         if self.bypass_parent_gate:
-            if self._compiled_rule is not None:
+            if use_compiled:
                 return self._compiled_rule(lm2_state.state)
             return self._logic_tree.evaluate(lm2_state)
-        if self._compiled_rule is not None:
+        if use_compiled:
             return (
                 lm2_state.can_reach(self.parent_area)
                 and self._compiled_rule(lm2_state.state)
@@ -391,7 +393,8 @@ class LM2Location(Location):
         return self.can_collect_with_adapter(lm2_state)
 
     def can_collect_with_adapter(self, lm2_state: PlayerStateAdapter) -> bool:
-        if self._compiled_rule is not None:
+        if (self._compiled_rule is not None
+                and not getattr(lm2_state, "force_tree_eval", False)):
             return self._compiled_rule(lm2_state.state)
         return self._logic_tree.evaluate(lm2_state)
 

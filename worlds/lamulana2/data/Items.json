@@ -197,7 +197,7 @@
   {
     "name": "Bracelet",
     "id": 41,
-    "isRequired": false
+    "isRequired": true
   },
   {
     "name": "Feather",

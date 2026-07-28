@@ -727,8 +727,9 @@ def _generate_pairings_reachable_first(
         _log(f"[ER] Reachability-first pairing: {forced_unreachable_sources} "
               f"forced from unreachable areas (validator may retry)")
     if uf.num_components > 1:
-        _log(f"[ER] WARNING (constructive): {uf.num_components} disconnected "
-              f"area components after pairing")
+        # Judge a layout by _sweep_reachability, never by this number.
+        _log(f"[ER] Constructive pairing: {uf.num_components} area components "
+              f"in the physical-only graph (item-gated edges excluded)")
 
     return _repair_same_dungeon_pairs(pairings, rng)
 
@@ -1605,6 +1606,19 @@ def _validate_region_reachability(world, base_state=None) -> Tuple[bool, List[st
 
     Returns (is_valid, list_of_unreachable_location_names).
     """
+    unreachable, _state = _sweep_reachability(world, base_state)
+    return len(unreachable) == 0, unreachable
+
+
+def _sweep_reachability(world, base_state=None):
+    """
+    The sphere-sweep behind _validate_region_reachability, also handing back
+    the final state so callers can ask further questions of it — chiefly
+    "is the goal still satisfiable?", which is the one thing a partitioned
+    layout must never break.
+
+    Returns (list_of_unreachable_location_names, final_state).
+    """
     from BaseClasses import CollectionState
     player = world.player
 
@@ -1649,8 +1663,28 @@ def _validate_region_reachability(world, base_state=None) -> Tuple[bool, List[st
         if hasattr(state, 'stale') and collected_new:
             state.stale[player] = True
 
-    unreachable = [loc.name for loc in remaining]
-    return len(unreachable) == 0, unreachable
+    return [loc.name for loc in remaining], state
+
+
+def _goal_reachable(world, state) -> bool:
+    """
+    Is the player's completion condition satisfiable in `state`?
+
+    Must be asked of a swept state (from _sweep_reachability), NOT of
+    _build_omniscient_state: the omniscient state force-adds every logic
+    flag, 9 guardians and 6 dissonance, so it answers True even when the
+    events that grant them are orphaned by the entrance layout.
+    """
+    try:
+        condition = world.multiworld.completion_condition.get(world.player)
+    except AttributeError:
+        return True
+    if condition is None:
+        return True
+    try:
+        return bool(condition(state))
+    except Exception:
+        return False
 
 
 # ── Starting cluster viability check ─────────────────────────────────
@@ -1659,19 +1693,19 @@ def _validate_region_reachability(world, base_state=None) -> Tuple[bool, List[st
 # Must be high enough that after pre-fills (shops, mantras, research,
 # logic flags, dissonance), enough UNFILLED slots remain for the fill
 # to bootstrap progression. 
-_MIN_STARTING_LOCATIONS = 8
+_MIN_STARTING_LOCATIONS = 2
 
 # Minimum number of UNFILLED accessible locations in sphere-0.
 # This is the actual bottleneck: the fill algorithm needs empty slots
 # to place progression items.  Pre-fills (shops, mantras, research,
 # dissonance, logic flags) consume slots before the fill even starts.
-_MIN_STARTING_UNFILLED = 4
+_MIN_STARTING_UNFILLED = 2
 
 # Minimum number of distinct REACHABLE AREAS (regions with unique
 # game_area_id) in sphere-0.  Prevents configurations where many
 # locations are accessible but all in 1-2 areas (tiny cluster that
 # the fill can't break out of even with the unfilled minimum met).
-_MIN_STARTING_AREAS = 3
+_MIN_STARTING_AREAS = 2
 
 def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
     """
@@ -1901,13 +1935,7 @@ def custom_structural_er(world) -> None:
     # ── Minimal-accessibility partition tolerance ────────────────────
     # For minimal/none accessibility we may accept a layout that leaves
     # some locations permanently unreachable, but only within sane
-    # bounds.  The old heuristic (reachable >= progression + 10) accepted
-    # the first passing attempt, which let through layouts with 300+ dead
-    # locations that then knife-edged the fill into intermittent
-    # accessibility failures.  These bounds reject implausible partitions;
-    # the loop additionally prefers a fully-connected layout and only
-    # falls back to the least-partitioned one it saw.
-    #
+    # bounds.  
     # All bounds are PROPORTIONAL, not absolute counts, because the number
     # of locations/items varies hugely with settings (potsanity, glossanity,
     # costumesanity, oannesanity, ...).  The core fillability test compares
@@ -2060,8 +2088,8 @@ def custom_structural_er(world) -> None:
         # ── Validation 1: omniscient reachability ─────────────────────
         # With ALL items + events, can every region be reached?
         # Catches permanent map partitions.
-        valid, unreachable = _validate_region_reachability(world,
-                                                           base_state=items_only_base)
+        unreachable, swept_state = _sweep_reachability(world,
+                                                       base_state=items_only_base)
         last_unreachable = unreachable
 
         accessibility = world.options.accessibility
@@ -2124,16 +2152,20 @@ def custom_structural_er(world) -> None:
                        int(progression_count * _MINIMAL_PREFILL_HEADROOM_FRACTION))
         dead_cap = max(_MINIMAL_MIN_TOLERANCE,
                        int(total_placeable * _MINIMAL_MAX_DEAD_FRACTION))
+        goal_ok = _goal_reachable(world, swept_state)
+
         acceptable = (
-            reachable_placeable >= progression_count + headroom
+            goal_ok
+            and reachable_placeable >= progression_count + headroom
             and len(unreachable) <= dead_cap
         )
         if not acceptable:
             if attempt < 5 or attempt % 25 == 0:
+                reason = ("goal unreachable" if not goal_ok
+                          else f"{reachable_placeable} reachable slots for "
+                               f"{progression_count} progression")
                 _log(f"[ER] Attempt {attempt + 1}: rejecting partition of "
-                      f"{len(unreachable)} unreachable "
-                      f"({reachable_placeable} reachable slots for "
-                      f"{progression_count} progression), retrying...")
+                      f"{len(unreachable)} unreachable ({reason}), retrying...")
             continue
 
         # Viable partition — remember the best (fewest unreachable) seen.
@@ -2661,9 +2693,9 @@ class SoulGateRandomizer:
             # All gates placed.  Final structural check (catches the rare
             # case where kill simulation passes but full-region accessibility
             # would still leave non-guardian regions unreachable).
-            valid, unreachable = _validate_region_reachability(self.world,
-                                                                base_state=items_only_base)
-            if not valid:
+            unreachable, swept_state = _sweep_reachability(self.world,
+                                                           base_state=items_only_base)
+            if unreachable:
                 structural = getattr(self.world, '_structural_unreachable', set())
                 new_unreachable = [loc for loc in unreachable if loc not in structural]
                 if new_unreachable:
@@ -2671,6 +2703,14 @@ class SoulGateRandomizer:
                           f"logic made {len(new_unreachable)} NEW locations "
                           f"unreachable (e.g. {new_unreachable[:3]}), retrying...")
                     continue
+
+            # Forgiving the structural partition must not extend to the goal:
+            # gate logic can put the completion path behind kills the layout
+            # can no longer deliver.
+            if not _goal_reachable(self.world, swept_state):
+                _log(f"[ER] Soul gate attempt {attempt + 1}: gate logic left "
+                      f"the goal unreachable, retrying...")
+                continue
 
             if attempt > 0:
                 _log(f"[ER] Soul gate succeeded on attempt {attempt + 1}")
@@ -2872,9 +2912,9 @@ class SoulGateRandomizer:
                       f"could not place all values, retrying with fresh shuffle...")
                 continue
 
-            valid, unreachable = _validate_region_reachability(
+            unreachable, swept_state = _sweep_reachability(
                 self.world, base_state=items_only_base)
-            if not valid:
+            if unreachable:
                 structural = getattr(self.world, '_structural_unreachable', set())
                 new_unreachable = [loc for loc in unreachable if loc not in structural]
                 if new_unreachable:
@@ -2883,6 +2923,11 @@ class SoulGateRandomizer:
                           f"locations unreachable (e.g. {new_unreachable[:3]}), "
                           f"retrying...")
                     continue
+
+            if not _goal_reachable(self.world, swept_state):
+                _log(f"[ER] Soul gate value-only attempt {attempt + 1}: gate "
+                      f"values left the goal unreachable, retrying...")
+                continue
 
             if attempt > 0:
                 _log(f"[ER] Soul gate value-only succeeded on attempt {attempt + 1}")

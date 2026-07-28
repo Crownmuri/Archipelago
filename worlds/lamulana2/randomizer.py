@@ -143,8 +143,9 @@ class LM2RandomizerCore:
         else:
             self._place_shop_items_random()
     
+        # only_murals placement is deferred to place_mantras_post_er() (pre_fill)
         self._place_mantras()
-    
+
         if not self.options.random_research:
             self._place_research()
     
@@ -155,7 +156,17 @@ class LM2RandomizerCore:
         self._fix_nibiru_logic()
         self._fix_fdc_logic()
         self._fix_spiral_gate_logic()
-        self._fix_ankh_logic()
+        # Branch A (guardian_specific_ankhs) is topology-independent — each
+        # guardian just needs its own jewel — so it can run here. Branch B's
+        # cumulative AnkhCount is derived from reachability and MUST wait until
+        # after connect_entrances: soul gates read
+        # "GuardianKills(N) or Setting(Random Soul Gates)", so with random soul
+        # gate values every gate is unconditionally open at set_rules time and
+        # the real requirement is only injected during ER. Grouping here would
+        # see an ungated world, put all 9 guardians in one group and stamp
+        # AnkhCount(9) on each. See fix_ankh_logic_post_er().
+        if self.options.guardian_specific_ankhs:
+            self._fix_ankh_logic()
 
     def _remove_item_from_pool(self, item_id: ItemID, item_name: str) -> bool:
         """
@@ -357,6 +368,7 @@ class LM2RandomizerCore:
         )
         state_adapter.set_starting_area(self.starting_area)
         state_adapter.ignore_guardians = True
+        state_adapter.force_tree_eval = True
 
         # C# parity: Collect ALL items (Items), not just itempool.
         for it in self.multiworld.itempool:
@@ -364,7 +376,25 @@ class LM2RandomizerCore:
                 state_adapter.state.collect(it, True)
                 state_adapter._collect_item_name(it.name)
 
+        # NO logic-flag event may be seeded here — not guardians, and not
+        # minibosses or puzzle completions either. C# builds this state from
+        # `Items` (the item POOL), which holds no flags at all; every flag is
+        # earned by the flood-fill below as its location becomes reachable.
+        #
+        # Seeding them hands each guardian its prerequisites for free: Anu needs
+        # IsDead(Ki sikil lil la ke), Aten Ra needs IsDead(Sekhmet), Echidna the
+        # two HoM paths, Jormungand needs Cetus, Kujata needs Ixtab, Vritra needs
+        # Vucub Caquix. Pre-granted, all nine guardians are reachable in pass 1,
+        # collapse into ONE group, and each gets AnkhCount(9) — which deadlocks
+        # against the Ankh Jewel that vanilla Hiner Shop 4 sells behind
+        # GuardianKills(3).
+        #
+        # Items pre-placed at REAL locations (shops, mantras, research,
+        # dissonance) ARE collected: those were still in C#'s pool at this point,
+        # and the port has already removed them from multiworld.itempool.
         for loc in self.locations.values():
+            if loc.address is None:
+                continue  # event / logic-flag location — earn it in the flood-fill
             if loc.item is not None and loc.item.player == self.player:
                 state_adapter.state.collect(loc.item, True)
                 state_adapter._collect_item_name(loc.item.name)
@@ -853,115 +883,141 @@ class LM2RandomizerCore:
 
             return True
 
-        if placement_mode == self.options.mantra_placement.option_only_murals:
-            mural_locations = get_unplaced_locations_of_type(self.locations, LocationType.Mural)
+        return True
 
-            if len(mural_locations) < len(MANTRA_ITEMS):
-                _log(f"[ERROR] Not enough mural locations ({len(mural_locations)}) for mantras ({len(MANTRA_ITEMS)})")
+    def fix_ankh_logic_post_er(self) -> None:
+        """
+        Cumulative AnkhCount grouping, run from World.pre_fill() so the entrance
+        graph and the soul gate kill requirements are final. See the note in
+        setup_preplaced_items() for why this cannot run at set_rules time.
+        """
+        if self.options.guardian_specific_ankhs:
+            return  # Branch A already applied during set_rules
+        self._fix_ankh_logic()
+
+    def place_mantras_post_er(self) -> bool:
+        """
+        only_murals placement, run from World.pre_fill() so the entrance graph
+        (structural ER + soul gate values) is final.
+
+        C# parity with Randomiser.cs::RandomiseWithChecks(): for each mantra,
+        rebuild the state from scratch out of the items still in the pool
+        (minus the mantras not yet placed) and then sphere-sweep, collecting
+        items off locations only once those locations are actually reachable.
+        That is the same semantics AP's own accessibility sweep and the ER
+        validator use, so a placement accepted here stays valid downstream.
+        """
+        if self.options.mantra_placement.value != self.options.mantra_placement.option_only_murals:
+            return True
+
+        mw = self.multiworld
+        player = self.player
+
+        def is_mantra_item(item: Item) -> bool:
+            try:
+                iid = get_game_item_id(item)
+            except Exception:
                 return False
+            return iid in MANTRA_ITEMS and item.player == player
 
-            if len(mantra_items) != len(MANTRA_ITEMS):
-                _log(f"[WARN] Found {len(mantra_items)} mantra items in AP pool, expected {len(MANTRA_ITEMS)}")
+        mantra_items = [it for it in list(mw.itempool) if is_mantra_item(it)]
+        if not mantra_items:
+            _log("[WARN] only_murals: no mantra items in the AP pool, nothing to place")
+            return True
 
-            if len(mantra_items) > len(mural_locations):
-                _log("[ERROR] More mantras to place than mural locations")
-                return False
-
-            # C# parity with Randomiser.cs::RandomiseWithChecks(): build state
-            # with every NON-mantra item, then place each mantra at a mural
-            # reachable in that state. Mantras must be excluded so that
-            # mantra-gated murals (Child Mural needs CanChant(Mother)+CanChant(Wind),
-            # Moon Mural needs CanChant(Sun)) are correctly seen as unreachable
-            # — otherwise the cyclic mantra→mural dependency softlocks the main
-            # fill.
-            mantra_names = {it.name for it in mantra_items}
-
-            state_copy = self.multiworld.state.copy()
-            state_adapter = PlayerStateAdapter(
-                state_copy, self.player, self.multiworld, self.options
-            )
-            state_adapter.set_starting_area(self.starting_area)
-
-            for it in mw.itempool:
-                if it.player == self.player and it.name not in mantra_names:
-                    state_adapter.state.collect(it, True)
-                    state_adapter._collect_item_name(it.name)
-            for placed_loc in self.locations.values():
-                pi = placed_loc.item
-                if pi is not None and pi.player == self.player and pi.name not in mantra_names:
-                    state_adapter.state.collect(pi, True)
-                    state_adapter._collect_item_name(pi.name)
-            for it in mw.precollected_items[self.player]:
-                if it.name not in mantra_names:
-                    state_adapter.state.collect(it, True)
-                    state_adapter._collect_item_name(it.name)
-
-            # Mirror C# GetStateWithItems' chained flood-fill: after each
-            # mantra is placed, collect it into the state so subsequent
-            # reachability checks see it. This unlocks chant-gated murals
-            # (Moon needs Sun; Child needs Mother+Wind; Night sits behind
-            # NIBIRU which needs five chants). Without chaining, three
-            # murals stay unreachable forever and we can never place all
-            # 10 mantras.
-            #
-            # Order is sensitive: if the last mantra to place is the one
-            # that gates the only remaining mural, we deadlock. Retry the
-            # shuffle a few times before giving up — most orderings are
-            # solvable given the chain dependency analysis.
-            MAX_SHUFFLE_RETRIES = 25
-
-            def snapshot_state():
-                return {k: v for k, v in state_adapter._collected_items.items()}
-
-            base_collected = snapshot_state()
-            base_locked = [loc for loc in mural_locations]
-
-            for attempt in range(MAX_SHUFFLE_RETRIES):
-                # Reset state and mural pool to pre-placement snapshot
-                state_adapter._collected_items.clear()
-                state_adapter._collected_items.update(base_collected)
-                state_adapter.area_checks.clear()
-                state_adapter.entrance_checks.clear()
-
-                trial_murals = list(base_locked)
-                trial_mantras = list(mantra_items)
-                self.rng.shuffle(trial_mantras)
-                placements = []
-
-                ok = True
-                for mantra_item in trial_mantras:
-                    self.rng.shuffle(trial_murals)
-                    chosen_idx = -1
-                    for i, loc in enumerate(trial_murals):
-                        try:
-                            if loc.can_access_with_adapter(state_adapter):
-                                chosen_idx = i
-                                break
-                        except Exception:
-                            continue
-                    if chosen_idx < 0:
-                        ok = False
-                        break
-                    chosen_loc = trial_murals.pop(chosen_idx)
-                    placements.append((chosen_loc, mantra_item))
-                    state_adapter.state.collect(mantra_item, True)
-                    state_adapter._collect_item_name(mantra_item.name)
-
-                if ok:
-                    for chosen_loc, mantra_item in placements:
-                        mw.push_item(chosen_loc, mantra_item, collect=False)
-                        chosen_loc.locked = True
-                        if mantra_item in mw.itempool:
-                            mw.itempool.remove(mantra_item)
-                    return True
-
-            _log(
-                f"[ERROR] Could not place all mantras at reachable murals after "
-                f"{MAX_SHUFFLE_RETRIES} shuffle attempts"
-            )
+        mural_locations = get_unplaced_locations_of_type(self.locations, LocationType.Mural)
+        if len(mural_locations) < len(mantra_items):
+            _log(f"[ERROR] Not enough mural locations ({len(mural_locations)}) "
+                 f"for mantras ({len(mantra_items)})")
             return False
 
-        return True
+        def sweep_state(pending_names: set) -> CollectionState:
+            """
+            State with every pool item except the mantras still awaiting
+            placement, then a sphere-sweep collecting placed items from
+            locations as they become reachable (C# GetStateWithItems).
+            """
+            state = CollectionState(mw)  # collects precollected items itself
+            for item in mw.itempool:
+                if item.player == player and item.name not in pending_names:
+                    state.collect(item, True)
+            state.stale[player] = True
+
+            remaining = [loc for loc in mw.get_locations(player)
+                         if loc.parent_region is not None and loc.item is not None]
+            while True:
+                sphere = []
+                for n in range(len(remaining) - 1, -1, -1):
+                    try:
+                        if remaining[n].can_reach(state):
+                            sphere.append(remaining.pop(n))
+                    except Exception:
+                        pass
+                if not sphere:
+                    break
+                for loc in sphere:
+                    if loc.item is not None and loc.item.player == player:
+                        state.collect(loc.item, True, loc)
+                state.stale[player] = True
+            return state
+
+        def undo(placements):
+            for loc, item in placements:
+                loc.item = None
+                loc.locked = False
+                item.location = None
+
+        # Placement order matters (a mantra that gates the only remaining
+        # reachable mural must not be placed last), so reshuffle and retry.
+        MAX_ORDER_RETRIES = 15
+
+        for attempt in range(MAX_ORDER_RETRIES):
+            trial_mantras = list(mantra_items)
+            self.rng.shuffle(trial_mantras)
+            trial_murals = list(mural_locations)
+            placements = []
+            pending = {it.name for it in trial_mantras}
+
+            ok = True
+            for mantra_item in trial_mantras:
+                state = sweep_state(pending)
+
+                self.rng.shuffle(trial_murals)
+                chosen_idx = -1
+                for i, loc in enumerate(trial_murals):
+                    try:
+                        if loc.can_reach(state):
+                            chosen_idx = i
+                            break
+                    except Exception:
+                        continue
+
+                if chosen_idx < 0:
+                    _log(f"[ER] only_murals attempt {attempt + 1}: no reachable mural "
+                         f"left for {mantra_item.name}, reshuffling...")
+                    ok = False
+                    break
+
+                chosen_loc = trial_murals.pop(chosen_idx)
+                mw.push_item(chosen_loc, mantra_item, collect=False)
+                chosen_loc.locked = True
+                placements.append((chosen_loc, mantra_item))
+                pending.discard(mantra_item.name)
+
+            if ok:
+                for _loc, item in placements:
+                    if item in mw.itempool:
+                        mw.itempool.remove(item)
+                if attempt > 0:
+                    _log(f"[ER] only_murals succeeded on attempt {attempt + 1}")
+                return True
+
+            undo(placements)
+
+        _log(f"[ERROR] Could not place all mantras at reachable murals after "
+             f"{MAX_ORDER_RETRIES} attempts")
+        return False
+
 
     # ============================================================
     # Research Placement

@@ -338,6 +338,40 @@ class LaMulana2World(World):
         mw = self.multiworld
         player = self.player
 
+        # ── Guardian ankh requirements ────────────────────────────────
+        # Must follow ER: soul gates only carry their real GuardianKills(N)
+        # requirement once connect_entrances has assigned gate values.
+        self.randomizer.fix_ankh_logic_post_er()
+
+        # ── Orphaned locations ────────────────────────────────────────
+        # ER may hand back a layout with a few locations permanently cut off
+        # (allowed for minimal/items accessibility — see custom_structural_er).
+        # Mark them EXCLUDED so the fill only ever drops filler there: AP's
+        # accessibility sweep skips filler-holding locations, and progression
+        # balancing shouldn't count slots nobody can open.
+        orphans = getattr(self, "_structural_unreachable", None)
+        if orphans:
+            excluded = 0
+            for loc in mw.get_locations(player):
+                if loc.address is None or loc.name not in orphans:
+                    continue
+                if loc.item is not None:
+                    continue  # already pre-filled; nothing left to exclude
+                loc.progress_type = LocationProgressType.EXCLUDED
+                excluded += 1
+            if excluded:
+                _log(f"[ER] Marked {excluded} unreachable location(s) EXCLUDED")
+
+        # ── Mantras (only_murals) ─────────────────────────────────────
+        # Runs here, not in set_rules, because it needs the final entrance
+        # graph: set_rules precedes connect_entrances, so ER would invalidate
+        # any reachability decided earlier.
+        if not self.randomizer.place_mantras_post_er():
+            raise RuntimeError(
+                "Mantra placement (only_murals) could not find a reachable mural "
+                "for every mantra on this entrance layout."
+            )
+
         # ── POST-RULES DIAGNOSTIC ─────────────────────────────────────
         try:
             from .entrances import _build_omniscient_state

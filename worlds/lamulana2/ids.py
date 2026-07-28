@@ -4130,7 +4130,6 @@ USELESS_ITEM_IDS = {
     ItemID.Alert,
     ItemID.SkullReader,
     ItemID.RaceScanner,
-    ItemID.Bracelet,
     ItemID.BronzeMirror,
     ItemID.Codices,
     ItemID.Harp,
