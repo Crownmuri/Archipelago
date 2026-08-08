@@ -1186,7 +1186,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "AnnwfnMain",
-                "Logic": "CanWarp and HorizontalAttack"
+                "Logic": "CanWarp or HorizontalAttack"
             },
             {
                 "Name": "Annwfn Bottom One-way Ladder (E-5)",
@@ -1359,7 +1359,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBTop",
-                "Logic": "CanWarp or (CanKill(Cetus) and Setting(Non Random Ladders))"
+                "Logic": "CanWarp or (CanKill(Cetus) and Setting(Non Random Ladders) and Setting(Non Random Unique))"
             },
             {
                 "Name": "Immortal Battlefield Bifrost Fall (D-1)",

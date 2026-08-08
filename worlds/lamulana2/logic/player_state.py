@@ -652,31 +652,29 @@ class PlayerStateAdapter:
         return self._melee_attack() or self._horizontal_attack()
 
     def _can_use(self, item: str) -> bool:
-        """Port of C# CanUse(string subWeapon)"""   
-        # Check if this is the starting weapon
-        if hasattr(self, 'starting_weapon'):
-            starting_name = get_item_name_from_id(self.starting_weapon)
-            if starting_name == item:
-                # Starting with this weapon, we should have it
-                # For subweapons, also need ammo check
-                if item in ["Shuriken", "Rolling Shuriken", "Earth Spear", "Flare", 
-                           "Caltrops", "Chakram", "Bomb", "Pistol"]:
-                    return self._has_item(f"{item} Ammo")
-                return True
-    
-        # Pistol special case
+        """Port of C# CanUse(string subWeapon)"""
+
+
+        # Pistol special case. Pistol Ammo is shop-only, and the price is what
+        # gates it: the spawn shop stocks it free when the Pistol is the starting
+        # weapon, but otherwise it is expensive enough that logic assumes the
+        # Money Fairy first, to grind the money to buy it. (Reaching the shop and
+        # the Money Fairy is a separate matter, handled by region access.)
         if item == "Pistol":
-            return (
-                self._has_item("Pistol")
-                and self._has_item("Pistol Ammo")
-                and self._has_item("Money Fairy")
-            )
-    
+            if not (self._has_item("Pistol") and self._has_item("Pistol Ammo")):
+                return False
+            return self._is_starting_weapon("Pistol") or self._has_item("Money Fairy")
+
         # Standard subweapon check
         return (
             self._has_item(item)
             and self._has_item(f"{item} Ammo")
         )
+
+    def _is_starting_weapon(self, item: str) -> bool:
+        if self.starting_weapon is None:
+            return False
+        return get_item_name_from_id(self.starting_weapon) == item
 
     def _can_warp(self) -> bool:
         if self.starting_area is None:
@@ -724,11 +722,6 @@ class PlayerStateAdapter:
         return any(self._has_item(weapon) for weapon in ["Leather Whip", "Knife", "Rapier", "Axe", "Katana"])
 
     def _horizontal_attack(self) -> bool:
-        if hasattr(self, 'starting_weapon'):
-            if self.starting_weapon in [ItemID.Whip1, ItemID.Knife, ItemID.Rapier, ItemID.Axe, ItemID.Katana]:
-                return True
-            if self.starting_weapon in [ItemID.Shuriken, ItemID.RollingShuriken, ItemID.EarthSpear, ItemID.Flare, ItemID.Caltrops, ItemID.Chakram, ItemID.Bomb, ItemID.Pistol, ItemID.ClaydollSuit]:
-                return True
         return (
             self._has_item("Leather Whip") or self._has_item("Knife") or 
             self._has_item("Rapier") or self._has_item("Axe") or self._has_item("Katana") or 
