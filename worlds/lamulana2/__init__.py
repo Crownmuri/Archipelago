@@ -315,12 +315,28 @@ class LaMulana2World(World):
         # Build the base item pool
         pool = build_item_pool(self)
 
-        # Add pot filler items for whichever potsanity pools are enabled
-        if potsanity_pools_enabled(self.options):
-            pool += build_pot_filler_pool(self)
+        # Add pot filler items for whichever potsanity pools are enabled.
+        pot_pool = (build_pot_filler_pool(self)
+                    if potsanity_pools_enabled(self.options) else [])
+        pool += pot_pool
+
+        self._local_pot_items = self._take_local_share(
+            pot_pool, self.options.local_potsanity_percentage.value)
+
+        if self._local_pot_items:
+            held = set(map(id, self._local_pot_items))
+            pool = [i for i in pool if id(i) not in held]
+            _log(f"[LOCAL] held back {len(self._local_pot_items)} pot item(s)")
 
         # Add items to multiworld's item pool
         self.multiworld.itempool += pool
+
+    def _take_local_share(self, items: list, percentage: int) -> list:
+        """Randomly pick `percentage`% of `items` to keep in our own world."""
+        if not items or percentage <= 0:
+            return []
+        count = min(len(items), round(len(items) * percentage / 100))
+        return self.random.sample(items, count) if count else []
 
     def set_rules(self) -> None:
         """
@@ -419,6 +435,12 @@ class LaMulana2World(World):
         except Exception as e:
             _log(f"[ER-DIAG] diagnostic failed: {e}")
 
+        # ── Local sanity filler ───────────────────────────────────────
+        # Lock the held-back potsanity/glossanity share into our own pots and
+        # glossary spots. Runs after ER and mantras so the location set is
+        # final, and before the top-up below so the counts stay balanced.
+        self._place_local_sanity_items()
+
         # ── Item/location balancing ───────────────────────────────────
         # Count fillable locations for this player
         # Top up filler by counting LM2 locations and LM2 items.
@@ -445,6 +467,60 @@ class LaMulana2World(World):
             from .items import build_pre_filler
             for _ in range(missing):
                 mw.itempool.append(build_pre_filler(self))
+
+    def _place_local_sanity_items(self) -> None:
+        """Lock the held-back potsanity/glossanity share into our own world."""
+        pot_items = getattr(self, "_local_pot_items", [])
+        self._local_pot_items = []
+        if pot_items:
+            self._lock_into_own_locations(pot_items, "pot")
+
+        # Glossanity share is taken now rather than in create_items, so the
+        # pool stays whole for the ER validators (see create_items).
+        gloss_pct = self.options.local_glossanity_percentage.value
+        if gloss_pct > 0:
+            mw = self.multiworld
+            gloss_codes = {BASE_ITEM_ID + int(g) for g in GLOSSARY_ITEM_IDS}
+            candidates = [i for i in mw.itempool
+                          if i.player == self.player and i.code in gloss_codes]
+            gloss_items = self._take_local_share(candidates, gloss_pct)
+            if gloss_items:
+                held = set(map(id, gloss_items))
+                mw.itempool[:] = [i for i in mw.itempool if id(i) not in held]
+                self._lock_into_own_locations(gloss_items, "glossary")
+
+    def _lock_into_own_locations(self, items: list, label: str) -> None:
+        mw = self.multiworld
+        spots = [loc for loc in mw.get_locations(self.player)
+                 if loc.address is not None and loc.item is None]
+
+        if len(spots) < len(items):
+            # One filler is built per included location, so there is always room
+            # — but never place more than there is. The remainder goes back into
+            # the pool to keep the item/location counts balanced.
+            items, overflow = items[:len(spots)], items[len(spots):]
+            mw.itempool.extend(overflow)
+            _log(f"[LOCAL] {len(overflow)} {label} item(s) had no free spot")
+
+        if any(i.advancement for i in items):
+            # Glossary ROMs are progression under the glossary_hunt goal, so
+            # they have to land somewhere actually reachable. fill_restrictive
+            # sweeps for us; whatever it can't place safely returns to the pool.
+            from Fill import fill_restrictive, sweep_from_pool
+            state = sweep_from_pool(mw.state, list(mw.itempool))
+            self.random.shuffle(spots)
+            remaining = list(items)
+            fill_restrictive(mw, state, spots, remaining, single_player_placement=True,
+                             lock=True, allow_partial=True, name=f"LM2 local {label}")
+            if remaining:
+                mw.itempool.extend(remaining)
+            placed = len(items) - len(remaining)
+        else:
+            for loc, item in zip(self.random.sample(spots, len(items)), items):
+                loc.place_locked_item(item)
+            placed = len(items)
+
+        _log(f"[LOCAL] locked {placed}/{len(items)} {label} item(s) into own world")
 
     def connect_entrances(self) -> None:
         """

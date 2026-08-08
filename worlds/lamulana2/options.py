@@ -241,6 +241,13 @@ class PotsanityBomb(Toggle):
     """Potsanity: add all Bomb ammo pots as checks. (26 pots)"""
     display_name = "Potsanity - Bomb Pots"
 
+class LocalPotsanityPercentage(Range):
+    """The percentage of Potsanity pot filler forced into your own world."""
+    display_name = "Local Potsanity Percentage"
+    range_start = 0
+    range_end = 100
+    default = "random"
+
 # --- Glossanity (partitioned by glossary entry type) ---------------------------
 # Each toggle adds that subset of the 244 glossary chips as randomized checks.
 
@@ -261,6 +268,15 @@ class GlossanityEnemy(Toggle):
     """Glossanity: add all Enemy Glossary entries as checks. (77+7 entries)
     Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
     display_name = "Glossanity - Enemy"
+
+
+class LocalGlossanityPercentage(Range):
+    """The percentage of Glossanity entries forced into your own world."""
+    display_name = "Local Glossanity Percentage"
+    range_start = 0
+    range_end = 100
+    default = "random"
+
 
 class Costumesanity(Toggle):
     """Add the costume chests (4+1) and their correlating costumes into the pool.
@@ -536,11 +552,13 @@ class LM2Options(PerGameCommonOptions):
     potsanity_caltrops: PotsanityCaltrops
     potsanity_chakram: PotsanityChakram
     potsanity_bomb: PotsanityBomb
+    local_potsanity_percentage: LocalPotsanityPercentage
     # Glossanity is partitioned by entry type (no single master toggle).
     glossanity_freestanding: GlossanityFreestanding
     glossanity_scannable: GlossanityScannable
     glossanity_npc: GlossanityNPC
     glossanity_enemy: GlossanityEnemy
+    local_glossanity_percentage: LocalGlossanityPercentage
     oannesanity: Oannesanity
 
     # Logic & Difficulty
