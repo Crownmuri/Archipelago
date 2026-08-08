@@ -473,7 +473,6 @@ class LaMulana2World(World):
             or opts.vertical_entrances
             or opts.gate_entrances
             or opts.unique_transitions
-            or opts.full_random_entrances
         )
         # Value-only soul gate pass: vanilla pairings, but values may
         # still need rewriting (random_soul_gate_value, include_nine_soul_gates,

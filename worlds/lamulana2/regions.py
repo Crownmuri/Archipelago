@@ -261,25 +261,15 @@ def _shuffleable_exits(world) -> list:
     opts = world.options
     shuffle_types: set = set()
 
-    if opts.full_random_entrances:
-        shuffle_types = {
-            ExitType.LeftDoor, ExitType.RightDoor,
-            ExitType.UpLadder, ExitType.DownLadder,
-            ExitType.Gate,
-        }
-        if opts.unique_transitions:
-            shuffle_types |= {ExitType.OneWay, ExitType.Pyramid,
-                               ExitType.Start, ExitType.Altar}
-    else:
-        if opts.horizontal_entrances:
-            shuffle_types |= {ExitType.LeftDoor, ExitType.RightDoor}
-        if opts.vertical_entrances:
-            shuffle_types |= {ExitType.UpLadder, ExitType.DownLadder}
-        if opts.gate_entrances:
-            shuffle_types.add(ExitType.Gate)
-        if opts.unique_transitions:
-            shuffle_types |= {ExitType.OneWay, ExitType.Pyramid,
-                               ExitType.Start, ExitType.Altar}
+    if opts.horizontal_entrances:
+        shuffle_types |= {ExitType.LeftDoor, ExitType.RightDoor}
+    if opts.vertical_entrances:
+        shuffle_types |= {ExitType.UpLadder, ExitType.DownLadder}
+    if opts.gate_entrances:
+        shuffle_types.add(ExitType.Gate)
+    if opts.unique_transitions:
+        shuffle_types |= {ExitType.OneWay, ExitType.Pyramid,
+                           ExitType.Start, ExitType.Altar}
 
     from .entrances import INCLUDE_DESPITE_FALSE, DLC_EXIT_IDS
 
