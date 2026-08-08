@@ -2059,12 +2059,12 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBBattery",
-                "Logic": "Has(Grapple Claw) or (Glitch(Costume Clip) and CanWarp)"
+                "Logic": "Has(Grapple Claw) or (Glitch(Costume Clip) and (CanWarp or Setting(Non Random Ladders)))"
             },
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBMoon",
-                "Logic": "Glitch(Costume Clip) and Has(Feather) and CanWarp"
+                "Logic": "Glitch(Costume Clip) and Has(Feather) and (Has(Life Sigil) or CanWarp)"
             }
         ]
     },
@@ -2075,26 +2075,26 @@
             {
                 "Name": "Moon Mantra Mural",
                 "LocationType": "Mural",
-                "Logic": "CanChant(Sun) and Has(Snapshot) and HorizontalAttack and Has(Life Sigil) and (CanWarp or CanReach(IBDinosaur) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))"
+                "Logic": "CanChant(Sun) and Has(Snapshot) and HorizontalAttack and Has(Life Sigil) and (CanWarp or (CanReach(IBMain) and (Has(Anchor) or Has(Fish Suit) or Has(Claydoll Suit)) and (IsDead(Cetus) or Has(Feather) or CanWarp)) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))"
             },
             {
                 "Name": "[IB E-7] Moon Altar Coin Pot",
                 "ID": "field03E6",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and Has(Life Sigil)"
+                "Logic": "HorizontalAttack and Has(Life Sigil) and (CanWarp or (CanReach(IBMain) and (Has(Anchor) or Has(Fish Suit) or Has(Claydoll Suit)) and (IsDead(Cetus) or Has(Feather) or CanWarp)) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))"
             },
             {
                 "Name": "[IB E-7] Moon Altar Item Pot",
                 "ID": "field03F6",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and Has(Life Sigil)"
+                "Logic": "HorizontalAttack and Has(Life Sigil) and (CanWarp or (CanReach(IBMain) and (Has(Anchor) or Has(Fish Suit) or Has(Claydoll Suit)) and (IsDead(Cetus) or Has(Feather) or CanWarp)) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))"
             }
         ],
         "Exits": [
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBDinosaur",
-                "Logic": "Has(Life Sigil) and (CanWarp or (Has(Grapple Claw) and Setting(Non Random Ladders)))"
+                "Logic": "Has(Life Sigil) and (CanWarp or (CanReach(IBMain) and (Has(Anchor) or Has(Fish Suit) or Has(Claydoll Suit)) and (IsDead(Cetus) or Has(Feather) or CanWarp)) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))"
             },
             {
                 "Name": "Immortal Battlefield Moon Altar Hallway (G-7)",
