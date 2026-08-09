@@ -432,7 +432,7 @@ def _eval_setting(setting_name: str, options) -> bool:
         "Non Random Ladders":  lambda: not options.vertical_entrances,
         "Random Gates":        lambda: options.gate_entrances,
         "Non Random Gates":    lambda: not options.gate_entrances,
-        "Random Soul Gates":   lambda: options.random_soul_gate_value,
+        "Random Soul Gates":   lambda: bool(options.random_soul_gate_value),
         "Non Random Soul Gates": lambda: not options.random_soul_gate_value,
         "Non Random Unique":   lambda: not options.unique_transitions,
         "Remove IT Statue":    lambda: options.remove_icefire_treetop_statue,

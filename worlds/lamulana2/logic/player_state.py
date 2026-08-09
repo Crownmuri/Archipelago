@@ -767,7 +767,7 @@ class PlayerStateAdapter:
             "Non Random Ladders": lambda: not self.options.vertical_entrances,
             "Random Gates": lambda: self.options.gate_entrances,
             "Non Random Gates": lambda: not self.options.gate_entrances,
-            "Random Soul Gates": lambda: self.options.random_soul_gate_value,
+            "Random Soul Gates": lambda: bool(self.options.random_soul_gate_value),
             "Non Random Soul Gates": lambda: not self.options.random_soul_gate_value,
             "Non Random Unique": lambda: not self.options.unique_transitions,
             "Remove IT Statue": lambda: self.options.remove_icefire_treetop_statue,

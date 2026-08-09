@@ -12,6 +12,7 @@ from .regions import LM2Entrance, ExitType
 from .locations import LocationType
 from .logic.logic_tokens import LogicTokeniser
 from .logic.logic_tree import LogicTree
+from .options import RandomSoulGateValue
 
 
 # ============================================================
@@ -146,11 +147,7 @@ _BANNED_SELF_LOOP_PAIRS: frozenset = frozenset({
 
 
 # Pairs that form a *virtual* dead-end when one side is the starting exit:
-# both areas can be entered, but escape requires late-game items the player
-# can't have yet (mantras, djed, mid-late bosses), and neither side has
-# another non-soul-gate exit to bootstrap progression.  Treated like Cliff
-# in ReduceDeadEndStarts -- the starting exit must not pair with the other.
-#
+# both areas can be entered, but escape requires too many items.
 # TS <-> DF: TS escape needs djed + mantra + 5 mantra chants + Raijin/Fujin;
 # DF's only other exit is a soul gate, and no boss is reachable inside the
 # TS<->DF island to earn souls.
@@ -158,6 +155,10 @@ _VIRTUAL_DEAD_END_START_PAIRS: frozenset = frozenset({
     frozenset({ExitID.f08GateP0, ExitID.f05GateP1}),  # TS Bottom Gate <-> DF Left Gate
 })
 
+
+# Value pool for RandomSoulGateValue: Randomized.  Drawn with replacement,
+# so a seed can end up with several [9] gates — or none at all. 
+_RANDOMIZED_SOUL_VALUES: Tuple[int, ...] = (1, 2, 3, 5, 9)
 
 # Vanilla soul gate pairings used when soul_gate_entrances is OFF but
 # value-only randomization is enabled.  N9 pair is listed last so that
@@ -2243,6 +2244,17 @@ class SoulGateRandomizer:
         self.options = world.options
         self.soul_gate_pairs: List[SoulGatePair] = []
 
+    @property
+    def _free_soul_values(self) -> bool:
+        """
+        True when every pair draws independently from [1,2,3,5(,9)]
+        (Randomized).  False keeps the vanilla multiset, so the spread of
+        costs is preserved and each value is consumed as it is handed out
+        (Standard / Shuffled).
+        """
+        return (self.options.random_soul_gate_value
+                == RandomSoulGateValue.option_randomized)
+
     def randomize(self) -> bool:
         """Randomize soul gates with retry logic. Returns True on success, False if exhausted."""
         if self.options.soul_gate_entrances:
@@ -2405,7 +2417,7 @@ class SoulGateRandomizer:
         When force_override is True, also rewrites any existing
         GuardianKills(N) literal in each gate's vanilla logic so that the
         new value actually lowers the cost.  Required when the floored N9
-        amount must take effect even with random_soul_gate_value off
+        amount must take effect even with random_soul_gate_value Standard
         (Setting(Random Soul Gates) is False, so the original
         GuardianKills(N) clause would otherwise dominate).
         """
@@ -2498,15 +2510,17 @@ class SoulGateRandomizer:
         gates = list(self._get_exits_of_type(ExitType.SoulGate))
         self.rng.shuffle(gates)
 
-        if self.options.random_soul_gate_value:
-            soul_amounts = [1, 2, 3, 5]
+        if self._free_soul_values:
+            soul_amounts = list(_RANDOMIZED_SOUL_VALUES)
         else:
             soul_amounts = [1, 2, 2, 3, 3, 5, 5, 5]
 
         # ── 9-soul gate handling ──
         priority_gates = []
         if self.options.include_nine_soul_gates:
-            soul_amounts.append(9)
+            if not self._free_soul_values:
+                # Randomized already has [9] in its pool.
+                soul_amounts.append(9)
             priority_gates = [g for g in gates
                               if g.game_exit_id in (ExitID.f03GateN9,
                                                      ExitID.f13GateN9)]
@@ -2541,7 +2555,7 @@ class SoulGateRandomizer:
                 self.soul_gate_pairs.append(SoulGatePair(g1.game_exit_id,
                                                          g2.game_exit_id, nine_amount))
 
-        if not self.options.random_soul_gate_value:
+        if not self._free_soul_values:
             soul_amounts.sort()
         else:
             self.rng.shuffle(soul_amounts)
@@ -2581,17 +2595,17 @@ class SoulGateRandomizer:
                     # the active pool.
                     forced_amount = self._floor_to_available_gate_value(
                         required_guardians, [1, 2, 3, 5, 9])
-                    # When using the multiset (random_soul_gate_value off),
-                    # the floored value still has to be drawable from the
+                    # When using the multiset (Standard / Shuffled), the
+                    # floored value still has to be drawable from the
                     # remaining pool for the bookkeeping below to work.
-                    if (not self.options.random_soul_gate_value
+                    if (not self._free_soul_values
                             and forced_amount not in soul_amounts):
                         forced_amount = self._floor_to_available_gate_value(
                             required_guardians, amounts)
 
                 if forced_amount is not None:
                     amount_order = [forced_amount]
-                elif self.options.random_soul_gate_value:
+                elif self._free_soul_values:
                     amount_order = list(amounts)
                     self.rng.shuffle(amount_order)
                 else:
@@ -2615,7 +2629,7 @@ class SoulGateRandomizer:
                     if self._kill_simulation_check():
                         # Commit
                         gates.remove(gate2)
-                        if not self.options.random_soul_gate_value:
+                        if not self._free_soul_values:
                             if soul_amount in soul_amounts:
                                 soul_amounts.remove(soul_amount)
                         self.soul_gate_pairs.append(
@@ -2759,8 +2773,8 @@ class SoulGateRandomizer:
             else:
                 non_nine_pairs.append((ga, gb))
 
-        if self.options.random_soul_gate_value:
-            soul_amounts: List[int] = [1, 2, 3, 5]
+        if self._free_soul_values:
+            soul_amounts: List[int] = list(_RANDOMIZED_SOUL_VALUES)
         else:
             soul_amounts = [1, 2, 2, 3, 3, 5, 5, 5]
 
@@ -2785,11 +2799,20 @@ class SoulGateRandomizer:
             pairs_to_place.extend(non_nine_pairs)
             self.rng.shuffle(pairs_to_place)
         if self.options.include_nine_soul_gates and nine_pair is not None:
-            soul_amounts.append(9)
+            if not self._free_soul_values:
+                # Randomized already has [9] in its pool.
+                soul_amounts.append(9)
             pairs_to_place.append(nine_pair)
             self.rng.shuffle(pairs_to_place)
 
-        if self.options.random_soul_gate_value:
+        # Place the Spiral Boat pair first when its cost is forced, so the
+        # floored value leaves the multiset before the ordinary gates draw.
+        if nine_forced is not None:
+            pairs_to_place.sort(
+                key=lambda p: 0 if ExitID.f03GateN9 in (p[0].game_exit_id,
+                                                        p[1].game_exit_id) else 1)
+
+        if self._free_soul_values:
             self.rng.shuffle(soul_amounts)
         else:
             soul_amounts.sort()
@@ -2800,7 +2823,7 @@ class SoulGateRandomizer:
 
             if is_nine and nine_forced is not None:
                 amount_order = [nine_forced]
-            elif self.options.random_soul_gate_value:
+            elif self._free_soul_values:
                 amount_order = list(soul_amounts)
                 self.rng.shuffle(amount_order)
             else:
@@ -2818,9 +2841,13 @@ class SoulGateRandomizer:
                     swap_regions=False, force_override=True)
 
                 if self._kill_simulation_check():
-                    if (not self.options.random_soul_gate_value
-                            and not (is_nine and nine_forced is not None)
-                            and soul_amount in soul_amounts):
+                    # The floored Spiral Boat value is consumed like any
+                    # other draw (same as the entrance path).  Leaving it in
+                    # would strand the value it displaced — with the [9]
+                    # floored to required_guardians, that dropped value is
+                    # the [9] itself, and the seed would end up with no
+                    # 9-cost gate at all.
+                    if not self._free_soul_values and soul_amount in soul_amounts:
                         soul_amounts.remove(soul_amount)
                     self.soul_gate_pairs.append(
                         SoulGatePair(gate1.game_exit_id,
@@ -3058,7 +3085,7 @@ class SoulGateRandomizer:
         GuardianKills(new_value).  Used when the assigned soul cost must
         actually lower the gate's kill requirement (vanilla pairs in
         value-only mode, or random_dissonance forced N9 floor with
-        random_soul_gate_value off).
+        random_soul_gate_value Standard).
         """
         cur = getattr(entrance, '_original_logic', '') or ''
         new_logic = re.sub(r'GuardianKills\(\s*\d+\s*\)',

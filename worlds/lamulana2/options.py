@@ -416,11 +416,23 @@ class SoulGateEntrances(Toggle):
     Note: does not mix with regular the above regular entrances and transitions."""
     display_name = "Soul Gate Entrances"
 
-class RandomSoulGateValue(Toggle):
-    """Randomize soul gate cost values.
-    If Soul Gate Entrances is vanilla (false): only shuffle values, keep vanilla pairing.
-    If Soul Gate Entrances is shuffled (true): shuffle values along with the pairing."""
+class RandomSoulGateValue(Choice):
+    """How the soul gate costs are handed out.
+    Standard: every gate keeps its vanilla cost.
+    Shuffled: vanilla costs are shuffled between the Soul Gates.
+    Randomized: each gate pair independently rolls any of [1,2,3,5,9]."""
     display_name = "Random Soul Gate Value"
+    option_standard = 0
+    option_shuffled = 1
+    option_randomized = 2
+    default = 0
+    # Old yamls used a plain toggle, where true meant "any value per gate".
+    alias_false = 0
+    alias_off = 0
+    alias_no = 0
+    alias_true = 2
+    alias_on = 2
+    alias_yes = 2
 
 class IncludeNineSoulGates(Toggle):
     """Include the two [9] soul gates (HoM to IB Boat) in the Soul Gate pool.

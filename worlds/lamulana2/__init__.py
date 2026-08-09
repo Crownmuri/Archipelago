@@ -1389,7 +1389,7 @@ class LaMulana2World(World):
         _log(f"  Unique Transitions: {opt('unique_transitions')}")
         _log(f"  Soul Gate Entrances: {opt('soul_gate_entrances')}")
         _log(f"  Include 9 Gates: {opt('include_nine_soul_gates')}")
-        _log(f"  Random Soul Gate Values: {opt('random_soul_gate_value')}")
+        _log(f"  Random Soul Gate Values: {opts.random_soul_gate_value.current_key}")
         _log(f"  Full Random Entrances: {opt('full_random_entrances')}")
         _log(f"  Prevent Area Loops: {opt('prevent_area_loops')}")
 
