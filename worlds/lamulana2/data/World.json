@@ -552,7 +552,7 @@
             {
                 "Name": "Ratatoskr 1",
                 "LocationType": "Miniboss",
-                "Logic": "MeleeAttack",
+                "Logic": "MeleeAttack or Has(Claydoll Suit)",
                 "HardLogic": "MeleeAttack",
                 "Item": {
                     "Name": "Ratatoskr 1",
@@ -562,8 +562,8 @@
             {
                 "Name": "Nidhogg",
                 "LocationType": "Miniboss",
-                "Logic": "MeleeAttack and (CanUse(Flare Gun) or CanUse(Pistol) or (OrbCount(1) and (CanUse(Shuriken) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))))",
-                "TrickyLogic": "MeleeAttack and (CanUse(Shuriken) or CanUse(Flare Gun) or CanUse(Pistol) or Has(Claydoll Suit) or (CanUse(Chakram) and Has(Ring)))",
+                "Logic": "(MeleeAttack and (CanUse(Flare Gun) or CanUse(Pistol) or (OrbCount(1) and (CanUse(Shuriken) or (CanUse(Chakram) and Has(Ring)))))) or (OrbCount(1) and Has(Claydoll Suit))",
+                "TrickyLogic": "(MeleeAttack and (CanUse(Shuriken) or CanUse(Flare Gun) or CanUse(Pistol) or (CanUse(Chakram) and Has(Ring)))) or Has(Claydoll Suit)",
                 "HardLogic": "MeleeAttack",
                 "Item": {
                     "Name": "Nidhogg",
@@ -573,7 +573,7 @@
             {
                 "Name": "Fafnir",
                 "LocationType": "Guardian",
-                "Logic": "MeleeAttack or Glitch(Costume Clip)",
+                "Logic": "MeleeAttack or Has(Claydoll Suit) or Glitch(Costume Clip)",
                 "HardLogic": "MeleeAttack or Glitch(Costume Clip)",
                 "Item": {
                     "Name": "Fafnir",
@@ -801,7 +801,7 @@
             {
                 "Name": "Pyramid Crystal Chest",
                 "LocationType": "Chest",
-                "Logic": "Has(Life Sigil) and (Has(Knife) or (Has(Mjolnir) and MeleeAttack) or (CanUse(Earth Spear) and Has(Ring) and MeleeAttack) or (Has(Spaulder) and (Has(Leather Whip) or Has(Rapier) or Has(Katana))) or (Has(Gauntlet) and Has(Leather Whip)))"
+                "Logic": "Has(Life Sigil) and (Has(Knife) or (Has(Mjolnir) and (MeleeAttack or Has(Claydoll Suit))) or (CanUse(Earth Spear) and Has(Ring) and (MeleeAttack or Has(Claydoll Suit))) or (Has(Spaulder) and (Has(Leather Whip) or Has(Rapier) or Has(Katana))) or (Has(Gauntlet) and Has(Leather Whip)))"
             },
             {
                 "Name": "Korobock Shop 1",
@@ -1305,7 +1305,7 @@
                 "Name": "[ANN F-2] Glossary in Bottom-Left Wall Past Kujata",
                 "ID": "Guardian02",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Ixtab) and MeleeAttack",
+                "Logic": "IsDead(Ixtab) and (MeleeAttack or Has(Claydoll Suit))",
                 "TrickyLogic": "IsDead(Ixtab) and HorizontalAttack"
             },
             {
@@ -1910,7 +1910,7 @@
                 "Name": "[IB B-5] Path to Time Altar Hidden Coin Pot",
                 "ID": "field03B4g",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (MeleeAttack or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))"
+                "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))"
             },
             {
                 "Name": "[IB B-5] Path to Time Altar Item Pot",
@@ -1929,7 +1929,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBMain",
-                "Logic": "MeleeAttack",
+                "Logic": "MeleeAttack or Has(Claydoll Suit)",
                 "TrickyLogic": "HorizontalAttack"
             },
             {
@@ -2514,7 +2514,7 @@
                 "Name": "[IT A-1] BTK Coin Pot",
                 "ID": "field04A0",
                 "LocationType": "Pot",
-                "Logic": "MeleeAttack or CanUse(Flare Gun) or CanUse(Earth Spear) or CanUse(Bomb) or (Has(Feather) and CanUse(Rolling Shuriken) or CanUse(Caltrops))",
+                "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Flare Gun) or CanUse(Earth Spear) or CanUse(Bomb) or (Has(Feather) and CanUse(Rolling Shuriken) or CanUse(Caltrops))",
                 "TrickyLogic": "True"
             },
             {
@@ -3643,7 +3643,7 @@
             {
                 "Name": "Crystal Skull Chest GotD",
                 "LocationType": "Chest",
-                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb) or CanUse(Caltrops) or (CanUse(Flare Gun) and HorizontalAttack)"
+                "Logic": "((Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Chakram) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime) and CanWarp) or MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb) or CanUse(Caltrops) or (CanUse(Flare Gun) and HorizontalAttack)"
             },
             {
                 "Name": "Katana Puzzle Reward",
@@ -4145,7 +4145,7 @@
                 "Name": "[TS C-3] Spirit Palace Hidden Coin Pot",
                 "ID": "field08C2g",
                 "LocationType": "Pot",
-                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun)"
+                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Chakram)"
             },
             {
                 "Name": "[TS C-3] Spirit Palace Right Item Pot",
@@ -4157,7 +4157,7 @@
                 "Name": "[TS C-4] Left Dragon Path Weight Pot",
                 "ID": "field08C3",
                 "LocationType": "Pot",
-                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
+                "Logic": "MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Chakram)"
             },
             {
                 "Name": "[TS C-3] NPC Glossary (Izanagi)",
@@ -5248,7 +5248,7 @@
                 "Name": "[DSLM B-2] Glossary in Visibly Breakable Wall",
                 "ID": "field11RG3",
                 "LocationType": "Glossary",
-                "Logic": "(MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb))",
+                "Logic": "(MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb))",
                 "TrickyLogic": "HorizontalAttack"
             },
             {
@@ -5965,7 +5965,8 @@
                 "Name": "[HOM B-4] Nemean Lion Right Item Pot",
                 "ID": "field13B3",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and CanWarp"
+                "TrickyLogic": "CanWarp and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb))",
+                "Logic": "CanWarp and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops))"
             },
             {
                 "Name": "[HOM B-4] Nemean Lion Left Coin Pot",
