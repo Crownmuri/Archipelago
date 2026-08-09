@@ -3290,7 +3290,7 @@
             {
                 "Name": "Birth Sigil Chest",
                 "LocationType": "Chest",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and HorizontalAttack"
+                "Logic": "Has(Origin Sigil) and HorizontalAttack"
             },
             {
                 "Name": "Ankh Chest SotFG",
@@ -3330,7 +3330,7 @@
                 "Name": "[SFG D-7] Altar of Birth Approach Item Pot",
                 "ID": "field06D6",
                 "LocationType": "Pot",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and (HorizontalAttack or (CanUse(Flare Gun) and Has(Ring)))"
+                "Logic": "(Has(Origin Sigil) or Has(Claydoll Suit) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and (HorizontalAttack or (CanUse(Flare Gun) and Has(Ring)))"
             },
             {
                 "Name": "[SFG B-5] Glossary in the Snow Below Skeleton",
@@ -3342,7 +3342,7 @@
                 "Name": "[SFG D-7] Glossary in Flame Torc Wall Above Spikes (Scan)",
                 "ID": "field06RG4",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Origin Sigil) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather) and Has(Hand Scanner)"
+                "Logic": "(Has(Origin Sigil) or Has(Claydoll Suit) or (PuzzleFinished(Bergelmir) and (IsDead(Fenrir) or CanStopTime))) and Has(Flame Torc) and Has(Feather) and Has(Hand Scanner)"
             }
         ],
         "Exits": [

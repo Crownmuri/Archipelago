@@ -333,25 +333,26 @@ class EchidnaDifficulty(Choice):
     default = 4
 
 class CostumeClip(Toggle):
-    """Include Glitched logic (i.e. costume clip).
+    """Logically require using a glitch called Costume Clip.
     Costume Clip: jump and pause on the same frame.
     Once you hear the jump SFX as you open the menu, switch costumes.
     This allows you to clip into objects like pots which can push you through walls."""
     display_name = "Costume Clip"
 
 class RequireFDC(DefaultOnToggle):
-    """Require Future Development Company for backsides."""
-    display_name = "Require FDC"
+    """Logically require Future Development Company for accessing backside regions.
+    (This does not include Icefire Treetop or Immortal Battlefield)."""
+    display_name = "Future Development Company in Logic"
 
 class DLCItemLogic(Toggle):
-    """Consider the DLC item in logic.
+    """Logically require making use of the DLC reward.
     When enabled, the DLC item is assumed as collected from the start, unless it is
     randomized by Costumesanity, in which case it must be obtained first.
     When disabled, the DLC item is never considered in logic."""
     display_name = "DLC Item Logic"
 
 class LifeSigilToAwakenHoM(DefaultOnToggle):
-    """Require Life Sigil to Awaken Hall of Malice.
+    """Logically require Life Sigil to Awaken Hall of Malice.
     If enabled, will consider access to the grail point in logic."""
     display_name = "Life Sigil to Awaken HoM"
 
