@@ -816,7 +816,7 @@ _WEAPON_NAMES: frozenset[str] = frozenset({
 })
 
 _SUBWEAPON_NAMES: frozenset[str] = frozenset({
-    "Shuriken", "Rolling Shuriken", "Earth Spear", "Flare",
+    "Shuriken", "Rolling Shuriken", "Earth Spear", "Flare Gun",
     "Caltrops", "Chakram", "Bomb", "Claydoll Suit",
 })
 
@@ -846,23 +846,44 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
     """Build item_name_groups for AP hinting."""
     from .ids import GUARDIAN_ANKHS_ITEMS
 
-    all_names = {d.name for d in ITEM_DEFS}
+    # Mirror how LaMulana2World.item_name_to_id is assembled: ITEM_DEFS holds the
+    # generic labels ("Sacred Orb"), ITEM_MAP the per-source ones ("Sacred Orb (VoD)"). 
+    all_names = (
+        {d.name for d in ITEM_DEFS}
+        | set(ITEM_MAP)
+        | set(GUARDIAN_ANKHS_ITEMS.values())
+    )
+
+    # Skulls, orbs and guardian ankh jewels are one item per source, so these
+    # groups are collected by prefix and cover both label styles.
+    crystal_skulls = {n for n in all_names if n.startswith("Crystal Skull")}
+    sacred_orbs = {n for n in all_names if n.startswith("Sacred Orb")}
+    ankh_jewels = {n for n in all_names if n.startswith("Ankh Jewel")}
+    ankh_jewels |= set(GUARDIAN_ANKHS_ITEMS.values()) & all_names
 
     return {
         "Weapons": set(_WEAPON_NAMES),
+        "Weapon": set(_WEAPON_NAMES),
         "Subweapons": set(_SUBWEAPON_NAMES),
+        "Subweapon": set(_SUBWEAPON_NAMES),
         "Maps": {n for n in all_names if n.startswith("Map")},
         "Research": {n for n in all_names if "Research" in n},
         "Ammo": {n for n in all_names if n.endswith(" Ammo")},
-        "Crystal Skulls": {"Crystal Skull"},
-        "Skulls":{"Crystal Skull"},
-        "Ankh Jewels": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
-        "Ankhs": {"Ankh Jewel"} | set(GUARDIAN_ANKHS_ITEMS.values()),
+        "Crystal Skulls": crystal_skulls,
+        "Skulls": crystal_skulls,
+        "Skull": crystal_skulls,
+        "Ankh Jewels": ankh_jewels,
+        "Ankhs": ankh_jewels,
+        "Ankh": ankh_jewels,
         "Mantras": set(_MANTRA_NAMES),
-        "Sacred Orbs": {"Sacred Orb"},
-        "HP":{"Sacred Orb"},
+        "Sacred Orbs": sacred_orbs,
+        "Orb": sacred_orbs,
+        "HP": sacred_orbs,
+        "Beherit": {"Progressive Beherit"},
         "Software": set(_SOFTWARE_NAMES),
         "Sigils": set(_SIGIL_NAMES),
+        "Sigil": set(_SIGIL_NAMES),
         "Seals": set(_SIGIL_NAMES),
+        "Seal": set(_SIGIL_NAMES),
         "Glossary": {d.name for d in ITEM_DEFS if int(d.game_id) in GLOSSARY_ITEM_IDS},
     }
