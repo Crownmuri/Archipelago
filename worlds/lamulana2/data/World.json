@@ -1625,7 +1625,8 @@
                 "Name": "[IB E-6] Jormungand Mural Item Pot",
                 "ID": "field03E5",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Feather) or IsDead(Cetus)))"
+                "Logic": "Has(Feather) or (Has(Grapple Claw) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb))) or IsDead(Cetus)",
+                "TrickyLogic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
             },
             {
                 "Name": "[IB F-2] Map Chest Left Item Pot",
@@ -3036,7 +3037,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "DFRight",
-                "Logic": "Has(Leather Whip) or Has(Rapier) or Has(Katana) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Caltrops) or CanUse(Pistol) or Has(Claydoll Suit)"
+                "Logic": "(HorizontalAttack and CanWarp) or (Has(Leather Whip) or Has(Rapier) or Has(Katana) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Caltrops) or CanUse(Pistol) or Has(Claydoll Suit))"
             },
             {
                 "Name": "Divine Fortress Left Gate (A-3)",
@@ -4139,7 +4140,7 @@
                 "Name": "[TS C-2] Above Grail Item Pot",
                 "ID": "field08C1",
                 "LocationType": "Pot",
-                "Logic": "True"
+                "Logic": "Has(Leather Whip) or Has(Katana) or Has(Axe) or CanUse(Earth Spear) or CanUse(Flare Gun) or CanUse(Caltrops) or CanUse(Bomb)"
             },
             {
                 "Name": "[TS C-3] Spirit Palace Hidden Coin Pot",
@@ -5212,13 +5213,13 @@
                 "Name": "[DSLM E-4] Right of Pyramid Stacked Coin Pot",
                 "ID": "field11E3g",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
+                "Logic": "HorizontalAttack and (CanWarp or Has(Feather))"
             },
             {
                 "Name": "[DSLM E-4] Right of Pyramid Stacked Item Pot",
                 "ID": "field11E3",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
+                "Logic": "HorizontalAttack and (CanWarp or Has(Feather))"
             },
             {
                 "Name": "[DSLM] Enemy Glossary (Ba)",
@@ -5243,13 +5244,6 @@
                 "ID": "field11RG1",
                 "LocationType": "Glossary",
                 "Logic": "True"
-            },
-            {
-                "Name": "[DSLM B-2] Glossary in Visibly Breakable Wall",
-                "ID": "field11RG3",
-                "LocationType": "Glossary",
-                "Logic": "(MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb))",
-                "TrickyLogic": "HorizontalAttack"
             },
             {
                 "Name": "[DSLM C-4] Glossary in Breakable Wall to Atum",
@@ -5411,6 +5405,13 @@
                 "ID": "talk55",
                 "LocationType": "Glossary",
                 "Logic": "Has(Feather) or CanWarp"
+            },
+            {
+                "Name": "[DSLM B-2] Glossary in Visibly Breakable Wall",
+                "ID": "field11RG3",
+                "LocationType": "Glossary",
+                "Logic": "(MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb))",
+                "TrickyLogic": "HorizontalAttack"
             }
         ],
         "Exits": [
@@ -5522,13 +5523,13 @@
                 "Name": "[AC D-7] Annunaki Hot Spring Item Pot",
                 "ID": "field12D6",
                 "LocationType": "Pot",
-                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC D-7] Annunaki Hot Spring Coin Pot",
                 "ID": "field12D6g",
                 "LocationType": "Pot",
-                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC B-6] Path to Inferno Coin Pot",
@@ -5618,13 +5619,13 @@
                 "Name": "[AC C-6] NPC Glossary (Venum)",
                 "ID": "talk63",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))"
             },
             {
                 "Name": "[AC D-7] NPC Glossary (Sykick)",
                 "ID": "talk64",
                 "LocationType": "Glossary",
-                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC C-6] Fish Glossary (Nodoguro)",

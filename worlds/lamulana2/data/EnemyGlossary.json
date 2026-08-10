@@ -144,8 +144,7 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "DSLMMain",
-            "DSLMTop",
-            "DSLMPyramid"
+            "DSLMTop"
         ]
     },
     "enemyF00-1": {
@@ -602,8 +601,7 @@
         "KillLogic": "HorizontalAttack",
         "SpawnAreas": [
             "DSLMMain",
-            "DSLMTop",
-            "DSLMPyramid"
+            "DSLMTop"
         ]
     },
     "enemyF11-3": {
@@ -611,11 +609,7 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "DSLMMain",
-            "DSLMTop",
-            {
-                "Area": "DSLMPyramid",
-                "Logic": "HorizontalAttack"
-            }
+            "DSLMTop"
         ]
     },
     "enemyF11-4": {
