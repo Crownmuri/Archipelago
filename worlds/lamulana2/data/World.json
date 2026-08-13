@@ -3914,6 +3914,12 @@
                 "Name": "Map Chest TS",
                 "LocationType": "Chest",
                 "Logic": "Has(Katana) or CanUse(Earth Spear) or CanUse(Bomb)"
+            },
+            {
+                "Name": "[TS D-1] NPC Glossary (Kami-musubi)",
+                "ID": "talk39",
+                "LocationType": "Glossary",
+                "Logic": "(Has(Leather Whip) and (Has(Vajra) or Has(Spaulder))) or Has(Knife) or Has(Rapier) or Has(Axe) or Has(Katana) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or (CanReach(TSMain) and CanUse(Flare Gun) and HorizontalAttack)"
             }
         ],
         "Exits": [
@@ -4079,12 +4085,6 @@
                 "Logic": "CanWarp or ((Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife))"
             },
             {
-                "Name": "[TS D-1] NPC Glossary (Kami-musubi)",
-                "ID": "talk39",
-                "LocationType": "Glossary",
-                "Logic": "(CanReach(TSEntrance) and Has(Katana) or CanUse(Earth Spear) or CanUse(Bomb)) or (CanReach(TSMain) and Has(Leather Whip) or Has(Axe) or CanUse(Earth Spear) or (Has(Katana) and Has(Vajra)) or (CanUse(Flare Gun) and HorizontalAttack))"
-            },
-            {
                 "Name": "[TS C-4] NPC Glossary (Ash Geen)",
                 "ID": "talk43",
                 "LocationType": "Glossary",
@@ -4105,7 +4105,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TSEntrance",
-                "Logic": "Has(Leather Whip) or Has(Axe) or CanUse(Earth Spear) or (Has(Katana) and Has(Vajra)) or (CanUse(Flare Gun) and HorizontalAttack)"
+                "Logic": "Has(Leather Whip) or (Has(Knife) and Has(Gauntlet) and Has(Vajra) and Has(Spaulder)) or Has(Axe) or Has(Katana) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (CanUse(Flare Gun) and HorizontalAttack)"
             }
         ]
     },
