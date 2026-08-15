@@ -274,6 +274,16 @@ class LM2RandomizerCore:
         # We don't have this option in our Python version yet, so just pass
         pass
 
+    # Tower of Oannes rooms are backside areas without a Holy Grail tablet, so
+    # FDC alone cannot get you back there. Needs Hand Scanner + Totem Pole.
+    # Internal exits count here too: the gate is the room itself, not the
+    # area boundary (Right-B is only ever entered through internal exits).
+    OANNES_CHECKPOINT_AREAS = frozenset({
+        AreaID.TowerOfOannesLeftA,
+        AreaID.TowerOfOannesLeftC,
+        AreaID.TowerOfOannesRightB,
+    })
+
     def _fix_fdc_logic(self):
         """C# parity: if FDCForBacksides, add FDC requirement to non-internal exits that lead to a backside area."""
         if not self.options.require_fdc:
@@ -287,6 +297,12 @@ class LM2RandomizerCore:
                 # Must be an LM2Entrance
                 if not hasattr(exit, "exit_type") or not hasattr(exit, "connecting_area"):
                     continue
+
+                # Oannes checkpoint rooms: scanner + totem pole, any exit type.
+                if exit.connecting_area in self.OANNES_CHECKPOINT_AREAS:
+                    exit.append_logic_string(
+                        "and Has(Hand Scanner) and Has(Totem Pole)"
+                    )
 
                 # C#: exit.ExitType != ExitType.Internal
                 if exit.exit_type == ExitType.Internal:

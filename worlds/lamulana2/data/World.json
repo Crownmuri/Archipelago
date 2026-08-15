@@ -7010,7 +7010,6 @@
     {
         "ID": "TowerOfOannesLeftB",
         "Name": "Tower of Oannes Left B",
-        "IsBackside": true,
         "Locations": [],
         "Exits": [
             {
