@@ -195,6 +195,9 @@ def _apply_option_classification(world, item: Item) -> Item:
         item.classification = ItemClassification.progression
     elif item.name == "Rebirth Sigil" and world.options.oannesanity:
         item.classification = ItemClassification.progression
+    elif (item.name == "Totem Pole"
+          and world.options.oannesanity and world.options.require_fdc):
+        item.classification = ItemClassification.progression
     return item
 
 
@@ -603,6 +606,16 @@ def build_item_pool(world) -> List[Item]:
             # DLC item, so it is only pooled when oannesanity is on, and it must
             # be progression there or the entire DLC area is unreachable.
             elif item_def.name == "Rebirth Sigil" and world.options.oannesanity:
+                item.classification = ItemClassification.progression
+            # The Tower of Oannes checkpoint rooms (Left-A / Left-C / Right-B)
+            # are backside areas with no Holy Grail tablet, so FDC alone can't
+            # return you there — _fix_fdc_logic gates their exits behind
+            # Has(Hand Scanner) and Has(Totem Pole). That gate only exists when
+            # require_fdc is on, and only guards anything when oannesanity is
+            # on, but Has() ignores non-progression items, so Totem Pole must
+            # be bumped there or the DLC checkpoints are unreachable.
+            elif (item_def.name == "Totem Pole"
+                  and world.options.oannesanity and world.options.require_fdc):
                 item.classification = ItemClassification.progression
             pool.append(item)
 
