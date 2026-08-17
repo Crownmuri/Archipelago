@@ -1896,6 +1896,12 @@
                 "Logic": "True"
             },
             {
+                "Name": "[IB D-7] Inferno Corridor Coin Pot",
+                "ID": "field03D6",
+                "LocationType": "Pot",
+                "Logic": "IsDead(Cetus) and HorizontalAttack and (CanWarp or Has(Feather))"
+            },
+            {
                 "Name": "[IB B-4] Time Altar Item Pot",
                 "ID": "field03B3",
                 "LocationType": "Pot",
@@ -2109,14 +2115,7 @@
     {
         "ID": "IBLadder",
         "Name": "Immortal Battlefield Ladder",
-        "Locations": [
-            {
-                "Name": "[IB D-7] Inferno Corridor Coin Pot",
-                "ID": "field03D6",
-                "LocationType": "Pot",
-                "Logic": "HorizontalAttack and (CanWarp or Has(Feather))"
-            }
-        ],
+        "Locations": [],
         "Exits": [
             {
                 "Name": "Immortal Battlefield Down Ladder near Spinning Wheel (D-7)",
