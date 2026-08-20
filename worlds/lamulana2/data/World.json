@@ -7124,7 +7124,7 @@
                 "ID": "fEx1_R",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyRight",
-                "Logic": "Has(Feather) or CanWarp"
+                "Logic": "True"
             },
             {
                 "ConnectionType": "Internal",
@@ -7154,7 +7154,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TowerOfOannesRightA",
-                "Logic": "CanWarp"
+                "Logic": "Has(Feather) and CanWarp"
             }
         ]
     },
@@ -7193,7 +7193,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TowerOfOannesRightBCrystal",
-                "Logic": "CanWarp or Has(Feather)"
+                "Logic": "Has(Feather)"
             }
         ]
     },
@@ -7223,7 +7223,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TowerOfOannesRightB",
-                "Logic": "True"
+                "Logic": "CanWarp or Has(Feather)"
             }
         ]
     },

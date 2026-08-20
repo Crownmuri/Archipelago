@@ -849,8 +849,11 @@
                 "Area": "TowerOfOannesLeftA",
                 "Logic": "CanReach(TowerOfOannesLeftB) and Has(Feather) and HorizontalAttack and CanUse(Flare Gun)"
             },
-            "TowerOfOannesRightA",
-            "TowerOfOannesRightB"
+            "TowerOfOannesRightASlide",
+            {
+                "Area": "TowerOfOannesRightB",
+                "Logic": "Has(Feather)"
+            }
         ]
     },
     "d242": {
