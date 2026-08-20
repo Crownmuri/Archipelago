@@ -3585,7 +3585,7 @@ AP_LOCATION_NAMES = {
     "[DSLM B-5] NPC Glossary (Set)": LocationID.Glossary147,
     "[DSLM B-3] NPC Glossary (Amunet)": LocationID.Glossary148,
     "[DSLM B-2] NPC Glossary (Nun)": LocationID.Glossary149,
-    "[DSLM C-6] NPC Glossary (Ra)": LocationID.Glossary150,
+    "[GOTD E-5] NPC Glossary (Ra)": LocationID.Glossary150,
     "[DSLM C-2] NPC Glossary (Kero)": LocationID.Glossary151,
     "[DSLM B-6] NPC Glossary (Fairy Guild Lieutenant)": LocationID.Glossary152,
     "[DSLM] Enemy Glossary (Soul)": LocationID.Glossary153,

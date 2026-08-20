@@ -3847,6 +3847,12 @@
                 "Logic": "True"
             },
             {
+                "Name": "[GOTD E-5] NPC Glossary (Ra)",
+                "ID": "talk57",
+                "LocationType": "Glossary",
+                "Logic": "CanReach(DSLMMain) and PuzzleFinished(White Pedestals)"
+            },
+            {
                 "Name": "[GOTD D-6] NPC Glossary (Nephthys)",
                 "ID": "talk36",
                 "LocationType": "Glossary",
@@ -5267,12 +5273,6 @@
                 "ID": "talk56",
                 "LocationType": "Glossary",
                 "Logic": "Has(Feather)"
-            },
-            {
-                "Name": "[DSLM C-6] NPC Glossary (Ra)",
-                "ID": "talk57",
-                "LocationType": "Glossary",
-                "Logic": "PuzzleFinished(White Pedestals)"
             },
             {
                 "Name": "[DSLM C-2] NPC Glossary (Kero)",
