@@ -5081,7 +5081,7 @@
                 "Name": "Money Fairy",
                 "LocationType": "Fairy",
                 "Logic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and (CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime)",
-                "TrickyLogic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and HorizontalAttack and (Has(Gale Fibula) or CanStopTime)",
+                "TrickyLogic": "Has(Fairy Guild Pass) and Has(Freya's Pendant) and CanReach(Annwfn Main) and HorizontalAttack",
                 "Item": {
                     "Name": "Money Fairy",
                     "IsRequired": true
@@ -5285,7 +5285,7 @@
                 "ID": "talk59",
                 "LocationType": "Glossary",
                 "Logic": "(CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime)",
-                "TrickyLogic": "HorizontalAttack and (Has(Gale Fibula) or CanStopTime)"
+                "TrickyLogic": "HorizontalAttack"
             },
             {
                 "Name": "[DSLM] Enemy Glossary (Soul)",
@@ -6325,7 +6325,8 @@
             {
                 "Name": "Osiris Item",
                 "LocationType": "Dialogue",
-                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))"
+                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))",
+                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather)"
             },
             {
                 "Name": "Hraesvelgr",
@@ -6341,13 +6342,15 @@
                 "Name": "[EPD C-6] Blikjandabol Lava Drop Coin Pot",
                 "ID": "field15C5",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))"
+                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))",
+                "TrickyLogic": "Has(Feather) and (HorizontalAttack or OrbCount(3))"
             },
             {
                 "Name": "[EPD C-7] Blikjandabol Lava Drop Item Pot",
                 "ID": "field15C6",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))"
+                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))",
+                "TrickyLogic": "Has(Feather) and (HorizontalAttack or OrbCount(3))"
             },
             {
                 "Name": "[EPD D-5] Yuga Wheel Coin Pot",
@@ -6383,7 +6386,8 @@
                 "Name": "[EPD E-5] NPC Glossary (Osiris)",
                 "ID": "talk77",
                 "LocationType": "Glossary",
-                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))"
+                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))",
+                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather)"
             }
         ],
         "Exits": [
@@ -6400,7 +6404,8 @@
             {
                 "ConnectionType": "PrisonGate",
                 "ConnectingAreaID": "EPG",
-                "Logic": "Has(Grapple Claw) and (Has(Gale Fibula) or CanStopTime) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))"
+                "Logic": "Has(Grapple Claw) and (Has(Gale Fibula) or CanStopTime) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))",
+                "TrickyLogic": "Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))"
             },
             {
                 "ConnectionType": "PrisonExit",
