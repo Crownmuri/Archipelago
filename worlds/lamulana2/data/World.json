@@ -6341,13 +6341,13 @@
                 "Name": "[EPD C-6] Blikjandabol Lava Drop Coin Pot",
                 "ID": "field15C5",
                 "LocationType": "Pot",
-                "Logic": "(HorizontalAttack or OrbCount(3)) and ((Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather))))"
+                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))"
             },
             {
                 "Name": "[EPD C-7] Blikjandabol Lava Drop Item Pot",
                 "ID": "field15C6",
                 "LocationType": "Pot",
-                "Logic": "(HorizontalAttack or OrbCount(3)) and ((Has(Gale Fibula) or CanStopTime) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and Has(Anchor)) or Has(Feather))))"
+                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))"
             },
             {
                 "Name": "[EPD D-5] Yuga Wheel Coin Pot",
