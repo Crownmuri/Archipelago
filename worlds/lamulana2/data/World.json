@@ -140,7 +140,7 @@
                 "Name": "[VOD C-4] Glossary Above Hot Spring (Scan)",
                 "ID": "player3",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner) and Has(Feather)"
+                "Logic": "Has(Hand Scanner) and Has(Feather) and Has(Ruins Encyclopedia)"
             },
             {
                 "Name": "[VOD E-4] NPC Glossary (Sidro)",
