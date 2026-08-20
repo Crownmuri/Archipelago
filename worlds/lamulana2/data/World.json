@@ -6377,7 +6377,7 @@
                 "Name": "[EPD E-5] NPC Glossary (Anubis)",
                 "ID": "talk76",
                 "LocationType": "Glossary",
-                "Logic": "Has(Maat's Feather)"
+                "Logic": "Has(Maat's Feather) or Has(Claydoll Suit)"
             },
             {
                 "Name": "[EPD E-5] NPC Glossary (Osiris)",
