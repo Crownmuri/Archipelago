@@ -721,7 +721,8 @@
         "SpawnAreas": [
             "EPG",
             "EPDMain",
-            "EPDTop"
+            "EPDTop",
+            "SpiralHell"
         ]
     },
     "enemyF14-2": {
