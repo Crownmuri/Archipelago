@@ -1329,7 +1329,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "Eden",
-                "Logic": "IsDead(Heimdall) and Has(Vessel) and CanChant(Earth) and CanChant(Sun) and CanChant(Fire) and CanChant(Wind) and CanChant(Mother) and CanChant(Child) and CanChant(Night)"
+                "Logic": "IsDead(Heimdall) and CanReach(DFTop) and Has(Vessel) and CanChant(Earth) and CanChant(Sun) and CanChant(Wind) and CanChant(Mother) and CanChant(Child) and CanChant(Night)"
             }
         ]
     },
@@ -1340,7 +1340,7 @@
             {
                 "Name": "[DLC] Four Trials Reward Chest",
                 "LocationType": "Chest",
-                "Logic": "CanReach(Start) and CanReach(ITRight) and CanReach(ACBottom) and Has(Ice Cloak) and CanReach(ValhallaMain) and IsDead(Fafnir) and CanChant(Moon)"
+                "Logic": "CanReach(Start) and CanReach(AnnwfnRight) and IsDead(Ixtab) and CanReach(ITRight) and CanReach(ACMain) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))) and CanReach(ValhallaMain) and CanChant(Fire) and CanReach(HL) and IsDead(Fenrir) and CanChant(Moon)"
             }
         ],
         "Exits": [
