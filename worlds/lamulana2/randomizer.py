@@ -154,7 +154,6 @@ class LM2RandomizerCore:
     
         # Fix logic
         self._fix_nibiru_logic()
-        self._fix_fdc_logic()
         self._fix_spiral_gate_logic()
         # Branch A (guardian_specific_ankhs) is topology-independent — each
         # guardian just needs its own jewel — so it can run here. Branch B's
@@ -274,47 +273,17 @@ class LM2RandomizerCore:
         # We don't have this option in our Python version yet, so just pass
         pass
 
-    # Tower of Oannes rooms are backside areas without a Holy Grail tablet, so
-    # FDC alone cannot get you back there. Needs Hand Scanner + Totem Pole.
-    # Internal exits count here too: the gate is the room itself, not the
-    # area boundary (Right-B is only ever entered through internal exits).
+    # Tower of Oannes rooms are backside areas without a Holy Grail tablet and
+    # are very easy to die in. The temporary save point that makes them
+    # survivable needs Hand Scanner + Totem Pole, so arriving there without both
+    # is out of logic. Internal exits count too: the gate is the room itself,
+    # not the area boundary (Right-B is only ever entered through internal
+    # exits).
     OANNES_CHECKPOINT_AREAS = frozenset({
         AreaID.TowerOfOannesLeftA,
         AreaID.TowerOfOannesLeftC,
         AreaID.TowerOfOannesRightB,
     })
-
-    def _fix_fdc_logic(self):
-        """C# parity: if FDCForBacksides, add FDC requirement to non-internal exits that lead to a backside area."""
-        if not self.options.require_fdc:
-            return
-
-        for region in self.multiworld.regions:
-            if region.player != self.player:
-                continue
-
-            for exit in region.exits:
-                # Must be an LM2Entrance
-                if not hasattr(exit, "exit_type") or not hasattr(exit, "connecting_area"):
-                    continue
-
-                # Oannes checkpoint rooms: scanner + totem pole, any exit type.
-                if exit.connecting_area in self.OANNES_CHECKPOINT_AREAS:
-                    exit.append_logic_string(
-                        "and Has(Hand Scanner) and Has(Totem Pole)"
-                    )
-
-                # C#: exit.ExitType != ExitType.Internal
-                if exit.exit_type == ExitType.Internal:
-                    continue
-
-                # C#: GetArea(exit.ConnectingAreaID).IsBackside
-                dest_area_def = AREA_DEFS.get(exit.connecting_area)
-                if not dest_area_def or not dest_area_def.is_backside:
-                    continue
-
-                # C#: exit.AppendLogicString(" and Has(Future Development Company)")
-                exit.append_logic_string("and Has(Future Development Company)")
 
     def _fix_spiral_gate_logic(self):
         # Match Randomiser.cs behavior for SpiralGate exit
@@ -900,6 +869,58 @@ class LM2RandomizerCore:
             return True
 
         return True
+
+    def fix_fdc_logic_post_er(self) -> None:
+        """
+        C# parity: Randomiser.FixFDCLogic(), run from World.pre_fill().
+
+        MainViewModel calls FixAnkhLogic() then FixFDCLogic() *after*
+        PlaceEntrances(), and C# rewrites Exit.ConnectingAreaID in place when it
+        pairs entrances -- so both gates read each exit's LIVE destination. 
+
+        * backside      -> FDC, non-internal exits only (straight C# parity).
+        * Oannes rooms  -> FDC + Hand Scanner + Totem Pole, ANY exit type.
+        """
+        if not self.options.require_fdc:
+            return
+        if getattr(self, "_fdc_logic_stamped", False):
+            return
+        self._fdc_logic_stamped = True
+
+        # Without oannesanity the checkpoint rooms hold no checks and Totem Pole
+        # stays filler -- Has() ignores non-progression items, so stamping that
+        # gate would close those rooms permanently for nothing.
+        gate_checkpoints = bool(self.options.oannesanity)
+
+        for region in self.multiworld.get_regions(self.player):
+            for exit in region.exits:
+                # Must be an LM2Entrance
+                if not hasattr(exit, "exit_type") or not hasattr(exit, "connecting_area"):
+                    continue
+
+                dest = exit.connected_region
+                if dest is None:
+                    continue
+                dest_area = getattr(dest, "game_area_id", None)
+
+                # Oannes checkpoint rooms: scanner + totem pole + FDC, any type.
+                if gate_checkpoints and dest_area in self.OANNES_CHECKPOINT_AREAS:
+                    exit.append_logic_string(
+                        "and Has(Future Development Company)"
+                        " and Has(Hand Scanner) and Has(Totem Pole)"
+                    )
+
+                # C#: exit.ExitType != ExitType.Internal
+                if exit.exit_type == ExitType.Internal:
+                    continue
+
+                # C#: GetArea(exit.ConnectingAreaID).IsBackside
+                dest_area_def = AREA_DEFS.get(dest_area)
+                if not dest_area_def or not dest_area_def.is_backside:
+                    continue
+
+                # C#: exit.AppendLogicString(" and Has(Future Development Company)")
+                exit.append_logic_string("and Has(Future Development Company)")
 
     def fix_ankh_logic_post_er(self) -> None:
         """

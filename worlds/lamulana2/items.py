@@ -609,7 +609,7 @@ def build_item_pool(world) -> List[Item]:
                 item.classification = ItemClassification.progression
             # The Tower of Oannes checkpoint rooms (Left-A / Left-C / Right-B)
             # are backside areas with no Holy Grail tablet, so FDC alone can't
-            # return you there — _fix_fdc_logic gates their exits behind
+            # return you there — fix_fdc_logic_post_er gates their exits behind
             # Has(Hand Scanner) and Has(Totem Pole). That gate only exists when
             # require_fdc is on, and only guards anything when oannesanity is
             # on, but Has() ignores non-progression items, so Totem Pole must

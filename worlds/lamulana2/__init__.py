@@ -359,6 +359,14 @@ class LaMulana2World(World):
         # requirement once connect_entrances has assigned gate values.
         self.randomizer.fix_ankh_logic_post_er()
 
+        # ── RequireFDC gates ──────────────────────────────────────────
+        # Must follow ER: both the backside FDC gate and the Tower of Oannes
+        # checkpoint gate describe the area you arrive in, so they can only be
+        # stamped once each exit's live destination is known. Order matches C#
+        # (MainViewModel: FixAnkhLogic() then FixFDCLogic(), both after
+        # PlaceEntrances()).
+        self.randomizer.fix_fdc_logic_post_er()
+
         # ── Orphaned locations ────────────────────────────────────────
         # ER may hand back a layout with a few locations permanently cut off
         # (allowed for minimal/items accessibility — see custom_structural_er).
