@@ -587,7 +587,7 @@
     },
     "enemyF10-5": {
         "Name": "Enemy Glossary (Cabracan)",
-        "KillLogic": "HorizontalAttack",
+        "KillLogic": "True",
         "SpawnAreas": [
             "ValhallaMain"
         ]
@@ -839,6 +839,7 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "TowerOfOannesLeftA",
+            "TowerOfOannesLeftC",
             "TowerOfOannesLeftCTop"
         ]
     },
@@ -866,7 +867,7 @@
     },
     "d243": {
         "Name": "Enemy Glossary (Fish Wall'22)",
-        "KillLogic": "(MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))",
+        "KillLogic": "True",
         "SpawnAreas": [
             "TowerOfOannesLeftA",
             "TowerOfOannesLeftC"

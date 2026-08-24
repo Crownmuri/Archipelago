@@ -290,7 +290,7 @@
                 "Name": "[GOG B-4] NPC Glossary (Hiner)",
                 "ID": "talk81",
                 "LocationType": "Glossary",
-                "Logic": "Has(Ruins Encyclopedia)"
+                "Logic": "CanReach(Gate of Illusion) and HorizontalAttack and Has(Ruins Encyclopedia)"
             }
         ],
         "Exits": [
@@ -2679,7 +2679,7 @@
                 "Name": "[IT E-1] NPC Glossary (Inanna)",
                 "ID": "talk17",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance))"
+                "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance)) or CanReach(EPDMain) or CanReach(EPG)"
             },
             {
                 "Name": "[IT E-2] NPC Glossary (Enimul)",
@@ -4510,6 +4510,11 @@
                 "Logic": "CanChant(Heaven)"
             },
             {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "HLCog",
+                "Logic": "CanWarp"
+            },
+            {
                 "Name": "Heavens Labyrinth Soul Gate (E-5)",
                 "ID": "f09GateN5",
                 "ConnectionType": "SoulGate",
@@ -4629,6 +4634,11 @@
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "HLGate",
                 "Logic": "True"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "HLCog",
+                "Logic": "IsDead(Scylla)"
             }
         ]
     },
@@ -4699,7 +4709,7 @@
             {
                 "Name": "Caltrop Puzzle Reward",
                 "LocationType": "FreeStanding",
-                "Logic": "True"
+                "Logic": "HorizontalAttack"
             },
             {
                 "Name": "Bargain Duck Shop 1",
@@ -4809,7 +4819,7 @@
                 "Name": "[VAL C-4] Above Laser Statue Weight Pot",
                 "ID": "field10C3-1",
                 "LocationType": "Pot",
-                "Logic": "True"
+                "Logic": "HorizontalAttack"
             },
             {
                 "Name": "[VAL D-3] Near Third Trickster Item Pot",
@@ -5996,7 +6006,8 @@
                 "Name": "[HOM E-2] Crusher Trap Hidden Coin Pot",
                 "ID": "field13B2",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather)"
+                "TrickyLogic": "Has(Feather) or CanUse(Bomb) or (CanUse(Flare Gun) and MeleeAttack) or CanUse(Earth Spear)",
+                "Logic": "Has(Feather) or (CanUse(Bomb) and MeleeAttack) or (CanUse(Flare Gun) and MeleeAttack) or CanUse(Earth Spear)"
             },
             {
                 "Name": "[HOM F-5] Corridor of Blood Coin Pot",
@@ -6682,7 +6693,7 @@
                 "Name": "[EPG F-2] Right of Prison Cells Coin Pot",
                 "ID": "field14F1",
                 "LocationType": "Pot",
-                "Logic": "((Has(Feather) and HorizontalAttack) or IsDead(Vidofnir))"
+                "Logic": "(((Has(Feather) or Has(Grapple Claw)) and HorizontalAttack and CanWarp) or IsDead(Vidofnir))"
             },
             {
                 "Name": "[EP] Enemy Glossary (Hekatonkheires)",
@@ -6724,7 +6735,7 @@
                 "Name": "[EPG F-2] NPC Glossary (Ereshkigal)",
                 "ID": "talk69",
                 "LocationType": "Glossary",
-                "Logic": "((Has(Feather) and HorizontalAttack) or IsDead(Vidofnir))"
+                "Logic": "(((Has(Feather) or Has(Grapple Claw)) and HorizontalAttack) or IsDead(Vidofnir))"
             },
             {
                 "Name": "[EPG B-5] NPC Glossary (Hades)",
@@ -6926,8 +6937,7 @@
             {
                 "Name": "Fish-Valusa Re-gyo-ded",
                 "LocationType": "Miniboss",
-                "Logic": "Has(Feather) and CanUse(Flare Gun) and (MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))) and OrbCount(2)",
-                "HardLogic": "Has(Feather) and CanUse(Flare Gun)",
+                "Logic": "Has(Feather) and CanUse(Flare Gun) and HorizontalAttack",
                 "Item": {
                     "Name": "Fish-Valusa Re-gyo-ded",
                     "IsRequired": false
@@ -7067,12 +7077,12 @@
                 "ID": "fEx1_L5",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "BaileyLevel3",
-                "Logic": "IsDead(Fish-Slime Zero) and (MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder)))"
+                "Logic": "IsDead(Fish-Slime Zero) and HorizontalAttack"
             },
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "TowerOfOannesLeftCTop",
-                "Logic": "MeleeAttack and (Has(Vajra) or Has(Gauntlet) or Has(Spaulder))"
+                "Logic": "HorizontalAttack"
             }
         ]
     },
@@ -7084,8 +7094,8 @@
             {
                 "Name": "Fish-Slime Zero",
                 "LocationType": "Miniboss",
-                "Logic": "IsDead(Fish-Valusa Re-gyo-ded) and ((CanUse(Flare Gun) and Has(Ring)) or CanUse(Pistol)) and OrbCount(2)",
-                "HardLogic": "True",
+                "Logic": "IsDead(Fish-Valusa Re-gyo-ded) and CanUse(Flare Gun) and OrbCount(2)",
+                "HardLogic": "IsDead(Fish-Valusa Re-gyo-ded)",
                 "Item": {
                     "Name": "Fish-Slime Zero",
                     "IsRequired": false
