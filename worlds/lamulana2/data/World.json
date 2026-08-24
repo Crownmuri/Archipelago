@@ -6353,15 +6353,15 @@
                 "Name": "[EPD C-6] Blikjandabol Lava Drop Coin Pot",
                 "ID": "field15C5",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))",
-                "TrickyLogic": "Has(Feather) and (HorizontalAttack or OrbCount(3))"
+                "Logic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or (CanStopTime and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1)))) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))",
+                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
             },
             {
                 "Name": "[EPD C-7] Blikjandabol Lava Drop Item Pot",
                 "ID": "field15C6",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or CanStopTime or (CanReach(EPG) and (Has(Claydoll Suit) or Has(Ice Cloak))))",
-                "TrickyLogic": "Has(Feather) and (HorizontalAttack or OrbCount(3))"
+                "Logic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or (CanStopTime and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1)))) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))",
+                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
             },
             {
                 "Name": "[EPD D-5] Yuga Wheel Coin Pot",
