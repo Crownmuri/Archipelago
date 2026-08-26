@@ -225,6 +225,9 @@ def _apply_option_classification(world, item: Item) -> Item:
     elif (item.name == "Totem Pole"
           and world.options.oannesanity and world.options.require_fdc):
         item.classification = ItemClassification.progression
+    elif (item.name in ("Harp", "Ganesha's Talisman")
+          and getattr(world.options, "include_expensive_shop_item", False)):
+        item.classification = ItemClassification.progression
     elif (item.name in COSTUME_CLIP_ITEMS
           and world.options.costumesanity and world.options.costume_clip):
         item.classification = ItemClassification.progression
@@ -714,6 +717,12 @@ def build_item_pool(world) -> List[Item]:
             # be bumped there or the DLC checkpoints are unreachable.
             elif (item_def.name == "Totem Pole"
                   and world.options.oannesanity and world.options.require_fdc):
+                item.classification = ItemClassification.progression
+            # Expensive item slot requirements:
+            # Has(Harp) to reduce the price of the item to 50 or
+            # Has(Ganesha's Talisman) to get 4 digit money
+            elif (item_def.name in ("Harp", "Ganesha's Talisman")
+                  and getattr(world.options, "include_expensive_shop_item", False)):
                 item.classification = ItemClassification.progression
             # Glitch(Costume Clip) item requirements when costumes are shuffled.
             # A costume needs to be found in order to do the clips

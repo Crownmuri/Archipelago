@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from http.client import CONFLICT
 import random
-from typing import Dict, List, Tuple, NamedTuple
+from typing import Dict, List, Optional, Tuple, NamedTuple
 from collections import Counter
 
 from BaseClasses import Item, CollectionState, ItemClassification, LocationProgressType  #
@@ -30,6 +30,8 @@ from .ids import (
     LOGIC_FLAG_ITEM_IDS,
     AP_ITEM_PLACEHOLDER,
     GLOSSARY_ITEM_IDS,
+    AMMO_ITEM_IDS,
+    FILLER_ITEM_IDS,
 )
 from .items import (
     build_item_pool,
@@ -755,6 +757,64 @@ class LM2RandomizerCore:
                 _log(f"[DEBUG] Placed Weights at Starting Shop 3")
 
 
+    # Price tag for the optional expensive slot, in coins.
+    EXPENSIVE_SHOP_PRICE = 1000
+
+    # Buying it needs either the Harp to drop the price to 50 or
+    # Ganesha's Talisman plus the Money Fairy to farm the coins.
+    EXPENSIVE_SHOP_LOGIC = (
+        "and (Has(Harp) or (Has(Ganesha's Talisman) and Has(Money Fairy)))"
+    )
+
+    def pick_expensive_shop_slot_post_er(self) -> None:
+        """
+        Choose the 1000-coin shop slot and gate it, from World.pre_fill().
+
+        Runs before fill so the logic gate is in place while items are placed;
+        the price itself is stamped later in _adjust_shop_prices(), once the
+        slot's item is actually known.
+        """
+        self.expensive_shop_location = None
+        if not getattr(self.options, "include_expensive_shop_item", False):
+            return
+
+        # The gate has to be stamped before fill, excluding ammo/filler/weights
+        skip_ids = AMMO_ITEM_IDS | FILLER_ITEM_IDS | {ItemID.Weights}
+        candidates = []
+        for loc_id, loc in self.locations.items():
+            if not is_shop_location(loc):
+                continue
+            item = loc.item
+            if item is not None:
+                try:
+                    if get_game_item_id(item) in skip_ids:
+                        continue
+                except Exception:
+                    continue
+            candidates.append((loc_id, loc))
+
+        if not candidates:
+            _log("[DEBUG] Expensive shop item: no eligible slot")
+            return
+
+        # With vanilla shops, use the originally expensive Enga Musica:
+        chosen = None
+        if self.options.shop_placement == self.options.shop_placement.option_original:
+            chosen = next(
+                ((lid, loc) for lid, loc in candidates
+                 if lid == LocationID.BTKShop3),
+                None,
+            )
+            if chosen is None:
+                _log("[DEBUG] Expensive shop item: BTK Shop 3 not eligible, "
+                     "falling back to a random slot")
+
+        loc_id, loc = chosen if chosen is not None else self.rng.choice(candidates)
+        loc.append_logic_string(self.EXPENSIVE_SHOP_LOGIC)
+        self.expensive_shop_location = loc_id
+        _log(f"[DEBUG] Expensive shop slot: {loc.name} "
+             f"({self.EXPENSIVE_SHOP_PRICE} coins)")
+
     def _adjust_shop_prices(self):
         """
         Assign shop prices based on which sphere the item becomes reachable in.
@@ -763,25 +823,73 @@ class LM2RandomizerCore:
         C# range: multiplier 5-9  (sphere 1 = 5, sphere 5+ = 9)
         AP range:  multiplier 4-8  (scaled on total amount of spheres)
         """
+        ap_map = self._get_ap_placeholder_map()
+        for loc_id, loc in self.locations.items():
+            if not is_shop_location(loc) or loc.item is None:
+                continue
+            if any(e.location_id == loc_id for e in self.shop_entries):
+                continue
+            if loc.item.player != self.player:
+                item_id = ap_map.get(loc_id, AP_ITEM_PLACEHOLDER)
+            else:
+                try:
+                    item_id = get_game_item_id(loc.item)
+                except Exception:
+                    continue
+            self.shop_entries.append(ShopEntry(loc_id, item_id, 5))
+
         entry_index = {}
         for i, entry in enumerate(self.shop_entries):
             entry_index[entry.location_id] = i
 
+        # Pass 1 -- fixed prices. Ammo stays at vanilla (ShopPrice x 10) and
+        # weights are static mod-side; neither is worth scaling by sphere.
+        fixed = set()
+        for i, entry in enumerate(self.shop_entries):
+            if entry.item_id in AMMO_ITEM_IDS:
+                fixed.add(entry.location_id)
+                self.shop_entries[i] = ShopEntry(entry.location_id, entry.item_id, 10)
+            elif entry.item_id == ItemID.Weights or entry.item_id in FILLER_ITEM_IDS:
+                fixed.add(entry.location_id)
+
+        # Expensive slot: the mod computes price as ShopPrice x
+        # Multiplier, and an AP placeholder has no ItemDB entry so its
+        # ShopPrice defaults to 10 -- hence 1500 / 10. A real item's ShopPrice
+        # varies, so this lands on the intended number only for AP items until
+        # the mod takes an absolute price.
+        expensive_loc = getattr(self, "expensive_shop_location", None)
+
         if not entry_index:
             return
 
-        # Collect all spheres first so we know the total count for scaling.
+        # Ranking the distinct sphere numbers that actually contain shop slots
+        # spreads the range across the shops that exist: the first-reachable
+        # shops get min, the last-reachable get max, and ties (all the sphere-0
+        # shops) price identically.
         spheres = list(self.multiworld.get_spheres())
-        total_spheres = max(len(spheres), 1)
 
-        min_mult = 4
-        max_mult = 8
+        shop_spheres = sorted({
+            idx for idx, sphere in enumerate(spheres)
+            for location in sphere
+            if location.player == self.player
+            and getattr(location, "game_location_id", None) in entry_index
+            and getattr(location, "game_location_id", None) not in fixed
+        })
+        rank_of = {sphere_idx: rank for rank, sphere_idx in enumerate(shop_spheres)}
+        last_rank = max(len(shop_spheres) - 1, 1)
+
+        # ShopPrice x multiplier is the mod's formula, and an AP placeholder
+        # has no ItemDB entry so its ShopPrice defaults to 10 -- these bounds
+        # put a foreign item at 50 in the earliest shops and 100 in the latest.
+        min_mult = 5
+        max_mult = 10
 
         assigned = set()
 
         for sphere_idx, sphere in enumerate(spheres):
-            # Linear interpolation across the full sphere range
-            t = sphere_idx / (total_spheres - 1) if total_spheres > 1 else 0.0
+            if sphere_idx not in rank_of:
+                continue
+            t = rank_of[sphere_idx] / last_rank
             multiplier = round(min_mult + t * (max_mult - min_mult))
 
             for location in sphere:
@@ -790,9 +898,16 @@ class LM2RandomizerCore:
                 loc_id = getattr(location, "game_location_id", None)
                 if loc_id is None or loc_id not in entry_index or loc_id in assigned:
                     continue
+                if loc_id in fixed:
+                    continue
 
-                item = location.item
-                if item is None or item.classification != ItemClassification.progression:
+                # Pass 2 -- rank scaling. Every non-fixed shop slot is priced,
+                # whoever the item belongs to and whatever its classification:
+                # what is being priced is how deep into the seed the slot
+                # unlocks, which is equally true of a foreign item or one of
+                # our own "useful" ones. Restricting this to progression left
+                # half the shops sitting at the backfill default.
+                if location.item is None:
                     continue
 
                 assigned.add(loc_id)
@@ -803,6 +918,29 @@ class LM2RandomizerCore:
                     item_id=old.item_id,
                     price_multiplier=multiplier
                 )
+
+        if expensive_loc is not None and expensive_loc in entry_index:
+            loc = self.locations.get(expensive_loc)
+            final_item = loc.item if loc is not None else None
+            try:
+                final_id = get_game_item_id(final_item) if final_item else None
+            except Exception:
+                final_id = None
+            if final_id is not None and final_id in (
+                    AMMO_ITEM_IDS | FILLER_ITEM_IDS | {ItemID.Weights}):
+                _log("[DEBUG] Expensive shop slot ended up holding filler/ammo; "
+                     "leaving it at the normal price")
+                expensive_loc = None
+        if expensive_loc is not None and expensive_loc in entry_index:
+            i = entry_index[expensive_loc]
+            old = self.shop_entries[i]
+            self.shop_entries[i] = ShopEntry(
+                location_id=old.location_id,
+                item_id=old.item_id,
+                price_multiplier=self.EXPENSIVE_SHOP_PRICE // 10,
+            )
+            _log(f"[DEBUG] Expensive shop slot priced: {old.location_id} "
+                 f"-> multiplier {self.EXPENSIVE_SHOP_PRICE // 10}")
 
     def _get_ammo_for_weapon(self, weapon_id: ItemID) -> ItemID:
         """Get the corresponding ammo item for a starting weapon."""

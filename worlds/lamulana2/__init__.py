@@ -386,6 +386,12 @@ class LaMulana2World(World):
         # PlaceEntrances()).
         self.randomizer.fix_fdc_logic_post_er()
 
+        # ── Expensive shop slot ────────────────────────────────
+        # Must follow ER: the gate names CanReach(DSLMMain), so it can only be
+        # judged once the entrance graph is final. Picks the slot and stamps
+        # the logic; the price lands in _adjust_shop_prices() after fill.
+        self.randomizer.pick_expensive_shop_slot_post_er()
+
         # ── Orphaned locations ────────────────────────────────────────
         # ER may hand back a layout with a few locations permanently cut off
         # (allowed for minimal/items accessibility — see custom_structural_er).

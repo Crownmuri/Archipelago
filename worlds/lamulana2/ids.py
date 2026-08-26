@@ -4175,6 +4175,14 @@ USELESS_ITEM_IDS = {
     ItemID.Map15,
     ItemID.Map16,
 }
+# Subweapon ammo -- priced at vanilla (ShopPrice x 10) and never sphere-scaled
+# or picked for the expensive shop slot.
+AMMO_ITEM_IDS = {
+    ItemID.ShurikenAmmo, ItemID.RollingShurikenAmmo, ItemID.EarthSpearAmmo,
+    ItemID.FlareAmmo, ItemID.BombAmmo, ItemID.ChakramAmmo,
+    ItemID.CaltropsAmmo, ItemID.PistolAmmo,
+}
+
 FILLER_ITEM_IDS = {
     ItemID.ChestWeight01,
     ItemID.ChestWeight02,

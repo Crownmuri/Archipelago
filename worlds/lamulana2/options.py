@@ -141,6 +141,12 @@ class ShopPlacement(Choice):
     option_shuffled = 2
     default = 2
 
+class IncludeExpensiveShopItem(Toggle):
+    """Put one random shop slot at a 1000 coin price tag.
+    Buying it is logically gated behind either the Harp which discounts the item,
+    or Ganesha's Talisman plus Money Fairy access to farm the coins required."""
+    display_name = "Include Expensive Item in Shop"
+
 class RandomResearch(DefaultOnToggle):
     """Add all Kosugi Research Papers into the AP item pool.
     If disabled, they will be static untracked locations in-game."""
@@ -543,6 +549,7 @@ class LM2Options(PerGameCommonOptions):
     random_maps_software: RandomMapsSoftware
     mantra_placement: MantraPlacement
     shop_placement: ShopPlacement
+    include_expensive_shop_item: IncludeExpensiveShopItem
 
     # Item Pool Adjustments
     random_research: RandomResearch
