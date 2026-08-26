@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import struct
-from typing import BinaryIO, Dict, Iterable, List, Tuple
+from typing import BinaryIO, Dict, List, Tuple
 
-from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID, potsanity_pools_enabled, POT_FLAG_MAP, LEGACY_LOCATION_IDS
+from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, potsanity_pools_enabled, POT_FLAG_MAP, LEGACY_LOCATION_IDS
 
 # ============================================================
 # AP item -> LM2 seed encoding (write-time only)

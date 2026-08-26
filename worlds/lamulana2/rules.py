@@ -55,29 +55,3 @@ def can_complete_game(state, player: int, world) -> bool:
         return state.has_group("Glossary", player, required)
 
     return state.has("Ninth Child", player)
-
-
-def set_location_access_rule(world, location_name: str, rule_func):
-    """
-    Helper to set a custom access rule for a specific location.
-    
-    Args:
-        world: The LM2 world
-        location_name: Name of the location
-        rule_func: Lambda function taking (state) and returning bool
-    """
-    location = world.multiworld.get_location(location_name, world.player)
-    location.access_rule = rule_func
-
-
-def set_entrance_access_rule(world, entrance_name: str, rule_func):
-    """
-    Helper to set a custom access rule for a specific entrance.
-    
-    Args:
-        world: The LM2 world  
-        entrance_name: Name of the entrance
-        rule_func: Lambda function taking (state) and returning bool
-    """
-    entrance = world.multiworld.get_entrance(entrance_name, world.player)
-    entrance.access_rule = rule_func

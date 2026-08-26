@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -334,20 +334,6 @@ def _get_classification(item_def: ItemDef) -> ItemClassification:
         return ItemClassification.trap
     else:
         return ItemClassification.useful
-
-def create_filler_item(world, name: str, game_item_id: int) -> Item:
-    """
-    Create a non-logic filler item backed only by a game ItemID.
-    Uses the game's ItemID enum value and converts to AP ID.
-    """
-    ap_id = BASE_ITEM_ID + game_item_id
-    
-    return Item(
-        name=name,
-        classification=ItemClassification.filler,
-        code=ap_id,
-        player=world.player
-    )
 
 def create_logic_flag_item(world, item_name: str) -> Item:
     """

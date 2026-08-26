@@ -436,36 +436,6 @@ def is_shop_location(loc: LM2Location) -> bool:
     return loc.location_type == LocationType.Shop
 
 
-def is_mural_location(loc: LM2Location) -> bool:
-    """Check if location is a mural (for mantra placement)."""
-    return loc.location_type == LocationType.Mural
-
-
-def is_guardian_location(loc: LM2Location) -> bool:
-    """Check if location is a guardian boss."""
-    return loc.location_type == LocationType.Guardian
-
-
-def is_miniboss_location(loc: LM2Location) -> bool:
-    """Check if location is a miniboss."""
-    return loc.location_type == LocationType.Miniboss
-
-
-def is_chest_location(loc: LM2Location) -> bool:
-    """Check if location is a chest."""
-    return loc.location_type == LocationType.Chest
-
-
-def is_pot_location(loc: LM2Location) -> bool:
-    """Check if location is a pot."""
-    return loc.location_type == LocationType.Pot
-
-
-def is_dissonance_location(loc: LM2Location) -> bool:
-    """Check if location is a dissonance check."""
-    return loc.location_type == LocationType.Dissonance
-
-
 def get_locations_of_type(locations: Dict[LocationID, LM2Location], 
                           loc_type: LocationType) -> list[LM2Location]:
     """Get all locations of a specific type."""

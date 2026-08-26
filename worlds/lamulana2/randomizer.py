@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from http.client import CONFLICT
-import random
-from typing import Dict, List, Optional, Tuple, NamedTuple
-from collections import Counter
+from typing import Dict, List, Tuple, NamedTuple
 
-from BaseClasses import Item, CollectionState, ItemClassification, LocationProgressType  #
+from BaseClasses import Item, CollectionState, ItemClassification
 
 from . import _log
 
@@ -13,12 +10,10 @@ from .ids import (
     AreaID, 
     ItemID, 
     LocationID,
-    ExitID,
     MANTRA_ITEMS, 
     MANTRA_LOCATIONS, 
     ORIGINAL_SHOPS,
     ORIGINAL_SHOP_ITEMS,
-    ORIGINAL_SHOP_PRICES,
     get_item_name_from_id,
     SHOP_ITEM_IDS,
     SHOP_WRITE_ORDER,
@@ -29,18 +24,13 @@ from .ids import (
     LOGIC_FLAG_LOCATION_IDS,
     LOGIC_FLAG_ITEM_IDS,
     AP_ITEM_PLACEHOLDER,
-    GLOSSARY_ITEM_IDS,
     AMMO_ITEM_IDS,
     FILLER_ITEM_IDS,
 )
 from .items import (
-    build_item_pool,
-    apply_starting_inventory,
     get_game_item_id,
     create_item,
-    create_filler_item,
     create_logic_flag_item,
-    get_starting_item_ids,
     build_pre_filler,
     AP_FILLER,
     INTERNAL_POOL_BY_REWARD,
@@ -48,14 +38,9 @@ from .items import (
     LM2Item,
 )
 from .locations import (
-    create_locations,
     LM2Location,
     LocationType,
     is_shop_location,
-    is_mural_location,
-    is_chest_location,
-    is_guardian_location,
-    is_miniboss_location,
     get_locations_of_type,
     get_unplaced_locations_of_type
 )
@@ -64,7 +49,6 @@ from .regions import (
     ExitType,
     LM2Entrance
 )
-from .entrances import EntrancePair, SoulGatePair
 from .logic.player_state import PlayerStateAdapter
 
 class ShopEntry(NamedTuple):
@@ -186,7 +170,7 @@ class LM2RandomizerCore:
                         mw.itempool.remove(pool_item)
                         _log(f"[DEBUG] Removed {item_name} (ID: {item_id}) from pool")
                         return True
-                except:
+                except Exception:
                     continue
     
         # If not found by ID, try to remove any item with the same name
@@ -242,7 +226,7 @@ class LM2RandomizerCore:
                 loc.item = None
                 flag_item = create_logic_flag_item(self.world, expected_item_name)
                 flag_item.player = player  # CRITICAL!
-                loc.event = True   # must be set BEFORE push_item for AP event handling
+                # loc.event = True flag no longer exists in AP 0.6.8.
                 loc.address = None
                 mw.push_item(loc, flag_item, collect=False)
                 loc.locked = True
@@ -1242,7 +1226,7 @@ class LM2RandomizerCore:
                 loc = self.locations[loc_id]
                 # IMPORTANT: Use create_logic_flag_item with name "Dissonance"
                 flag_item = create_logic_flag_item(self.world, "Dissonance")
-                loc.event = True   # must be set BEFORE push_item
+                # loc.event = True flag no longer exists in AP 0.6.8.
                 loc.address = None
                 self.multiworld.push_item(loc, flag_item, collect=False)
                 loc.locked = True
@@ -1394,7 +1378,7 @@ class LM2RandomizerCore:
 
 
     # ============================================================
-    # Filler ID pre-computation (must run in post_fill, before
+    # Filler ID pre-computation (must run in pre_output, before
     # the thread pool that runs generate_output + write_multidata
     # concurrently — otherwise loc.item mutations race with the
     # multidata builder reading location.item.code)
@@ -1404,10 +1388,11 @@ class LM2RandomizerCore:
         """Assign unique internal filler IDs for every location and sync
         ``loc.item`` when the fallback path changes the reward type.
 
-        Must be called from ``post_fill()`` so that mutations to
-        ``loc.item.name`` / ``loc.item.code`` are visible to
-        ``write_multidata()``, which runs concurrently with
-        ``generate_output()`` in the AP thread pool.
+        Called from ``World.pre_output()``. It has to run there (or earlier)
+        because mutations to ``loc.item.name`` / ``loc.item.code`` must land
+        before ``write_multidata()``, which runs concurrently with
+        ``generate_output()`` in the AP thread pool that Main.py starts after
+        ``pre_output``.
         """
         self._filler_id_cache: Dict[LocationID, ItemID] = {}
 
@@ -1524,7 +1509,7 @@ class LM2RandomizerCore:
             if is_shop_location(loc):
                 continue
 
-            # Use pre-computed filler ID (assigned in post_fill)
+            # Use pre-computed filler ID (assigned in pre_output)
             item_id = self._filler_id_cache.get(loc.game_location_id, item_id)
 
             result.append((loc.game_location_id, item_id))
@@ -1563,7 +1548,7 @@ class LM2RandomizerCore:
             else:
                 try:
                     item_id = get_game_item_id(loc.item)
-                except:
+                except Exception:
                     continue
                 # Own glossary ROM / pot filler at a shop has no sold-out/check flag of its
                 # own — route it through the per-location placeholder so the shop's sheet-31
@@ -1575,7 +1560,7 @@ class LM2RandomizerCore:
             if item_id == ItemID.None_:
                 continue
 
-            # Use pre-computed filler ID (assigned in post_fill)
+            # Use pre-computed filler ID (assigned in pre_output)
             item_id = self._filler_id_cache.get(loc_id, item_id)
 
             # Get price - look in shop_entries first, then use default

@@ -1,4 +1,3 @@
-from typing import Dict
 from dataclasses import dataclass
 from Options import Choice, Toggle, DefaultOnToggle, Range, ItemsAccessibility, PerGameCommonOptions, DeathLink
 

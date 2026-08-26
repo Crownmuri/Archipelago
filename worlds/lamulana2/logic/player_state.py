@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, List, Optional, Dict, Set
+from typing import TYPE_CHECKING, List, Dict, Set
 import re
 import weakref
 
@@ -12,7 +12,7 @@ from .logic_data import (
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState, MultiWorld
-    from ..locations import LM2Location, LocationType
+    from ..locations import LM2Location
     from ..regions import LM2Entrance
 
 import weakref as _weakref

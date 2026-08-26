@@ -16,23 +16,19 @@ import os
 import zipfile
 from typing import Dict, List, Tuple
 
-from BaseClasses import Region, ItemClassification, Tutorial, CollectionState, LocationProgressType
+from BaseClasses import ItemClassification, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule
-from Options import Accessibility
 
 from .options import LM2Options, StartingArea, StartingWeapon, ShopPlacement
 from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
-    ITEM_DEFS, AP_FILLER, AP_FILLER_NAMES, FILLER_DISTRIBUTION,
-    create_filler_item, POT_FILLER_DISTRIBUTION, INTERNAL_ID_TO_REWARD,
+    ITEM_DEFS, AP_FILLER, FILLER_DISTRIBUTION,
     build_pot_filler_pool, build_item_name_groups
 )
 from .locations import (
     LM2Location, AreaID, create_locations, LOCATION_DEFS, LocationType,
-    LOCATION_DEFS_BY_AP_ID, LOCATION_DEFS_BY_NAME, LM2LocationDef,
-    AP_LOCATION_DEFS, build_location_name_groups
+    LM2LocationDef, AP_LOCATION_DEFS, build_location_name_groups
 )
 from .regions import create_regions
 from .rules import set_rules

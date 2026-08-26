@@ -4,7 +4,7 @@ import re
 import random
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Set, Tuple
-from collections import defaultdict, deque
+from collections import defaultdict
 
 from . import _log
 from .ids import ExitID, AreaID, LOGIC_FLAG_MAP

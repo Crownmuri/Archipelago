@@ -9,7 +9,6 @@ from typing import Dict, List, Optional
 
 from BaseClasses import Region, Entrance
 
-from . import _log
 from .ids import AreaID, ExitID
 from .logic.logic_tree import LogicTree
 from .logic.logic_tokens import LogicTokeniser
