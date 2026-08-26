@@ -1140,56 +1140,45 @@ class LM2RandomizerCore:
                 loc.locked = False
                 item.location = None
 
-        # Placement order matters (a mantra that gates the only remaining
-        # reachable mural must not be placed last), so reshuffle and retry.
-        MAX_ORDER_RETRIES = 15
+        # Assumed fill, the same algorithm AP uses for its own progression
+        # placement. The previous forward-greedy loop ("take the next mantra,
+        # drop it in any currently-reachable mural") could paint itself into a
+        # corner -- a mantra that gates the only remaining mural had to be
+        # placed before it, and reshuffling the order 15 times only sometimes
+        # stumbled onto a working sequence.
+        #
+        # fill_restrictive walks the items in reverse against a state that
+        # assumes every not-yet-placed mantra is already held, and can SWAP an
+        # already-placed item out when it hits a dead end.
+        from Fill import fill_restrictive
 
-        for attempt in range(MAX_ORDER_RETRIES):
-            trial_mantras = list(mantra_items)
-            self.rng.shuffle(trial_mantras)
-            trial_murals = list(mural_locations)
-            placements = []
-            pending = {it.name for it in trial_mantras}
+        base = CollectionState(self.multiworld)
+        for item in mw.itempool:
+            if item.player == player and not is_mantra_item(item):
+                base.collect(item, prevent_sweep=True)
 
-            ok = True
-            for mantra_item in trial_mantras:
-                state = sweep_state(pending)
-
-                self.rng.shuffle(trial_murals)
-                chosen_idx = -1
-                for i, loc in enumerate(trial_murals):
+        remaining_items = list(mantra_items)
+        remaining_locs = list(mural_locations)
+        self.rng.shuffle(remaining_locs)
                     try:
-                        if loc.can_reach(state):
-                            chosen_idx = i
-                            break
-                    except Exception:
-                        continue
+            fill_restrictive(
+                mw, base, remaining_locs, remaining_items,
+                single_player_placement=True, lock=True,
+                name="LM2 only_murals mantras",
+            )
+        except Exception as exc:
+            _log(f"[ERROR] only_murals fill_restrictive failed: {exc!r}")
+            return False
 
-                if chosen_idx < 0:
-                    _log(f"[ER] only_murals attempt {attempt + 1}: no reachable mural "
-                         f"left for {mantra_item.name}, reshuffling...")
-                    ok = False
-                    break
+        if remaining_items:
+            _log(f"[ERROR] only_murals: {len(remaining_items)} mantra(s) could "
+                 f"not be placed at a reachable mural")
+            return False
 
-                chosen_loc = trial_murals.pop(chosen_idx)
-                mw.push_item(chosen_loc, mantra_item, collect=False)
-                chosen_loc.locked = True
-                placements.append((chosen_loc, mantra_item))
-                pending.discard(mantra_item.name)
-
-            if ok:
-                for _loc, item in placements:
+        for item in mantra_items:
                     if item in mw.itempool:
                         mw.itempool.remove(item)
-                if attempt > 0:
-                    _log(f"[ER] only_murals succeeded on attempt {attempt + 1}")
                 return True
-
-            undo(placements)
-
-        _log(f"[ERROR] Could not place all mantras at reachable murals after "
-             f"{MAX_ORDER_RETRIES} attempts")
-        return False
 
 
     # ============================================================

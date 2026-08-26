@@ -73,13 +73,12 @@ class TestRequireFDCWithER(LM2TestBase):
     }
 
     def _live_exits(self):
-        for region in self.multiworld.get_regions(self.player):
-            for exit_ in region.exits:
-                logic = getattr(exit_, "_original_logic", None)
-                dest = exit_.connected_region
-                if logic is None or dest is None:
-                    continue
-                yield exit_, logic, dest, getattr(dest, "game_area_id", None)
+        for exit_ in self.multiworld.get_entrances(self.player):
+            logic = getattr(exit_, "_original_logic", None)
+            dest = exit_.connected_region
+            if logic is None or dest is None:
+                continue
+            yield exit_, logic, dest, exit_.destination_area
 
     def test_checkpoint_gate_follows_live_destination(self):
         from ..randomizer import LM2RandomizerCore
@@ -106,11 +105,10 @@ class TestRequireFDCWithER(LM2TestBase):
 
         # A couple of World.json exits name FDC in their own logic (the EPG
         # internal exit routes through a backside warp). Those are not stamps,
-        # so exempt them rather than counting them as one.
-        # Keyed on the vanilla (parent, connecting) pair -- connecting_area is
-        # never rewritten by ER, so it still identifies the exit definition.
+        # so exempt them rather than counting them as one. Exit names are
+        # globally unique, so the name alone identifies the definition.
         native = {
-            (ed.parent_area, ed.connecting_area, ed.name)
+            ed.name
             for area_def in AREA_DEFS.values()
             for ed in area_def.exits
             if any(gate in (s or "")
@@ -118,8 +116,7 @@ class TestRequireFDCWithER(LM2TestBase):
         }
 
         for exit_, logic, dest, dest_area in self._live_exits():
-            if (exit_.parent_area, exit_.connecting_area,
-                    exit_.name) in native:
+            if exit_.name in native:
                 continue
             area_def = AREA_DEFS.get(dest_area)
             expected = (

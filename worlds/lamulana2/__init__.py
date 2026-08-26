@@ -392,6 +392,16 @@ class LaMulana2World(World):
         # the logic; the price lands in _adjust_shop_prices() after fill.
         self.randomizer.pick_expensive_shop_slot_post_er()
 
+        # ── Indirect conditions ───────────────────────────────────────
+        # Must follow every pass that appends to an entrance's logic, and must
+        # precede fill. AP evaluates entrance rules from inside
+        # update_reachable_regions, so a rule calling CanReach(X) reads a
+        # half-built reachable set; without registering X the connection is
+        # never retried once X opens up and the sweep under-reports.
+        from .entrances import register_indirect_conditions
+        _n_indirect = register_indirect_conditions(self)
+        _log(f"[ER] Registered {_n_indirect} indirect conditions")
+
         # ── Orphaned locations ────────────────────────────────────────
         # ER may hand back a layout with a few locations permanently cut off
         # (allowed for minimal/items accessibility — see custom_structural_er).

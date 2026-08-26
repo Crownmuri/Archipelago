@@ -196,8 +196,22 @@ class LM2Entrance(Entrance):
 
     def disconnect(self) -> None:
         """Disconnect this entrance from its current region."""
-        # In Archipelago, set connected_region to None
+        # AP's connect() appends to region.entrances, so dropping the forward
+        # pointer alone leaves a stale back-reference behind -- and the
+        # soul-gate pass reconnects thousands of times per generation.
+        if self.connected_region is not None:
+            try:
+                self.connected_region.entrances.remove(self)
+            except ValueError:
+                pass
         self.connected_region = None
+
+    @property
+    def destination_area(self) -> Optional[AreaID]:
+        """
+        The area this exit leads to post-entrance-randomization.
+        """
+        return getattr(self.connected_region, "game_area_id", None)
 
     def append_logic_string(self, logic_string: str) -> None:
         self._original_logic = f"({self._original_logic}) {logic_string}"

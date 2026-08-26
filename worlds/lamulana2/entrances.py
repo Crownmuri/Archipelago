@@ -267,6 +267,7 @@ _DUNGEON_GROUP: Dict[AreaID, str] = {
     AreaID.Start: "Start",
     AreaID.InfernoCavern: "InfernoCavern",
     AreaID.GateofGuidance: "GoG", AreaID.GateofGuidanceLeft: "GoG",
+    AreaID.GateofGuidanceRightLadder: "GoG",
     AreaID.MausoleumofGiants: "MoG", AreaID.MausoleumofGiantsRubble: "MoG",
     AreaID.EndlessCorridor: "EC",
     AreaID.GateofIllusion: "GoI",
@@ -277,7 +278,7 @@ _DUNGEON_GROUP: Dict[AreaID, str] = {
     # Annwfn
     AreaID.AnnwfnMain: "Annwfn", AreaID.AnnwfnOneWay: "Annwfn",
     AreaID.AnnwfnSG: "Annwfn", AreaID.AnnwfnPoison: "Annwfn",
-    AreaID.AnnwfnRight: "Annwfn",
+    AreaID.AnnwfnRight: "Annwfn", AreaID.Eden: "Annwfn",
     # Immortal Battlefield
     AreaID.IBBifrost: "IB", AreaID.IBTop: "IB", AreaID.IBTopLeft: "IB",
     AreaID.IBCetusLadder: "IB", AreaID.IBMain: "IB", AreaID.IBRight: "IB",
@@ -327,6 +328,26 @@ _DUNGEON_GROUP: Dict[AreaID, str] = {
     AreaID.EPG: "EPG",
     # Spiral Hell
     AreaID.SpiralHell: "SpiralHell",
+    # --- DLC ---
+    # Spring in the Sky is the two-room corridor between the Gate of Guidance
+    # right ladder and the Tower of Oannes; it holds no locations.
+    AreaID.SpringintheSky: "SpringintheSky",
+    AreaID.SpringintheSkyTop: "SpringintheSky",
+    AreaID.TowerOfOannesLeftA: "TowerOfOannes",
+    AreaID.TowerOfOannesLeftATopGate: "TowerOfOannes",
+    AreaID.TowerOfOannesLeftB: "TowerOfOannes",
+    AreaID.TowerOfOannesLeftBTopGate: "TowerOfOannes",
+    AreaID.TowerOfOannesLeftC: "TowerOfOannes",
+    AreaID.TowerOfOannesLeftCTop: "TowerOfOannes",
+    AreaID.TowerOfOannesRightA: "TowerOfOannes",
+    AreaID.TowerOfOannesRightASlide: "TowerOfOannes",
+    AreaID.TowerOfOannesRightB: "TowerOfOannes",
+    AreaID.TowerOfOannesRightBCrystal: "TowerOfOannes",
+    AreaID.BaileyBottom: "Bailey",
+    AreaID.BaileyLevel1: "Bailey",
+    AreaID.BaileyLevel2: "Bailey",
+    AreaID.BaileyLevel3: "Bailey",
+    AreaID.BaileyRight: "Bailey",
 }
 
 
@@ -535,6 +556,15 @@ def _generate_pairings_reachable_first(
 
     def _commit_pair(e1: LM2Entrance, e2: LM2Entrance) -> None:
         nonlocal reachable
+        # _pick_except's relaxation fallback ignores the exclusion filter when
+        # nothing satisfies it, so it can hand back the ANCHOR itself -- and
+        # pairing an exit with itself removes the same object from the pool
+        # twice, raising "ValueError: list.remove(x): x not in list". Leaving
+        # it unpaired is the honest outcome: the main loop or _restore_unpaired
+        # deals with it, exactly as when no partner is found at all.
+        if e1 is e2:
+            _log(f"[ER] refusing to self-pair {e1.name}; leaving it in the pool")
+            return
         pool.remove(e1)
         pool.remove(e2)
         pairings.append((e1, e2))
@@ -543,11 +573,16 @@ def _generate_pairings_reachable_first(
             uf.union(a1, a2)
         reachable = _reachable_set()
 
-    def _pick_except(exclude_fn) -> Optional[LM2Entrance]:
+    def _pick_except(exclude_fn, anchor: Optional[LM2Entrance] = None) -> Optional[LM2Entrance]:
         ok = [e for e in pool if not exclude_fn(e)]
         if ok:
             return rng.choice(ok)
-        return rng.choice(pool) if pool else None
+        # Relaxation: a tight pool can make every exclusion unsatisfiable, and
+        # a suboptimal pairing beats no pairing. Identity is the one exclusion
+        # that is NOT a preference though -- see the self-pair guard in the
+        # commit helpers -- so the caller's anchor is kept out of the fallback.
+        fallback = [e for e in pool if e is not anchor]
+        return rng.choice(fallback) if fallback else None
 
     def _same_area(e1: LM2Entrance, e2: LM2Entrance) -> bool:
         return _same_dungeon(e1, e2)
@@ -563,7 +598,7 @@ def _generate_pairings_reachable_first(
             or _would_self_loop(ExitID.fP02Left, e.game_exit_id)
             or e.game_exit_id in _starting_exit_ids
             or _same_area(cliff, e)
-        ))
+        ), anchor=cliff)
         if partner:
             _commit_pair(cliff, partner)
 
@@ -575,7 +610,7 @@ def _generate_pairings_reachable_first(
             or e.game_exit_id == ExitID.fP00Right
             or e.game_exit_id == ExitID.fL08Right
             or _same_area(cavern_left, e)
-        ))
+        ), anchor=cavern_left)
         if partner:
             _commit_pair(cavern_left, partner)
 
@@ -586,7 +621,7 @@ def _generate_pairings_reachable_first(
             e is ill_north
             or e.game_exit_id == ExitID.fL11GateY0
             or _same_area(ill_north, e)
-        ))
+        ), anchor=ill_north)
         if partner:
             _commit_pair(ill_north, partner)
 
@@ -597,7 +632,7 @@ def _generate_pairings_reachable_first(
             e is altar_left
             or e.game_exit_id == ExitID.fP01Right
             or _same_area(altar_left, e)
-        ))
+        ), anchor=altar_left)
         if partner:
             _commit_pair(altar_left, partner)
 
@@ -609,7 +644,7 @@ def _generate_pairings_reachable_first(
                 e is _ow
                 or e.game_exit_id == ExitID.fL05Up
                 or _same_area(_ow, e)
-            ))
+            ), anchor=ow)
             if partner:
                 _commit_pair(ow, partner)
 
@@ -642,7 +677,7 @@ def _generate_pairings_reachable_first(
                 or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
                 or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
-            ))
+            ), anchor=se)
             if partner is not None:
                 _commit_pair(se, partner)
                 d = _exit_dungeon(partner)
@@ -769,6 +804,15 @@ def _generate_pairings(
         return next((e for e in pool if e.game_exit_id == eid), None)
 
     def _pair(e1: LM2Entrance, e2: LM2Entrance) -> None:
+        # _pick_except's relaxation fallback ignores the exclusion filter when
+        # nothing satisfies it, so it can hand back the ANCHOR itself -- and
+        # pairing an exit with itself removes the same object from the pool
+        # twice, raising "ValueError: list.remove(x): x not in list". Leaving
+        # it unpaired is the honest outcome: the main loop or _restore_unpaired
+        # deals with it, exactly as when no partner is found at all.
+        if e1 is e2:
+            _log(f"[ER] refusing to self-pair {e1.name}; leaving it in the pool")
+            return
         pool.remove(e1)
         pool.remove(e2)
         pairings.append((e1, e2))
@@ -777,12 +821,17 @@ def _generate_pairings(
         if a1 is not None and a2 is not None:
             uf.union(a1, a2)
 
-    def _pick_except(exclude_fn) -> Optional[LM2Entrance]:
+    def _pick_except(exclude_fn, anchor: Optional[LM2Entrance] = None) -> Optional[LM2Entrance]:
         """Pick a random exit from pool, rejecting those matching exclude_fn."""
         ok = [e for e in pool if not exclude_fn(e)]
         if ok:
             return rng.choice(ok)
-        return rng.choice(pool) if pool else None
+        # Relaxation: a tight pool can make every exclusion unsatisfiable, and
+        # a suboptimal pairing beats no pairing. Identity is the one exclusion
+        # that is NOT a preference though -- see the self-pair guard in the
+        # commit helpers -- so the caller's anchor is kept out of the fallback.
+        fallback = [e for e in pool if e is not anchor]
+        return rng.choice(fallback) if fallback else None
 
     def _same_area(e1: LM2Entrance, e2: LM2Entrance) -> bool:
         """True if both exits belong to the same dungeon."""
@@ -801,7 +850,7 @@ def _generate_pairings(
             or _would_self_loop(ExitID.fP02Left, e.game_exit_id)
             or e.game_exit_id in _starting_exit_ids  # ReduceDeadEndStarts
             or _same_area(cliff, e)
-        ))
+        ), anchor=cliff)
         if partner:
             _pair(cliff, partner)
 
@@ -813,7 +862,7 @@ def _generate_pairings(
             or e.game_exit_id == ExitID.fP00Right
             or e.game_exit_id == ExitID.fL08Right
             or _same_area(cavern_left, e)
-        ))
+        ), anchor=cavern_left)
         if partner:
             _pair(cavern_left, partner)
 
@@ -824,7 +873,7 @@ def _generate_pairings(
             e is ill_north
             or e.game_exit_id == ExitID.fL11GateY0
             or _same_area(ill_north, e)
-        ))
+        ), anchor=ill_north)
         if partner:
             _pair(ill_north, partner)
 
@@ -835,7 +884,7 @@ def _generate_pairings(
             e is altar_left
             or e.game_exit_id == ExitID.fP01Right
             or _same_area(altar_left, e)
-        ))
+        ), anchor=altar_left)
         if partner:
             _pair(altar_left, partner)
 
@@ -847,7 +896,7 @@ def _generate_pairings(
                 e is _ow
                 or e.game_exit_id == ExitID.fL05Up
                 or _same_area(_ow, e)
-            ))
+            ), anchor=ow)
             if partner:
                 _pair(ow, partner)
 
@@ -870,7 +919,7 @@ def _generate_pairings(
                 or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
                 or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
-            ))
+            ), anchor=se)
             if partner is not None:
                 _pair(se, partner)
                 d = _exit_dungeon(partner)
@@ -966,6 +1015,91 @@ def _generate_pairings(
 # mirrors the C# Randomiser's individual Randomise*Entrances
 # methods rather than FullRandomEntrances.
 # ============================================================
+
+# ============================================================
+# Indirect conditions
+# ============================================================
+
+# Areas that a predicate consults behind the scenes, mirroring the adapter
+# implementations in logic/player_state.py. CanSpinCorridor is item-only and
+# so needs no entry.
+_CAN_STOP_TIME_AREAS = ("RoYBottom", "IBMain", "ITLeft", "DSLMMain")
+_CAN_SEAL_CORRIDOR_AREAS = ("ValhallaMain", "DSLMTop", "SotFGBlood",
+                            "ACBlood", "HoM", "EPDEntrance")
+
+
+def _areas_referenced(logic: str, world) -> set:
+    """
+    AreaIDs whose reachability a rule string depends on.
+
+    Anything here has to be registered with AP as an indirect condition of the
+    entrance carrying the rule -- see register_indirect_conditions().
+    """
+    from .ids import AreaID, LocationID
+
+    areas = set()
+    if not logic:
+        return areas
+
+    def add(name: str) -> None:
+        try:
+            areas.add(AreaID[re.sub(r"\s+", "", name)])
+        except KeyError:
+            pass
+
+    for arg in re.findall(r"CanReach\(([^)]*)\)", logic):
+        add(arg)
+
+    if "CanStopTime" in logic:
+        for a in _CAN_STOP_TIME_AREAS:
+            add(a)
+    if "CanSealCorridor" in logic:
+        for a in _CAN_SEAL_CORRIDOR_AREAS:
+            add(a)
+
+    # CanKill(boss) defers to that boss location's own rule, so the entrance
+    # depends on wherever the boss lives.
+    for boss in re.findall(r"CanKill\(([^)]*)\)", logic):
+        try:
+            loc = world.locations.get(LocationID[boss.replace(" ", "")])
+        except KeyError:
+            continue
+        area = getattr(getattr(loc, "parent_region", None), "game_area_id", None)
+        if area is not None:
+            areas.add(area)
+
+    return areas
+
+
+def register_indirect_conditions(world) -> int:
+    """
+    Tell AP which regions an entrance's rule reads.
+
+    AP evaluates entrance rules from inside update_reachable_regions, so a rule
+    that calls CanReach(X) reads a HALF-BUILT reachable set. Without an
+    indirect condition the connection is dropped from the queue and never
+    retried once X becomes reachable, so the sweep under-reports: measured, a
+    single pass found 23 regions where the fixpoint is 24 (Endless Corridor,
+    whose only rule is CanReach(Annwfn Main)). That false negative is what the
+    ER validator then rejects layouts over.
+
+    Must run after entrances are connected. Returns the registration count.
+    """
+    multiworld = world.multiworld
+    regions_by_area = getattr(world, "regions_by_area_id", None) or {}
+    registered = 0
+    for entrance in multiworld.get_entrances(world.player):
+        if not isinstance(entrance, LM2Entrance):
+            continue
+        logic = getattr(entrance, "_original_logic", "") or ""
+        for area_id in _areas_referenced(logic, world):
+            region = regions_by_area.get(area_id)
+            if region is None:
+                continue
+            multiworld.register_indirect_condition(region, entrance)
+            registered += 1
+    return registered
+
 
 # Port of C# StartEntranceLoopCheck — prevents the starting
 # entrance from pairing back into its own area.
@@ -1546,7 +1680,7 @@ def _build_items_only_state(world):
     """
     Like _build_omniscient_state but no events/flags — only the static
     item pool (precollected + itempool).  Used as a base state to copy
-    from in _validate_region_reachability so we avoid re-collecting all
+    from in _sweep_reachability so we avoid re-collecting all
     items on every ER retry attempt.
     """
     from BaseClasses import CollectionState
@@ -1587,33 +1721,9 @@ def _reset_state_for_attempt(state, player: int) -> None:
     state.path = {}
 
 
-def _validate_region_reachability(world, base_state=None) -> Tuple[bool, List[str]]:
-    """
-    Sphere-sweep validation that mirrors AP's fulfills_accessibility().
-
-    Starts with all POOL items collected (simulating optimal fill placement)
-    but does NOT force-set logic-flag events (bosses, shortcuts, guardians,
-    etc.).  Events are collected dynamically as their locations become
-    reachable, exactly as happens during the real fill sweep.
-
-    This catches circular event dependencies that the old omniscient
-    approach missed: e.g. Area A needs an event from Area B, but Area B
-    is only reachable through Area A.
-
-    Performance: if `base_state` (an items-only CollectionState built by
-    _build_items_only_state) is supplied, it is copied and reset rather
-    than re-collecting all itempool items each call.  This is the hot
-    path during ER retry loops.
-
-    Returns (is_valid, list_of_unreachable_location_names).
-    """
-    unreachable, _state = _sweep_reachability(world, base_state)
-    return len(unreachable) == 0, unreachable
-
-
 def _sweep_reachability(world, base_state=None):
     """
-    The sphere-sweep behind _validate_region_reachability, also handing back
+    The sphere-sweep used by ER validation, also handing back
     the final state so callers can ask further questions of it — chiefly
     "is the goal still satisfiable?", which is the one thing a partitioned
     layout must never break.
@@ -1648,8 +1758,12 @@ def _sweep_reachability(world, base_state=None):
             try:
                 if remaining[n].can_reach(state):
                     sphere.append(remaining.pop(n))
-            except Exception:
-                pass
+            except Exception as exc:
+                # A rule that raises for every location makes the whole sweep
+                # report everything unreachable, which then burns all 100 ER
+                # attempts and surfaces as a generic "ER failed" RuntimeError.
+                # Swallow it (one bad rule must not abort the sweep) but say so.
+                _log(f"[ER] can_reach raised for {remaining[n].name}: {exc!r}")
 
         if not sphere:
             break
@@ -1769,8 +1883,8 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
                 area_id = getattr(loc.parent_region, 'game_area_id', None)
                 if area_id is not None:
                     reachable_areas.add(area_id)
-        except Exception:
-            pass
+        except Exception as exc:
+            _log(f"[ER] cluster scan raised while walking a sphere: {exc!r}")
 
     # Check openness: at least one exit from a reachable region leads somewhere
     # unreachable — meaning a progression item COULD unlock new territory.
@@ -1832,8 +1946,8 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
                 if hasattr(exit_, 'can_access') and exit_.can_access(no_kills):
                     has_non_kill_exit = True
                     break
-            except Exception:
-                pass
+            except Exception as exc:
+                _log(f"[ER] can_access raised for {exit_.name}: {exc!r}")
 
         if not has_non_kill_exit:
             # Every outward exit requires guardian kills — check for guardians
@@ -2969,18 +3083,6 @@ class SoulGateRandomizer:
     # ============================================================
     # Soul gate validation helpers
     # ============================================================
-
-    def get_max_reachable_regions(self) -> set:
-        """
-        Returns the set of region names reachable with all guardians defeated.
-        Used to mark structurally cut-off locations as EXCLUDED after ER.
-        """
-        kill_costs = self._build_kill_costs()
-        guardian_locs = [
-            loc for loc in self.world.multiworld.get_locations(self.world.player)
-            if hasattr(loc, 'location_type') and loc.location_type == LocationType.Guardian
-        ]
-        return self._flood_fill(len(guardian_locs), kill_costs)
 
     def _flood_fill(self, kills: int, kill_gated_exits: dict) -> set:
         """
