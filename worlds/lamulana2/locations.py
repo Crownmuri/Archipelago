@@ -484,10 +484,11 @@ def get_unplaced_locations_of_type(locations: Dict[LocationID, LM2Location],
 # ============================================================
 # AreaID → display name (collapses sub-areas to broad regions
 # for AP location_name_groups). Areas without locations
-# (Cliff, Start) are still mapped — they drop out naturally.
+# (Cliff, Eden) are still mapped — they drop out naturally.
 # ============================================================
 
 AREA_DISPLAY_NAME: Dict[AreaID, str] = {
+    AreaID.Start: "Starting Area",
     AreaID.VoD: "Village of Departure",
     AreaID.VoDLadder: "Village of Departure",
     AreaID.InfernoCavern: "Inferno Cavern",
@@ -579,6 +580,26 @@ AREA_DISPLAY_NAME: Dict[AreaID, str] = {
     AreaID.EPDHel: "Eternal Prison Doom",
     AreaID.EPG: "Eternal Prison Gloom",
     AreaID.SpiralHell: "Spiral Hell",
+    # --- DLC ---
+    AreaID.GateofGuidanceRightLadder: "Gate of Guidance",
+    AreaID.SpringintheSky: "Spring in the Sky",
+    AreaID.SpringintheSkyTop: "Spring in the Sky",
+    AreaID.Eden: "Eden",
+    AreaID.TowerOfOannesLeftA: "Tower of Oannes",
+    AreaID.TowerOfOannesLeftATopGate: "Tower of Oannes",
+    AreaID.TowerOfOannesLeftB: "Tower of Oannes",
+    AreaID.TowerOfOannesLeftBTopGate: "Tower of Oannes",
+    AreaID.TowerOfOannesLeftC: "Tower of Oannes",
+    AreaID.TowerOfOannesLeftCTop: "Tower of Oannes",
+    AreaID.TowerOfOannesRightA: "Tower of Oannes",
+    AreaID.TowerOfOannesRightASlide: "Tower of Oannes",
+    AreaID.TowerOfOannesRightB: "Tower of Oannes",
+    AreaID.TowerOfOannesRightBCrystal: "Tower of Oannes",
+    AreaID.BaileyBottom: "Bailey",
+    AreaID.BaileyLevel1: "Bailey",
+    AreaID.BaileyLevel2: "Bailey",
+    AreaID.BaileyLevel3: "Bailey",
+    AreaID.BaileyRight: "Bailey",
 }
 
 
