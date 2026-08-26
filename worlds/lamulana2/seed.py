@@ -3,7 +3,7 @@ from __future__ import annotations
 import struct
 from typing import BinaryIO, Dict, Iterable, List, Tuple
 
-from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID, potsanity_pools_enabled
+from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, AP_ITEM_PLACEHOLDER, BASE_ITEM_ID, potsanity_pools_enabled, POT_FLAG_MAP, LEGACY_LOCATION_IDS
 
 # ============================================================
 # AP item -> LM2 seed encoding (write-time only)
@@ -22,12 +22,16 @@ LM2AP_MAGIC = b"LM2A"
 # v2: appended location_labels section after pot_flag_map.
 # v3: appended greedy_charon bool.
 # v4: appended game_difficulty int32.
-LM2AP_VERSION = 4
+# v5: appended ap_placements (Glossary, Costumes, DLC)
+LM2AP_VERSION = 5
 
 # Pot LocationIDs are written here, not in the legacy items section,
 # so seed.lm2r stays compatible with the original LM2 randomizer mod.
-# 400 is the first pot LocationID (see POT_FLAG_MAP in ids.py).
-POT_LOCATION_ID_MIN = 400
+# Derived from POT_FLAG_MAP rather than an id range: pot ids are 400-716,
+# but Glossary ids start at 2000, so a bare ">= 400" test also swallows
+# every glossary location and files it as a pot.
+POT_LOCATION_IDS = frozenset(int(loc_id) for loc_id in POT_FLAG_MAP)
+_LEGACY_IDS = frozenset(int(loc_id) for loc_id in LEGACY_LOCATION_IDS)
 
 # ============================================================
 # Low-level writers (C# BinaryWriter parity)
@@ -53,7 +57,19 @@ def _write_string(f: BinaryIO, value: str):
 
 
 def _is_pot_location_id(loc_id: int) -> bool:
-    return int(loc_id) >= POT_LOCATION_ID_MIN
+    return int(loc_id) in POT_LOCATION_IDS
+
+
+def _is_legacy_location_id(loc_id: int) -> bool:
+    """
+    True if the ORIGINAL La-Mulana 2 randomizer knows this location.
+
+    seed.lm2r may only carry these. Everything else -- pots, glossary, DLC,
+    costumes -- is an AP addition and belongs in seed.lm2ap. The split is not
+    an id range: the DLC boss reward chest is id 61, inside the legacy chest
+    band, while plenty of higher ids are legacy.
+    """
+    return int(loc_id) in _LEGACY_IDS
 
 
 # ============================================================
@@ -85,12 +101,12 @@ def write_seed_file(
     It assumes all inputs are final and valid.
     """
 
-    # Pot LocationIDs (>= 400) are not understood by the legacy mod; the
-    # .lm2ap companion file owns them. Drop them here defensively in case
-    # the caller passes a mixed list.
+    # Only placements the original randomizer can parse belong here; pots,
+    # glossary, DLC and costumes are AP additions and travel in the .lm2ap
+    # companion instead.
     legacy_item_placements = [
         (loc_id, item_id) for loc_id, item_id in item_placements
-        if not _is_pot_location_id(loc_id)
+        if _is_legacy_location_id(loc_id)
     ]
 
     with open(path, "wb") as f:
@@ -280,11 +296,20 @@ def write_ap_seed_file(
         greedy_charon             bool
         --- v4+ Difficulty ---
         game_difficulty           int32
+        --- v5+ AP placements ---
+        ap_placement_count        int32
+        [ location_id int32, item_id int32 ] * ap_placement_count
     """
 
     pot_placements = [
         (loc_id, item_id) for loc_id, item_id in item_placements
         if _is_pot_location_id(loc_id)
+    ]
+    # Every other AP-added placement: glossary, DLC, costumes. Anything the
+    # original randomizer does not know and that is not already a pot.
+    ap_placements = [
+        (loc_id, item_id) for loc_id, item_id in item_placements
+        if not _is_legacy_location_id(loc_id) and not _is_pot_location_id(loc_id)
     ]
 
     with open(path, "wb") as f:
@@ -328,3 +353,12 @@ def write_ap_seed_file(
 
         # --- v4+ Difficulty ---------------------------------------------
         _write_i32(f, settings.game_difficulty)
+
+        # --- AP placements (v5+) ----------------------------------------
+        # Glossary / DLC / costume checks. These used to fall through into
+        # seed.lm2r, which the legacy mod cannot read, so they were lost for
+        # solo replay.
+        _write_i32(f, len(ap_placements))
+        for location_id, item_id in ap_placements:
+            _write_i32(f, int(location_id))
+            _write_i32(f, int(item_id))
