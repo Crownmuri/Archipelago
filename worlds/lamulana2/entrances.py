@@ -1990,6 +1990,53 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
                    f"{len(reachable_areas)} areas, open cluster)")
 
 
+# ── Logic snapshot / rollback ─────────────────────────────────────────
+#
+# Several passes stamp extra requirements onto entrances and locations once
+# the entrance graph is known -- soul gate GuardianKills, the FDC backside
+# gate, cumulative AnkhCount, the expensive shop slot. If the layout is then
+# rejected and rerolled, those stamps have to come off, or the next attempt
+# inherits the previous one's requirements. Entrance appends rewrite
+# _original_logic in place with no undo, and a location's AnkhCount(N) only
+# dedupes against the identical string, so AnkhCount(3) followed by
+# AnkhCount(5) would silently accumulate.
+
+
+def snapshot_logic_state(world) -> dict:
+    """Capture every mutable logic string for this player."""
+    entrances = {}
+    for e in world.multiworld.get_entrances(world.player):
+        if isinstance(e, LM2Entrance):
+            entrances[id(e)] = e._original_logic
+    locations = {}
+    for loc in world.multiworld.get_locations(world.player):
+        extra = getattr(loc, "_additional_logic", None)
+        if extra is not None:
+            locations[id(loc)] = list(extra)
+    return {"entrances": entrances, "locations": locations}
+
+
+def restore_logic_state(world, snap: dict) -> None:
+    """Roll every entrance and location back to a snapshot, recompiling only
+    what actually changed."""
+    saved_entrances = snap["entrances"]
+    for e in world.multiworld.get_entrances(world.player):
+        if not isinstance(e, LM2Entrance):
+            continue
+        base = saved_entrances.get(id(e))
+        if base is not None and e._original_logic != base:
+            SoulGateRandomizer._reset_logic(e, base)
+
+    saved_locations = snap["locations"]
+    for loc in world.multiworld.get_locations(world.player):
+        saved = saved_locations.get(id(loc))
+        if saved is None:
+            continue
+        if loc._additional_logic != saved:
+            loc._additional_logic = list(saved)
+            loc._rebuild_combined_logic()
+
+
 # ── Disconnect / reconnect helpers ────────────────────────────────────
 
 def _disconnect_exit(exit_: LM2Entrance) -> None:
@@ -2178,6 +2225,17 @@ def custom_structural_er(world) -> None:
     # cost ~150ms × 100 attempts; post-fix ~30ms each.
     items_only_base = _build_items_only_state(world)
     omniscient_base = _build_omniscient_state(world)
+
+    # Register indirect conditions BEFORE the first validation sweep.
+    # explicit_indirect_conditions defaults to True, so AP's BFS only retries a
+    # connection whose rule calls CanReach(X) once X is registered against that
+    # entrance -- otherwise the sweep can stop on a half-built reachable set and
+    # under-report, which the validators then reject layouts over (and which
+    # feeds world._structural_unreachable, i.e. the EXCLUDED marking in
+    # pre_fill). The registry is a set keyed by (region, entrance), so this is
+    # idempotent with the pre_fill pass that picks up the soul gate / FDC /
+    # ankh clauses appended after this point.
+    register_indirect_conditions(world)
 
     for attempt in range(MAX_ATTEMPTS):
         _disconnect_all()

@@ -101,7 +101,7 @@ class LM2RandomizerCore:
         # AP's per-player Random, already seeded off the multiworld seed plus
         # the player id, which is exactly what this wants.
         self.rng = world.random
-    
+
     # ============================================================
     # Entry point
     # ============================================================
@@ -945,29 +945,15 @@ class LM2RandomizerCore:
 
     def _place_mantras(self) -> bool:
         """
-        Place mantras during the preplaced phase (AP-fill friendly).
+        Vanilla mantra placement, run during the preplaced phase.
 
-        Removed:
-          - items_copy parameter
-          - reliance on an external pool copy
-
-        Behavior preserved:
-          - option_original: do not place; remove mantra items from AP pool
-          - option_only_murals: place mantra items into mural locations; lock; remove from AP pool
+        option_original: items.py does not create mantra items at all, so the
+        ten vanilla murals are filled and locked here.
+        option_only_murals: nothing to do now -- placement needs the final
+        entrance graph, so it is deferred to place_mantras_post_er().
         """
         placement_mode = self.options.mantra_placement.value
         mw = self.multiworld
-        player = self.player
-
-        def is_mantra_item(item: Item) -> bool:
-            try:
-                iid = get_game_item_id(item)
-            except Exception:
-                return False
-            return iid in MANTRA_ITEMS and item.player == player
-
-        # Collect mantra items from the real AP pool
-        mantra_items = [it for it in list(mw.itempool) if is_mantra_item(it)]
 
         if placement_mode == self.options.mantra_placement.option_original:
             # In original mode, items.py does NOT create mantra items in the pool.
@@ -1049,8 +1035,12 @@ class LM2RandomizerCore:
 
     def place_mantras_post_er(self) -> bool:
         """
-        only_murals placement, run from World.pre_fill() so the entrance graph
-        (structural ER + soul gate values) is final.
+        only_murals placement, run once the entrance graph (structural ER +
+        soul gate values) and every post-ER logic stamp are final.
+
+        Returns False -- leaving no placements behind -- when this layout has
+        no seating for all ten mantras. World.connect_entrances treats that as
+        a rejected layout and rerolls ER rather than failing generation.
 
         C# parity with Randomiser.cs::RandomiseWithChecks(): for each mantra,
         rebuild the state from scratch out of the items still in the pool
@@ -1083,42 +1073,6 @@ class LM2RandomizerCore:
                  f"for mantras ({len(mantra_items)})")
             return False
 
-        def sweep_state(pending_names: set) -> CollectionState:
-            """
-            State with every pool item except the mantras still awaiting
-            placement, then a sphere-sweep collecting placed items from
-            locations as they become reachable (C# GetStateWithItems).
-            """
-            state = CollectionState(mw)  # collects precollected items itself
-            for item in mw.itempool:
-                if item.player == player and item.name not in pending_names:
-                    state.collect(item, True)
-            state.stale[player] = True
-
-            remaining = [loc for loc in mw.get_locations(player)
-                         if loc.parent_region is not None and loc.item is not None]
-            while True:
-                sphere = []
-                for n in range(len(remaining) - 1, -1, -1):
-                    try:
-                        if remaining[n].can_reach(state):
-                            sphere.append(remaining.pop(n))
-                    except Exception:
-                        pass
-                if not sphere:
-                    break
-                for loc in sphere:
-                    if loc.item is not None and loc.item.player == player:
-                        state.collect(loc.item, True, loc)
-                state.stale[player] = True
-            return state
-
-        def undo(placements):
-            for loc, item in placements:
-                loc.item = None
-                loc.locked = False
-                item.location = None
-
         # Assumed fill, the same algorithm AP uses for its own progression
         # placement. The previous forward-greedy loop ("take the next mantra,
         # drop it in any currently-reachable mural") could paint itself into a
@@ -1136,6 +1090,22 @@ class LM2RandomizerCore:
             if item.player == player and not is_mantra_item(item):
                 base.collect(item, prevent_sweep=True)
 
+        def unplace() -> None:
+            """Undo whatever fill_restrictive managed to seat.
+
+            A rejected layout must leave the murals exactly as it found them:
+            connect_entrances rerolls ER and calls back in, and a mantra still
+            locked to a mural from the previous attempt would both hide that
+            mural from the next fill and double-count against the item pool.
+            """
+            for item in mantra_items:
+                loc = getattr(item, "location", None)
+                if loc is None:
+                    continue
+                loc.item = None
+                loc.locked = False
+                item.location = None
+
         remaining_items = list(mantra_items)
         remaining_locs = list(mural_locations)
         self.rng.shuffle(remaining_locs)
@@ -1147,11 +1117,13 @@ class LM2RandomizerCore:
             )
         except Exception as exc:
             _log(f"[ERROR] only_murals fill_restrictive failed: {exc!r}")
+            unplace()
             return False
 
         if remaining_items:
             _log(f"[ERROR] only_murals: {len(remaining_items)} mantra(s) could "
                  f"not be placed at a reachable mural")
+            unplace()
             return False
 
         for item in mantra_items:

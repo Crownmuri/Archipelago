@@ -369,34 +369,19 @@ class LaMulana2World(World):
         mw = self.multiworld
         player = self.player
 
-        # ── Guardian ankh requirements ────────────────────────────────
-        # Must follow ER: soul gates only carry their real GuardianKills(N)
-        # requirement once connect_entrances has assigned gate values.
-        self.randomizer.fix_ankh_logic_post_er()
-
-        # ── RequireFDC gates ──────────────────────────────────────────
-        # Must follow ER: both the backside FDC gate and the Tower of Oannes
-        # checkpoint gate describe the area you arrive in, so they can only be
-        # stamped once each exit's live destination is known. Order matches C#
-        # (MainViewModel: FixAnkhLogic() then FixFDCLogic(), both after
-        # PlaceEntrances()).
-        self.randomizer.fix_fdc_logic_post_er()
-
-        # ── Expensive shop slot ────────────────────────────────
-        # Must follow ER: the gate names CanReach(DSLMMain), so it can only be
-        # judged once the entrance graph is final. Picks the slot and stamps
-        # the logic; the price lands in _adjust_shop_prices() after fill.
-        self.randomizer.pick_expensive_shop_slot_post_er()
-
-        # ── Indirect conditions ───────────────────────────────────────
-        # Must follow every pass that appends to an entrance's logic, and must
-        # precede fill. AP evaluates entrance rules from inside
-        # update_reachable_regions, so a rule calling CanReach(X) reads a
-        # half-built reachable set; without registering X the connection is
-        # never retried once X opens up and the sweep under-reports.
-        from .entrances import register_indirect_conditions
-        _n_indirect = register_indirect_conditions(self)
-        _log(f"[ER] Registered {_n_indirect} indirect conditions")
+        # ── Post-ER logic + mantras ───────────────────────────────────
+        # connect_entrances already ran _finalize_layout when it had a layout
+        # to judge, so that a mantra seating failure could reroll ER instead of
+        # aborting generation. This is the fallback for the paths that never
+        # reach it: no entrance randomization at all, and the Universal Tracker
+        # replay. There is nothing to reroll on those, so a seating failure
+        # here really is terminal.
+        if not getattr(self, "_post_er_applied", False):
+            if not self._finalize_layout():
+                raise RuntimeError(
+                    "Mantra placement (only_murals) could not find a reachable "
+                    "mural for every mantra on this entrance layout."
+                )
 
         # ── Orphaned locations ────────────────────────────────────────
         # ER may hand back a layout with a few locations permanently cut off
@@ -416,16 +401,6 @@ class LaMulana2World(World):
                 excluded += 1
             if excluded:
                 _log(f"[ER] Marked {excluded} unreachable location(s) EXCLUDED")
-
-        # ── Mantras (only_murals) ─────────────────────────────────────
-        # Runs here, not in set_rules, because it needs the final entrance
-        # graph: set_rules precedes connect_entrances, so ER would invalidate
-        # any reachability decided earlier.
-        if not self.randomizer.place_mantras_post_er():
-            raise RuntimeError(
-                "Mantra placement (only_murals) could not find a reachable mural "
-                "for every mantra on this entrance layout."
-            )
 
         # ── POST-RULES DIAGNOSTIC ─────────────────────────────────────
         try:
@@ -569,7 +544,16 @@ class LaMulana2World(World):
         If soul gates cannot find a valid configuration for a given structural
         layout (some layouts are fundamentally incompatible), the entire
         structural layout is regenerated and both are retried.
+
+        With mantra_placement=only_murals the same loop also has to own the
+        post-ER logic passes and the mantra fill (_finalize_layout). Mantras
+        can only be seated at murals, so some layouts have no valid seating at
+        all -- and once we are past connect_entrances there is no way to ask
+        for a different one, which is why that used to abort generation.
+        Judging it here makes an unseatable layout just another reason to
+        reroll.
         """
+        self._post_er_applied = False
         ut_data = self._ut_passthrough()
         if ut_data is not None:
             # Universal Tracker regen: skip randomization, replay server's
@@ -606,7 +590,16 @@ class LaMulana2World(World):
 
         OUTER_MAX = 10  # structural layout retries
 
+        # Baseline for rollback: every logic string as it stands after
+        # set_rules, before any ER or post-ER pass has stamped anything.
+        # Restored at the top of each attempt so a rejected layout's soul gate
+        # / FDC / AnkhCount clauses can't leak into the next one.
+        from .entrances import snapshot_logic_state, restore_logic_state
+        logic_baseline = snapshot_logic_state(self)
+
         for outer in range(OUTER_MAX):
+            restore_logic_state(self, logic_baseline)
+
             # ── Structural ER ─────────────────────────────────────────────
             if any_structural:
                 from .entrances import custom_structural_er
@@ -647,7 +640,15 @@ class LaMulana2World(World):
                         continue
 
                     self._sg_pairs = sgr.soul_gate_pairs
-                    return  # success — both structural and soul gates valid
+
+                    # Stamp the post-ER logic and seat the mantras. Only a
+                    # only_murals seating failure can reject here.
+                    if not self._finalize_layout():
+                        _log(f"[ER] Outer retry {outer + 1}: no mural seating "
+                              f"for every mantra on this layout, regenerating...")
+                        continue
+
+                    return  # success — layout is final and fully stamped
                 else:
                     # Soul gates exhausted retries on this structural layout.
                     # Retry with a new structural layout (only meaningful
@@ -661,12 +662,62 @@ class LaMulana2World(World):
                               f"incompatible with soul gates, regenerating...")
                     continue
             else:
-                return  # no soul gates, structural ER alone is sufficient
+                # No soul gates — structural ER alone decides the layout.
+                if not self._finalize_layout():
+                    _log(f"[ER] Outer retry {outer + 1}: no mural seating for "
+                          f"every mantra on this layout, regenerating...")
+                    continue
+                return
 
         raise RuntimeError(
             f"Entrance randomization failed after {OUTER_MAX} full retries "
-            f"(structural + soul gates)."
+            f"(structural + soul gates + mantra seating)."
         )
+
+    def _finalize_layout(self) -> bool:
+        """Stamp every pass that needs the final entrance graph, then seat the
+        only_murals mantras.
+
+        Returns False when the mantras cannot all be seated, which tells
+        connect_entrances to reroll the layout. Everything stamped here is
+        undone by restore_logic_state at the top of the next attempt, and
+        place_mantras_post_er unwinds its own partial placements, so a
+        rejected attempt leaves no trace.
+
+        Order matches C# (MainViewModel: FixAnkhLogic() then FixFDCLogic(),
+        both after PlaceEntrances()).
+        """
+        # Guardian ankh requirements: soul gates only carry their real
+        # GuardianKills(N) once the gate values are assigned.
+        self.randomizer.fix_ankh_logic_post_er()
+
+        # RequireFDC gates: both the backside gate and the Tower of Oannes
+        # checkpoint describe the area you arrive in, so they can only be
+        # stamped once each exit's live destination is known. This has to
+        # precede the mantra fill -- it can gate the approach to a backside
+        # mural, and a seating decided without it would not survive.
+        self.randomizer.fix_fdc_logic_post_er()
+
+        # Expensive shop slot: the gate names CanReach(DSLMMain), so it can
+        # only be judged once the entrance graph is final. Picks the slot and
+        # stamps the logic; the price lands in _adjust_shop_prices() after fill.
+        self.randomizer.pick_expensive_shop_slot_post_er()
+
+        # Indirect conditions: must follow every pass that appends to an
+        # entrance's logic. AP evaluates entrance rules from inside
+        # update_reachable_regions, so a rule calling CanReach(X) reads a
+        # half-built reachable set; without registering X the connection is
+        # never retried once X opens up and the sweep under-reports. The
+        # registry is set-keyed, so repeating this across attempts is free.
+        from .entrances import register_indirect_conditions
+        _n_indirect = register_indirect_conditions(self)
+        _log(f"[ER] Registered {_n_indirect} indirect conditions")
+
+        if not self.randomizer.place_mantras_post_er():
+            return False
+
+        self._post_er_applied = True
+        return True
 
     def generate_basic(self) -> None:
         """
@@ -1066,21 +1117,7 @@ class LaMulana2World(World):
 
     def _should_include_location(self, loc) -> bool:
         """Determine if a location should be included in the pool."""
-        """
-        from .locations import is_shop_location, is_mural_location
 
-        # Skip shops if using original placement
-        if is_shop_location(loc) and self.options.shop_placement.value == 0:
-            return False
-
-        if is_mural_location(loc) and self.options.mantra_placement.value == 0:
-            return False
-
-        # Skip research if not enabled
-        if "Research" in loc.name and not self.options.random_research:
-            return False
-        """
-        # Skip starting shops if we're starting in Village (they're in the base game)
         if self.starting_area == AreaID.VoD and "Starting Shop" in loc.name:
             return False
 
