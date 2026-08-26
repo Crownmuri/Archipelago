@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, AP_ITEM_PLACEHOLDER, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -214,7 +214,9 @@ def _apply_option_classification(world, item: Item) -> Item:
       glossary check shows out of logic in the tracker.
     - plando / create_filler go through world.create_item as well.
     """
-    if item.name == "Ruins Encyclopedia" and glossanity_pools_enabled(world.options):
+    if item.name == "Ruins Encyclopedia" and (world.options.glossanity_freestanding
+                                              or world.options.glossanity_npc
+                                              or world.options.glossanity_scannable):
         item.classification = ItemClassification.progression
     elif item.name == "Perfume" and world.options.glossanity_enemy:
         item.classification = ItemClassification.progression
@@ -222,6 +224,12 @@ def _apply_option_classification(world, item: Item) -> Item:
         item.classification = ItemClassification.progression
     elif (item.name == "Totem Pole"
           and world.options.oannesanity and world.options.require_fdc):
+        item.classification = ItemClassification.progression
+    elif (item.name in COSTUME_CLIP_ITEMS
+          and world.options.costumesanity and world.options.costume_clip):
+        item.classification = ItemClassification.progression
+    elif (item.name == "Fish Suit" and world.options.costumesanity
+          and world.options.oannesanity and world.options.dlc_item_logic):
         item.classification = ItemClassification.progression
     return item
 
@@ -683,30 +691,39 @@ def build_item_pool(world) -> List[Item]:
         # Add to pool
         for _ in range(item_def.count):
             item = create_item(world, item_def.name, game_id=item_def.game_id)
-            # Glossary gating: Has() only sees progression items, so the items
-            # that gate glossary checks must be progression when the relevant
-            # glossanity is on (otherwise those checks are never reachable).
-            # Ruins Encyclopedia gates every glossary check (any glossanity cat);
-            # Perfume gates the single Blue Skeleton enemy-glossary check.
-            if item_def.name == "Ruins Encyclopedia" and glossanity_pools_enabled(world.options):
+            # Glossary additional item requirements:
+            # Ruins Encyclopedia is required for pre Eg-Lana glossary checks.
+            # Perfume is required for killing Blue Skeletons.
+            if item_def.name == "Ruins Encyclopedia" and (world.options.glossanity_freestanding
+                                                          or world.options.glossanity_npc
+                                                          or world.options.glossanity_scannable):
                 item.classification = ItemClassification.progression
             elif item_def.name == "Perfume" and world.options.glossanity_enemy:
                 item.classification = ItemClassification.progression
-            # Rebirth Sigil gates the only path into the Tower of Oannes
-            # (Spring in the Sky ladder up) and Fish-Gear mk-2 turboR. It is a
-            # DLC item, so it is only pooled when oannesanity is on, and it must
-            # be progression there or the entire DLC area is unreachable.
+            # DLC additional item requirements:
+            # Rebirth Sigil is required for the Fish-Gear mk-2 turboR reward.
+            # Aside from 1 item location, also required for vanilla SitS -> TOO.
             elif item_def.name == "Rebirth Sigil" and world.options.oannesanity:
                 item.classification = ItemClassification.progression
-            # The Tower of Oannes checkpoint rooms (Left-A / Left-C / Right-B)
-            # are backside areas with no Holy Grail tablet, so FDC alone can't
-            # return you there — fix_fdc_logic_post_er gates their exits behind
+            # DLC warp gating:
+            # The Tower of Oannes is a backside areas with no Holy Grail tablet.
+            # FDC alone can't return you there — fix_fdc_logic_post_er adds
             # Has(Hand Scanner) and Has(Totem Pole). That gate only exists when
             # require_fdc is on, and only guards anything when oannesanity is
             # on, but Has() ignores non-progression items, so Totem Pole must
             # be bumped there or the DLC checkpoints are unreachable.
             elif (item_def.name == "Totem Pole"
                   and world.options.oannesanity and world.options.require_fdc):
+                item.classification = ItemClassification.progression
+            # Glitch(Costume Clip) item requirements when costumes are shuffled.
+            # A costume needs to be found in order to do the clips
+            elif (item_def.name in COSTUME_CLIP_ITEMS
+                  and world.options.costumesanity and world.options.costume_clip):
+                item.classification = ItemClassification.progression
+            # DLC Item Logic item requirements when costumes are shuffled.
+            # Fish Suit is no longer assumed in inventory, so now a shuffled progressive item.
+            elif (item_def.name == "Fish Suit" and world.options.costumesanity
+                  and world.options.oannesanity and world.options.dlc_item_logic):
                 item.classification = ItemClassification.progression
             pool.append(item)
 
