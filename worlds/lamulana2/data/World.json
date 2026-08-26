@@ -4952,7 +4952,7 @@
             {
                 "ConnectionType": "Corridor",
                 "ConnectingAreaID": "SotFGBlood",
-                "Logic": "CanWarp or CanSpinCorridor or (CanReach(SotFG Main) and CanKill(Tezcatlipoca) and Setting(Non Random Gates))"
+                "Logic": "CanWarp or CanSpinCorridor or (CanReach(SotFGMain) and CanKill(Tezcatlipoca) and Has(Grapple Claw) and Setting(Non Random Gates))"
             },
             {
                 "ConnectionType": "Corridor",
