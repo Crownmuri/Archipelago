@@ -175,6 +175,31 @@ _register_logic_items()
 # Item creation helpers
 # ============================================================
 
+# Per-area map names, keyed by game id. Items.json calls every one of them
+# "Map", but which map you found is meaningful to the player, so each keeps
+# its own name and id instead of collapsing like the families below.
+_MAP_NAME_BY_ID = {
+    item_id: name for name, item_id in ITEM_MAP.items()
+    if name.startswith("Map (")
+}
+
+# The ten Kosugi research papers ship as one AP item. Items.json names them
+# individually ("Kosugi Research FILE 01".."10") but which file you found never
+# matters -- no logic reads them (HasResearch appears nowhere in World.json) and
+# the options that touch them (random_research, remove_research,
+# replace_research_with_orbs) all key on game id, not name.
+RESEARCH_LABEL = "Kosugi Research Papers"
+_RESEARCH_IDS = {getattr(ItemID, f"Research{n}") for n in range(1, 11)}
+
+
+# Item labels that collapse a whole family of game ids onto one AP id.
+_GENERIC_FAMILY_CODE = {
+    "Ankh Jewel":    BASE_ITEM_ID + ItemID.AnkhJewel.value,
+    "Crystal Skull": BASE_ITEM_ID + ItemID.CrystalSkull.value,
+    "Sacred Orb":    BASE_ITEM_ID + ItemID.SacredOrb.value,
+    RESEARCH_LABEL:  BASE_ITEM_ID + ItemID.Research.value,
+}
+
 def _apply_option_classification(world, item: Item) -> Item:
     """Bump items that only gate logic under certain options to progression.
 
@@ -504,13 +529,23 @@ def build_item_pool(world) -> List[Item]:
 
         # Handle ProgressiveBeherit based on RandomDissonance setting
         if game_item_id == ItemID.ProgressiveBeherit1:
-            count = 7 if world.options.random_dissonance else 1
+            # There is only ever one Beherit; it absorbs Dissonance rather than
+            # being upgraded. random_dissonance is what turns each absorption
+            # into its own trackable item, which is where the "Progressive"
+            # label comes from -- with the option off a single plain "Beherit"
+            # is the honest name. The game id stays ProgressiveBeherit1 either
+            # way, and both labels satisfy Has(Progressive Beherit) (see
+            # BEHERIT_NAMES in logic/logic_tree.py).
+            if world.options.random_dissonance:
+                count, label, base = 7, "Progressive Beherit", ItemID.ProgressiveBeherit1
+            else:
+                count, label, base = 1, "Beherit", ItemID.Beherit
             for i in range(count):
                 actual_id = ItemID(ItemID.ProgressiveBeherit1.value + i)
                 item = LM2Item(
-                    name="Progressive Beherit",
+                    name=label,
                     classification=ItemClassification.progression,
-                    code=BASE_ITEM_ID + ItemID.ProgressiveBeherit1.value,
+                    code=BASE_ITEM_ID + base.value,
                     player=world.player,
                 )
                 item.lm2_game_id = actual_id
@@ -561,7 +596,18 @@ def build_item_pool(world) -> List[Item]:
                 research_orbs_remaining -= 1
                 orb_id = EXTRA_ORB_IDS[bonus_orbs_assigned % len(EXTRA_ORB_IDS)]
                 bonus_orbs_assigned += 1
-                pool.append(create_item(world, "Sacred Orb", game_id=orb_id.value))
+                # One AP id for the whole bonus family, with the distinct game
+                # id on lm2_game_id so each keeps its own client flag. They stay
+                # "useful" rather than progression and are deliberately NOT
+                # counted by OrbCount, which reads the "Sacred Orb" label only.
+                bonus = LM2Item(
+                    name="Sacred Orb (Bonus)",
+                    classification=ItemClassification.useful,
+                    code=BASE_ITEM_ID + ItemID.SacredOrbBonus.value,
+                    player=world.player,
+                )
+                bonus.lm2_game_id = orb_id
+                pool.append(bonus)
                 continue
             if world.options.remove_research:
                 continue
@@ -588,6 +634,51 @@ def build_item_pool(world) -> List[Item]:
                     pool.append(item)
                 continue
             # Unmapped ankh jewel (shouldn't happen) — fall through to generic
+
+        # Collapse generic items into a single AP ID
+        # Mod still needs unique IDs through get_game_item_id()
+        # guardian_specific_ankhs OFF: 9 jewels into ItemID.AnkhJewel
+        # Research papers collapse onto ItemID.Research
+        # Maps are not collapsed as it can help to label the area
+        if game_item_id in _RESEARCH_IDS:
+            for _ in range(item_def.count):
+                item = LM2Item(
+                    name=RESEARCH_LABEL,
+                    classification=_get_classification(item_def),
+                    code=BASE_ITEM_ID + ItemID.Research.value,
+                    player=world.player,
+                )
+                item.lm2_game_id = game_item_id
+                pool.append(_apply_option_classification(world, item))
+            continue
+
+        # Maps: give each its own per-area name so the label means something.
+        specific_map = (_MAP_NAME_BY_ID.get(game_item_id)
+                        if item_def.name == "Map" else None)
+        if specific_map is not None:
+            for _ in range(item_def.count):
+                item = LM2Item(
+                    name=specific_map,
+                    classification=_get_classification(item_def),
+                    code=BASE_ITEM_ID + game_item_id.value,
+                    player=world.player,
+                )
+                item.lm2_game_id = game_item_id
+                pool.append(_apply_option_classification(world, item))
+            continue
+
+        generic_code = _GENERIC_FAMILY_CODE.get(item_def.name)
+        if generic_code is not None:
+            for _ in range(item_def.count):
+                item = LM2Item(
+                    name=item_def.name,
+                    classification=_get_classification(item_def),
+                    code=generic_code,
+                    player=world.player,
+                )
+                item.lm2_game_id = game_item_id
+                pool.append(_apply_option_classification(world, item))
+            continue
 
         # Add to pool
         for _ in range(item_def.count):

@@ -8,6 +8,10 @@ from typing import TYPE_CHECKING, Callable
 import weakref
 
 from .logic_tokens import Token, TokenType, LogicTokeniser
+from .logic_data import (
+    SETTING_OVERRIDES, EXPLICIT_SETTINGS,
+    WHIP_LEVELS, SHIELD_LEVELS, BEHERIT_NAMES,
+)
 from .logic_shunting_yard import LogicShuntingYard
 
 if TYPE_CHECKING:
@@ -102,16 +106,25 @@ def _can_reach_compiled(area_name: str, world) -> "Callable[[CollectionState], b
 
 # ---------- RuleNode ----------
 
+def beherit_count(state, player: int) -> int:
+    return sum(state.count(n, player) for n in BEHERIT_NAMES)
+
+
 class RuleNode(LogicNode):
+    __slots__ = ("rule", "name", "args")
+
     def __init__(self, rule: str):
         self.rule = rule  # e.g. "Has(Mjolnir)"
+        # Parse once. The rule string never changes, but evaluate() is driven
+        # by the guardian flood-fill and used to re-run _parse_rule -- a
+        # character scan plus split plus strips -- on every single call.
+        self.name, self.args = self._parse_rule(rule)
 
     def evaluate(self, player_state) -> bool:
-        name, args = self._parse_rule(self.rule)
-        return player_state.evaluate_rule(name, args)
+        return player_state.evaluate_rule(self.name, self.args)
 
     def compile(self, world) -> "Callable[[CollectionState], bool]":  # noqa: C901
-        name, args = self._parse_rule(self.rule)
+        name, args = self.name, self.args
         player = world.player
         options = world.options
 
@@ -186,16 +199,19 @@ class RuleNode(LogicNode):
                     return lambda state, p=player: state.has("Fish Suit", p)
                 return lambda state: True
 
+            if name == "Has" and item in BEHERIT_NAMES:
+                return lambda state, p=player: beherit_count(state, p) >= 1
+
             # Progressive Whip
             if "Whip" in item:
-                level = {"Leather Whip": 1, "Chain Whip": 2, "Flail Whip": 3}.get(item, 0)
+                level = WHIP_LEVELS.get(item, 0)
                 if level:
                     return lambda state, l=level, p=player: (
                         state.count("Progressive Whip", p) >= l
                     )
 
             # Progressive Shield
-            shield_levels = {"Buckler": 1, "Silver Shield": 2, "Angel Shield": 3}
+            shield_levels = SHIELD_LEVELS
             if item in shield_levels:
                 level = shield_levels[item]
                 return lambda state, l=level, p=player: (
@@ -245,7 +261,7 @@ class RuleNode(LogicNode):
             # C# parity: Dissonance count OR Progressive Beherit >= n+1
             return lambda state, required=n, p=player: (
                 state.count("Dissonance", p) >= required
-                or state.count("Progressive Beherit", p) >= (required + 1)
+                or beherit_count(state, p) >= (required + 1)
             )
 
         if name == "CanChant":
@@ -265,9 +281,9 @@ class RuleNode(LogicNode):
         if name == "CanSpinCorridor":
             # Has(Progressive Beherit) and Dissonance(1)
             return lambda state, p=player: (
-                state.count("Progressive Beherit", p) >= 1
+                beherit_count(state, p) >= 1
                 and (state.count("Dissonance", p) >= 1
-                     or state.count("Progressive Beherit", p) >= 2)
+                     or beherit_count(state, p) >= 2)
             )
 
         if name == "CanSealCorridor":
@@ -286,15 +302,15 @@ class RuleNode(LogicNode):
                 _guardian_rule = _make_adapter_rule("GuardianKills", [str(req)], world)
                 return lambda state, r=_guardian_rule, p=player: (
                     (state.count("Dissonance", p) >= 6
-                     or state.count("Progressive Beherit", p) >= 7)
-                    and state.count("Progressive Beherit", p) >= 1
+                     or beherit_count(state, p) >= 7)
+                    and beherit_count(state, p) >= 1
                     and r(state)
                 )
             else:
                 return lambda state, p=player: (
                     (state.count("Dissonance", p) >= 6
-                     or state.count("Progressive Beherit", p) >= 7)
-                    and state.count("Progressive Beherit", p) >= 1
+                     or beherit_count(state, p) >= 7)
+                    and beherit_count(state, p) >= 1
                     and state.has("Anu", p)
                 )
 
@@ -426,43 +442,14 @@ def _eval_setting(setting_name: str, options) -> bool:
     Mirrors the logic in PlayerStateAdapter._setting() but operates purely
     on options so the result can be pre-computed at compile time.
     """
-    explicit: dict[str, object] = {
-        "AutoScan":            lambda: options.auto_scan,
-        "Random Ladders":      lambda: options.vertical_entrances,
-        "Non Random Ladders":  lambda: not options.vertical_entrances,
-        "Random Gates":        lambda: options.gate_entrances,
-        "Non Random Gates":    lambda: not options.gate_entrances,
-        "Random Soul Gates":   lambda: bool(options.random_soul_gate_value),
-        "Non Random Soul Gates": lambda: not options.random_soul_gate_value,
-        "Non Random Unique":   lambda: not options.unique_transitions,
-        "Remove IT Statue":    lambda: options.remove_icefire_treetop_statue,
-        "Not Life for HoM":    lambda: not options.life_sigil_to_awaken_hom,
-        "CostumeClip":         lambda: options.costume_clip,
-    }
-
-    if setting_name in explicit:
+    handler = EXPLICIT_SETTINGS.get(setting_name)
+    if handler is not None:
         try:
-            return bool(explicit[setting_name]())
+            return bool(handler(options))
         except AttributeError:
             return False
 
-    setting_overrides = {
-        "FDCForBacksides":   "require_fdc",
-        "AutoScan":          "auto_scan",
-        "AutoPlaceSkulls":   "auto_skulls",
-        "RandomDissonance":  "random_dissonance",
-        "RandomResearch":    "include_research_locations",
-        "CostumeClip":       "costume_clip",
-        "MinimalBosses":     "logic_difficulty",
-        "RemoveITStatue":    "remove_icefire_treetop_statue",
-        "LifeForHoM":        "life_sigil_to_awaken_hom",
-        "DLCItem":           "dlc_item_logic",
-        "RandomCurses":      "randomize_cursed_chests",
-        "RequiredGuardians": "required_guardians",
-        "RequiredSkulls":    "required_skulls",
-    }
-
-    key = setting_overrides.get(
+    key = SETTING_OVERRIDES.get(
         setting_name,
         re.sub(r'(?<!^)(?=[A-Z])', '_', setting_name).lower(),
     )

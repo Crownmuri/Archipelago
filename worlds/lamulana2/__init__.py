@@ -140,13 +140,15 @@ class LaMulana2World(World):
     item_name_to_id["Progressive Whip"]    = BASE_ITEM_ID + ItemID.Whip1.value
     item_name_to_id["Progressive Shield"]  = BASE_ITEM_ID + ItemID.Shield1.value
     item_name_to_id["Progressive Beherit"] = BASE_ITEM_ID + ItemID.ProgressiveBeherit1.value
+    item_name_to_id["Beherit"] = BASE_ITEM_ID + ItemID.Beherit.value
 
-    # Pin multi-ID same-label families to a single AP ID
-    # Currently using unique labels for every item below -- not implemented.
-    #item_name_to_id["Sacred Orb"] = BASE_ITEM_ID + ItemID.SacredOrb0.value
-    #item_name_to_id["Ankh Jewel"] = BASE_ITEM_ID + ItemID.AnkhJewel1.value
-    #item_name_to_id["Crystal Skull"] = BASE_ITEM_ID + ItemID.CrystalSkull1.value
-    #item_name_to_id["Kosugi Research Papers"] = BASE_ITEM_ID + ItemID.Research1.value
+    # Pin multi-ID same-label families to a single AP ID.
+    item_name_to_id["Ankh Jewel"] = BASE_ITEM_ID + ItemID.AnkhJewel.value
+    item_name_to_id["Crystal Skull"] = BASE_ITEM_ID + ItemID.CrystalSkull.value
+    item_name_to_id["Sacred Orb"] = BASE_ITEM_ID + ItemID.SacredOrb.value
+    item_name_to_id["Sacred Orb (Bonus)"] = BASE_ITEM_ID + ItemID.SacredOrbBonus.value
+    item_name_to_id["Kosugi Research Papers"] = BASE_ITEM_ID + ItemID.Research.value
+    # Maps are not collapsed at this point.
 
     for _ankh_item_id, _ankh_specific_name in GUARDIAN_ANKHS_ITEMS.items():
         item_name_to_id[_ankh_specific_name] = BASE_ITEM_ID + _ankh_item_id.value

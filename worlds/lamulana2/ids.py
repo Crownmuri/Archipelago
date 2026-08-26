@@ -10,12 +10,12 @@ class ItemID(IntEnum):
     HandScanner = 1
     DjedPillar = 2
     Mjolnir = 3
-    #Beherit = 4
+    Beherit = 4               # random_dissonance: off version of ProgressiveBeherit1.
     AncientBattery = 5
     LampofTime = 6
     PochetteKey = 7
     PyramidCrystal = 8
-    CrystalSkull = 9
+    CrystalSkull = 9          # generic skull: the single AP id for all 12
     Vessel = 10
     Pepper = 11
     EggofCreation = 12
@@ -85,7 +85,7 @@ class ItemID(IntEnum):
     Shield1 = 76
     Shield2 = 77
     Shield3 = 78
-    #AnkhJewel = 79
+    AnkhJewel = 79          # guardian_specific_ankhs:off single AP id for all 9
     Xelputter = 80
     YagooMapReader = 81
     YagooMapStreet = 82
@@ -511,6 +511,14 @@ class ItemID(IntEnum):
     SacredOrb17 = 820
     SacredOrb18 = 821
     SacredOrb19 = 822
+    # Generic Sacred Orb: the single AP id for the ten area orbs. Which one you
+    # picked up never matters -- logic counts them via OrbCount -- so they ship
+    # under one label, with the real orb on Item.lm2_game_id.
+    SacredOrb = 823
+    # Bonus orbs (SacredOrb10-19), created by replace_research_with_orbs. Kept
+    # a separate family from the area orbs on purpose: they are "useful", not
+    # progression, and deliberately do NOT count toward OrbCount.
+    SacredOrbBonus = 824
 
     # -------------------------------------------------------------------------
     # AP Trash

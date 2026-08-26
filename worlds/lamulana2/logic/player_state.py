@@ -5,6 +5,10 @@ import weakref
 
 from .. import _log
 from ..ids import AreaID, LocationID, ItemID, get_item_name_from_id
+from .logic_data import (
+    SETTING_OVERRIDES, EXPLICIT_SETTINGS,
+    WHIP_LEVELS, SHIELD_LEVELS, BEHERIT_NAMES,
+)
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState, MultiWorld
@@ -30,12 +34,16 @@ def get_cached_adapter(state, player: int, multiworld, options) -> "PlayerStateA
         state_cache = {}
         _adapter_cache[state] = state_cache
 
-    # Use the total count of collected advancement items as a cheap staleness key.
-    current_count: int = sum(state.prog_items.get(player, {}).values())
+    # Staleness key: a snapshot of the player's advancement counter, compared by value.
+    current = state.prog_items.get(player, {})
 
     entry = state_cache.get(player)
-    if entry is not None and entry[0] == current_count:
+    if entry is not None and entry[0] == current:
         return entry[1]
+
+    # Snapshot so later in-place mutation of the live counter cannot make a
+    # cached entry look current.
+    snapshot = dict(current)
 
     # Rebuild
     adapter = PlayerStateAdapter(state, player, multiworld, options)
@@ -43,8 +51,104 @@ def get_cached_adapter(state, player: int, multiworld, options) -> "PlayerStateA
     if adapter.starting_area is None:
         adapter.starting_area = getattr(world, "starting_area", None)
 
-    state_cache[player] = (current_count, adapter)
+    state_cache[player] = (snapshot, adapter)
     return adapter
+
+
+_REGIONS_BY_ID = {
+        "VoD": "Village of Departure",
+        "VoDLadder": "Village of Departure Ladder",
+        "Start": "Starting Area",
+        "InfernoCavern": "Inferno Cavern",
+        "GateofGuidance": "Gate of Guidance",
+        "GateofGuidanceLeft": "Gate of Guidance Left",
+        "MausoleumofGiants": "Mausoleum of Giants",
+        "MausoleumofGiantsRubble": "Mausoleum of Giants Left Door",
+        "EndlessCorridor": "Endless Corridor",
+        "GateofIllusion": "Gate of Illusion",
+        "RoY": "Roots of Yggdrasil",
+        "RoYTopLeft": "Roots of Yggdrasil Left Switch Gate",
+        "RoYTopRight": "Roots of Yggdrasil Birth Sigil Gate",
+        "RoYTopMiddle": "Roots of Yggdrasil Nidhogg Gate",
+        "RoYMiddle": "Roots of Yggdrasil Middle",
+        "RoYBottom": "Roots of Yggdrasil Bottom",
+        "RoYBottomLeft": "Roots of Yggdrasil Bottom Left",
+        "AnnwfnMain": "Annwfn Main",
+        "AnnwfnOneWay": "Annwfn One Way Corridor",
+        "AnnwfnSG": "Annwfn Soul Gate",
+        "AnnwfnPoison": "Annwfn Poison",
+        "AnnwfnRight": "Annwfn Right",
+        "IBBifrost": "Immortal Battlefield Bifrost",
+        "IBTop": "Immortal Battlefield Top",
+        "IBTopLeft": "Immortal Battlefield Top Left",
+        "IBCetusLadder": "Immortal Battlefield Cetus Ladder",
+        "IBMain": "Immortal Battlefield Main",
+        "IBRight": "Immortal Battlefield Right",
+        "IBBottom": "Immortal Battlefield Bottom",
+        "IBLeft": "Immortal Battlefield Left",
+        "IBLeftSG": "Immortal Battlefield Left Soul Gate",
+        "IBBattery": "Immortal Battlefield Battery",
+        "IBDinosaur": "Immortal Battlefield Dinosaur",
+        "IBMoon": "Immortal Battlefield Moon",
+        "IBLadder": "Immortal Battlefield Ladder",
+        "IBBoat": "Immortal Battlefield Spiral Boat",
+        "Cavern": "Cavern",
+        "Cliff": "Cliff",
+        "AltarLeft": "Altar Left",
+        "AltarRight": "Altar Right",
+        "ITEntrance": "Icefire Treetop Entrance",
+        "ITBottom": "Icefire Treetop Bottom",
+        "ITSinmara": "Icefire Treetop Sinmara",
+        "ITLeft": "Icefire Treetop Left",
+        "ITRight": "Icefire Treetop Right",
+        "ITRightLeftLadder": "Icefire Treetop Right Left Ladder",
+        "ITVidofnir": "Icefire Treetop Vidofnir",
+        "DFEntrance": "Divine Fortress Entrance",
+        "DFRight": "Divine Fortress Right",
+        "DFMain": "Divine Fortress Main",
+        "DFTop": "Divine Fortress Top",
+        "SotFGMain": "Shrine of the Frost Giants Main",
+        "SotFGGrail": "Shrine of the Frost Giants Grail",
+        "SotFGTop": "Shrine of the Frost Giants Top",
+        "SotFGBalor": "Shrine of the Frost Giants Balor",
+        "SotFGBlood": "Shrine of the Frost Giants Blood",
+        "SotFGBloodTez": "Shrine of the Frost Giants Blood Tezcatlipoca",
+        "SotFGLeft": "Shrine of the Frost Giants Left",
+        "GotD": "Gate of the Dead",
+        "GotDWedjet": "Gate of the Dead Wedjet Gate",
+        "TSEntrance": "Takamagahara Shrine Entrance",
+        "TSMain": "Takamagahara Shrine Main",
+        "TSLeft": "Takamagahara Shrine Left",
+        "TSNeck": "Takamagahara Shrine Neck",
+        "TSNeckEntrance": "Takamagahara Shrine Neck Entrance",
+        "TSBottom": "Takamagahara Shrine Bottom",
+        "TSBlood": "Takamagahara Shrine Blood",
+        "HL": "Heavens Labyrinth",
+        "HLGate": "Heavens Labyrinth Gate",
+        "HLSpun": "Heavens Labyrinth Spun",
+        "HLCog": "Heavens Labyrinth Cog",
+        "ValhallaMain": "Valhalla Main",
+        "ValhallaTop": "Valhalla Top",
+        "ValhallaTopRight": "Valhalla Top Right",
+        "DSLMMain": "Dark Lords Mausoleum Main",
+        "DSLMTop": "Dark Lords Mausoleum Top",
+        "DSLMPyramid": "Dark Star Lords Mausoleum Pyramid",
+        "Nibiru": "Nibiru",
+        "ACBottom": "Ancient Chaos Bottom",
+        "ACWind": "Ancient Chaos Wind",
+        "ACTablet": "Ancient Chaos Tablet",
+        "ACMain": "Ancient Chaos Main",
+        "ACBlood": "Ancient Chaos Blood",
+        "HoMTop": "Hall of Malice Top",
+        "HoM": "Hall of Malice",
+        "HoMAwoken": "Hall of Malice Awoken",
+        "EPDEntrance": "Eternal Prison Doom Entrance",
+        "EPDMain": "Eternal Prison Doom Main",
+        "EPDTop": "Eternal Prison Doom Top",
+        "EPDHel": "Eternal Prison Doom Hel",
+        "EPG": "Eternal Prison Gloom",
+        "SpiralHell": "Spiral Hell",
+    }
 
 
 class PlayerStateAdapter:
@@ -96,117 +200,10 @@ class PlayerStateAdapter:
         self._initialize_from_state(state)
 
         # Setting overrides and region mappings
-        self.setting_overrides = {
-            "FDCForBacksides": "require_fdc",
-            "AutoScan": "auto_scan",
-            "AutoPlaceSkulls": "auto_skulls",
-            "RandomDissonance": "random_dissonance",
-            "RandomResearch": "random_research",
-            "CostumeClip": "costume_clip",
-            "MinimalBosses": "logic_difficulty",
-            "RemoveITStatue": "remove_icefire_treetop_statue",
-            "LifeForHoM": "life_sigil_to_awaken_hom",
-            "DLCItem": "dlc_item_logic",
-            "RandomCurses": "random_cursed_chests",
-            "RequiredGuardians": "required_guardians",
-            "RequiredSkulls": "required_skulls",
-        }
-
         # Region ID mapping
-        self.regions_by_id = {
-            "VoD": "Village of Departure",
-            "VoDLadder": "Village of Departure Ladder",
-            "Start": "Starting Area",
-            "InfernoCavern": "Inferno Cavern",
-            "GateofGuidance": "Gate of Guidance",
-            "GateofGuidanceLeft": "Gate of Guidance Left",
-            "MausoleumofGiants": "Mausoleum of Giants",
-            "MausoleumofGiantsRubble": "Mausoleum of Giants Left Door",
-            "EndlessCorridor": "Endless Corridor",
-            "GateofIllusion": "Gate of Illusion",
-            "RoY": "Roots of Yggdrasil",
-            "RoYTopLeft": "Roots of Yggdrasil Left Switch Gate",
-            "RoYTopRight": "Roots of Yggdrasil Birth Sigil Gate",
-            "RoYTopMiddle": "Roots of Yggdrasil Nidhogg Gate",
-            "RoYMiddle": "Roots of Yggdrasil Middle",
-            "RoYBottom": "Roots of Yggdrasil Bottom",
-            "RoYBottomLeft": "Roots of Yggdrasil Bottom Left",
-            "AnnwfnMain": "Annwfn Main",
-            "AnnwfnOneWay": "Annwfn One Way Corridor",
-            "AnnwfnSG": "Annwfn Soul Gate",
-            "AnnwfnPoison": "Annwfn Poison",
-            "AnnwfnRight": "Annwfn Right",
-            "IBBifrost": "Immortal Battlefield Bifrost",
-            "IBTop": "Immortal Battlefield Top",
-            "IBTopLeft": "Immortal Battlefield Top Left",
-            "IBCetusLadder": "Immortal Battlefield Cetus Ladder",
-            "IBMain": "Immortal Battlefield Main",
-            "IBRight": "Immortal Battlefield Right",
-            "IBBottom": "Immortal Battlefield Bottom",
-            "IBLeft": "Immortal Battlefield Left",
-            "IBLeftSG": "Immortal Battlefield Left Soul Gate",
-            "IBBattery": "Immortal Battlefield Battery",
-            "IBDinosaur": "Immortal Battlefield Dinosaur",
-            "IBMoon": "Immortal Battlefield Moon",
-            "IBLadder": "Immortal Battlefield Ladder",
-            "IBBoat": "Immortal Battlefield Spiral Boat",
-            "Cavern": "Cavern",
-            "Cliff": "Cliff",
-            "AltarLeft": "Altar Left",
-            "AltarRight": "Altar Right",
-            "ITEntrance": "Icefire Treetop Entrance",
-            "ITBottom": "Icefire Treetop Bottom",
-            "ITSinmara": "Icefire Treetop Sinmara",
-            "ITLeft": "Icefire Treetop Left",
-            "ITRight": "Icefire Treetop Right",
-            "ITRightLeftLadder": "Icefire Treetop Right Left Ladder",
-            "ITVidofnir": "Icefire Treetop Vidofnir",
-            "DFEntrance": "Divine Fortress Entrance",
-            "DFRight": "Divine Fortress Right",
-            "DFMain": "Divine Fortress Main",
-            "DFTop": "Divine Fortress Top",
-            "SotFGMain": "Shrine of the Frost Giants Main",
-            "SotFGGrail": "Shrine of the Frost Giants Grail",
-            "SotFGTop": "Shrine of the Frost Giants Top",
-            "SotFGBalor": "Shrine of the Frost Giants Balor",
-            "SotFGBlood": "Shrine of the Frost Giants Blood",
-            "SotFGBloodTez": "Shrine of the Frost Giants Blood Tezcatlipoca",
-            "SotFGLeft": "Shrine of the Frost Giants Left",
-            "GotD": "Gate of the Dead",
-            "GotDWedjet": "Gate of the Dead Wedjet Gate",
-            "TSEntrance": "Takamagahara Shrine Entrance",
-            "TSMain": "Takamagahara Shrine Main",
-            "TSLeft": "Takamagahara Shrine Left",
-            "TSNeck": "Takamagahara Shrine Neck",
-            "TSNeckEntrance": "Takamagahara Shrine Neck Entrance",
-            "TSBottom": "Takamagahara Shrine Bottom",
-            "TSBlood": "Takamagahara Shrine Blood",
-            "HL": "Heavens Labyrinth",
-            "HLGate": "Heavens Labyrinth Gate",
-            "HLSpun": "Heavens Labyrinth Spun",
-            "HLCog": "Heavens Labyrinth Cog",
-            "ValhallaMain": "Valhalla Main",
-            "ValhallaTop": "Valhalla Top",
-            "ValhallaTopRight": "Valhalla Top Right",
-            "DSLMMain": "Dark Lords Mausoleum Main",
-            "DSLMTop": "Dark Lords Mausoleum Top",
-            "DSLMPyramid": "Dark Star Lords Mausoleum Pyramid",
-            "Nibiru": "Nibiru",
-            "ACBottom": "Ancient Chaos Bottom",
-            "ACWind": "Ancient Chaos Wind",
-            "ACTablet": "Ancient Chaos Tablet",
-            "ACMain": "Ancient Chaos Main",
-            "ACBlood": "Ancient Chaos Blood",
-            "HoMTop": "Hall of Malice Top",
-            "HoM": "Hall of Malice",
-            "HoMAwoken": "Hall of Malice Awoken",
-            "EPDEntrance": "Eternal Prison Doom Entrance",
-            "EPDMain": "Eternal Prison Doom Main",
-            "EPDTop": "Eternal Prison Doom Top",
-            "EPDHel": "Eternal Prison Doom Hel",
-            "EPG": "Eternal Prison Gloom",
-            "SpiralHell": "Spiral Hell",
-        }
+        # Constant lookup, hoisted to module scope: this used to allocate a
+        # 93-entry dict on every adapter construction.
+        self.regions_by_id = _REGIONS_BY_ID
     
     def _canonicalize_item_name(self, name: str) -> str:
         """
@@ -498,26 +495,21 @@ class PlayerStateAdapter:
     
     def _has_item(self, item: str) -> bool:
         """Port of C# HasItem(string itemName)"""
+        # Either Beherit label satisfies the other -- World.json only spells
+        # the progressive form, but random_dissonance off ships a plain
+        # "Beherit". See _beherit_count().
+        if item in BEHERIT_NAMES:
+            return self._beherit_count() >= 1
+
         # 1. Handle progressive items (must check _collected_items counts)
         if "Whip" in item:
-            level = {
-                "Leather Whip": 1,
-                "Chain Whip": 2,
-                "Flail Whip": 3,
-            }.get(item, 0)
-            if "Progressive Whip" in self._collected_items:
-                return self._collected_items["Progressive Whip"] >= level
-            return False
-        
-        if item in ("Buckler", "Silver Shield", "Angel Shield"):
-            level = {
-                "Buckler": 1,
-                "Silver Shield": 2,
-                "Angel Shield": 3,
-            }[item]
-            if "Progressive Shield" in self._collected_items:
-                return self._collected_items["Progressive Shield"] >= level
-            return False
+            level = WHIP_LEVELS.get(item, 0)
+            if level:
+                return self._collected_items.get("Progressive Whip", 0) >= level
+
+        if item in SHIELD_LEVELS:
+            return (self._collected_items.get("Progressive Shield", 0)
+                    >= SHIELD_LEVELS[item])
         
         # 2. Check for subweapon ammo variations
         if item.endswith("Ammo"):
@@ -699,7 +691,7 @@ class PlayerStateAdapter:
         return any(self._can_reach_by_name(area) for area in ["RoYBottom", "IBMain", "ITLeft", "DSLMMain"])
 
     def _can_spin_corridor(self) -> bool:
-        return self._has_item("Progressive Beherit") and self._dissonance(1)
+        return self._beherit_count() >= 1 and self._dissonance(1)
 
     def _can_seal_corridor(self) -> bool:
         if not self._dissonance(6):
@@ -758,27 +750,24 @@ class PlayerStateAdapter:
         # otherwise fall back to Progressive Beherit (>= count+1).
         if self._collected_items.get("Dissonance", 0) >= count:
             return True
-        return self._collected_items.get("Progressive Beherit", 0) >= (count + 1)
+        return self._beherit_count() >= (count + 1)
+
+    def _beherit_count(self) -> int:
+        """
+        Beherit held, under either label.
+
+        random_dissonance on ships seven "Progressive Beherit"; off ships one
+        "Beherit" (see BEHERIT_NAMES in logic_tree). Only one label exists per
+        seed, so summing is exact.
+        """
+        return sum(self._collected_items.get(n, 0) for n in BEHERIT_NAMES)
 
     def _setting(self, setting_name: str) -> bool:
-        explicit_settings = {
-            "AutoScan": lambda: self.options.auto_scan,
-            "Random Ladders": lambda: self.options.vertical_entrances,
-            "Non Random Ladders": lambda: not self.options.vertical_entrances,
-            "Random Gates": lambda: self.options.gate_entrances,
-            "Non Random Gates": lambda: not self.options.gate_entrances,
-            "Random Soul Gates": lambda: bool(self.options.random_soul_gate_value),
-            "Non Random Soul Gates": lambda: not self.options.random_soul_gate_value,
-            "Non Random Unique": lambda: not self.options.unique_transitions,
-            "Remove IT Statue": lambda: self.options.remove_icefire_treetop_statue,
-            "Not Life for HoM": lambda: not self.options.life_sigil_to_awaken_hom,
-            "CostumeClip": lambda: self.options.costume_clip,
-        }
+        handler = EXPLICIT_SETTINGS.get(setting_name)
+        if handler is not None:
+            return bool(handler(self.options))
         
-        if setting_name in explicit_settings:
-            return bool(explicit_settings[setting_name]())
-        
-        key = self.setting_overrides.get(setting_name, re.sub(r'(?<!^)(?=[A-Z])', '_', setting_name).lower())
+        key = SETTING_OVERRIDES.get(setting_name, re.sub(r'(?<!^)(?=[A-Z])', '_', setting_name).lower())
         
         if not hasattr(self.options, key):
             return False
