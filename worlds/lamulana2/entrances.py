@@ -2047,9 +2047,9 @@ def custom_structural_er(world) -> None:
 
     MAX_ATTEMPTS = 100
 
-    # ── Minimal-accessibility partition tolerance ────────────────────
-    # For minimal/none accessibility we may accept a layout that leaves
-    # some locations permanently unreachable, but only within sane
+    # ── Partition tolerance (items / minimal accessibility) ──────────
+    # For any accessibility other than `full` we may accept a layout that
+    # leaves some locations permanently unreachable, but only within sane
     # bounds.  
     # All bounds are PROPORTIONAL, not absolute counts, because the number
     # of locations/items varies hugely with settings (potsanity, glossanity,
@@ -2211,11 +2211,17 @@ def custom_structural_er(world) -> None:
                                                        base_state=items_only_base)
         last_unreachable = unreachable
 
+        # Only `full` demands that every location be reachable. `items` (the
+        # world's default) and `minimal` both allow some locations to be cut
+        # off -- pre_fill marks the orphans EXCLUDED so the fill only ever
+        # drops filler there, which is exactly what those settings promise.
+        # Treating `items` as strict cost ER retries, and occasionally the
+        # whole outer budget, on layouts the player had already accepted.
         accessibility = world.options.accessibility
-        is_minimal = (accessibility == accessibility.option_minimal)
+        tolerates_partition = (accessibility != accessibility.option_full)
 
-        if unreachable and not is_minimal:
-            # Full/Items/Locations: zero unreachable locations allowed.
+        if unreachable and not tolerates_partition:
+            # Full accessibility: zero unreachable locations allowed.
             if attempt < 5 or attempt % 25 == 0:
                 _log(f"[ER] Attempt {attempt + 1}: {len(unreachable)} "
                       f"unreachable (e.g. {unreachable[:3]}), retrying...")
@@ -2242,8 +2248,8 @@ def custom_structural_er(world) -> None:
                       f"({cluster_msg})")
             break
 
-        # ── Minimal accessibility: partition tolerance ────────────────
-        # unreachable > 0 and is_minimal here.  Reject implausible
+        # ── Items/minimal accessibility: partition tolerance ──────────
+        # unreachable > 0 and tolerates_partition here.  Reject implausible
         # partitions outright, remember the least-partitioned viable
         # layout, and keep searching for a fully-connected one.  The best
         # remembered layout is used after the loop only if no perfect
@@ -2293,7 +2299,16 @@ def custom_structural_er(world) -> None:
 
         # A genuinely minor partition is accepted immediately to bound
         # runtime; larger viable ones keep searching for something better.
-        if len(unreachable) <= _MINIMAL_EARLY_ACCEPT:
+        #
+        # Only `minimal` takes this shortcut. `items` tolerates a partition but
+        # doesn't ask for one, and in practice a fully-connected layout is
+        # almost always found within the budget -- so at the default setting we
+        # keep hunting and fall back to best_tolerable only once the attempts
+        # run out. Otherwise enabling tolerance would have handed default seeds
+        # a 15-location dead zone on attempt 1 where they used to get a
+        # complete map.
+        if (accessibility == accessibility.option_minimal
+                and len(unreachable) <= _MINIMAL_EARLY_ACCEPT):
             _log(f"[ER] Attempt {attempt + 1}: accepting minor partition of "
                   f"{len(unreachable)} unreachable "
                   f"({reachable_placeable} reachable slots for "
@@ -2306,10 +2321,10 @@ def custom_structural_er(world) -> None:
                   f"fully-connected layout...")
         continue
     else:
-        # No fully-connected (or minor-partition) layout found.  For
-        # minimal accessibility, fall back to the least-partitioned viable
-        # layout if one was remembered; otherwise this config is unshuffle-
-        # able within the attempt budget.
+        # No fully-connected (or minor-partition) layout found.  When the
+        # accessibility setting tolerates a partition, fall back to the
+        # least-partitioned viable layout if one was remembered; otherwise
+        # this config is unshuffleable within the attempt budget.
         if best_tolerable is not None:
             _disconnect_all()
             _apply_pairings(best_tolerable[1])
@@ -2588,11 +2603,19 @@ class SoulGateRandomizer:
 
     def _valid_amounts_for(self, gate1, gate2, soul_amounts):
         """Apply the f14GateN6 9-soul restriction in non-random-dissonance/
-        full-accessibility modes (matches C# behaviour)."""
+        full-accessibility modes (matches C# behaviour).
+
+        C# parity (Randomiser.cs:1391):
+            (Settings.AllAccessible || !Settings.RandomDissonance)
+        AllAccessible is the FULL-accessibility flag, so this must compare
+        against Accessibility.option_full (0), not option_minimal (2).
+        AP's ItemsAccessibility numbering is full=0, items=1, minimal=2.
+        """
+        from Options import Accessibility
         valid = [
             a for a in soul_amounts
             if not (
-                (self.options.accessibility.value == 2
+                (self.options.accessibility.value == Accessibility.option_full
                  or not self.options.random_dissonance)
                 and (gate1.game_exit_id == ExitID.f14GateN6
                      or gate2.game_exit_id == ExitID.f14GateN6)
