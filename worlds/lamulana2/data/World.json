@@ -608,7 +608,7 @@
                 "Name": "[ROY B-2] Below Ratatoskr Coin Pot",
                 "ID": "field00B1",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
+                "Logic": "Has(Origin Sigil) or HorizontalAttack"
             },
             {
                 "Name": "[ROY C-2] Footprint Item Pot",
@@ -1663,7 +1663,7 @@
                 "Name": "[IB G-3] Frontside Grail Upper Coin Pot",
                 "ID": "field03G2-1",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
+                "Logic": "True"
             },
             {
                 "Name": "[IB G-3] Frontside Grail Lower Item Pot",
@@ -1851,7 +1851,7 @@
                 "Name": "[IB H-7] Glossary in the Buried Fortress",
                 "ID": "Guardian04",
                 "LocationType": "Glossary",
-                "Logic": "IsDead(Svipdagr) and CanWarp and Has(Claydoll Suit) and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or Glitch(Costume Clip))"
+                "Logic": "CanWarp and Has(Claydoll Suit) and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or Glitch(Costume Clip))"
             }
         ],
         "Exits": [
@@ -2022,7 +2022,7 @@
             {
                 "Name": "Battery Chest",
                 "LocationType": "Chest",
-                "Logic": "IsDead(Svipdagr) and CanWarp and Has(Life Sigil) and Has(Feather) and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or (Has(Claydoll Suit) and Glitch(Costume Clip)))"
+                "Logic": "CanReach(IBRight) and CanWarp and Has(Life Sigil) and Has(Feather) and ((CanChant(Wind) and CanChant(Sea) and CanChant(Fire) and CanChant(Earth)) or (Has(Claydoll Suit) and Glitch(Costume Clip)))"
             }
         ],
         "Exits": [
@@ -2571,7 +2571,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "ITSinmara",
-                "Logic": "HorizontalAttack"
+                "Logic": "HorizontalAttack or IsDead(Vedfolnir)"
             },
             {
                 "ConnectionType": "Internal",
@@ -4087,7 +4087,7 @@
                 "Name": "[TS D-4] Glossary in Bottom-Right Breakable Wall",
                 "ID": "field08RG3",
                 "LocationType": "Glossary",
-                "Logic": "CanWarp or ((Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife))"
+                "Logic": "HorizontalAttack and (CanWarp or ((Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife)))"
             },
             {
                 "Name": "[TS C-4] NPC Glossary (Ash Geen)",
@@ -5495,22 +5495,22 @@
             {
                 "Name": "Map Chest AC",
                 "LocationType": "Chest",
-                "Logic": "Has(Leather Whip) or Has(Axe) or CanUse(Earth Spear) or CanUse(Bomb) or (Has(Katana) and Has(Vajra)) or (CanUse(Flare Gun) and HorizontalAttack)"
+                "Logic": "Has(Leather Whip) or Has(Axe) or CanUse(Earth Spear) or CanUse(Bomb) or (Has(Katana) and Has(Vajra)) or (CanUse(Flare Gun) and (HorizontalAttack or (Has(Ice Cloak) and OrbCount(1))))"
             },
             {
                 "Name": "Venum Shop 1",
                 "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))"
+                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)) or (Has(Ice Cloak) and OrbCount(2) and CanWarp)"
             },
             {
                 "Name": "Venum Shop 2",
                 "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))"
+                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)) or (Has(Ice Cloak) and OrbCount(2) and CanWarp)"
             },
             {
                 "Name": "Venum Shop 3",
                 "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))"
+                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)) or (Has(Ice Cloak) and OrbCount(2) and CanWarp)"
             },
             {
                 "Name": "Ki sikil lil la ke",
@@ -5526,7 +5526,7 @@
                 "Name": "[AC D-6] Entrance Gate Item Pot",
                 "ID": "field12D5",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(6)))"
+                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and ((Has(Ice Cloak) and OrbCount(3)) or (Has(Ice Cloak) and OrbCount(1) and Has(Bracelet))))"
             },
             {
                 "Name": "[AC D-7] Annunaki Hot Spring Item Pot",
@@ -5544,7 +5544,7 @@
                 "Name": "[AC B-6] Path to Inferno Coin Pot",
                 "ID": "field12B5",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Ice Cloak) or OrbCount(6)))"
+                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and ((Has(Ice Cloak) and OrbCount(3)) or (Has(Ice Cloak) and OrbCount(1) and Has(Bracelet))))"
             },
             {
                 "Name": "[AC B-6] Abandon Your Desires Coin Pot #1",
@@ -5610,7 +5610,7 @@
                 "Name": "[AC D-7] Glossary at the Bottom of Lava Funnel",
                 "ID": "field12RG1",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(3)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)))"
             },
             {
                 "Name": "[AC A-6] Glossary in Wall Between The Eyes (Scan)",
@@ -5628,7 +5628,7 @@
                 "Name": "[AC C-6] NPC Glossary (Venum)",
                 "ID": "talk63",
                 "LocationType": "Glossary",
-                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4))"
+                "Logic": "Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)) or (Has(Ice Cloak) and OrbCount(2) and CanWarp)"
             },
             {
                 "Name": "[AC D-7] NPC Glossary (Sykick)",
@@ -6241,27 +6241,25 @@
                 "Name": "[HOM E-3] Glossary at Ladon when Awoken",
                 "ID": "field13RG9",
                 "LocationType": "Glossary",
-                "Logic": "Has(Silver Shield) and ((Has(Chain Whip) and OrbCount(7)) or ((Has(Flail Whip) or Has(Axe) or Has(Katana)) and OrbCount(6)))",
-                "HardLogic": "MeleeAttack"
+                "Logic": "IsDead(HoM Right Path)"
             },
             {
                 "Name": "[HOM D-5] Glossary in Orthrus' Right Wall (Scan)",
                 "ID": "field13RG6",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner) and Has(Feather)"
+                "Logic": "Has(Hand Scanner) and Has(Feather) and IsDead(HoM Right Path)"
             },
             {
                 "Name": "[HOM E-5] Glossary at Spikes before Orthrus (Scan)",
                 "ID": "field13RG5",
                 "LocationType": "Glossary",
-                "Logic": "Has(Hand Scanner)"
+                "Logic": "Has(Hand Scanner) and IsDead(HoM Right Path)"
             },
             {
                 "Name": "[HOM F-3] NPC Glossary (Alcyoneus)",
                 "ID": "talk67",
                 "LocationType": "Glossary",
-                "Logic": "Has(Silver Shield) and ((Has(Chain Whip) and OrbCount(7)) or ((Has(Flail Whip) or Has(Axe) or Has(Katana)) and OrbCount(6)))",
-                "HardLogic": "MeleeAttack"
+                "Logic": "IsDead(HoM Right Path)"
             }
         ],
         "Exits": []
