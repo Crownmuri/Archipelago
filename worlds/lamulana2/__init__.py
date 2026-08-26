@@ -627,8 +627,11 @@ class LaMulana2World(World):
                 import random as _random
                 from .entrances import SoulGateRandomizer, _validate_starting_cluster
 
-                seed_val = self.multiworld.seed + outer  # vary RNG per outer attempt
-                rng = _random.Random(seed_val)
+                # Derive the per-attempt stream from this world's own Random.
+                # multiworld.seed is shared by every slot in the room, so
+                # Random(multiworld.seed + outer) handed every La-Mulana 2
+                # player the identical soul gate draw.
+                rng = _random.Random(self.random.getrandbits(64))
 
                 all_entrances = [
                     e for region in self.multiworld.get_regions(self.player)
@@ -1326,7 +1329,7 @@ class LaMulana2World(World):
         chosen_name = StartingArea.name_lookup[chosen]
         valid = [v for v in _STARTING_AREA_MAP if self._starting_area_prereqs_met(v)]
         if valid:
-            rerolled = self.multiworld.random.choice(valid)
+            rerolled = self.random.choice(valid)
             logging.warning(
                 f"[La-Mulana 2] {self.player_name}: starting area '{chosen_name}' requires "
                 f"entrance options that are disabled. Re-rolled to '{StartingArea.name_lookup[rerolled]}'."

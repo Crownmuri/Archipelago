@@ -110,15 +110,14 @@ class LM2RandomizerCore:
         self.soul_gate_pairs = []
         self._filler_id_cache: Dict[LocationID, ItemID] = {}
 
-        # Use a different seed for each attempt by adding attempt number
-        # We'll get this from the world if available
-        if hasattr(world, 'generation_attempt'):
-            seed = world.multiworld.seed + world.generation_attempt
-        else:
-            seed = world.multiworld.seed
+        # Per-player stream. multiworld.seed is a property of the MULTIWORLD,
+        # so seeding from it gave every La-Mulana 2 slot in a room the same
+        # draws in the same order -- measured: two identical slots produced
+        # byte-identical cursed_locations and shop_entries. world.random is
+        # AP's per-player Random, already seeded off the multiworld seed plus
+        # the player id, which is exactly what this wants.
+        self.rng = world.random
     
-        self.rng = random.Random(seed)
-
     # ============================================================
     # Entry point
     # ============================================================

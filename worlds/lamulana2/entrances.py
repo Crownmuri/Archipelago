@@ -2080,7 +2080,11 @@ def custom_structural_er(world) -> None:
     _DUNGEON_LEVEL_CHECK = bool(getattr(opts, 'prevent_area_loops', True))
 
     candidates = _shuffleable_exits(world)
-    rng = world.multiworld.random
+    # Per-player stream. multiworld.random is shared across every world in the
+    # room, so drawing from it makes this layout depend on how many other
+    # worlds drew first -- the same yaml + seed stops reproducing as soon as
+    # anything else in the multiworld changes.
+    rng = world.random
 
     if not candidates:
         return
