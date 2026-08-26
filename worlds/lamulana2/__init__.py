@@ -21,7 +21,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 from Options import Accessibility
 
-from .options import LM2Options, StartingArea, StartingWeapon, ShopPlacement
+from .options import LM2Options, StartingArea, StartingWeapon
 from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
@@ -238,23 +238,6 @@ class LaMulana2World(World):
                 f"Oannesanity, which is disabled. Disabling DLC entrance shuffling."
             )
             self.options.include_dlc_entrances.value = 0
-
-        # shop_placement=original pins the FDC to its vanilla slot, Bargain Duck
-        # Shop 3 -- which sits in ValhallaMain, a backside area. require_fdc
-        # gates backside areas behind the FDC, so the item would require itself
-        # and strand everything behind it (measured: 54 locations unreachable
-        # while holding every item in the game). Exempting just that area is not
-        # enough either, because ER routes the approach through other backside
-        # areas. So original shops and the backside requirement are mutually
-        # exclusive; the shops win, since that is the option that pins the item.
-        if (self.options.shop_placement == ShopPlacement.option_original
-                and self.options.require_fdc):
-            logging.warning(
-                f"[La-Mulana 2] {self.player_name}: 'Shop Placement' is set to "
-                f"original, which pins the Future Development Company inside a "
-                f"backside area. Disabling 'Future Development Company in Logic'."
-            )
-            self.options.require_fdc.value = 0
 
         # Cursed Chests may target any Chest-type location, and the number of
         # those grows with Costumesanity / Oannesanity. The option's static

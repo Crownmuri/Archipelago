@@ -61,8 +61,7 @@ from .locations import (
 )
 from .regions import (
     AREA_DEFS,
-    ExitType,
-    LM2Entrance
+    ExitType
 )
 from .entrances import EntrancePair, SoulGatePair
 from .logic.player_state import PlayerStateAdapter
@@ -1013,10 +1012,11 @@ class LM2RandomizerCore:
         """
         C# parity: Randomiser.FixFDCLogic(), run from World.pre_fill().
 
-        MainViewModel calls FixAnkhLogic() then FixFDCLogic()
-        after PlaceEntrances(), which is the order pre_fill mirrors.
+        MainViewModel calls FixAnkhLogic() then FixFDCLogic() *after*
+        PlaceEntrances(), and C# rewrites Exit.ConnectingAreaID in place when it
+        pairs entrances -- so both gates read each exit's LIVE destination. 
 
-        * backside      -> FDC, non-internal exits only.
+        * backside      -> FDC, non-internal exits only (straight C# parity).
         * Oannes rooms  -> FDC + Hand Scanner + Totem Pole, ANY exit type.
         """
         if not self.options.require_fdc:
@@ -1030,33 +1030,35 @@ class LM2RandomizerCore:
         # gate would close those rooms permanently for nothing.
         gate_checkpoints = bool(self.options.oannesanity)
 
-        for exit_ in self.multiworld.get_entrances(self.player):
-            if not isinstance(exit_, LM2Entrance):
+        for region in self.multiworld.get_regions(self.player):
+            for exit in region.exits:
+                # Must be an LM2Entrance
+                if not hasattr(exit, "exit_type") or not hasattr(exit, "connecting_area"):
                     continue
 
-            dest_area = exit_.destination_area
-            if dest_area is None:
+                dest = exit.connected_region
+                if dest is None:
                     continue
                 dest_area = getattr(dest, "game_area_id", None)
 
-            need_checkpoint = (gate_checkpoints
-                               and dest_area in self.OANNES_CHECKPOINT_AREAS)
+                # Oannes checkpoint rooms: scanner + totem pole + FDC, any type.
+                if gate_checkpoints and dest_area in self.OANNES_CHECKPOINT_AREAS:
+                    exit.append_logic_string(
+                        "and Has(Future Development Company)"
+                        " and Has(Hand Scanner) and Has(Totem Pole)"
+                    )
 
                 # C#: exit.ExitType != ExitType.Internal
-            #     and GetArea(exit.ConnectingAreaID).IsBackside
-                dest_area_def = AREA_DEFS.get(dest_area)
-            need_backside = (exit_.exit_type != ExitType.Internal
-                             and dest_area_def is not None
-                             and dest_area_def.is_backside)
+                if exit.exit_type == ExitType.Internal:
+                    continue
 
-            if not (need_checkpoint or need_backside):
+                # C#: GetArea(exit.ConnectingAreaID).IsBackside
+                dest_area_def = AREA_DEFS.get(dest_area)
+                if not dest_area_def or not dest_area_def.is_backside:
                     continue
 
                 # C#: exit.AppendLogicString(" and Has(Future Development Company)")
-            clause = "and Has(Future Development Company)"
-            if need_checkpoint:
-                clause += " and Has(Hand Scanner) and Has(Totem Pole)"
-            exit_.append_logic_string(clause)
+                exit.append_logic_string("and Has(Future Development Company)")
 
     def fix_ankh_logic_post_er(self) -> None:
         """
