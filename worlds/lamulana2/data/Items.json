@@ -302,7 +302,7 @@
   {
     "name": "Fish Suit",
     "id": 812,
-    "isRequired": true
+    "isRequired": false
   },
   {
     "name": "Progressive Whip",
