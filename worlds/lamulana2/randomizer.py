@@ -724,21 +724,20 @@ class LM2RandomizerCore:
             placed_items_info.append((item_name, loc.name))
             _log(f"[DEBUG] Placed {item_name} (ID: {item_id}) at {loc.name}")
 
-        # C# parity: for non-VoD starts, place Weights in StartingShop2 (melee only) and StartingShop3
-        if self.starting_area != AreaID.VoD:
-            if self.starting_weapon <= ItemID.Katana:
-                starting_shop2 = self.locations.get(LocationID.StartingShop2)
-                if starting_shop2 and starting_shop2.item is None:
-                    mw.push_item(starting_shop2, create_item(self.world, "Weights"), collect=False)
-                    starting_shop2.locked = True
-                    _log(f"[DEBUG] Placed Weights at Starting Shop 2 (melee start)")
+        # Intentional non-parity with original C# randomizer (PlaceOriginalShops)
+        # StartingShop2 (melee only) and StartingShop3 no longer fixed to Weights.
 
-            starting_shop3 = self.locations.get(LocationID.StartingShop3)
-            if starting_shop3 and starting_shop3.item is None:
-                mw.push_item(starting_shop3, create_item(self.world, "Weights"), collect=False)
-                starting_shop3.locked = True
-                _log(f"[DEBUG] Placed Weights at Starting Shop 3")
-
+        # if self.starting_area != AreaID.VoD:
+        #    if self.starting_weapon <= ItemID.Katana:
+        #        starting_shop2 = self.locations.get(LocationID.StartingShop2)
+        #        if starting_shop2 and starting_shop2.item is None:
+        #            mw.push_item(starting_shop2, create_item(self.world, "Weights"), collect=False)
+        #            starting_shop2.locked = True
+        #
+        #    starting_shop3 = self.locations.get(LocationID.StartingShop3)
+        #    if starting_shop3 and starting_shop3.item is None:
+        #        mw.push_item(starting_shop3, create_item(self.world, "Weights"), collect=False)
+        #        starting_shop3.locked = True
 
     # Price tag for the optional expensive slot, in coins.
     EXPENSIVE_SHOP_PRICE = 1000
