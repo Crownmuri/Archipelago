@@ -1834,10 +1834,8 @@ _MIN_STARTING_LOCATIONS = 2
 _MIN_STARTING_UNFILLED = 2
 
 # Minimum number of distinct REACHABLE AREAS (regions with unique
-# game_area_id) in sphere-0.  Prevents configurations where many
-# locations are accessible but all in 1-2 areas (tiny cluster that
-# the fill can't break out of even with the unfilled minimum met).
-_MIN_STARTING_AREAS = 2
+# game_area_id) in sphere-0.
+_MIN_STARTING_AREAS = 1
 
 def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
     """
