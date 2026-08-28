@@ -95,6 +95,17 @@ _STARTING_WEAPON_MAP: Dict[int, ItemID] = {
     StartingWeapon.option_claydoll_suit: ItemID.ClaydollSuit,
 }
 
+# =============================================================================
+# Local Filler (potsanity / glossanity) distribution helper
+# =============================================================================
+
+
+# How much of sphere one the local filler share may never take. Sphere one is
+# small and does not grow with the world (a gate-entrance start offers ~12
+# reachable locations), so the reserve is what keeps the progression fill able
+# to seed itself. See _lock_into_own_locations.
+_LOCAL_FILL_SPHERE_ONE_RESERVE_FRACTION = 0.5
+_LOCAL_FILL_SPHERE_ONE_RESERVE_MIN = 4
 
 # =============================================================================
 # Main World
@@ -343,8 +354,41 @@ class LaMulana2World(World):
             pool = [i for i in pool if id(i) not in held]
             _log(f"[LOCAL] held back {len(self._local_pot_items)} pot item(s)")
 
+        # Glossary ROMs are uniquely named, so when they are filler their
+        # locality can be declared by name instead of pre-placed -- nothing
+        # leaves the pool and AP's own fill keeps them home.
+        self._name_local_glossary_share(pool)
+
         # Add items to multiworld's item pool
         self.multiworld.itempool += pool
+
+    def _name_local_glossary_share(self, pool: list) -> None:
+        """Name the share of glossary to be in local_items,
+        and let the generic locality rules plus the ordinary fill do the rest. 
+        Nothing is removed from the pool, so the progression fill
+        keeps every slot it needs.
+
+        Not usable in two cases, both handled in _place_local_sanity_items:
+        - solo game (no local_items in a single world seed AP)
+        - glossary_hunt (ROMs are progressive MacGuffins)
+        """
+        from .options import Goal
+
+        if self.multiworld.players == 1:
+            return
+        if getattr(self, "goal", Goal.option_beat_the_game) == Goal.option_glossary_hunt:
+            return
+
+        pct = self.options.local_glossanity_percentage.value
+        if pct <= 0:
+            return
+
+        gloss_codes = {BASE_ITEM_ID + int(g) for g in GLOSSARY_ITEM_IDS}
+        share = self._take_local_share(
+            [i for i in pool if i.code in gloss_codes], pct)
+        if share:
+            self.options.local_items.value.update(i.name for i in share)
+            _log(f"[LOCAL] named {len(share)} glossary item(s) local")
 
     def _take_local_share(self, items: list, percentage: int) -> list:
         """Randomly pick `percentage`% of `items` to keep in our own world."""
@@ -483,16 +527,29 @@ class LaMulana2World(World):
                 mw.itempool.append(build_pre_filler(self))
 
     def _place_local_sanity_items(self) -> None:
-        """Lock the held-back potsanity/glossanity share into our own world."""
+        """Place the shares that cannot be declared by name.
+
+        * the potsanity share -- pot filler shares item names across many
+          copies ("3 Bombs" x17), so local_items cannot express "64% of them"
+          the way it can for the uniquely-named glossary ROMs.
+        * the glossanity share under the glossary_hunt goal, where the ROMs
+          are progression. Those go down the fill_restrictive path below,
+          which sweeps for reachability; returning that many progression
+          items to the pool instead measurably tightens the main fill.
+
+        A solo seed with any other goal does no pre-placement at all.
+        """
+        from .options import Goal
+
         pot_items = getattr(self, "_local_pot_items", [])
         self._local_pot_items = []
         if pot_items:
             self._lock_into_own_locations(pot_items, "pot")
 
-        # Glossanity share is taken now rather than in create_items, so the
-        # pool stays whole for the ER validators (see create_items).
         gloss_pct = self.options.local_glossanity_percentage.value
-        if gloss_pct > 0:
+        if (gloss_pct > 0
+                and getattr(self, "goal", Goal.option_beat_the_game)
+                == Goal.option_glossary_hunt):
             mw = self.multiworld
             gloss_codes = {BASE_ITEM_ID + int(g) for g in GLOSSARY_ITEM_IDS}
             candidates = [i for i in mw.itempool
@@ -503,10 +560,51 @@ class LaMulana2World(World):
                 mw.itempool[:] = [i for i in mw.itempool if id(i) not in held]
                 self._lock_into_own_locations(gloss_items, "glossary")
 
-    def _lock_into_own_locations(self, items: list, label: str) -> None:
+    def _viable_local_spots(self, label: str, needed: int) -> list:
+        """Free locations a pre-placed local share may use.
+
+        Keeps part of sphere one out of reach of the filler share. That share
+        is sampled uniformly over every free slot, so it scales with the world
+        -- but sphere one does not. 
+        """
+        from BaseClasses import CollectionState
+
         mw = self.multiworld
         spots = [loc for loc in mw.get_locations(self.player)
                  if loc.address is not None and loc.item is None]
+
+        start_state = CollectionState(mw)
+        sphere_one = [loc for loc in spots if loc.can_reach(start_state)]
+        reserved = set()
+        if sphere_one:
+            keep = min(len(sphere_one),
+                       max(_LOCAL_FILL_SPHERE_ONE_RESERVE_MIN,
+                           int(len(sphere_one)
+                               * _LOCAL_FILL_SPHERE_ONE_RESERVE_FRACTION)))
+            reserved = set(self.random.sample(sphere_one, keep))
+
+        priority = self.options.priority_locations.value
+        viable = [loc for loc in spots
+                  if loc not in reserved and loc.name not in priority]
+
+        if len(viable) < needed:
+            # The share still has to go somewhere. Give back the unrestricted
+            # list and let the overflow path trim whatever does not fit.
+            _log(f"[LOCAL] {label}: only {len(viable)} viable spot(s) for "
+                  f"{needed} item(s), ignoring the sphere-one reserve")
+            return spots
+
+        return viable
+
+    def _lock_into_own_locations(self, items: list, label: str) -> None:
+        mw = self.multiworld
+        free = [loc for loc in mw.get_locations(self.player)
+                if loc.address is not None and loc.item is None]
+        # Only the filler branch needs the sphere-one reserve. The progression
+        # branch below hands its items to fill_restrictive, and holding early
+        # slots back from that pass measurably costs more than it saves.
+        spots = (free if any(i.advancement for i in items)
+                 else self._viable_local_spots(label, len(items)))
 
         if len(spots) < len(items):
             # One filler is built per included location, so there is always room
