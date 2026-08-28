@@ -67,6 +67,18 @@ _STARTING_AREA_MAP: Dict[int, AreaID] = {
     StartingArea.option_hall_of_malice: AreaID.HoMTop,
 }
 
+# Annwfn and Immortal Battlefield don't have any escape without ER and original shops.
+# Gate of the Dead Wedjat gate requires PuzzleFinished(White Pedestals).
+# Original shop placement pins Pepper in VoD, outside the pocket.
+# Other Soul Gates require 3/5 guardian kills when only 2 are accessible.
+# Two required options to escape:
+#   * any kind of regular entrance shuffle (ladders/gates/doors)
+#   * soul gate entrance shuffle
+_POCKET_STARTING_AREAS = frozenset({
+    StartingArea.option_annwfn,
+    StartingArea.option_immortal_battlefield,
+})
+
 _STARTING_AREA_PREREQS: Dict[int, Tuple[str, ...]] = {
     StartingArea.option_icefire_treetop: ("vertical_entrances",),
     StartingArea.option_divine_fortress: ("gate_entrances",),
@@ -671,12 +683,7 @@ class LaMulana2World(World):
             return
 
         opts = self.options
-        any_structural = (
-            opts.horizontal_entrances
-            or opts.vertical_entrances
-            or opts.gate_entrances
-            or opts.unique_transitions
-        )
+        any_structural = self._any_structural_er()
         # Value-only soul gate pass: vanilla pairings, but values may
         # still need rewriting (random_soul_gate_value, include_nine_soul_gates,
         # or random_dissonance N9 floor).
@@ -1460,15 +1467,38 @@ class LaMulana2World(World):
 
         self.goal = goal
 
-    def _starting_area_prereqs_met(self, area_value: int) -> bool:
+    def _any_structural_er(self) -> bool:
+        """True when some pool of ordinary exits is being shuffled."""
+        opts = self.options
+        return bool(opts.horizontal_entrances
+                    or opts.vertical_entrances
+                    or opts.gate_entrances
+                    or opts.unique_transitions)
+
+    def _starting_area_block_reason(self, area_value: int) -> "str | None":
+        """Why this starting area cannot be used, or None if it can."""
         prereqs = _STARTING_AREA_PREREQS.get(area_value, ())
-        return all(getattr(self.options, name).value for name in prereqs)
+        if not all(getattr(self.options, name).value for name in prereqs):
+            return "requires entrance options that are disabled"
+
+        if (area_value in _POCKET_STARTING_AREAS
+                and self.options.shop_placement == ShopPlacement.option_original
+                and not self._any_structural_er()
+                and not self.options.soul_gate_entrances):
+            return ("cannot be escaped with original shop placement and no "
+                    "entrance or soul gate randomization")
+
+        return None
+
+    def _starting_area_prereqs_met(self, area_value: int) -> bool:
+        return self._starting_area_block_reason(area_value) is None
 
     def _choose_starting_area(self) -> AreaID:
         """Resolve the chosen starting area, re-rolling uniformly across valid
         areas if the picked one's entrance prerequisites aren't satisfied."""
         chosen = self.options.starting_area.value
-        if self._starting_area_prereqs_met(chosen):
+        reason = self._starting_area_block_reason(chosen)
+        if reason is None:
             return _STARTING_AREA_MAP[chosen]
 
         chosen_name = StartingArea.name_lookup[chosen]
@@ -1476,8 +1506,8 @@ class LaMulana2World(World):
         if valid:
             rerolled = self.random.choice(valid)
             logging.warning(
-                f"[La-Mulana 2] {self.player_name}: starting area '{chosen_name}' requires "
-                f"entrance options that are disabled. Re-rolled to '{StartingArea.name_lookup[rerolled]}'."
+                f"[La-Mulana 2] {self.player_name}: starting area '{chosen_name}' "
+                f"{reason}. Re-rolled to '{StartingArea.name_lookup[rerolled]}'."
             )
             return _STARTING_AREA_MAP[rerolled]
 

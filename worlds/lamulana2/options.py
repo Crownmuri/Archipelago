@@ -33,6 +33,7 @@ class StartingArea(Choice):
     prerequisites aren't met, a uniform re-roll is performed across the remaining valid areas
     (a warning is logged); if no valid options remain, falls back to Village of Departure.
 
+    Requires non-original shops: annwfn, immortal_battlefield.
     Requires vertical_entrances: icefire_treetop.
     Requires gate_entrances: divine_fortress, shrine_of_the_frost_giants, takamagahara_shrine,
     valhalla, dark_star_lords_mausoleum, ancient_chaos, hall_of_malice."""
