@@ -51,6 +51,18 @@ from .regions import (
 )
 from .logic.player_state import PlayerStateAdapter
 
+# ============================================================
+# only_murals placement helper
+# ============================================================
+
+# How many only_murals seatings to try before keeping the cheapest. 
+# See place_mantras_post_er.
+_MANTRA_SEATING_CANDIDATES = 5
+
+# ============================================================
+# 
+# ============================================================
+
 class ShopEntry(NamedTuple):
     location_id: LocationID
     item_id: ItemID
@@ -646,7 +658,9 @@ class LM2RandomizerCore:
         """
         items = list(getattr(self, "_pending_shop_items", []) or [])
         slots = list(getattr(self, "_pending_shop_slots", []) or [])
-        if not items:
+        # Short-circuit on a committed flag rather than on an emptied list, so
+        # unplace_shop_items_post_er can hand the work back for a re-roll.
+        if not items or getattr(self, "_shop_committed", False):
             return True
 
         from Fill import sweep_from_pool
@@ -716,7 +730,7 @@ class LM2RandomizerCore:
                 continue
 
             commit(pairs)
-            self._pending_shop_items = []
+            self._shop_committed = True
             _log(f"[SHOP] Placed {len(pairs)} shop item(s) with checks "
                  f"on attempt {attempt + 1}")
             return True
@@ -735,7 +749,7 @@ class LM2RandomizerCore:
             pairs.append((loc, item))
         commit(pairs)
         self.world._pending_shop_items = []
-        self._pending_shop_items = []
+        self._shop_committed = True
         return False
 
     def _place_shop_items_original(self):
@@ -1203,31 +1217,123 @@ class LM2RandomizerCore:
                 loc.locked = False
                 item.location = None
 
-        remaining_items = list(mantra_items)
-        remaining_locs = list(mural_locations)
-        self.rng.shuffle(remaining_locs)
-        try:
-            fill_restrictive(
-                mw, base, remaining_locs, remaining_items,
-                single_player_placement=True, lock=True,
-                name="LM2 only_murals mantras",
-            )
-        except Exception as exc:
-            _log(f"[ERROR] only_murals fill_restrictive failed: {exc!r}")
-            unplace()
-            return False
+        # Seating the mantras costs the world reachability: they leave the item
+        # pool, so every CanChant gate now has to be earned at the mural holding
+        # it. How much it costs varies enormously between equally-valid
+        # seatings, so take the cheapest of several rather than the first that works.
+        from .entrances import _sweep_reachability
 
-        if remaining_items:
-            _log(f"[ERROR] only_murals: {len(remaining_items)} mantra(s) could "
-                 f"not be placed at a reachable mural")
-            unplace()
-            return False
-
+        # Out of the pool before measuring, or the sweep would hand itself every
+        # mantra for free and every candidate would look equally good.
         for item in mantra_items:
             if item in mw.itempool:
                 mw.itempool.remove(item)
+
+        best_pairs = None
+        best_cost = None
+
+        for attempt in range(_MANTRA_SEATING_CANDIDATES):
+            remaining_items = list(mantra_items)
+            remaining_locs = list(mural_locations)
+            self.rng.shuffle(remaining_locs)
+            try:
+                fill_restrictive(
+                    mw, base, remaining_locs, remaining_items,
+                    single_player_placement=True, lock=True,
+                    name="LM2 only_murals mantras",
+                )
+            except Exception as exc:
+                _log(f"[ERROR] only_murals fill_restrictive failed: {exc!r}")
+                unplace()
+                continue
+
+            if remaining_items:
+                _log(f"[ERROR] only_murals: {len(remaining_items)} mantra(s) "
+                     f"could not be placed at a reachable mural")
+                unplace()
+                continue
+
+            cost = len(_sweep_reachability(self.world)[0])
+            if best_cost is None or cost < best_cost:
+                best_cost = cost
+                best_pairs = [(item.location, item) for item in mantra_items]
+            unplace()
+            if best_cost == 0:
+                break  # nothing to beat
+
+        if best_pairs is None:
+            mw.itempool.extend(mantra_items)
+            return False
+
+        for loc, item in best_pairs:
+            loc.item = item
+            item.location = loc
+            loc.locked = True
+        _log(f"[MANTRA] Seated 10 mantra(s), costing {best_cost} unreachable "
+             f"location(s)")
         return True
 
+    def unplace_shop_items_post_er(self) -> None:
+        """Undo a committed post-ER shop assignment so the layout can reroll.
+
+        _finalize_layout assigns the shops and only then seats the mantras, so
+        it can still reject the layout afterwards -- the seating fails, or the
+        post-mantra reachability gate trips. The outer loop in connect_entrances
+        then rerolls the entrance graph, and restore_logic_state rewinds only
+        logic strings. Without this the shop items stay pinned to slots that
+        were chosen against the discarded graph, and the next
+        place_shop_items_post_er short-circuits instead of re-placing them --
+        measured: 2 of 24 shop assignments were followed by a rejection, so a
+        shop-only progression item could survive at a slot the accepted layout
+        never makes reachable.
+        """
+        if not getattr(self, "_shop_committed", False):
+            return
+
+        slots = list(getattr(self, "_pending_shop_slots", []) or [])
+        items = list(getattr(self, "_pending_shop_items", []) or [])
+        slot_ids = {loc.game_location_id for loc in slots}
+
+        for loc in slots:
+            loc.item = None
+            loc.locked = False
+        for item in items:
+            item.location = None
+
+        self.shop_entries = [e for e in self.shop_entries
+                             if e.location_id not in slot_ids]
+        # Back to "pending", so the ER validators count them as held again.
+        self.world._pending_shop_items = list(items)
+        self._shop_committed = False
+
+    def unplace_mantras_post_er(self) -> None:
+        """Undo a *successful* only_murals seating.
+
+        The internal unplace() above covers the failure paths, but a seating can
+        also be rejected after the fact -- _finalize_layout re-checks the
+        starting cluster, because a valid-looking seating can still seal the
+        world. Rerolling ER then needs the murals empty AND the mantras back in
+        the pool, since a successful seating removed them from it.
+        """
+        if (self.options.mantra_placement.value
+                != self.options.mantra_placement.option_only_murals):
+            return
+
+        mw = self.multiworld
+        for loc in get_locations_of_type(self.locations, LocationType.Mural):
+            item = loc.item
+            if item is None or item.player != self.player:
+                continue
+            try:
+                iid = get_game_item_id(item)
+            except Exception:
+                continue
+            if iid not in MANTRA_ITEMS:
+                continue
+            loc.item = None
+            loc.locked = False
+            item.location = None
+            mw.itempool.append(item)
 
     # ============================================================
     # Research Placement

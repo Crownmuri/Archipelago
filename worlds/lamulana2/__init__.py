@@ -71,9 +71,10 @@ _STARTING_AREA_MAP: Dict[int, AreaID] = {
 # Gate of the Dead Wedjat gate requires PuzzleFinished(White Pedestals).
 # Original shop placement pins Pepper in VoD, outside the pocket.
 # Other Soul Gates require 3/5 guardian kills when only 2 are accessible.
-# Two required options to escape:
+# Two ways to escape:
 #   * any kind of regular entrance shuffle (ladders/gates/doors)
-#   * soul gate entrance shuffle
+#   * strict soul gate entrance shuffle excluding the 9 gate
+
 _POCKET_STARTING_AREAS = frozenset({
     StartingArea.option_annwfn,
     StartingArea.option_immortal_battlefield,
@@ -118,6 +119,12 @@ _STARTING_WEAPON_MAP: Dict[int, ItemID] = {
 # to seed itself. See _lock_into_own_locations.
 _LOCAL_FILL_SPHERE_ONE_RESERVE_FRACTION = 0.5
 _LOCAL_FILL_SPHERE_ONE_RESERVE_MIN = 4
+
+# The glossary_hunt goal turns required glossary into progression_not_balancing,
+# clogging up spheres. All glossary would be tough to fill in a solo world.
+# Forcing max to be a fraction of the total, leaving the rest as useful/filler.
+_GLOSSARY_HUNT_MAX_FRACTION = 0.80
+
 
 # =============================================================================
 # Main World
@@ -353,6 +360,10 @@ class LaMulana2World(World):
         # Build the base item pool
         pool = build_item_pool(self)
 
+        # Only as many Glossary ROMs as the goal actually needs stay
+        # progression; the rest are filler.
+        self._demote_surplus_glossary(pool)
+
         # Add pot filler items for whichever potsanity pools are enabled.
         pot_pool = (build_pot_filler_pool(self)
                     if potsanity_pools_enabled(self.options) else [])
@@ -373,6 +384,39 @@ class LaMulana2World(World):
 
         # Add items to multiworld's item pool
         self.multiworld.itempool += pool
+
+    def _demote_surplus_glossary(self, pool: list) -> None:
+        """Leave only as many Glossary ROMs progression as the goal needs.
+
+        `has_group("Glossary", ...)` counts prog_items, so a filler ROM does not
+        count toward the goal -- which is exactly the point: the goal needs
+        `glossary_hunt_count` of them, and every ROM beyond that was only making
+        the fill's job harder. `_GLOSSARY_HUNT_MAX_FRACTION` guarantees the
+        surplus exists.
+        """
+        from .options import Goal
+
+        if getattr(self, "goal", None) != Goal.option_glossary_hunt:
+            return  # ROMs are already filler for every other goal
+
+        gloss_codes = {BASE_ITEM_ID + int(g) for g in GLOSSARY_ITEM_IDS}
+        roms = [i for i in pool if i.code in gloss_codes]
+        if not roms:
+            return
+
+        required = int(getattr(self, "glossary_hunt_count", 0))
+        keep = min(len(roms), required)
+
+        # Shuffle so it is not always the same entries that matter.
+        order = list(roms)
+        self.random.shuffle(order)
+        for item in order[keep:]:
+            item.classification = ItemClassification.filler
+
+        demoted = len(order) - keep
+        if demoted:
+            _log(f"[GLOSSARY] {keep} of {len(roms)} ROM(s) kept progression for "
+                 f"a goal of {required}; {demoted} demoted to filler")
 
     def _name_local_glossary_share(self, pool: list) -> None:
         """Name the share of glossary to be in local_items,
@@ -451,18 +495,7 @@ class LaMulana2World(World):
         # Mark them EXCLUDED so the fill only ever drops filler there: AP's
         # accessibility sweep skips filler-holding locations, and progression
         # balancing shouldn't count slots nobody can open.
-        orphans = getattr(self, "_structural_unreachable", None)
-        if orphans:
-            excluded = 0
-            for loc in mw.get_locations(player):
-                if loc.address is None or loc.name not in orphans:
-                    continue
-                if loc.item is not None:
-                    continue  # already pre-filled; nothing left to exclude
-                loc.progress_type = LocationProgressType.EXCLUDED
-                excluded += 1
-            if excluded:
-                _log(f"[ER] Marked {excluded} unreachable location(s) EXCLUDED")
+        self._mark_unreachable_excluded("post-ER")
 
         # ── POST-RULES DIAGNOSTIC ─────────────────────────────────────
         try:
@@ -543,6 +576,31 @@ class LaMulana2World(World):
             from .items import build_pre_filler
             for _ in range(missing):
                 mw.itempool.append(build_pre_filler(self))
+
+    def _mark_unreachable_excluded(self, tag: str) -> int:
+        """Mark every unreachable, still-empty location as EXCLUDED.
+
+        Keeps the fill from dropping progression somewhere nobody can open, and
+        keeps progression balancing from counting those slots. EXCLUDED still
+        accepts filler, which is what AP's accessibility sweep skips over.
+        """
+        orphans = getattr(self, "_structural_unreachable", None)
+        if not orphans:
+            return 0
+
+        excluded = 0
+        for loc in self.multiworld.get_locations(self.player):
+            if loc.address is None or loc.name not in orphans:
+                continue
+            if loc.item is not None:
+                continue  # already pre-filled; nothing left to exclude
+            if loc.progress_type == LocationProgressType.EXCLUDED:
+                continue
+            loc.progress_type = LocationProgressType.EXCLUDED
+            excluded += 1
+        if excluded:
+            _log(f"[ER] Marked {excluded} unreachable location(s) EXCLUDED ({tag})")
+        return excluded
 
     def _place_local_sanity_items(self) -> None:
         """Place the shares that cannot be declared by name.
@@ -833,7 +891,25 @@ class LaMulana2World(World):
         _log(f"[ER] Registered {_n_indirect} indirect conditions")
 
         if not self.randomizer.place_mantras_post_er():
+            self.randomizer.unplace_shop_items_post_er()
             return False
+
+        # Seating the mantras can seal the world: they leave the item pool, so
+        # every CanChant gate now has to be earned at the mural holding it, and
+        # a seating where those murals gate each other collapses the reachable set.
+        from .entrances import _sweep_reachability
+        placeable = [loc for loc in self.multiworld.get_locations(self.player)
+                     if loc.address is not None]
+        if placeable:
+            dead = set(_sweep_reachability(self)[0])
+            dead_frac = sum(1 for loc in placeable if loc.name in dead) / len(placeable)
+            # 40% matches the partition tolerance the structural ER already allows.
+            if dead_frac > 0.40:
+                _log(f"[ER] Mantra seating left {dead_frac:.0%} of locations "
+                      f"unreachable, regenerating...")
+                self.randomizer.unplace_mantras_post_er()
+                self.randomizer.unplace_shop_items_post_er()
+                return False
 
         self._post_er_applied = True
         return True
@@ -845,6 +921,21 @@ class LaMulana2World(World):
         """
         # Nothing needed here - AP will handle the fill
         pass
+
+    def fill_hook(self, progitempool, usefulitempool, filleritempool,
+                  fill_locations) -> None:
+        """Order the glossary MacGuffins to the back of the progression pool.
+        No-op for every other goal, where the ROMs are filler and never reach
+        the progression pool.
+        """
+        gloss_codes = {BASE_ITEM_ID + int(g) for g in GLOSSARY_ITEM_IDS}
+        mine = [item for item in progitempool
+                if item.player == self.player and item.code in gloss_codes]
+        if not mine:
+            return
+        held = set(map(id, mine))
+        progitempool[:] = [item for item in progitempool
+                           if id(item) not in held] + mine
 
     def post_fill(self) -> None:
         """
@@ -1457,12 +1548,16 @@ class LaMulana2World(World):
                 goal = Goal.option_beat_the_game
             else:
                 requested = self.options.glossary_hunt_count.value
-                self.glossary_hunt_count = min(requested, available)
+                cap = max(1, int(available * _GLOSSARY_HUNT_MAX_FRACTION))
+                self.glossary_hunt_count = min(requested, cap)
                 if self.glossary_hunt_count < requested:
                     logging.warning(
                         f"[La-Mulana 2] {self.player_name}: glossary_hunt_count "
-                        f"{requested} exceeds the {available} Glossary entries shuffled "
-                        f"by the enabled Glossanity options. Lowered to {available}."
+                        f"{requested} exceeds the "
+                        f"{int(_GLOSSARY_HUNT_MAX_FRACTION * 100)}% of the "
+                        f"{available} Glossary entries shuffled by the enabled "
+                        f"Glossanity options that the goal may ask for. "
+                        f"Lowered to {self.glossary_hunt_count}."
                     )
 
         self.goal = goal
@@ -1481,12 +1576,17 @@ class LaMulana2World(World):
         if not all(getattr(self.options, name).value for name in prereqs):
             return "requires entrance options that are disabled"
 
-        if (area_value in _POCKET_STARTING_AREAS
-                and self.options.shop_placement == ShopPlacement.option_original
-                and not self._any_structural_er()
-                and not self.options.soul_gate_entrances):
-            return ("cannot be escaped with original shop placement and no "
-                    "entrance or soul gate randomization")
+        if area_value in _POCKET_STARTING_AREAS and not self._any_structural_er():
+            if self.options.soul_gate_entrances:
+                # The shuffle reconnects the pocket reliably -- but only while
+                # the [9] gates stay out of the pool.
+                if self.options.include_nine_soul_gates:
+                    return ("cannot be escaped reliably when the soul gate "
+                            "shuffle includes the [9] gates")
+            elif self.options.shop_placement == ShopPlacement.option_original:
+                # No shuffle at all, and original shops pin Pepper outside the pocket. 
+                return ("cannot be escaped with original shop placement and no "
+                        "entrance or soul gate randomization")
 
         return None
 
