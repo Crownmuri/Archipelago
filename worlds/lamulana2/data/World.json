@@ -7257,7 +7257,7 @@
             {
                 "Name": "Tower of Oannes Right One-Way Exit Slide (E-6)",
                 "ID": "fEx2_Rout",
-                "ConnectionType": "OneWay",
+                "ConnectionType": "RightDoor",
                 "ConnectingAreaID": "TowerOfOannesRightASlide",
                 "Logic": "False"
             },
