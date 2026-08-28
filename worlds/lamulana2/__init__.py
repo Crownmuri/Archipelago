@@ -427,6 +427,12 @@ class LaMulana2World(World):
                     "mural for every mantra on this entrance layout."
                 )
 
+        # Safety net: every path has to end with the deferred shop items placed.
+        # The Universal Tracker replay bypasses _finalize_layout, and nothing
+        # downstream tolerates a shop slot that is still waiting for its item.
+        # Returns immediately when there is nothing pending.
+        self.randomizer.place_shop_items_post_er()
+
         # ── Orphaned locations ────────────────────────────────────────
         # ER may hand back a layout with a few locations permanently cut off
         # (allowed for minimal/items accessibility — see custom_structural_er).
@@ -795,6 +801,14 @@ class LaMulana2World(World):
         # precede the mantra fill -- it can gate the approach to a backside
         # mural, and a seating decided without it would not survive.
         self.randomizer.fix_fdc_logic_post_er()
+
+        # Randomized shop contents, deferred out of set_rules so they are
+        # assigned against the final entrance graph with reachability checks
+        # (C# PlaceItems -> PlaceShopItems -> RandomiseWithChecks, which runs
+        # after PlaceEntrances and the ankh/FDC fixes). Has to precede the
+        # expensive-slot pick below, which reads each slot's item to skip
+        # ammo and filler.
+        self.randomizer.place_shop_items_post_er()
 
         # Expensive shop slot: the gate names CanReach(DSLMMain), so it can
         # only be judged once the entrance graph is final. Picks the slot and

@@ -1658,6 +1658,11 @@ def _build_omniscient_state(world):
         if item.player == player:
             add(item.name)
 
+    # Shop-only items whose assignment is still deferred (see
+    # _build_items_only_state) -- "has everything" has to include them.
+    for item in getattr(world, "_pending_shop_items", ()) or ():
+        add(item.name)
+
     # Any already-placed items owned by this player
     for loc in world.multiworld.get_locations(player):
         if loc.item is not None and loc.item.player == player:
@@ -1699,6 +1704,14 @@ def _build_items_only_state(world):
         if item.player == player:
             add(item.name)
 
+    # Shop-only items (ammo, weights) never enter the itempool -- they are
+    # assigned straight to shop slots. While that assignment is deferred until
+    # after ER, count them as held, the way C#'s EntranceCheck does by building
+    # its state from the still-unplaced pool. Without this the validators judge
+    # a layout while holding no ammo at all and reject layouts that are fine.
+    for item in getattr(world, "_pending_shop_items", ()) or ():
+        add(item.name)
+
     if hasattr(state, "stale"):
         state.stale[player] = True
 
@@ -1735,6 +1748,10 @@ def _sweep_reachability(world, base_state=None):
 
     if base_state is not None:
         state = base_state.copy()
+        _reset_state_for_attempt(state, player)
+    elif getattr(world, "_pending_shop_items", None):
+        # Deferred shop items still count as held (see _build_items_only_state).
+        state = _build_items_only_state(world)
         _reset_state_for_attempt(state, player)
     else:
         state = CollectionState(world.multiworld)

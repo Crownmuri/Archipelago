@@ -614,31 +614,129 @@ class LM2RandomizerCore:
                     return vanilla_price
             return 10
 
-        # Place into shops (no prog-first ordering; C# is just randomised shop pool)
-        # If you *want* to keep prog-first, it will diverge from C# behavior.
-        self.rng.shuffle(open_slots)
+        # Hand the assignment to place_shop_items_post_er(), which runs once the
+        # entrance graph is final.
+        #
+        # C# order is PlaceEntrances -> EntranceCheck -> FixAnkh/FixFDC ->
+        # PlaceItems -> PlaceShopItems -> RandomiseWithChecks: a logic-aware
+        # assumed fill that returns false and rerolls when an item has nowhere
+        # reachable to go. Assigning here instead -- before connect_entrances,
+        # against the vanilla graph, with no checks -- can pin a subweapon's
+        # ammo behind a gate that needs that very ammo. 
 
-        placed_items: List[Item] = []
-        for item in chosen:
-            if not open_slots:
-                break
-            loc = open_slots.pop()
-            mw.push_item(loc, item, collect=False)
-            loc.locked = True
-            placed_items.append(item)
-
-            try:
-                iid = get_game_item_id(item)
-            except Exception:
-                iid = -1
-
-            self.shop_entries.append(ShopEntry(
-                location_id=loc.game_location_id,
-                item_id=iid,
-                price_multiplier=price_multiplier_for(item)
-            ))
+        # Until they are placed, the ER validators count these items as held,
+        # which is what C#'s EntranceCheck does by building its state from the
+        # still-unplaced pool. See _build_items_only_state.
+        self._pending_shop_items = list(chosen)
+        self._pending_shop_slots = list(open_slots)
+        self._pending_shop_prices = {
+            id(item): price_multiplier_for(item) for item in chosen
+        }
+        self.world._pending_shop_items = list(chosen)
 
         return True
+
+    def place_shop_items_post_er(self) -> bool:
+        """Assign the deferred shop items, C# RandomiseWithChecks style.
+
+        For each item, in random order, build the state you would have holding
+        everything still unplaced and drop it in the first reachable slot. A
+        layout that strands an item is rejected and rerolled, and the finished
+        layout has to leave the world fully reachable and the goal satisfiable.
+        """
+        items = list(getattr(self, "_pending_shop_items", []) or [])
+        slots = list(getattr(self, "_pending_shop_slots", []) or [])
+        if not items:
+            return True
+
+        from Fill import sweep_from_pool
+        from .entrances import _sweep_reachability, _goal_reachable
+
+        mw = self.multiworld
+        prices = getattr(self, "_pending_shop_prices", {})
+        MAX_ATTEMPTS = 20
+
+        def clear():
+            for loc in slots:
+                loc.item = None
+                loc.locked = False
+
+        def commit(pairs):
+            self.shop_entries = [
+                e for e in self.shop_entries
+                if e.location_id not in {l.game_location_id for l in slots}
+            ]
+            for loc, item in pairs:
+                try:
+                    iid = get_game_item_id(item)
+                except Exception:
+                    iid = -1
+                self.shop_entries.append(ShopEntry(
+                    location_id=loc.game_location_id,
+                    item_id=iid,
+                    price_multiplier=prices.get(id(item), 10),
+                ))
+
+        for attempt in range(MAX_ATTEMPTS):
+            clear()
+            pool = [i for i in mw.itempool if i.player == self.player]
+            remaining = list(items)
+            avail = list(slots)
+            pairs = []
+            stranded = False
+
+            while remaining:
+                item = remaining.pop(self.rng.randrange(len(remaining)))
+                # currentItems is the main pool only: a shop-only item has to be
+                # placeable without assuming you already bought it.
+                state = sweep_from_pool(mw.state, pool)
+                self.rng.shuffle(avail)
+                for i, loc in enumerate(avail):
+                    if loc.can_reach(state):
+                        loc.item = item
+                        item.location = loc
+                        loc.locked = True
+                        pairs.append((loc, item))
+                        del avail[i]
+                        break
+                else:
+                    stranded = True
+                    break
+
+            if stranded:
+                continue
+
+            # The items are real now, so stop counting them as held.
+            self.world._pending_shop_items = []
+            unreachable, swept = _sweep_reachability(self.world)
+            structural = getattr(self.world, "_structural_unreachable", set()) or set()
+            if ([n for n in unreachable if n not in structural]
+                    or not _goal_reachable(self.world, swept)):
+                self.world._pending_shop_items = list(items)
+                continue
+
+            commit(pairs)
+            self._pending_shop_items = []
+            _log(f"[SHOP] Placed {len(pairs)} shop item(s) with checks "
+                 f"on attempt {attempt + 1}")
+            return True
+
+        # Nothing validated. Fall back to the unchecked assignment -- no worse
+        # than the behaviour this replaced -- rather than failing generation.
+        _log(f"[SHOP] No valid shop layout in {MAX_ATTEMPTS} attempts; "
+             f"falling back to an unchecked assignment")
+        clear()
+        self.rng.shuffle(slots)
+        pairs = []
+        for loc, item in zip(slots, items):
+            loc.item = item
+            item.location = loc
+            loc.locked = True
+            pairs.append((loc, item))
+        commit(pairs)
+        self.world._pending_shop_items = []
+        self._pending_shop_items = []
+        return False
 
     def _place_shop_items_original(self):
         """
