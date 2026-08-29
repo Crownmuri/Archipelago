@@ -2110,6 +2110,17 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
 
         has_non_kill_exit = False
         for exit_ in outward_exits:
+            # A soul gate is NEVER a kill-free escape: every assignable cost is
+            # in [1,2,3,5,9], all >= 1. It only looks free here because its
+            # logic reads "GuardianKills(N) or Setting(Random Soul Gates)" and
+            # that Setting is True whenever the values will be rewritten -- the
+            # real cost is not stamped until _apply_gate_pair, which runs AFTER
+            # this check. Counting it as an escape let a provably dead layout
+            # (start cluster with no guardian, every other exit a dead end) pass
+            # structural validation, and the whole soul gate stage then burned
+            # its attempt budget proving what was already knowable here.
+            if getattr(exit_, "exit_type", None) == ExitType.SoulGate:
+                continue
             try:
                 if hasattr(exit_, 'can_access') and exit_.can_access(no_kills):
                     has_non_kill_exit = True
@@ -3037,9 +3048,9 @@ class SoulGateRandomizer:
         unfortunate gate1 ordering, resets all gate state and retries
         up to MAX_ATTEMPTS times with a fresh shuffle.
         """
-        # Upped from 50 to 200 after inspecting a 1 in 300 seed which was open,
+        # Upped from 50 to 100 after inspecting a 1 in 300 seed which was open,
         # but the randomizer sometimes failed to find a viable set in just 50 attempts.
-        MAX_ATTEMPTS = 200
+        MAX_ATTEMPTS = 100
 
         gates = self._get_exits_of_type(ExitType.SoulGate)
         vanilla_state = {
@@ -3077,6 +3088,50 @@ class SoulGateRandomizer:
             if epd_hel_exit is not None and epd_hel_vanilla_logic is not None:
                 self._reset_logic(epd_hel_exit, epd_hel_vanilla_logic)
             self.soul_gate_pairs.clear()
+
+        # Hopeless-layout early-out. _kill_simulation_check requires EVERY
+        # guardian to be reachable, and treats unplaced gates as freely
+        # traversable -- so this, run before a single gate is committed, is the
+        # most permissive configuration that will ever exist. Its own contract
+        # says committing gates "can only add constraints, never remove them",
+        # so if the layout cannot reach every guardian even now, no assignment
+        # can rescue it and the whole attempt budget is wasted proving it.
+        # Reject immediately and let the outer loop try another layout.
+        _reset_all_gates_to_vanilla()
+        if not self._kill_simulation_check():
+            _log("[ER-SG] Layout cannot reach every guardian even with all soul "
+                 "gates free -- no assignment can fix that, skipping "
+                 f"{MAX_ATTEMPTS} attempts.")
+            _reset_all_gates_to_vanilla()
+            return False
+
+        # Second hopeless-layout test, and the one that catches a start whose
+        # only ways out are soul gates: shut EVERY soul gate and ask whether
+        # ANY guardian is reachable. Every assignable cost is in [1,2,3,5,9],
+        # all >= 1, so if no guardian can be killed with the gates shut then no
+        # gate can ever be opened, and no pairing or value assignment exists
+        # that rescues the layout.
+        #
+        # This is the opposite extreme from the check above (all gates free)
+        # and is the one that bites in practice: with the gates treated as free
+        # every guardian looks reachable, the budget is spent, and the failure
+        # surfaces as hundreds of "could not place all gates" retries.
+        _shut = dict(self._build_kill_costs())
+        for _g in self._get_exits_of_type(ExitType.SoulGate):
+            _shut[id(_g)] = max(1, _shut.get(id(_g), 1))
+        _reachable_shut = self._flood_fill(0, _shut)
+        _guardians = [loc for loc in
+                      self.world.multiworld.get_locations(self.world.player)
+                      if getattr(loc, 'location_type', None) == LocationType.Guardian]
+        if _guardians and not any(
+                loc.parent_region is not None
+                and loc.parent_region.name in _reachable_shut
+                for loc in _guardians):
+            _log("[ER-SG] No guardian is reachable with the soul gates shut, and "
+                 "every gate costs at least one kill -- this layout can never "
+                 f"open one. Skipping {MAX_ATTEMPTS} attempts.")
+            _reset_all_gates_to_vanilla()
+            return False
 
         for attempt in range(MAX_ATTEMPTS):
             _reset_all_gates_to_vanilla()
@@ -3286,9 +3341,9 @@ class SoulGateRandomizer:
 
     def _randomize_soul_gate_values_retry(self) -> bool:
         """Retry wrapper around _randomize_soul_gate_values_speculative."""
-        # Upped from 50 to 200 after inspecting a 1 in 300 seed which was open,
+        # Upped from 50 to 100 after inspecting a 1 in 300 seed which was open,
         # but the randomizer sometimes failed to find a viable set in just 50 attempts.
-        MAX_ATTEMPTS = 200
+        MAX_ATTEMPTS = 100
 
         gates = self._get_exits_of_type(ExitType.SoulGate)
         vanilla_logic = {
