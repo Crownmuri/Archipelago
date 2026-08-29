@@ -885,6 +885,53 @@ class LaMulana2World(World):
         dead = set(_sweep_reachability(self)[0])
         return [loc.name for loc in pinned if loc.name in dead]
 
+
+    def _original_ankh_behind_nine(self) -> "str | None":
+        """Validate the shop-pinned Ankh Jewels accessibility.
+
+        `shop_placement: original` pins two Ankh Jewels into the Hiner shop,
+        which sits in the Gate of Guidance and is logic-gated on Gate of Illusion,
+        so both gates have to be reachable before a nine gate. Don't sweep them.
+
+        Only rejects when EVERY pinned jewel is stranded.
+        """
+        from BaseClasses import CollectionState
+
+        pinned = [loc for loc in self.multiworld.get_locations(self.player)
+                  if loc.address is not None and loc.item is not None
+                  and loc.item.player == self.player
+                  and "Ankh Jewel" in loc.item.name]
+        if not pinned:
+            return None
+
+        state = CollectionState(self.multiworld)
+        for item in self.multiworld.precollected_items[self.player]:
+            state.collect(item, True)
+        for item in self.multiworld.itempool:
+            if item.player == self.player:
+                state.collect(item, True)
+        if hasattr(state, "stale"):
+            state.stale[self.player] = True
+
+        pinned_set = set(pinned)
+        seen: set = set()
+        while True:
+            sphere = [loc for loc in self.multiworld.get_locations(self.player)
+                      if loc not in seen and loc.can_reach(state)]
+            if not sphere:
+                break
+            for loc in sphere:
+                seen.add(loc)
+                if loc.item is not None and loc not in pinned_set:
+                    state.collect(loc.item, True, loc)
+            if hasattr(state, "stale"):
+                state.stale[self.player] = True
+
+        stranded = [loc.name for loc in pinned if loc not in seen]
+        if len(stranded) == len(pinned):
+            return ", ".join(stranded)
+        return None
+
     def _finalize_layout(self) -> bool:
         """Stamp every pass that needs the final entrance graph, then seat the
         only_murals mantras.
@@ -927,6 +974,16 @@ class LaMulana2World(World):
         # AnkhCount can never be met and the guardians behind it never open.
         # That surfaces much later, from Main.py, as "Could not access required
         # locations" -- so catch it here, while a layout can still be rerolled.
+        budget = self._original_ankh_behind_nine()
+        if budget:
+            self._finalize_reject_reason = (
+                f"every shop-pinned Ankh Jewel is behind guardian kills those "
+                f"same jewels are needed to buy: {budget}"
+            )
+            _log(f"[ER] {self._finalize_reject_reason}, regenerating...")
+            self.randomizer.unplace_shop_items_post_er()
+            return False
+
         stranded = self._stranded_shop_progression()
         if stranded:
             self._finalize_reject_reason = (
