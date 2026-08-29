@@ -19,7 +19,8 @@ from typing import Dict, List, Tuple
 from BaseClasses import ItemClassification, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
 
-from .options import LM2Options, StartingArea, StartingWeapon, ShopPlacement
+from .options import (LM2Options, StartingArea, StartingWeapon, ShopPlacement,
+                      RandomSoulGateValue)
 from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
@@ -264,6 +265,19 @@ class LaMulana2World(World):
                 f"Oannesanity, which is disabled. Disabling DLC entrance shuffling."
             )
             self.options.include_dlc_entrances.value = 0
+
+        # 'Standard' soul gate values mean "every gate keeps its vanilla cost",
+        # which stops being achievable the moment the gates are shuffled.
+        if (self.options.soul_gate_entrances
+                and self.options.random_soul_gate_value
+                == RandomSoulGateValue.option_standard):
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: 'Random Soul Gate Value' is "
+                f"set to standard, but shuffling the soul gate entrances re-pairs "
+                f"the gates, so cannot guarantee vanilla cost. Set to 'shuffled'"
+            )
+            self.options.random_soul_gate_value.value = (
+                RandomSoulGateValue.option_shuffled)
 
         # shop_placement=original pins the FDC to its vanilla slot, Bargain Duck
         # Shop 3 -- which sits in ValhallaMain, a backside area. require_fdc

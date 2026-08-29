@@ -426,7 +426,7 @@ class SoulGateEntrances(Toggle):
 
 class RandomSoulGateValue(Choice):
     """How the soul gate costs are handed out.
-    Standard: every gate keeps its vanilla cost.
+    Standard: every gate keeps its vanilla cost. (Only applies to Soul Gate ER off)
     Shuffled: vanilla costs are shuffled between the Soul Gates.
     Randomized: each gate pair independently rolls any of [1,2,3,5,9]."""
     display_name = "Random Soul Gate Value"

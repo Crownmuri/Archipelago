@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Set, Tuple
 from collections import defaultdict
 
 from . import _log
-from .ids import ExitID, AreaID, LOGIC_FLAG_MAP
+from .ids import ExitID, AreaID, LOGIC_FLAG_MAP, DLC_AREA_IDS
 from .regions import LM2Entrance, ExitType
 from .locations import LocationType
 from .logic.logic_tokens import LogicTokeniser
@@ -176,6 +176,7 @@ _SOFT_DEAD_END_START_PAIRS: Dict[frozenset, int] = {
 _SOFT_DEAD_END_NO_LADDER_PAIRS: Dict[frozenset, int] = {
     frozenset({ExitID.f13GateP0, ExitID.f04GateYB}): 7,  # HoM <-> IT Entrance
     frozenset({ExitID.f12GateP0, ExitID.f04GateYB}): 7,  # AC  <-> IT Entrance
+    frozenset({ExitID.f05GateP1, ExitID.f04GateYB}): 7,  # DF  <-> IT Entrance
 }
 
 
@@ -222,6 +223,86 @@ def _is_virtual_dead_end_start_pair(e1_id: ExitID, e2_id: ExitID) -> bool:
     """True if pairing e1<->e2 forms a virtual dead-end when one side is
     the starting exit (see _VIRTUAL_DEAD_END_START_PAIRS)."""
     return frozenset({e1_id, e2_id}) in _VIRTUAL_DEAD_END_START_PAIRS
+
+
+# Depending on ER settings, you can get stuck in DLC with an early pair.
+_DLC_TRAP_AREAS: frozenset = frozenset(
+    DLC_AREA_IDS - {AreaID.SpringintheSky, AreaID.SpringintheSkyTop}
+)
+
+
+# Which exit types each structural pool shuffles.
+_POOL_EXIT_TYPES = (
+    ("horizontal_entrances", (ExitType.LeftDoor, ExitType.RightDoor)),
+    ("vertical_entrances", (ExitType.UpLadder, ExitType.DownLadder)),
+    ("gate_entrances", (ExitType.Gate,)),
+    ("unique_transitions", (ExitType.OneWay, ExitType.Pyramid,
+                            ExitType.Start, ExitType.Altar)),
+)
+
+
+def _shuffled_exit_types(world) -> tuple:
+    """Exit types belonging to the single pool being shuffled."""
+    for name, types in _POOL_EXIT_TYPES:
+        if getattr(world.options, name):
+            return types
+    return ()
+
+
+def _single_pool_shuffle(world) -> bool:
+    """True when exactly one structural entrance pool is being shuffled."""
+    opts = world.options
+    return sum((bool(opts.horizontal_entrances), bool(opts.vertical_entrances),
+                bool(opts.gate_entrances), bool(opts.unique_transitions))) == 1
+
+
+def _lands_in_dlc_trap(world, partner) -> bool:
+    """True if stepping through a partner exit drops you in the Tower/Bailey.
+
+    Pairing e1<->e2 puts the player at e2's parent region, so the destination
+    is the partner's PARENT area, not its connecting area.
+    """
+    if not _single_pool_shuffle(world):
+        return False
+    parent = getattr(partner, "parent_region", None)
+    area = getattr(parent, "game_area_id", None) if parent else None
+    return area in _DLC_TRAP_AREAS
+
+
+def _realised_dlc_trap(world) -> Optional[str]:
+    """Does any starting-area exit open directly into the Tower or Bailey?
+
+    Backstop for the pairing-time ban, and the general form of it: whichever
+    single entrance pool is being shuffled -- horizontal doors for Immortal
+    Battlefield, the unique pool for Annwfn's Bifrost, ladders for Icefire
+    Treetop -- the failure is the same, so this tests the destination rather
+    than enumerating exit pairs.
+    """
+    if not _single_pool_shuffle(world):
+        return None
+    starting_area = getattr(world, "starting_area", None)
+    if starting_area is None:
+        return None
+    starting_dungeon = _DUNGEON_GROUP.get(starting_area, starting_area)
+    shuffled_types = _shuffled_exit_types(world)
+    if not shuffled_types:
+        return None
+
+    for region in world.multiworld.get_regions(world.player):
+        area = getattr(region, "game_area_id", None)
+        if area is None or _DUNGEON_GROUP.get(area, area) != starting_dungeon:
+            continue
+        for exit_ in region.exits:
+            dest = exit_.connected_region
+            if dest is None:
+                continue
+            # Only exits ER actually re-paired can be a trap; vanilla ones are
+            # the game's own layout and have their normal ways back.
+            if getattr(exit_, "exit_type", None) not in shuffled_types:
+                continue
+            if getattr(dest, "game_area_id", None) in _DLC_TRAP_AREAS:
+                return f"{region.name} -> {dest.name}"
+    return None
 
 
 def _realised_soft_dead_end(world, unfilled_count: int) -> Optional[str]:
@@ -745,6 +826,7 @@ def _generate_pairings_reachable_first(
                 or e.game_exit_id == ExitID.fP02Left
                 or _would_self_loop(se.game_exit_id, e.game_exit_id)
                 or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
+                or _lands_in_dlc_trap(world, e)
                 or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
             ), anchor=se)
@@ -987,6 +1069,7 @@ def _generate_pairings(
                 or e.game_exit_id == ExitID.fP02Left   # Cliff is a single-transition dead end
                 or _would_self_loop(se.game_exit_id, e.game_exit_id)
                 or _is_virtual_dead_end_start_pair(se.game_exit_id, e.game_exit_id)
+                or _lands_in_dlc_trap(world, e)
                 or e.game_exit_id in _starting_exit_ids
                 or _same_area(_se, e)
             ), anchor=se)
@@ -2078,6 +2161,10 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
     if soft:
         return False, f"starting gate paired {soft} to find the escape in"
 
+    trap = _realised_dlc_trap(world)
+    if trap:
+        return False, f"lone starting escape leads into the DLC ({trap})"
+
     return True, (f"OK ({loc_count} accessible, {unfilled_count} unfilled, "
                    f"{len(reachable_areas)} areas, open cluster)")
 
@@ -2846,10 +2933,12 @@ class SoulGateRandomizer:
                 self.soul_gate_pairs.append(SoulGatePair(g1.game_exit_id,
                                                          g2.game_exit_id, nine_amount))
 
-        if not self._free_soul_values:
-            soul_amounts.sort()
-        else:
-            self.rng.shuffle(soul_amounts)
+        # Deal the multiset out in random order, matching the original
+        # (Randomiser.cs shuffles soulAmounts then picks random indices).
+        # Sorting made the earliest-placed gates -- the f03GateN9 priority gate
+        # first -- systematically take the cheapest costs, leaving [5,5,5]/[9]
+        # wherever placement happened to end.
+        self.rng.shuffle(soul_amounts)
 
         # ── Main placement loop ─────────────────────────────────────────
         # Pop one "gate1" at a time, try (partner, soul_amount) combos
@@ -3103,10 +3192,9 @@ class SoulGateRandomizer:
                 key=lambda p: 0 if ExitID.f03GateN9 in (p[0].game_exit_id,
                                                         p[1].game_exit_id) else 1)
 
-        if self._free_soul_values:
-            self.rng.shuffle(soul_amounts)
-        else:
-            soul_amounts.sort()
+        # Random order for both modes -- see the note in the entrance-shuffle
+        # path above.
+        self.rng.shuffle(soul_amounts)
 
         for gate1, gate2 in pairs_to_place:
             is_nine = (gate1.game_exit_id == ExitID.f03GateN9
