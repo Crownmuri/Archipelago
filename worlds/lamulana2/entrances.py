@@ -3037,7 +3037,9 @@ class SoulGateRandomizer:
         unfortunate gate1 ordering, resets all gate state and retries
         up to MAX_ATTEMPTS times with a fresh shuffle.
         """
-        MAX_ATTEMPTS = 50
+        # Upped from 50 to 200 after inspecting a 1 in 300 seed which was open,
+        # but the randomizer sometimes failed to find a viable set in just 50 attempts.
+        MAX_ATTEMPTS = 200
 
         gates = self._get_exits_of_type(ExitType.SoulGate)
         vanilla_state = {
@@ -3284,7 +3286,9 @@ class SoulGateRandomizer:
 
     def _randomize_soul_gate_values_retry(self) -> bool:
         """Retry wrapper around _randomize_soul_gate_values_speculative."""
-        MAX_ATTEMPTS = 50
+        # Upped from 50 to 200 after inspecting a 1 in 300 seed which was open,
+        # but the randomizer sometimes failed to find a viable set in just 50 attempts.
+        MAX_ATTEMPTS = 200
 
         gates = self._get_exits_of_type(ExitType.SoulGate)
         vanilla_logic = {
