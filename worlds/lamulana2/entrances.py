@@ -147,13 +147,36 @@ _BANNED_SELF_LOOP_PAIRS: frozenset = frozenset({
 
 
 # Pairs that form a *virtual* dead-end when one side is the starting exit:
-# both areas can be entered, but escape requires too many items.
-# TS <-> DF: TS escape needs djed + mantra + 5 mantra chants + Raijin/Fujin;
-# DF's only other exit is a soul gate, and no boss is reachable inside the
-# TS<->DF island to earn souls.
+# both areas can be entered, but unable to progress through the Soul Gates.
 _VIRTUAL_DEAD_END_START_PAIRS: frozenset = frozenset({
-    frozenset({ExitID.f08GateP0, ExitID.f05GateP1}),  # TS Bottom Gate <-> DF Left Gate
+    frozenset({ExitID.f05GateP1, ExitID.f07GateP0}),  # DF    <-> GotD Wedjat
+    frozenset({ExitID.f05GateP1, ExitID.f09GateP0}),  # DF    <-> Heaven's Labyrinth
+    frozenset({ExitID.f06GateP0, ExitID.f05GateP1}),  # SotFG <-> DF
+    frozenset({ExitID.f06GateP0, ExitID.f07GateP0}),  # SotFG <-> GotD Wedjat
+    frozenset({ExitID.f06GateP0, ExitID.f09GateP0}),  # SotFG <-> Heaven's Labyrinth
 })
+
+# Allowed only when the starting cluster has room to hold the escape. 
+# The value is how many free starting slots the escape needs, sized off what it
+# actually costs to place:
+#   HoM <-> TS  12  Mjolnir + Djed Pillar + mantra software + five mantras + alpha
+#   others       7  Powered Beherit + alpha
+#
+# A layout below the threshold is not a failure -- _validate_starting_cluster
+# returning False just rerolls that ER attempt.
+_SOFT_DEAD_END_START_PAIRS: Dict[frozenset, int] = {
+    frozenset({ExitID.f13GateP0, ExitID.f08GateP0}): 12,  # HoM <-> TS Bottom
+    frozenset({ExitID.f13GateP0, ExitID.f05GateP1}): 7,  # HoM <-> DF Left
+    frozenset({ExitID.f13GateP0, ExitID.f07GateP0}): 7,  # HoM <-> GotD Wedjat
+    frozenset({ExitID.f13GateP0, ExitID.f09GateP0}): 7,  # HoM <-> Heaven's Lab
+    frozenset({ExitID.f05GateP1, ExitID.f08GateP0}): 12,  # DF  <-> TS Bottom
+}
+
+# Low chance of escape if vertical_entrances off with IT Entrance starting pair.
+_SOFT_DEAD_END_NO_LADDER_PAIRS: Dict[frozenset, int] = {
+    frozenset({ExitID.f13GateP0, ExitID.f04GateYB}): 7,  # HoM <-> IT Entrance
+    frozenset({ExitID.f12GateP0, ExitID.f04GateYB}): 7,  # AC  <-> IT Entrance
+}
 
 
 # Value pool for RandomSoulGateValue: Randomized.  Drawn with replacement,
@@ -199,6 +222,53 @@ def _is_virtual_dead_end_start_pair(e1_id: ExitID, e2_id: ExitID) -> bool:
     """True if pairing e1<->e2 forms a virtual dead-end when one side is
     the starting exit (see _VIRTUAL_DEAD_END_START_PAIRS)."""
     return frozenset({e1_id, e2_id}) in _VIRTUAL_DEAD_END_START_PAIRS
+
+
+def _realised_soft_dead_end(world, unfilled_count: int) -> Optional[str]:
+    """Name a soft dead-end pairing this layout made with too little room.
+
+    Checked after the layout exists rather than while pairing, because the test
+    is how big the starting cluster came out -- which is not known until then.
+    Only counts when one side belongs to the player's own starting dungeon: the
+    same pairing elsewhere is nobody's problem, and once guardians start dying
+    the soul gates open anyway.
+    """
+    starting_area = getattr(world, "starting_area", None)
+    if starting_area is None:
+        return None
+    starting_dungeon = _DUNGEON_GROUP.get(starting_area, starting_area)
+
+    pairs = dict(_SOFT_DEAD_END_START_PAIRS)
+    if not world.options.vertical_entrances:
+        pairs.update(_SOFT_DEAD_END_NO_LADDER_PAIRS)
+
+    by_id: Dict = {}
+    for region in world.multiworld.get_regions(world.player):
+        for exit_ in region.exits:
+            eid = getattr(exit_, "game_exit_id", None)
+            if eid is not None:
+                by_id[eid] = exit_
+
+    def in_starting_dungeon(exit_) -> bool:
+        parent = getattr(exit_, "parent_region", None)
+        area = getattr(parent, "game_area_id", None) if parent else None
+        if area is None:
+            return False
+        return _DUNGEON_GROUP.get(area, area) == starting_dungeon
+
+    for pair, needed in pairs.items():
+        if unfilled_count >= needed:
+            continue
+        a, b = tuple(pair)
+        ea, eb = by_id.get(a), by_id.get(b)
+        if ea is None or eb is None:
+            continue
+        if not (in_starting_dungeon(ea) or in_starting_dungeon(eb)):
+            continue
+        if (ea.connected_region is not None
+                and ea.connected_region is getattr(eb, "parent_region", None)):
+            return f"{a!s} <-> {b!s} (needs {needed} free, has {unfilled_count})"
+    return None
 
 
 # ── Union-Find for connectivity guarantee ─────────────────────────────
@@ -2000,6 +2070,13 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
         return False, (f"too few unfilled starting slots ({unfilled_count} unfilled "
                         f"of {loc_count} accessible in {len(reachable_areas)} areas "
                         f"< {_MIN_STARTING_UNFILLED} minimum)")
+
+    # Escapable-in-principle dead ends: fine when there is room nearby to find
+    # the escape, rerolled when there is not. Each pair carries its own cost,
+    # see _SOFT_DEAD_END_START_PAIRS.
+    soft = _realised_soft_dead_end(world, unfilled_count)
+    if soft:
+        return False, f"starting gate paired {soft} to find the escape in"
 
     return True, (f"OK ({loc_count} accessible, {unfilled_count} unfilled, "
                    f"{len(reachable_areas)} areas, open cluster)")

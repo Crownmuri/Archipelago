@@ -5,7 +5,7 @@ from __future__ import annotations
 # Set DEBUG = True to enable verbose logging during AP generation.
 # Leave False for public/alpha builds to suppress [ER], [DEBUG], etc. output.
 # =============================================================================
-DEBUG = False
+DEBUG = True
 
 def _log(*args, **kwargs):
     if DEBUG:
@@ -478,6 +478,16 @@ class LaMulana2World(World):
         # here really is terminal.
         if not getattr(self, "_post_er_applied", False):
             if not self._finalize_layout():
+                # Nothing to reroll on this path, so the message has to name the
+                # actual cause -- a shop stranding reported as a mantra failure
+                # sends anyone debugging it to the wrong pass entirely.
+                reason = getattr(self, "_finalize_reject_reason", None)
+                if reason:
+                    raise RuntimeError(
+                        f"Generation failed with no entrance randomization to "
+                        f"reroll: {reason}. Enable an entrance or soul gate "
+                        f"shuffle, or change shop_placement."
+                    )
                 raise RuntimeError(
                     "Mantra placement (only_murals) could not find a reachable "
                     "mural for every mantra on this entrance layout."
@@ -843,6 +853,24 @@ class LaMulana2World(World):
             f"(structural + soul gates + mantra seating)."
         )
 
+    def _stranded_shop_progression(self) -> List[str]:
+        """Shop slots holding progression this layout cannot reach.
+
+        Only pre-placed shop items are judged: the pool is still unplaced here,
+        so _sweep_reachability holds all of it and answers purely about the
+        layout. Mantras are seated after this point and are checked separately.
+        """
+        from .entrances import _sweep_reachability
+        pinned = [loc for loc in self.multiworld.get_locations(self.player)
+                  if loc.address is not None and loc.item is not None
+                  and loc.item.player == self.player
+                  and loc.item.classification == ItemClassification.progression
+                  and "Shop" in loc.name]
+        if not pinned:
+            return []
+        dead = set(_sweep_reachability(self)[0])
+        return [loc.name for loc in pinned if loc.name in dead]
+
     def _finalize_layout(self) -> bool:
         """Stamp every pass that needs the final entrance graph, then seat the
         only_murals mantras.
@@ -856,6 +884,10 @@ class LaMulana2World(World):
         Order matches C# (MainViewModel: FixAnkhLogic() then FixFDCLogic(),
         both after PlaceEntrances()).
         """
+        # Cleared per attempt so a rejection reason from an earlier layout
+        # cannot leak into this one's error message.
+        self._finalize_reject_reason = None
+
         # Guardian ankh requirements: soul gates only carry their real
         # GuardianKills(N) once the gate values are assigned.
         self.randomizer.fix_ankh_logic_post_er()
@@ -874,6 +906,22 @@ class LaMulana2World(World):
         # expensive-slot pick below, which reads each slot's item to skip
         # ammo and filler.
         self.randomizer.place_shop_items_post_er()
+
+        # A pinned shop item can be stranded by the layout. `shop_placement:
+        # original` puts two Ankh Jewels in the Gate of Guidance shop, one of
+        # them behind GuardianKills(3); if either is unobtainable the cumulative
+        # AnkhCount can never be met and the guardians behind it never open.
+        # That surfaces much later, from Main.py, as "Could not access required
+        # locations" -- so catch it here, while a layout can still be rerolled.
+        stranded = self._stranded_shop_progression()
+        if stranded:
+            self._finalize_reject_reason = (
+                "shop placement pinned progression into locations this layout "
+                f"cannot reach: {', '.join(stranded)}"
+            )
+            _log(f"[ER] {self._finalize_reject_reason}, regenerating...")
+            self.randomizer.unplace_shop_items_post_er()
+            return False
 
         # Expensive shop slot: the gate names CanReach(DSLMMain), so it can
         # only be judged once the entrance graph is final. Picks the slot and

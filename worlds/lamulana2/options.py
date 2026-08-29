@@ -21,10 +21,12 @@ class Goal(Choice):
 class GlossaryHuntCount(Range):
     """Number of Glossary entries required to win when the goal is glossary_hunt.
     The maximum value is automatically lowered to the number of Glossary entries
-    shuffled based on the enabled Glossanity options (and Oannesanity, for DLC glossary)"""
+    shuffled based on the enabled Glossanity options (and Oannesanity, for DLC glossary)
+    Capped at 200 with all settings on, or otherwise 80% of available selected glossaries.
+    Surplus is set as filler to avoid failing generation."""
     display_name = "Glossary Hunt Count"
     range_start = 1
-    range_end = 244
+    range_end = 200
     default = 50
 
 class StartingArea(Choice):
