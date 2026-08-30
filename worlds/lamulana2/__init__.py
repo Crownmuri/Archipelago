@@ -5,7 +5,7 @@ from __future__ import annotations
 # Set DEBUG = True to enable verbose logging during AP generation.
 # Leave False for public/alpha builds to suppress [ER], [DEBUG], etc. output.
 # =============================================================================
-DEBUG = True
+DEBUG = False
 
 def _log(*args, **kwargs):
     if DEBUG:
@@ -1110,18 +1110,9 @@ class LaMulana2World(World):
         # carries "Map (Roots of Yggdrasil)" rather than the generic
         # AP name "Map"); fall back to loc.item.name for foreign items
         # and anything not registered in ITEM_MAP.
-        slot_location_labels: Dict[str, str] = {}
-        for loc in self.multiworld.get_filled_locations(self.player):
-            if not hasattr(loc, "game_location_id"):
-                continue
-            if loc.item is None:
-                continue
-            slot_location_labels[str(int(loc.game_location_id))] = (
-                self._label_for_location(loc)
-            )
-
-        _enabled_pot_pools = potsanity_pools_enabled(self.options)
-        _enabled_gloss_cats = glossanity_pools_enabled(self.options)
+        slot_location_labels: Dict[str, str] = {
+            str(loc_id): name for loc_id, name in self._location_labels().items()
+        }
 
         return {
             # Existing fields
@@ -1165,16 +1156,13 @@ class LaMulana2World(World):
 
             # Potsanity (partitioned) — mod just needs "active"; the pot_flag_map
             # is restricted to the pots whose pool is enabled.
-            "potsanity": int(bool(_enabled_pot_pools)),
-            "pot_flag_map": {str(k): v for k, v in POT_FLAG_MAP.items()
-                             if POT_POOL_BY_LOC.get(k) in _enabled_pot_pools},
+            "potsanity": int(bool(potsanity_pools_enabled(self.options))),
+            "pot_flag_map": {str(k): v for k, v in self._enabled_pot_flag_map().items()},
 
             # Glossanity (partitioned) — only the PLACED locations are live AP checks.
             # The flag map is restricted to entries whose category is enabled.
-            "glossanity": int(bool(_enabled_gloss_cats)),
-            "glossary_flag_map": {str(k): v for k, v in GLOSSARY_FLAG_MAP.items()
-                                  if k in GLOSSARY_ITEM_IDS
-                                  and GLOSSARY_POOLS_BY_ID.get(int(k)) in _enabled_gloss_cats},
+            "glossanity": int(bool(glossanity_pools_enabled(self.options))),
+            "glossary_flag_map": {str(k): v for k, v in self._enabled_glossary_flag_map().items()},
 
             # Per-location display names — see comment above the dict build.
             "location_labels": slot_location_labels,
@@ -1367,34 +1355,17 @@ class LaMulana2World(World):
                 # and pot LocationID -> in-game potFlagNo map. Pot data is
                 # only meaningful when potsanity is enabled, but settings
                 # are always worth carrying for solo replay.
-                _seed_pot_pools = potsanity_pools_enabled(self.options)
-                pot_flag_map = {
-                    int(k): int(v) for k, v in POT_FLAG_MAP.items()
-                    if POT_POOL_BY_LOC.get(k) in _seed_pot_pools
-                }
-
-                # Display name per LocationID — captures every filled
-                # location (own + foreign) so the C# mod can label items
-                # in offline mode and so guardian-specific Ankh names
-                # survive in place of the vanilla BoxName.
-                # See _label_for_location for the ITEM_MAP-first / loc.item.name
-                # fallback rationale (matches slot_data["location_labels"]).
-                location_labels: Dict[int, str] = {}
-                for loc in mw.get_filled_locations(player):
-                    if not hasattr(loc, "game_location_id"):
-                        continue
-                    if loc.item is None:
-                        continue
-                    location_labels[int(loc.game_location_id)] = (
-                        self._label_for_location(loc)
-                    )
-
+                # Same helpers fill_slot_data uses, so an offline replay of a
+                # seed sees exactly what the online client is handed.
                 write_ap_seed_file(
                     path=lm2ap_path,
                     settings=self.options,
                     item_placements=item_placements,
-                    pot_flag_map=pot_flag_map,
-                    location_labels=location_labels,
+                    pot_flag_map=self._enabled_pot_flag_map(),
+                    glossary_flag_map=self._enabled_glossary_flag_map(),
+                    location_labels=self._location_labels(),
+                    goal=int(getattr(self, "goal", 0)),
+                    glossary_hunt_count=int(getattr(self, "glossary_hunt_count", 0)),
                 )
 
                 # Package both seed files plus manifest into the AP zip
@@ -1409,6 +1380,41 @@ class LaMulana2World(World):
     # =============================================================================
     # Helpers
     # =============================================================================
+
+    def _enabled_pot_flag_map(self) -> Dict[int, int]:
+        """LocationID -> in-game potFlagNo, restricted to enabled potsanity pools."""
+        enabled = potsanity_pools_enabled(self.options)
+        return {
+            int(k): int(v) for k, v in POT_FLAG_MAP.items()
+            if POT_POOL_BY_LOC.get(k) in enabled
+        }
+
+    def _enabled_glossary_flag_map(self) -> Dict[int, int]:
+        """LocationID -> sheet-20 book flagNo, restricted to enabled glossanity categories."""
+        enabled = glossanity_pools_enabled(self.options)
+        return {
+            int(k): int(v) for k, v in GLOSSARY_FLAG_MAP.items()
+            if k in GLOSSARY_ITEM_IDS
+            and GLOSSARY_POOLS_BY_ID.get(int(k)) in enabled
+        }
+
+    def _location_labels(self) -> Dict[int, str]:
+        """
+        Display name per LocationID — captures every filled location (own +
+        foreign) so the C# mod can label items in offline mode and so
+        guardian-specific Ankh names survive in place of the vanilla BoxName.
+
+        See _label_for_location for the ITEM_MAP-first / loc.item.name
+        fallback rationale.
+        """
+        labels: Dict[int, str] = {}
+        for loc in self.multiworld.get_filled_locations(self.player):
+            if not hasattr(loc, "game_location_id"):
+                continue
+            if loc.item is None:
+                continue
+            labels[int(loc.game_location_id)] = self._label_for_location(loc)
+        return labels
 
     def _label_for_location(self, loc) -> str:
         """

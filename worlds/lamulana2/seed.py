@@ -3,7 +3,12 @@ from __future__ import annotations
 import struct
 from typing import BinaryIO, Dict, List, Tuple
 
-from .ids import ItemID, LocationID, ExitID, SHOP_WRITE_ORDER, potsanity_pools_enabled, POT_FLAG_MAP, LEGACY_LOCATION_IDS
+from .ids import (
+    ItemID, LocationID, ExitID, SHOP_WRITE_ORDER,
+    potsanity_pools_enabled, glossanity_pools_enabled,
+    POT_POOLS, GLOSS_POOLS,
+    POT_FLAG_MAP, LEGACY_LOCATION_IDS,
+)
 
 # ============================================================
 # AP item -> LM2 seed encoding (write-time only)
@@ -22,7 +27,11 @@ LM2AP_MAGIC = b"LM2A"
 # v2: appended location_labels section after pot_flag_map.
 # v3: appended greedy_charon bool.
 # v4: appended game_difficulty int32.
-# v5: appended ap_placements (Glossary, Costumes, DLC)
+# v5: appended ap_placements (Glossary, Costumes, DLC), the glossanity
+#     flag map, the goal fields, the costumesanity/persistent_inventory
+#     toggles, the per-pool potsanity/glossanity partitions, and the
+#     entrance-category toggles -- everything slot_data carries that
+#     v4 could not express.
 LM2AP_VERSION = 5
 
 # Pot LocationIDs are written here, not in the legacy items section,
@@ -257,7 +266,10 @@ def write_ap_seed_file(
     settings,
     item_placements: List[Tuple[LocationID, ItemID]],
     pot_flag_map: Dict[int, int],
+    glossary_flag_map: Dict[int, int],
     location_labels: Dict[int, str],
+    goal: int,
+    glossary_hunt_count: int,
 ):
     """
     Write the AP-extended companion file `seed.lm2ap`.
@@ -299,6 +311,27 @@ def write_ap_seed_file(
         --- v5+ AP placements ---
         ap_placement_count        int32
         [ location_id int32, item_id int32 ] * ap_placement_count
+        --- v5+ Glossanity ---
+        glossanity                bool
+        glossary_flag_count       int32
+        [ location_id int32, book_flag_no int32 ] * glossary_flag_count
+        --- v5+ Goal ---
+        goal                      int32
+        glossary_hunt_count       int32
+        --- v5+ Remaining slot_data toggles ---
+        costumesanity             bool
+        persistent_inventory      bool
+        --- v5+ Pool partitions ---
+        potsanity_<pool>          bool * len(POT_POOLS)    (POT_POOLS order)
+        glossanity_<pool>         bool * len(GLOSS_POOLS)  (GLOSS_POOLS order)
+        oannesanity               bool
+        gate_entrances            bool
+        --- v5+ Entrance categories ---
+        horizontal_entrances      bool
+        vertical_entrances        bool
+        unique_transitions        bool
+        include_dlc_entrances     bool
+        soul_gate_entrances       bool
     """
 
     pot_placements = [
@@ -362,3 +395,59 @@ def write_ap_seed_file(
         for location_id, item_id in ap_placements:
             _write_i32(f, int(location_id))
             _write_i32(f, int(item_id))
+
+        # --- Glossanity (v5+) --------------------------------------------
+        # Glossanity is partitioned like potsanity; the mod only needs
+        # "any category active" plus the restricted flag map.
+        _write_bool(f, bool(glossanity_pools_enabled(settings)))
+        glossary_entries = [(int(loc_id), int(flag_no)) for loc_id, flag_no in glossary_flag_map.items()]
+        _write_i32(f, len(glossary_entries))
+        for location_id, flag_no in glossary_entries:
+            _write_i32(f, location_id)
+            _write_i32(f, flag_no)
+
+        # --- Goal (v5+) --------------------------------------------------
+        # Without these the offline goal trackers both read 0 and no
+        # non-default victory condition can ever fire.
+        _write_i32(f, goal)
+        _write_i32(f, glossary_hunt_count)
+
+        # --- Remaining slot_data toggles (v5+) ---------------------------
+        # costumesanity was previously inferred from the costume closets
+        # showing up in the placements; send it explicitly like slot_data does.
+        _write_bool(f, settings.costumesanity)
+        _write_bool(f, settings.persistent_inventory)
+
+        # --- Pool partitions (v5+) ---------------------------------------
+        # The collapsed `potsanity`/`glossanity` bools above only answer
+        # "is any pool on". Consumers that need per-pool visibility (the
+        # PopTracker pack gates each pot pool and glossary category
+        # separately) previously had to infer membership from which
+        # LocationIDs showed up in the restricted flag maps, which fails
+        # silently for an enabled pool that happens to place nothing.
+        # Written in POT_POOLS / GLOSS_POOLS order -- the reader walks the
+        # same tuples, so adding a pool means bumping the version.
+        for pool in POT_POOLS:
+            _write_bool(f, getattr(settings, f"potsanity_{pool}"))
+        for pool in GLOSS_POOLS:
+            _write_bool(f, getattr(settings, f"glossanity_{pool}"))
+
+        # oannesanity was inferred offline from the Fish Suit closet landing
+        # in the placements; gate_entrances had no offline source at all
+        # (a non-empty soul_gate_pairs does not imply the gates were
+        # shuffled). Both are explicit now.
+        _write_bool(f, settings.oannesanity)
+        _write_bool(f, settings.gate_entrances)
+
+        # --- Entrance categories (v5+) -----------------------------------
+        # The tracker decides which entrance pairs to pre-fill as vanilla from
+        # these, one per shuffle category (entrance_mapping.lua's cat_vanilla).
+        # Without them every category reads "off" and the whole graph is locked
+        # to vanilla -- the pairings in seed.lm2r are then silently ignored.
+        # gate_entrances is written just above; oannesanity gates whether the
+        # DLC categories are tracked at all.
+        _write_bool(f, settings.horizontal_entrances)
+        _write_bool(f, settings.vertical_entrances)
+        _write_bool(f, settings.unique_transitions)
+        _write_bool(f, settings.include_dlc_entrances)
+        _write_bool(f, settings.soul_gate_entrances)
