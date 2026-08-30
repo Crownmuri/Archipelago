@@ -159,24 +159,32 @@ _VIRTUAL_DEAD_END_START_PAIRS: frozenset = frozenset({
 # Allowed only when the starting cluster has room to hold the escape. 
 # The value is how many free starting slots the escape needs, sized off what it
 # actually costs to place:
-#   HoM <-> TS  12  Mjolnir + Djed Pillar + mantra software + five mantras + alpha
-#   others       7  Powered Beherit + alpha
+#   AC          4   Powered Beherit, Bomb+Ammo 
+#   HoM         2   Powered Beherit
+#   TS Escape   8   Mjolnir + Djed Pillar + mantra software + five mantras
 #
 # A layout below the threshold is not a failure -- _validate_starting_cluster
 # returning False just rerolls that ER attempt.
 _SOFT_DEAD_END_START_PAIRS: Dict[frozenset, int] = {
-    frozenset({ExitID.f13GateP0, ExitID.f08GateP0}): 12,  # HoM <-> TS Bottom
-    frozenset({ExitID.f13GateP0, ExitID.f05GateP1}): 7,  # HoM <-> DF Left
-    frozenset({ExitID.f13GateP0, ExitID.f07GateP0}): 7,  # HoM <-> GotD Wedjat
-    frozenset({ExitID.f13GateP0, ExitID.f09GateP0}): 7,  # HoM <-> Heaven's Lab
-    frozenset({ExitID.f05GateP1, ExitID.f08GateP0}): 12,  # DF  <-> TS Bottom
+    frozenset({ExitID.f12GateP0, ExitID.f08GateP0}): 4,   # AC    <-> TS Bottom
+    frozenset({ExitID.f12GateP0, ExitID.f05GateP1}): 4,   # AC    <-> DF Left
+    frozenset({ExitID.f12GateP0, ExitID.f07GateP0}): 4,   # AC    <-> GotD Wedjat
+    frozenset({ExitID.f12GateP0, ExitID.f09GateP0}): 4,   # AC    <-> Heaven's Lab
+    frozenset({ExitID.f13GateP0, ExitID.f08GateP0}): 2,   # HoM   <-> TS Bottom
+    frozenset({ExitID.f13GateP0, ExitID.f05GateP1}): 2,   # HoM   <-> DF Left
+    frozenset({ExitID.f13GateP0, ExitID.f07GateP0}): 2,   # HoM   <-> GotD Wedjat
+    frozenset({ExitID.f13GateP0, ExitID.f09GateP0}): 2,   # HoM   <-> Heaven's Lab
+    frozenset({ExitID.f05GateP1, ExitID.f08GateP0}): 8,  # DF     <-> TS Bottom
+    frozenset({ExitID.f06GateP0, ExitID.f08GateP0}): 8,  # SotFG  <-> TS Bottom
+    
 }
 
 # Low chance of escape if vertical_entrances off with IT Entrance starting pair.
 _SOFT_DEAD_END_NO_LADDER_PAIRS: Dict[frozenset, int] = {
-    frozenset({ExitID.f13GateP0, ExitID.f04GateYB}): 7,  # HoM <-> IT Entrance
-    frozenset({ExitID.f12GateP0, ExitID.f04GateYB}): 7,  # AC  <-> IT Entrance
-    frozenset({ExitID.f05GateP1, ExitID.f04GateYB}): 7,  # DF  <-> IT Entrance
+    frozenset({ExitID.f12GateP0, ExitID.f04GateYB}): 4,    # AC     <-> IT Entrance
+    frozenset({ExitID.f13GateP0, ExitID.f04GateYB}): 2,    # HoM    <-> IT Entrance
+    frozenset({ExitID.f05GateP1, ExitID.f04GateYB}): 999,  # DF     <-> IT Entrance
+    frozenset({ExitID.f06GateP0, ExitID.f04GateYB}): 999,  # SotFG  <-> IT Entrance
 }
 
 
