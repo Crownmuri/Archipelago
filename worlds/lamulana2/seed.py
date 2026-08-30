@@ -432,12 +432,8 @@ def write_ap_seed_file(
         for pool in GLOSS_POOLS:
             _write_bool(f, getattr(settings, f"glossanity_{pool}"))
 
-        # oannesanity was inferred offline from the Fish Suit closet landing
-        # in the placements; gate_entrances had no offline source at all
-        # (a non-empty soul_gate_pairs does not imply the gates were
-        # shuffled). Both are explicit now.
+        # oannesanity was originally inferred offline from the Fish Suit item.
         _write_bool(f, settings.oannesanity)
-        _write_bool(f, settings.gate_entrances)
 
         # --- Entrance categories (v5+) -----------------------------------
         # The tracker decides which entrance pairs to pre-fill as vanilla from
@@ -448,6 +444,7 @@ def write_ap_seed_file(
         # DLC categories are tracked at all.
         _write_bool(f, settings.horizontal_entrances)
         _write_bool(f, settings.vertical_entrances)
+        _write_bool(f, settings.gate_entrances)
         _write_bool(f, settings.unique_transitions)
         _write_bool(f, settings.include_dlc_entrances)
         _write_bool(f, settings.soul_gate_entrances)
