@@ -1785,6 +1785,39 @@ class LM2RandomizerCore:
         }
         return self._cached_ap_placeholder_map
 
+    def get_own_placeholder_items(self) -> List[Tuple[LocationID, ItemID]]:
+        """
+        Seed writer helper: LocationID -> the REAL own-world game ItemID that a
+        per-location AP placeholder is standing in for.
+
+        ``get_item_placements`` / ``get_shop_placements`` route this player's own
+        glossary ROMs and pot filler through the sheet-31 placeholder mechanism
+        (see ``_get_ap_placeholder_map``), so both seed files record 410000+n at
+        a location where the player actually receives item 2000+ / 1001+.
+
+        Online the scout reply still carries the truth, so nothing needed to know
+        this. Offline the seed IS the truth, and a placeholder there is
+        indistinguishable from another player's item -- which is exactly how the
+        mod was reading it. This map is what lets it resolve them back.
+        """
+        ap_map = self._get_ap_placeholder_map()
+        result: List[Tuple[LocationID, ItemID]] = []
+
+        for loc_id, loc in self.locations.items():
+            if loc_id not in ap_map or not self._is_glosspot_own(loc):
+                continue
+            try:
+                item_id = get_game_item_id(loc.item)
+            except Exception:
+                continue
+            # Mirror the writers' last step: a filler id may have been
+            # translated to a per-location unique in pre_output.
+            item_id = self._filler_id_cache.get(loc_id, item_id)
+            result.append((loc_id, item_id))
+
+        result.sort(key=lambda pair: int(pair[0]))
+        return result
+
     def _is_glosspot_own(self, loc) -> bool:
         """This player's glossary ROM (2000-2251) or pot filler (1001-1307), any location."""
         if loc.item is None or loc.item.player != self.player:

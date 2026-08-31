@@ -1366,6 +1366,7 @@ class LaMulana2World(World):
                     location_labels=self._location_labels(),
                     goal=int(getattr(self, "goal", 0)),
                     glossary_hunt_count=int(getattr(self, "glossary_hunt_count", 0)),
+                    own_placeholder_items=self.randomizer.get_own_placeholder_items(),
                 )
 
                 # Package both seed files plus manifest into the AP zip

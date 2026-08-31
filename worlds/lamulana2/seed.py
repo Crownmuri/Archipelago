@@ -30,8 +30,9 @@ LM2AP_MAGIC = b"LM2A"
 # v5: appended ap_placements (Glossary, Costumes, DLC), the glossanity
 #     flag map, the goal fields, the costumesanity/persistent_inventory
 #     toggles, the per-pool potsanity/glossanity partitions, and the
-#     entrance-category toggles -- everything slot_data carries that
-#     v4 could not express.
+#     entrance-category toggles, and own_placeholder_items (the real
+#     own-world ItemID behind each per-location AP placeholder) --
+#     everything slot_data carries that v4 could not express.
 LM2AP_VERSION = 5
 
 # Pot LocationIDs are written here, not in the legacy items section,
@@ -270,6 +271,7 @@ def write_ap_seed_file(
     location_labels: Dict[int, str],
     goal: int,
     glossary_hunt_count: int,
+    own_placeholder_items: List[Tuple[LocationID, ItemID]] = (),
 ):
     """
     Write the AP-extended companion file `seed.lm2ap`.
@@ -332,6 +334,9 @@ def write_ap_seed_file(
         unique_transitions        bool
         include_dlc_entrances     bool
         soul_gate_entrances       bool
+        --- v5+ Own items hidden behind AP placeholders ---
+        own_placeholder_count     int32
+        [ location_id int32, item_game_id int32 ] * own_placeholder_count
     """
 
     pot_placements = [
@@ -448,3 +453,21 @@ def write_ap_seed_file(
         _write_bool(f, settings.unique_transitions)
         _write_bool(f, settings.include_dlc_entrances)
         _write_bool(f, settings.soul_gate_entrances)
+
+        # --- Own items behind AP placeholders (v5+) ----------------------
+        # get_item_placements / get_shop_placements deliberately route this
+        # player's OWN glossary ROMs and pot filler through the per-location
+        # sheet-31 placeholder (410000+n) so the location's AP machinery fires
+        # the check. Online that costs nothing -- the scout reply still names
+        # the real item and its owner. Offline the seed is the only source, so
+        # without this section the mod reads every one of those placements as
+        # "another player's item": own glossary ROMs stop being recognised
+        # (no silent pickup, no direct delivery, a bogus "Sent ... to Player"
+        # dialog) and the UAT tracker publishes an unmappable placeholder id.
+        own_entries = [
+            (int(loc_id), int(item_id)) for loc_id, item_id in own_placeholder_items
+        ]
+        _write_i32(f, len(own_entries))
+        for location_id, item_id in own_entries:
+            _write_i32(f, location_id)
+            _write_i32(f, item_id)
