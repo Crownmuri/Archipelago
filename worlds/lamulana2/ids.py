@@ -5228,6 +5228,26 @@ def glossanity_pools_enabled(options) -> set:
     """Set of glossary category names whose `glossanity_<pool>` toggle is on."""
     return {c for c in GLOSS_POOLS if getattr(options, f"glossanity_{c}")}
 
+
+def glossary_is_shuffled(options, glossary_id) -> bool:
+    """True when this glossary entry's ROM is actually placed in the seed.
+
+    Single source of truth for "is this entry part of the seed": its category
+    toggle has to be on, and DLC entries additionally need Oannesanity. The item
+    pool, the glossary-hunt count clamp and the flag map handed to the mod all
+    read this. They used to carry their own copies of the filter and the flag
+    map's was missing the DLC clause, so with Oannesanity off the client still
+    registered ids 2232-2243 -- entries with no ROM behind them, which
+    GlossaryGoalTracker then counted toward the hunt goal for free.
+    """
+    gid = int(glossary_id)
+    cat = GLOSSARY_POOLS_BY_ID.get(gid)
+    if cat is None or not getattr(options, f"glossanity_{cat}"):
+        return False
+    if gid in DLC_GLOSSARY_IDS and not options.oannesanity:
+        return False
+    return True
+
 # Inverse of ITEM_MAP: game ItemID → display label.
 # Built from ITEM_MAP so the area-specific labels (e.g. "Map (Roots of Yggdrasil)",
 # "Sacred Orb (VoD)", "Ankh Jewel (Vritra)") flow through wherever a game ItemID

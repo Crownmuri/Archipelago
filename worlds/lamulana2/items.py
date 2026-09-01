@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, ITEM_MAP, DLC_ITEM_IDS, DLC_GLOSSARY_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, ITEM_MAP, DLC_ITEM_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, glossary_is_shuffled, potsanity_pools_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -480,12 +480,11 @@ def build_item_pool(world) -> List[Item]:
 
         # glossary ROMs: pool the placed ones as filler when that glossary
         # category's glossanity toggle is on. DLC glossaries (fish + Gyonin)
-        # additionally require oannesanity.
+        # additionally require oannesanity -- glossary_is_shuffled is the shared
+        # filter, so the hunt-count clamp and the mod's flag map cannot disagree
+        # with what actually lands in the pool.
         if item_def.game_id in GLOSSARY_ITEM_IDS:
-            is_dlc_gloss = item_def.game_id in DLC_GLOSSARY_IDS
-            cat = GLOSSARY_POOLS_BY_ID.get(int(item_def.game_id))
-            cat_on = cat is not None and getattr(world.options, f"glossanity_{cat}")
-            if (cat_on and (not is_dlc_gloss or world.options.oannesanity)):
+            if glossary_is_shuffled(world.options, item_def.game_id):
                 # For the glossary_hunt goal the ROMs are MacGuffins, so they
                 # must be progression (collected into state → has_group counts
                 # them). Same pattern as ALTTP Triforce Piece / Celeste Strawberry. 

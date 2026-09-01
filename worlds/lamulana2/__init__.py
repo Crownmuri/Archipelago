@@ -21,7 +21,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .options import (LM2Options, StartingArea, StartingWeapon, ShopPlacement,
                       RandomSoulGateValue)
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, MISSABLE_LOCATION_IDS
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, FILLER_DISTRIBUTION,
@@ -120,12 +120,6 @@ _STARTING_WEAPON_MAP: Dict[int, ItemID] = {
 # to seed itself. See _lock_into_own_locations.
 _LOCAL_FILL_SPHERE_ONE_RESERVE_FRACTION = 0.5
 _LOCAL_FILL_SPHERE_ONE_RESERVE_MIN = 4
-
-# The glossary_hunt goal turns required glossary into progression_not_balancing,
-# clogging up spheres. All glossary would be tough to fill in a solo world.
-# Forcing max to be a fraction of the total, leaving the rest as useful/filler.
-_GLOSSARY_HUNT_MAX_FRACTION = 0.80
-
 
 # =============================================================================
 # Main World
@@ -403,10 +397,10 @@ class LaMulana2World(World):
         """Leave only as many Glossary ROMs progression as the goal needs.
 
         `has_group("Glossary", ...)` counts prog_items, so a filler ROM does not
-        count toward the goal -- which is exactly the point: the goal needs
-        `glossary_hunt_count` of them, and every ROM beyond that was only making
-        the fill's job harder. `_GLOSSARY_HUNT_MAX_FRACTION` guarantees the
-        surplus exists.
+        count toward the goal in AP logic -- which is exactly the point: the goal
+        needs `glossary_hunt_count` of them, and every ROM beyond that was only
+        making the fill's job harder. The surplus is whatever the count leaves
+        over, and is empty when the count is the full available total.
         """
         from .options import Goal
 
@@ -1400,11 +1394,9 @@ class LaMulana2World(World):
 
     def _enabled_glossary_flag_map(self) -> Dict[int, int]:
         """LocationID -> sheet-20 book flagNo, restricted to enabled glossanity categories."""
-        enabled = glossanity_pools_enabled(self.options)
         return {
             int(k): int(v) for k, v in GLOSSARY_FLAG_MAP.items()
-            if k in GLOSSARY_ITEM_IDS
-            and GLOSSARY_POOLS_BY_ID.get(int(k)) in enabled
+            if k in GLOSSARY_ITEM_IDS and glossary_is_shuffled(self.options, k)
         }
 
     def _location_labels(self) -> Dict[int, str]:
@@ -1650,19 +1642,10 @@ class LaMulana2World(World):
 
     def _available_glossary_count(self) -> int:
         """Number of Glossary ROM entries that will actually be shuffled, given
-        the enabled Glossanity categories (and Oannesanity for DLC glossary).
-        Mirrors the pool-building filter in items.build_item_pool so the
-        glossary-hunt count can be clamped to something achievable."""
-        from .ids import GLOSSARY_ITEM_IDS, DLC_GLOSSARY_IDS, GLOSSARY_POOLS_BY_ID
-        count = 0
-        for gid in GLOSSARY_ITEM_IDS:
-            cat = GLOSSARY_POOLS_BY_ID.get(gid)
-            if cat is None or not getattr(self.options, f"glossanity_{cat}"):
-                continue
-            if gid in DLC_GLOSSARY_IDS and not self.options.oannesanity:
-                continue
-            count += 1
-        return count
+        the enabled Glossanity categories (and Oannesanity for DLC glossary),
+        so the glossary-hunt count can be clamped to something achievable."""
+        return sum(1 for gid in GLOSSARY_ITEM_IDS
+                   if glossary_is_shuffled(self.options, gid))
 
     def _resolve_goal(self) -> None:
         """Resolve and validate the goal option.
@@ -1693,15 +1676,12 @@ class LaMulana2World(World):
                 goal = Goal.option_beat_the_game
             else:
                 requested = self.options.glossary_hunt_count.value
-                cap = max(1, int(available * _GLOSSARY_HUNT_MAX_FRACTION))
-                self.glossary_hunt_count = min(requested, cap)
+                self.glossary_hunt_count = min(requested, available)
                 if self.glossary_hunt_count < requested:
                     logging.warning(
                         f"[La-Mulana 2] {self.player_name}: glossary_hunt_count "
-                        f"{requested} exceeds the "
-                        f"{int(_GLOSSARY_HUNT_MAX_FRACTION * 100)}% of the "
-                        f"{available} Glossary entries shuffled by the enabled "
-                        f"Glossanity options that the goal may ask for. "
+                        f"{requested} exceeds the {available} Glossary entries "
+                        f"shuffled by the enabled Glossanity options. "
                         f"Lowered to {self.glossary_hunt_count}."
                     )
 
