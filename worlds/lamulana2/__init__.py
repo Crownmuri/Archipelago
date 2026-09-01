@@ -1422,11 +1422,20 @@ class LaMulana2World(World):
         Player-facing label for the item at this location.
 
         Prefers the descriptive ITEM_MAP entry keyed by the underlying game
-        ItemID (so e.g. Maps and Sacred Orbs carry their area-specific names
-        rather than the generic AP display name), and falls back to
-        loc.item.name when the item isn't registered there — that catches
-        foreign-player items, AP filler bundles, and any one-offs that don't
-        have an ITEM_MAP entry.
+        ItemID (so e.g. Maps carry their area-specific names rather than a
+        generic display name), and falls back to loc.item.name when the item
+        isn't registered there — that catches foreign-player items, AP filler
+        bundles, and any one-offs that don't have an ITEM_MAP entry.
+
+        Collapsed families are the exception: Sacred Orb, Sacred Orb (Bonus),
+        Crystal Skull, non-guardian Ankh Jewels and the Kosugi research papers
+        all ship on ONE AP id with the real game id on lm2_game_id, so the
+        server (and therefore online play) only ever says "Sacred Orb". Taking
+        the ITEM_MAP entry for the underlying game id would put the area suffix
+        back on — "Sacred Orb (IB)" — but only offline, where these labels are
+        the sole naming source. A collapsed item is exactly one whose AP code
+        is not its own game id's code, so that comparison keeps both modes
+        reading the same without a hand-maintained name list.
 
         For LM2Items carrying lm2_game_id (Progressive Whip/Shield/Beherit and
         the guardian-specific Ankh Jewels), we look up by the underlying
@@ -1436,15 +1445,17 @@ class LaMulana2World(World):
         or "Ankh Jewel (Vritra)").
         """
         item = loc.item
+        code = getattr(item, "code", None)
         # LM2Item-specific game ID (preserves progressives + guardian ankhs).
         game_id = getattr(item, "lm2_game_id", None)
-        if game_id is None:
-            code = getattr(item, "code", None)
-            if isinstance(code, int) and code >= BASE_ITEM_ID:
-                try:
-                    game_id = ItemID(code - BASE_ITEM_ID)
-                except ValueError:
-                    game_id = None
+        if game_id is not None:
+            if isinstance(code, int) and code != BASE_ITEM_ID + int(game_id):
+                return item.name          # collapsed family — keep the AP name
+        elif isinstance(code, int) and code >= BASE_ITEM_ID:
+            try:
+                game_id = ItemID(code - BASE_ITEM_ID)
+            except ValueError:
+                game_id = None
         if game_id is not None:
             label = ITEM_LABEL_BY_ID.get(game_id)
             if label:
