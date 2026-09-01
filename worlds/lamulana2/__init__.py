@@ -787,11 +787,19 @@ class LaMulana2World(World):
         # set_rules, before any ER or post-ER pass has stamped anything.
         # Restored at the top of each attempt so a rejected layout's soul gate
         # / FDC / AnkhCount clauses can't leak into the next one.
-        from .entrances import snapshot_logic_state, restore_logic_state
+        from .entrances import (snapshot_logic_state, restore_logic_state,
+                                snapshot_soul_gate_connections,
+                                restore_soul_gate_connections)
         logic_baseline = snapshot_logic_state(self)
+        # Soul gates sit outside the structural ER candidate pool, so a rejected
+        # attempt leaves them wired to whatever the last SoulGateRandomizer did
+        # and the next one adopts that as its "vanilla". restore_logic_state
+        # only rewinds logic strings, not connections.
+        soul_gate_baseline = snapshot_soul_gate_connections(self)
 
         for outer in range(OUTER_MAX):
             restore_logic_state(self, logic_baseline)
+            restore_soul_gate_connections(self, soul_gate_baseline)
 
             # ── Structural ER ─────────────────────────────────────────────
             if any_structural:

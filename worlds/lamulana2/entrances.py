@@ -1889,9 +1889,12 @@ def _reset_state_for_attempt(state, player: int) -> None:
     state.stale[player] = True
     state.reachable_regions[player].clear()
     state.blocked_connections[player].clear()
-    # locations_checked tracks event-collection per sphere-sweep — must
-    # restart fresh each attempt.
+    # locations_checked / advancements track event-collection per sphere-sweep
+    # — must restart fresh each attempt. advancements is the set
+    # sweep_for_advancements() filters against, so a stale entry silently hides
+    # a location from the next attempt's sweep.
     state.locations_checked = set()
+    state.advancements = set()
     state.path = {}
 
 
@@ -1915,12 +1918,19 @@ def _sweep_reachability(world, base_state=None):
         state = _build_items_only_state(world)
         _reset_state_for_attempt(state, player)
     else:
+        # prevent_sweep is mandatory here. collect() without it runs AP's own
+        # sweep_for_advancements(), which already banks every reachable placed
+        # item -- and the manual sphere loop below then collects those same
+        # location items a SECOND time. That doubles every counted resource,
+        # most damagingly the derived Guardians counter (each boss-kill event
+        # counted twice), so soul gates gated on GuardianKills(N) read as open
+        # and the sweep reports a sealed layout as fully reachable.
         state = CollectionState(world.multiworld)
         for item in world.multiworld.precollected_items[player]:
-            state.collect(item)
+            state.collect(item, True)
         for item in world.multiworld.itempool:
             if item.player == player:
-                state.collect(item)
+                state.collect(item, True)
         if hasattr(state, 'stale'):
             state.stale[player] = True
 
@@ -2233,6 +2243,40 @@ def restore_logic_state(world, snap: dict) -> None:
         if loc._additional_logic != saved:
             loc._additional_logic = list(saved)
             loc._rebuild_combined_logic()
+
+
+def snapshot_soul_gate_connections(world) -> dict:
+    """Capture every soul gate exit's destination, for the ER outer retry loop.
+
+    Soul gates are randomized by SoulGateRandomizer, not by custom_structural_er,
+    so they are absent from its candidate pool and nothing in the outer retry
+    loop puts them back. A rejected attempt (soul gate exhaustion, a mantra
+    seating that seals the world, a stranded shop item) therefore leaves the
+    previous attempt's gate wiring in place, the next attempt's randomizer
+    snapshots THAT as its own vanilla baseline, and the graph drifts further
+    from vanilla with every reroll while never drifting back.
+    """
+    snap = {}
+    for e in world.multiworld.get_entrances(world.player):
+        if isinstance(e, LM2Entrance) and e.exit_type == ExitType.SoulGate:
+            snap[id(e)] = e.connected_region
+    return snap
+
+
+def restore_soul_gate_connections(world, snap: dict) -> int:
+    """Rewire every soul gate back to its snapshotted destination."""
+    restored = 0
+    for e in world.multiworld.get_entrances(world.player):
+        if not isinstance(e, LM2Entrance) or e.exit_type != ExitType.SoulGate:
+            continue
+        target = snap.get(id(e))
+        if target is None or e.connected_region is target:
+            continue
+        _disconnect_exit(e)
+        e.access_rule = e.can_access
+        e.connect(target)
+        restored += 1
+    return restored
 
 
 # ── Disconnect / reconnect helpers ────────────────────────────────────
@@ -3179,6 +3223,12 @@ class SoulGateRandomizer:
         _log(f"[ER] Soul gate randomization failed after {MAX_ATTEMPTS} attempts "
               f"-- structural layout incompatible with soul gates.")
         self._log_soul_gate_pairings("LAST FAILED: ")
+        # Same contract as the two hopeless-layout early-outs above: a failed
+        # randomize() must not leave the last attempt's wiring behind. Soul
+        # gates are not in the structural ER candidate pool, so nothing in the
+        # outer retry loop rewires them, and the next attempt's randomizer
+        # snapshots whatever it finds as its own "vanilla" baseline.
+        _reset_all_gates_to_vanilla()
         return False
 
     # ============================================================

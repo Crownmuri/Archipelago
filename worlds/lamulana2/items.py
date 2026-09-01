@@ -299,6 +299,24 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
             item.lm2_game_id = mapped_id
             return _apply_option_classification(world, item)
 
+    # Coin/Weight/ammo-bundle filler. These are registered in the datapackage
+    # (item_name_to_id, see LaMulana2World) and are what get_filler_item_name()
+    # returns, but they have no ItemDef and no ITEM_MAP entry -- the pool builds
+    # them straight from AP_FILLER via create_filler_item(). Without this branch
+    # world.create_filler() raises KeyError on its OWN filler name, which breaks
+    # every AP path that mints a replacement item: the generator's
+    # `panic_method: start_inventory` recovery (observed turning a recoverable
+    # FillError into a hard KeyError), Fill's filler top-ups, item_links, and
+    # plando of a filler name.
+    if name in AP_FILLER_NAMES:
+        filler_id = next(iid for n, iid in AP_FILLER if n == name)
+        return Item(
+            name=name,
+            classification=ItemClassification.filler,
+            code=BASE_ITEM_ID + int(filler_id),
+            player=world.player,
+        )
+
     matching_defs = [d for d in ITEM_DEFS if d.name == name]
 
     if not matching_defs:
