@@ -945,12 +945,17 @@ def build_pre_filler(world) -> Item:
 # Members must match names registered in LaMulana2World.item_name_to_id.
 
 _WEAPON_NAMES: frozenset[str] = frozenset({
-    "Progressive Whip", "Knife", "Rapier", "Axe", "Katana", "Pistol",
+    "Progressive Whip", "Knife", "Rapier", "Axe", "Katana",
 })
 
 _SUBWEAPON_NAMES: frozenset[str] = frozenset({
     "Shuriken", "Rolling Shuriken", "Earth Spear", "Flare Gun",
-    "Caltrops", "Chakram", "Bomb", "Claydoll Suit",
+    "Caltrops", "Chakram", "Bomb", "Pistol",
+})
+
+_COSTUME_NAMES: frozenset[str] = frozenset({
+    "Claydoll Suit", "Fish Suit", "Valkyrie",
+    "Eastern Europe", "Kimono Cowgirl", "Little Demon",
 })
 
 _MANTRA_NAMES: frozenset[str] = frozenset({
@@ -985,6 +990,7 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
         {d.name for d in ITEM_DEFS}
         | set(ITEM_MAP)
         | set(GUARDIAN_ANKHS_ITEMS.values())
+        | {RESEARCH_LABEL, "Sacred Orb (Bonus)", "Beherit", "Progressive Beherit"}
     )
 
     # Skulls, orbs and guardian ankh jewels are one item per source, so these
@@ -993,13 +999,16 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
     sacred_orbs = {n for n in all_names if n.startswith("Sacred Orb")}
     ankh_jewels = {n for n in all_names if n.startswith("Ankh Jewel")}
     ankh_jewels |= set(GUARDIAN_ANKHS_ITEMS.values()) & all_names
+    maps = {n for n in all_names if n.startswith("Map")}
 
     return {
         "Weapons": set(_WEAPON_NAMES),
         "Weapon": set(_WEAPON_NAMES),
         "Subweapons": set(_SUBWEAPON_NAMES),
         "Subweapon": set(_SUBWEAPON_NAMES),
-        "Maps": {n for n in all_names if n.startswith("Map")},
+        "Costumes": set(_COSTUME_NAMES),
+        "Costume": set(_COSTUME_NAMES),
+        "Maps": maps,
         "Research": {n for n in all_names if "Research" in n},
         "Ammo": {n for n in all_names if n.endswith(" Ammo")},
         "Crystal Skulls": crystal_skulls,
@@ -1012,11 +1021,34 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
         "Sacred Orbs": sacred_orbs,
         "Orb": sacred_orbs,
         "HP": sacred_orbs,
-        "Beherit": {"Progressive Beherit"},
+        "Beherit": {"Beherit", "Progressive Beherit"},
         "Software": set(_SOFTWARE_NAMES),
         "Sigils": set(_SIGIL_NAMES),
         "Sigil": set(_SIGIL_NAMES),
         "Seals": set(_SIGIL_NAMES),
         "Seal": set(_SIGIL_NAMES),
         "Glossary": {d.name for d in ITEM_DEFS if int(d.game_id) in GLOSSARY_ITEM_IDS},
+
+        # Singular aliases, deliberately shadowing the same-named ITEMS.
+        #
+        # item_name_to_id carries BOTH label styles for these families -- the
+        # generic "Ankh Jewel" and the per-source "Ankh Jewel (Fafnir)" -- because
+        # it is a ClassVar and cannot vary per slot. Only one style is ever in a
+        # given pool: guardian_specific_ankhs decides it for jewels, while Maps
+        # always ship per-area and Crystal Skull / Sacred Orb always collapse. So
+        # "/hint Ankh Jewel" on a guardian-ankh seed matched a real item name that
+        # nothing in the pool uses and answered "No hints found" -- the plural
+        # aliases above were the only way in.
+        #
+        # MultiServer resolves group names BEFORE item names (the
+        # `hint_name in item_name_groups[game]` branch precedes the item-name one),
+        # so registering the singular as a group makes it resolve to whichever
+        # style the seed actually used -- each group holds both. This trips core's
+        # test_item_name_group_conflict, which forbids a group sharing an item's
+        # name; that check exists to stop groups silently shadowing items, and
+        # here the shadowing is the point.
+        "Crystal Skull": crystal_skulls,
+        "Ankh Jewel": ankh_jewels,
+        "Sacred Orb": sacred_orbs,
+        "Map": maps,
     }
