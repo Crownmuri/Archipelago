@@ -860,6 +860,10 @@ class LM2RandomizerCore:
         "and (Has(Harp) or (Has(Ganesha's Talisman) and Has(Money Fairy)))"
     )
 
+    # Slots the expensive gate must never land on.
+    # - HinerShop3 blocks HinerShop4 and potentially NPC Glossary, appended logic is not inherited.
+    EXPENSIVE_SHOP_EXCLUDED = frozenset({LocationID.HinerShop3})
+
     def pick_expensive_shop_slot_post_er(self) -> None:
         """
         Choose the 1000-coin shop slot and gate it, from World.pre_fill().
@@ -877,6 +881,8 @@ class LM2RandomizerCore:
         candidates = []
         for loc_id, loc in self.locations.items():
             if not is_shop_location(loc):
+                continue
+            if loc_id in self.EXPENSIVE_SHOP_EXCLUDED:
                 continue
             item = loc.item
             if item is not None:

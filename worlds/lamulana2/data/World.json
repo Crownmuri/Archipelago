@@ -290,7 +290,7 @@
                 "Name": "[GOG B-4] NPC Glossary (Hiner)",
                 "ID": "talk81",
                 "LocationType": "Glossary",
-                "Logic": "CanReach(Gate of Illusion) and HorizontalAttack and Has(Ruins Encyclopedia)"
+                "Logic": "Has(Ruins Encyclopedia) or (CanReach(Gate of Illusion) and HorizontalAttack and GuardianKills(3))"
             }
         ],
         "Exits": [
