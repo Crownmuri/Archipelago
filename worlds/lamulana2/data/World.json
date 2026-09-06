@@ -1359,7 +1359,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "IBTop",
-                "Logic": "CanWarp or (CanKill(Cetus) and Setting(Non Random Ladders) and Setting(Non Random Unique))"
+                "Logic": "CanWarp or (CanKill(Cetus) and HorizontalAttack and Setting(Non Random Ladders) and Setting(Non Random Unique))"
             },
             {
                 "Name": "Immortal Battlefield Bifrost Fall (D-1)",
