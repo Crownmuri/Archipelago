@@ -1186,7 +1186,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "AnnwfnMain",
-                "Logic": "CanWarp or HorizontalAttack"
+                "Logic": "HorizontalAttack and (CanWarp or (Setting(Non Random Ladders) and Setting(Non Random Unique)))"
             },
             {
                 "Name": "Annwfn Bottom One-way Ladder (E-5)",
