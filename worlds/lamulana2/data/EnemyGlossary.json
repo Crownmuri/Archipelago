@@ -121,7 +121,7 @@
             "TSLeft",
             "TSBottom",
             "HL",
-            "HLCog",
+            "HLStatue",
             "HLSpun",
             "ACBottom",
             "ACTablet",
@@ -525,7 +525,7 @@
         "KillLogic": "HorizontalAttack",
         "SpawnAreas": [
             "HL",
-            "HLCog",
+            "HLStatue",
             "HLSpun"
         ]
     },
@@ -542,7 +542,7 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "HL",
-            "HLCog",
+            "HLStatue",
             "HLSpun"
         ]
     },

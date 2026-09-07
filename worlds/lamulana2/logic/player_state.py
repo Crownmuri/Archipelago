@@ -127,6 +127,7 @@ _REGIONS_BY_ID = {
         "HLGate": "Heavens Labyrinth Gate",
         "HLSpun": "Heavens Labyrinth Spun",
         "HLCog": "Heavens Labyrinth Cog",
+        "HLStatue": "Heavens Labyrinth Statue",
         "ValhallaMain": "Valhalla Main",
         "ValhallaTop": "Valhalla Top",
         "ValhallaTopRight": "Valhalla Top Right",

@@ -2784,6 +2784,8 @@ class AreaID(IntEnum):
     BaileyLevel2 = 106
     BaileyLevel3 = 107
     BaileyRight = 108
+    # --- Pot / Glossary sub-region ---
+    HLStatue = 112
 
 
 

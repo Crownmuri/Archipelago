@@ -529,6 +529,7 @@ AREA_DISPLAY_NAME: Dict[AreaID, str] = {
     AreaID.HLGate: "Heaven's Labyrinth",
     AreaID.HLSpun: "Heaven's Labyrinth",
     AreaID.HLCog: "Heaven's Labyrinth",
+    AreaID.HLStatue: "Heaven's Labyrinth",
     AreaID.ValhallaMain: "Valhalla",
     AreaID.ValhallaTop: "Valhalla",
     AreaID.ValhallaTopRight: "Valhalla",

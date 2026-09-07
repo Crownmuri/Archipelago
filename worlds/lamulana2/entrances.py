@@ -467,7 +467,7 @@ _DUNGEON_GROUP: Dict[AreaID, str] = {
     AreaID.TSBottom: "TS", AreaID.TSBlood: "TS",
     # Heaven's Labyrinth
     AreaID.HL: "HL", AreaID.HLGate: "HL", AreaID.HLSpun: "HL",
-    AreaID.HLCog: "HL",
+    AreaID.HLCog: "HL", AreaID.HLStatue: "HL",
     # Valhalla
     AreaID.ValhallaMain: "Val", AreaID.ValhallaTop: "Val",
     AreaID.ValhallaTopRight: "Val",

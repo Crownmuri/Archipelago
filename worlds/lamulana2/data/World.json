@@ -4511,7 +4511,7 @@
             },
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "HLCog",
+                "ConnectingAreaID": "HLStatue",
                 "Logic": "CanWarp"
             },
             {
@@ -4637,7 +4637,7 @@
             },
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "HLCog",
+                "ConnectingAreaID": "HLStatue",
                 "Logic": "IsDead(Scylla)"
             }
         ]
@@ -4650,7 +4650,27 @@
                 "Name": "Cog of Antiquity Chest",
                 "LocationType": "Chest",
                 "Logic": "Has(Ancient Battery) and CanWarp and HorizontalAttack"
+            }
+        ],
+        "Exits": [
+            {
+                "Name": "Heavens Labyrinth Monster's Jaw (A-5)",
+                "ID": "f09In",
+                "ConnectionType": "OneWay",
+                "ConnectingAreaID": "TSNeckEntrance",
+                "Logic": "False"
             },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "HLStatue",
+                "Logic": "CanWarp"
+            }
+        ]
+    },
+    {
+        "ID": "HLStatue",
+        "Name": "Heavens Labyrinth Statue",
+        "Locations": [
             {
                 "Name": "[HL B-5] Scylla's Breakable Wall Coin Pot",
                 "ID": "field09B4",
@@ -4676,15 +4696,7 @@
                 "Logic": "HorizontalAttack"
             }
         ],
-        "Exits": [
-            {
-                "Name": "Heavens Labyrinth Monster's Jaw (A-5)",
-                "ID": "f09In",
-                "ConnectionType": "OneWay",
-                "ConnectingAreaID": "TSNeckEntrance",
-                "Logic": "False"
-            }
-        ]
+        "Exits": []
     },
     {
         "ID": "ValhallaMain",
