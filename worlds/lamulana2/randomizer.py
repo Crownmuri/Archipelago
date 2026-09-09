@@ -669,6 +669,13 @@ class LM2RandomizerCore:
         mw = self.multiworld
         prices = getattr(self, "_pending_shop_prices", {})
         MAX_ATTEMPTS = 20
+        # Sweep our own locations only. sweep_for_advancements() with no
+        # argument walks EVERY player's region graph, and connect_entrances is
+        # called per world in slot order -- a world later in that order has not
+        # connected its entrances yet, so its dangling Entrances still have
+        # connected_region None and the sweep dies on them ('NoneType' object
+        # has no attribute 'exits'). Only our own reachability matters here.
+        own_locations = mw.get_locations(self.player)
 
         def clear():
             for loc in slots:
@@ -703,7 +710,7 @@ class LM2RandomizerCore:
                 item = remaining.pop(self.rng.randrange(len(remaining)))
                 # currentItems is the main pool only: a shop-only item has to be
                 # placeable without assuming you already bought it.
-                state = sweep_from_pool(mw.state, pool)
+                state = sweep_from_pool(mw.state, pool, own_locations)
                 self.rng.shuffle(avail)
                 for i, loc in enumerate(avail):
                     if loc.can_reach(state):
