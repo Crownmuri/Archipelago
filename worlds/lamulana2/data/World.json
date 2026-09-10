@@ -2594,7 +2594,7 @@
             {
                 "Name": "[IT F-3] Kimono Cowgirl Costume Chest",
                 "LocationType": "Chest",
-                "Logic": "HorizontalAttack or Has(Feather) or (CanReach(ITEntrance) and Has(Grapple Claw))"
+                "Logic": "HorizontalAttack or Has(Feather) or CanReach(EPG) or (CanReach(ITEntrance) and Has(Grapple Claw))"
             },
             {
                 "Name": "Fairy Guild Pass Chest",
@@ -3613,7 +3613,7 @@
             {
                 "Name": "[GOTD D-4] Little Demon Costume Chest",
                 "LocationType": "Chest",
-                "Logic": "True"
+                "Logic": "HorizontalAttack"
             },
             {
                 "Name": "Map Chest GotD",
@@ -4187,7 +4187,8 @@
             {
                 "Name": "Flare Puzzle Reward",
                 "LocationType": "FreeStanding",
-                "Logic": "Has(Birth Sigil) and (CanStopTime or Has(Gale Fibula)) and (Has(Feather) or IsDead(Raijin and Fujin))"
+                "Logic": "Has(Birth Sigil) and (CanStopTime or (Has(Gale Fibula) and HorizontalAttack)) and (Has(Feather) or IsDead(Raijin and Fujin))",
+                "TrickyLogic": "(Has(Birth Sigil) and (CanStopTime or (Has(Gale Fibula) and HorizontalAttack)) and (Has(Feather) or IsDead(Raijin and Fujin))) or (Has(Birth Sigil) and Has(Feather) and HorizontalAttack)"
             }
         ],
         "Exits": [
@@ -4294,7 +4295,7 @@
                 "ID": "f08GateP0",
                 "ConnectionType": "Gate",
                 "ConnectingAreaID": "ACBottom",
-                "Logic": "True"
+                "Logic": "HorizontalAttack or Start(TSLeft)"
             }
         ]
     },
@@ -4494,7 +4495,7 @@
                 "Name": "[HL B-1] NPC Glossary (Baphomet)",
                 "ID": "talk47",
                 "LocationType": "Glossary",
-                "Logic": "True"
+                "Logic": "HorizontalAttack"
             },
             {
                 "Name": "[HL A-3] NPC Glossary (Megarock)",
@@ -4530,7 +4531,7 @@
             {
                 "Name": "Sacred Orb Chest HL",
                 "LocationType": "Chest",
-                "Logic": "(Has(Feather) or Has(Grapple Claw)) and IsDead(Glasya Labolas)"
+                "Logic": "((Has(Feather) or Has(Grapple Claw)) and IsDead(Glasya Labolas)) or (CanReach(HLGate) and HorizontalAttack)"
             },
             {
                 "Name": "Perfume Chest",
@@ -4540,7 +4541,8 @@
             {
                 "Name": "Axe Puzzle Reward",
                 "LocationType": "FreeStanding",
-                "Logic": "(Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)"
+                "Logic": "(Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)",
+                "TrickyLogic": "((Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)) or (CanReach(HLGate) and Has(Feather) and Has(Glove))"
             },
             {
                 "Name": "Mobile Super X3 Item",
@@ -4602,7 +4604,8 @@
                 "Name": "[HL B-1] Weapon Vault Coin Pot",
                 "ID": "field09B0g",
                 "LocationType": "Pot",
-                "Logic": "(IsDead(Glasya Labolas) or CanReach(HLGate)) and (Has(Feather) or Has(Grapple Claw))"
+                "Logic": "IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))",
+                "TrickyLogic": "(IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))) or (CanReach(HLGate) and Has(Feather))"
             },
             {
                 "Name": "[HL C-2] Path to Chaos Item Pot",
@@ -4633,7 +4636,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "HLGate",
-                "Logic": "True"
+                "Logic": "(Has(Feather) or Has(Grapple Claw)) and IsDead(Glasya Labolas)"
             },
             {
                 "ConnectionType": "Internal",
@@ -6637,7 +6640,7 @@
                 "Name": "[EPG D-1] Gate with Glowing Eyes Item Pot",
                 "ID": "field14D0",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and (Has(Feather) or Has(Ice Cloak) or OrbCount(6)))"
+                "Logic": "Has(Grapple Claw) and (HorizontalAttack or (CanUse(Flare Gun) and (Has(Feather) or Has(Ice Cloak) or OrbCount(6))))"
             },
             {
                 "Name": "[EPG D-2] Soul Gate Coin Pot",
@@ -6697,7 +6700,7 @@
                 "Name": "[EPG E-3] Fourth Hell Gate Exit Coin Pot",
                 "ID": "field14E2",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and (CanUse(Flare Gun) and Has(Feather) and Has(Glove))"
+                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather) and Has(Glove))"
             },
             {
                 "Name": "[EPG F-2] Right of Prison Cells Coin Pot",

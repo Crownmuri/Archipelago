@@ -522,10 +522,13 @@
     },
     "enemyF09-1": {
         "Name": "Enemy Glossary (Lizardman)",
-        "KillLogic": "HorizontalAttack",
+        "KillLogic": "True",
         "SpawnAreas": [
             "HL",
-            "HLStatue",
+            {
+                "Area": "HLStatue",
+                "Logic": "HorizontalAttack"
+            },
             "HLSpun"
         ]
     },
