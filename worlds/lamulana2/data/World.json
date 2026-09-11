@@ -6950,7 +6950,7 @@
             {
                 "Name": "Fish-Valusa Re-gyo-ded",
                 "LocationType": "Miniboss",
-                "Logic": "Has(Feather) and CanUse(Flare Gun) and HorizontalAttack",
+                "Logic": "CanReach(TowerOfOannesLeftB) and Has(Feather) and HorizontalAttack and CanUse(Flare Gun)",
                 "Item": {
                     "Name": "Fish-Valusa Re-gyo-ded",
                     "IsRequired": false
