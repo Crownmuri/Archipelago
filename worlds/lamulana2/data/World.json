@@ -6857,7 +6857,7 @@
                 "Name": "[SH C-5] Enemy Glossary (Skuld)",
                 "ID": "lastRG3",
                 "LocationType": "Glossary",
-                "Logic": "HorizontalAttack"
+                "Logic": "Has(Feather) and Has(Grapple Claw)"
             },
             {
                 "Name": "[SH] Enemy Glossary (Dvergr)",
