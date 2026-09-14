@@ -12,7 +12,6 @@
             "IBTopLeft",
             "IBRight",
             "IBMain",
-            "IBLadder",
             "IBBottom",
             "ITLeft",
             "ITBottom",
@@ -66,7 +65,6 @@
             "IBTopLeft",
             "IBRight",
             "IBMain",
-            "IBLadder",
             "ITLeft",
             {
                 "Area": "ITBottom",
