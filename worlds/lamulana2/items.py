@@ -260,6 +260,12 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
             player=world.player,
         )
     
+    # Logic flags (boss kills, puzzles, ladders) are events: only
+    # create_logic_flag_item may mint them, as code=None items at their flag
+    # locations. Raise KeyError to make UT skip events in /next_progression sweep.
+    if name in LOGIC_FLAG_MAP:
+        raise KeyError(f"'{name}' is a logic flag event, not a creatable item")
+
     # Area/boss-labeled names ("Sacred Orb (VoD)", "Crystal Skull (RoY)",
     # "Map (Annwfn)", "Ankh Jewel (Fafnir)", ...) are the canonical datapackage
     # names (item_name_to_id is built from ITEM_MAP), each tied to a distinct
