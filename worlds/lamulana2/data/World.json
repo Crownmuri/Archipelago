@@ -1918,7 +1918,8 @@
                 "Name": "[IB B-5] Path to Time Altar Hidden Coin Pot",
                 "ID": "field03B4g",
                 "LocationType": "Pot",
-                "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))"
+                "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))",
+                "TrickyLogic": "CanUse(Bomb)"
             },
             {
                 "Name": "[IB B-5] Path to Time Altar Item Pot",
@@ -1930,7 +1931,8 @@
                 "Name": "[IB B-6] Glossary at Left-side Long Ladder",
                 "ID": "field03RG2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))"
+                "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))",
+                "TrickyLogic": "CanUse(Bomb)"
             }
         ],
         "Exits": [
@@ -5284,7 +5286,8 @@
                 "Name": "[DSLM C-4] Glossary in Breakable Wall to Atum",
                 "ID": "field11RG2",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather)"
+                "Logic": "Has(Feather)",
+                "TrickyLogic": "CanUse(Bomb)"
             },
             {
                 "Name": "[DSLM C-6] Glossary after Aten-Ra Defeated",
