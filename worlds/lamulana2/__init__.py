@@ -751,6 +751,7 @@ class LaMulana2World(World):
             # Universal Tracker regen: skip randomization, replay server's
             # exact layout from slot_data.
             self._apply_ut_layout(ut_data)
+            self._apply_ut_post_er_logic(ut_data)
             return
         if self._is_ut_fake_gen():
             # UT's initial fake gen, before it has slot_data. The regen will
@@ -951,16 +952,22 @@ class LaMulana2World(World):
         # cannot leak into this one's error message.
         self._finalize_reject_reason = None
 
+        # The UT replay already stamped the logic passes below from slot_data
+        # (_apply_ut_post_er_logic).
+        ut_stamped = getattr(self, "_ut_logic_applied", False)
+
         # Guardian ankh requirements: soul gates only carry their real
         # GuardianKills(N) once the gate values are assigned.
-        self.randomizer.fix_ankh_logic_post_er()
+        if not ut_stamped:
+            self.randomizer.fix_ankh_logic_post_er()
 
         # RequireFDC gates: both the backside gate and the Tower of Oannes
         # checkpoint describe the area you arrive in, so they can only be
         # stamped once each exit's live destination is known. This has to
         # precede the mantra fill -- it can gate the approach to a backside
         # mural, and a seating decided without it would not survive.
-        self.randomizer.fix_fdc_logic_post_er()
+        if not ut_stamped:
+            self.randomizer.fix_fdc_logic_post_er()
 
         # Randomized shop contents, deferred out of set_rules so they are
         # assigned against the final entrance graph with reachability checks
@@ -999,7 +1006,8 @@ class LaMulana2World(World):
         # Expensive shop slot: the gate names CanReach(DSLMMain), so it can
         # only be judged once the entrance graph is final. Picks the slot and
         # stamps the logic; the price lands in _adjust_shop_prices() after fill.
-        self.randomizer.pick_expensive_shop_slot_post_er()
+        if not ut_stamped:
+            self.randomizer.pick_expensive_shop_slot_post_er()
 
         # Indirect conditions: must follow every pass that appends to an
         # entrance's logic. AP evaluates entrance rules from inside
@@ -1639,6 +1647,41 @@ class LaMulana2World(World):
                 soul_amount=soul_amount,
             ))
         self._sg_pairs = applied_sg
+
+    def _apply_ut_post_er_logic(self, slot_data: dict) -> None:
+        """Stamp the post-ER logic passes onto the replayed UT layout.
+
+        A real generation stamps these in _finalize_layout, which the UT regen
+        only reaches through pre_fill -- and UT stops after generate_basic, so
+        without this its graph misses the RequireFDC / Oannes checkpoint gates
+        and the ankh grouping, and shows those checks in logic too early.
+
+        Only the logic stamps are replayed. Shop and mantra placement are left
+        out: UT reads received items from the server, not from locations. The
+        expensive shop slot is a random pick, so it is read back from
+        slot_data instead of re-rolled.
+        """
+        self.randomizer.fix_ankh_logic_post_er()
+        self.randomizer.fix_fdc_logic_post_er()
+
+        expensive_mult = self.randomizer.EXPENSIVE_SHOP_PRICE // 10
+        for entry in slot_data.get("shop_entries") or []:
+            if entry.get("price") != expensive_mult:
+                continue
+            try:
+                loc_id = LocationID(int(entry["location"]))
+            except (KeyError, TypeError, ValueError):
+                continue
+            loc = self.randomizer.locations.get(loc_id)
+            if loc is not None:
+                loc.append_logic_string(self.randomizer.EXPENSIVE_SHOP_LOGIC)
+                self.randomizer.expensive_shop_location = loc_id
+
+        from .entrances import register_indirect_conditions
+        register_indirect_conditions(self)
+
+        # pre_fill must not stamp these a second time if UT ever runs it.
+        self._ut_logic_applied = True
 
     def _available_glossary_count(self) -> int:
         """Number of Glossary ROM entries that will actually be shuffled, given
