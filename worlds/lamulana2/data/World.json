@@ -3402,13 +3402,13 @@
                 "Name": "[SFG A-4] Left Snow Drop Coin Pot",
                 "ID": "field06add1",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather))"
+                "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Pistol) or (CanUse(Flare Gun) and Has(Feather))"
             },
             {
                 "Name": "[SFG A-4] Glossary at Left Snow Drop",
                 "ID": "charactor9",
                 "LocationType": "Glossary",
-                "Logic": "HorizontalAttack or (CanUse(Flare Gun) and Has(Feather))"
+                "Logic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Pistol) or (CanUse(Flare Gun) and Has(Feather))"
             },
             {
                 "Name": "[SFG A-5] NPC Glossary (Hydlit)",
