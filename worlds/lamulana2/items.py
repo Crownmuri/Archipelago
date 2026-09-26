@@ -323,6 +323,30 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
             player=world.player,
         )
 
+    # Collapsed labels that build_item_pool mints inline under their own AP id
+    # rather than from an ItemDef. They are in the datapackage, so UT recreates
+    # them by name (received items, next_progression probe) and must get the
+    # same name/classification the pool used.
+    if name == "Sacred Orb (Bonus)":
+        item = LM2Item(name=name, classification=ItemClassification.useful,
+                       code=BASE_ITEM_ID + ItemID.SacredOrbBonus.value,
+                       player=world.player)
+        item.lm2_game_id = ItemID.SacredOrb10
+        return item
+    if name == "Beherit":
+        item = LM2Item(name=name, classification=ItemClassification.progression,
+                       code=BASE_ITEM_ID + ItemID.Beherit.value,
+                       player=world.player)
+        item.lm2_game_id = ItemID.ProgressiveBeherit1
+        return item
+    if name == RESEARCH_LABEL:
+        research_def = next(d for d in ITEM_DEFS if d.game_id == ItemID.Research1.value)
+        item = LM2Item(name=name, classification=_get_classification(research_def),
+                       code=BASE_ITEM_ID + ItemID.Research.value,
+                       player=world.player)
+        item.lm2_game_id = ItemID.Research1
+        return _apply_option_classification(world, item)
+
     matching_defs = [d for d in ITEM_DEFS if d.name == name]
 
     if not matching_defs:
