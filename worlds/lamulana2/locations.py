@@ -4,7 +4,7 @@ import json
 import importlib.resources as resources
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Optional, Set
+from typing import Dict, Optional, Set, Tuple
 
 from BaseClasses import Location
 
@@ -63,11 +63,13 @@ class LM2LocationDef:
 # lists every area the enemy can be fought in, so the glossary drops there. The
 # composed rule is an OR over those areas: reach any spawn area AND meet that
 # area's kill condition (its own override Logic, else the entry's KillLogic).
+# A spawn area may also carry TrickyLogic; entries with any such override get a
+# second composed rule that becomes the location's tricky-tier logic.
 
 ENEMY_GLOSSARY_MARKER = "@EnemyGlossary"
 
 
-def _compose_enemy_glossary_logic(entry: dict) -> str:
+def _compose_enemy_glossary_logic(entry: dict, tricky: bool = False) -> str:
     kill = entry.get("KillLogic", "True")
     terms = []
     for spawn in entry.get("SpawnAreas", []):
@@ -75,25 +77,37 @@ def _compose_enemy_glossary_logic(entry: dict) -> str:
             area, area_logic = spawn, kill
         else:
             area, area_logic = spawn["Area"], spawn.get("Logic", kill)
+            if tricky:
+                area_logic = spawn.get("TrickyLogic", area_logic)
         terms.append(f"(CanReach({area}) and ({area_logic}))")
     if not terms:
         return "False"
     return "(" + " or ".join(terms) + ")"
 
 
-def _load_enemy_glossary_logic() -> Dict[str, str]:
+def _has_tricky_spawn(entry: dict) -> bool:
+    return any(
+        isinstance(spawn, dict) and "TrickyLogic" in spawn
+        for spawn in entry.get("SpawnAreas", [])
+    )
+
+
+def _load_enemy_glossary_logic() -> Tuple[Dict[str, str], Dict[str, str]]:
     with resources.files(__package__ + ".data").joinpath(
         "EnemyGlossary.json"
     ).open("r", encoding="utf-8") as f:
         raw = json.load(f)
-    return {
-        key: _compose_enemy_glossary_logic(val)
-        for key, val in raw.items()
-        if not key.startswith("_")
+    entries = {key: val for key, val in raw.items() if not key.startswith("_")}
+    base = {key: _compose_enemy_glossary_logic(val) for key, val in entries.items()}
+    tricky = {
+        key: _compose_enemy_glossary_logic(val, tricky=True)
+        for key, val in entries.items()
+        if _has_tricky_spawn(val)
     }
+    return base, tricky
 
 
-ENEMY_GLOSSARY_LOGIC: Dict[str, str] = _load_enemy_glossary_logic()
+ENEMY_GLOSSARY_LOGIC, ENEMY_GLOSSARY_TRICKY_LOGIC = _load_enemy_glossary_logic()
 
 
 # ============================================================
@@ -152,9 +166,11 @@ def _load_locations() -> Dict[LocationID, LM2LocationDef]:
             # (keyed by the World.json game ID, e.g. "enemyC0"). These locations
             # bypass the parent-area gate since CanReach(...) covers reachability.
             logic = loc.get("Logic", "True")
+            tricky_logic = loc.get("TrickyLogic")
             bypass_parent_gate = False
             if logic.strip() == ENEMY_GLOSSARY_MARKER:
                 logic = ENEMY_GLOSSARY_LOGIC.get(loc.get("ID"), "False")
+                tricky_logic = tricky_logic or ENEMY_GLOSSARY_TRICKY_LOGIC.get(loc.get("ID"))
                 bypass_parent_gate = True
 
             # Create location definition
@@ -163,7 +179,7 @@ def _load_locations() -> Dict[LocationID, LM2LocationDef]:
                 game_id=loc_id,
                 location_type=loc_type,
                 logic=logic,
-                tricky_logic=loc.get("TrickyLogic"),
+                tricky_logic=tricky_logic,
                 minimal_logic=loc.get("HardLogic"),
                 parent_area=parent_area,
                 ap_id=ap_id,

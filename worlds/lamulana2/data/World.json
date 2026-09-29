@@ -1442,7 +1442,7 @@
             {
                 "Name": "Earth Spear Puzzle Reward",
                 "LocationType": "FreeStanding",
-                "Logic": "Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
+                "Logic": "Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops) or Has(Gale Fibula)))"
             },
             {
                 "Name": "Research IB Top Left",
@@ -1453,7 +1453,7 @@
                 "Name": "[IB C-1] Top-Left Weapon Vault Item Pot",
                 "ID": "field03C0",
                 "LocationType": "Pot",
-                "Logic": "Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops)))"
+                "Logic": "Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops) or (Has(Gale Fibula) and HorizontalAttack)))"
             },
             {
                 "Name": "[IB B-2] Under Fake Wall Puzzle Item Pot",
@@ -1626,7 +1626,7 @@
                 "ID": "field03E5",
                 "LocationType": "Pot",
                 "Logic": "Has(Feather) or (Has(Grapple Claw) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb))) or IsDead(Cetus)",
-                "TrickyLogic": "MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
+                "TrickyLogic": "Has(Feather) or IsDead(Cetus) or MeleeAttack or Has(Claydoll Suit) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb)"
             },
             {
                 "Name": "[IB F-2] Map Chest Left Item Pot",
@@ -1919,7 +1919,7 @@
                 "ID": "field03B4g",
                 "LocationType": "Pot",
                 "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))",
-                "TrickyLogic": "CanUse(Bomb)"
+                "TrickyLogic": "(Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Flare Gun) or CanUse(Pistol))) or CanUse(Bomb)"
             },
             {
                 "Name": "[IB B-5] Path to Time Altar Item Pot",
@@ -1932,7 +1932,7 @@
                 "ID": "field03RG2",
                 "LocationType": "Glossary",
                 "Logic": "Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Flare Gun) or CanUse(Pistol))",
-                "TrickyLogic": "CanUse(Bomb)"
+                "TrickyLogic": "(Has(Feather) and (MeleeAttack or Has(Claydoll Suit) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Flare Gun) or CanUse(Pistol))) or CanUse(Bomb)"
             }
         ],
         "Exits": [
@@ -2377,7 +2377,8 @@
                 "Name": "[IT C-4] NPC Glossary (Mino the Bomb Guy)",
                 "ID": "talk19",
                 "LocationType": "Glossary",
-                "Logic": "Has(Feather) or Glitch(Costume Clip)"
+                "Logic": "Has(Feather) or Glitch(Costume Clip)",
+                "TrickyLogic": "True"
             },
             {
                 "Name": "[IT E-4] Enemy Glossary During Escape (Urd)",
@@ -4195,7 +4196,7 @@
                 "Name": "Flare Puzzle Reward",
                 "LocationType": "FreeStanding",
                 "Logic": "Has(Birth Sigil) and (CanStopTime or (Has(Gale Fibula) and HorizontalAttack)) and (Has(Feather) or IsDead(Raijin and Fujin))",
-                "TrickyLogic": "(Has(Birth Sigil) and (CanStopTime or (Has(Gale Fibula) and HorizontalAttack)) and (Has(Feather) or IsDead(Raijin and Fujin))) or (Has(Birth Sigil) and Has(Feather) and HorizontalAttack)"
+                "TrickyLogic": "Has(Birth Sigil) and (CanStopTime or HorizontalAttack) and (Has(Feather) or IsDead(Raijin and Fujin))"
             }
         ],
         "Exits": [
@@ -4502,7 +4503,7 @@
                 "Name": "[HL B-1] NPC Glossary (Baphomet)",
                 "ID": "talk47",
                 "LocationType": "Glossary",
-                "Logic": "HorizontalAttack"
+                "Logic": "HorizontalAttack or CanReach(HLSpun)"
             },
             {
                 "Name": "[HL A-3] NPC Glossary (Megarock)",
@@ -4594,8 +4595,8 @@
             {
                 "Name": "Griffin",
                 "LocationType": "Miniboss",
-                "Logic": "(Has(Gale Fibula) or CanStopTime) and Has(Glove) and Has(Life Sigil) and IsDead(Glasya Labolas) and OrbCount(2)",
-                "HardLogic": "(Has(Gale Fibula) or CanStopTime) and Has(Glove) and Has(Life Sigil) and IsDead(Glasya Labolas)",
+                "Logic": "(Has(Gale Fibula) or CanStopTime) and (Has(Glove) or Glitch(Costume Clip)) and Has(Life Sigil) and IsDead(Glasya Labolas) and OrbCount(2)",
+                "HardLogic": "(Has(Gale Fibula) or CanStopTime) and (Has(Glove) or Glitch(Costume Clip)) and Has(Life Sigil) and IsDead(Glasya Labolas)",
                 "Item": {
                     "Name": "Griffin",
                     "IsRequired": true
@@ -4605,7 +4606,8 @@
                 "Name": "[HL E-3] Spiral Mural Coin Pot",
                 "ID": "field09E2",
                 "LocationType": "Pot",
-                "Logic": "IsDead(Glasya Labolas)"
+                "Logic": "IsDead(Glasya Labolas) and Has(Glove)",
+                "TrickyLogic": "IsDead(Glasya Labolas) and (Has(Glove) or (CanUse(Bomb) and Glitch(Costume Clip)))"
             },
             {
                 "Name": "[HL B-1] Weapon Vault Coin Pot",
@@ -5010,7 +5012,8 @@
             {
                 "Name": "Flail Whip Puzzle Reward",
                 "LocationType": "FreeStanding",
-                "Logic": "(Has(Feather) or Has(Grapple Claw)) and Has(Origin Sigil) and Has(Birth Sigil) and Has(Life Sigil) and Has(Death Sigil) and Has(Claydoll Suit) and CanReach(Valhalla Top Right)"
+                "Logic": "(Has(Feather) or Has(Grapple Claw)) and Has(Origin Sigil) and Has(Birth Sigil) and Has(Life Sigil) and Has(Death Sigil) and Has(Claydoll Suit) and CanReach(Valhalla Top Right)",
+                "TrickyLogic": "(Has(Feather) or Has(Grapple Claw)) and Has(Origin Sigil) and Has(Birth Sigil) and Has(Life Sigil) and Has(Death Sigil) and (Has(Claydoll Suit) or CanUse(Bomb)) and CanReach(Valhalla Top Right)"
             },
             {
                 "Name": "[VAL D-1] Mantra Mural Coin Pot",
@@ -5287,7 +5290,7 @@
                 "ID": "field11RG2",
                 "LocationType": "Glossary",
                 "Logic": "Has(Feather)",
-                "TrickyLogic": "CanUse(Bomb)"
+                "TrickyLogic": "Has(Feather) or CanUse(Bomb)"
             },
             {
                 "Name": "[DSLM C-6] Glossary after Aten-Ra Defeated",
@@ -6357,8 +6360,8 @@
             {
                 "Name": "Osiris Item",
                 "LocationType": "Dialogue",
-                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))",
-                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather)"
+                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (CanReach(EPDEntrance) and CanReach(EPG))) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG)) and (MeleeAttack or Has(Claydoll Suit))",
+                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (CanReach(EPDEntrance) and CanReach(EPG))) and (MeleeAttack or Has(Claydoll Suit))"
             },
             {
                 "Name": "Hraesvelgr",
@@ -6375,14 +6378,14 @@
                 "ID": "field15C5",
                 "LocationType": "Pot",
                 "Logic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or (CanStopTime and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1)))) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))",
-                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
+                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
             },
             {
                 "Name": "[EPD C-7] Blikjandabol Lava Drop Item Pot",
                 "ID": "field15C6",
                 "LocationType": "Pot",
                 "Logic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or (CanStopTime and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1)))) or (CanReach(EPG) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))",
-                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
+                "TrickyLogic": "(HorizontalAttack or OrbCount(3)) and (Has(Gale Fibula) or Has(Feather) or Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (Has(Grapple Claw) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1) and Has(Anchor)))) or (CanReach(EPG) and CanWarp))"
             },
             {
                 "Name": "[EPD D-5] Yuga Wheel Coin Pot",
@@ -6412,14 +6415,14 @@
                 "Name": "[EPD E-5] NPC Glossary (Anubis)",
                 "ID": "talk76",
                 "LocationType": "Glossary",
-                "Logic": "Has(Maat's Feather) or Has(Claydoll Suit)"
+                "Logic": "(Has(Maat's Feather) or Has(Claydoll Suit)) and HorizontalAttack"
             },
             {
                 "Name": "[EPD E-5] NPC Glossary (Osiris)",
                 "ID": "talk77",
                 "LocationType": "Glossary",
-                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG))",
-                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or Has(Ice Cloak)) and Has(Feather)"
+                "Logic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (CanReach(EPDEntrance) and CanReach(EPG))) and ((Has(Gale Fibula) or CanStopTime) or CanReach(EPG)) and (MeleeAttack or Has(Claydoll Suit))",
+                "TrickyLogic": "Has(Maat's Feather) and Has(Djed Pillar) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(1))) and (Has(Feather) or (CanReach(EPDEntrance) and CanReach(EPG))) and (MeleeAttack or Has(Claydoll Suit))"
             }
         ],
         "Exits": [

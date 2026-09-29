@@ -249,7 +249,9 @@ class PotsanityBomb(Toggle):
     display_name = "Potsanity - Bomb Pots"
 
 class LocalPotsanityPercentage(Range):
-    """The percentage of Potsanity pot filler forced into your own world."""
+    """The percentage of Potsanity pot filler forced into your own world.
+    0% - no items are pre-filled, pot filler can be anywhere (including own world)
+    100% - all pot filler items are forced into own world."""
     display_name = "Local Potsanity Percentage"
     range_start = 0
     range_end = 100
@@ -278,7 +280,9 @@ class GlossanityEnemy(Toggle):
 
 
 class LocalGlossanityPercentage(Range):
-    """The percentage of Glossanity entries forced into your own world."""
+    """The percentage of Glossanity entries forced into your own world.
+    0% - no items are pre-filled, glossary can be anywhere (including own world)
+    100% - all glossary chips are forced into own world."""
     display_name = "Local Glossanity Percentage"
     range_start = 0
     range_end = 100
@@ -295,6 +299,7 @@ class Costumesanity(Toggle):
 
 class Oannesanity(Toggle):
     """DLC Required. Enabling this may add the following checks based off of other options:
+    - Beat the DLC goal
     - 1 Item Chest (Comes with this option)
     - 5 Freestanding Glossary (Glossanity - Freestanding Required)
     - 7 Enemy Glossary (Glossanity - Enemy Required)
@@ -312,7 +317,7 @@ class LogicDifficulty(Choice):
     """Logic difficulty setting.
     - normal: intuitive logic - certain HP / damage thresholds required for (mini-)bosses.
     - tricky: includes some shenanigans such as precise jumps, janky hitboxes or damage boosting.
-    - minimal: in addition to tricky logic, sets minimal combat requirements for (mini-)bosses."""
+    - minimal: in addition to tricky logic, sets minimal melee requirements for (mini-)bosses."""
     display_name = "Logic Difficulty"
     option_normal = 0
     option_tricky = 1
