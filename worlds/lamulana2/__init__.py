@@ -25,7 +25,7 @@ from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, I
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, FILLER_DISTRIBUTION,
-    build_pot_filler_pool, build_item_name_groups
+    build_pot_filler_pool, build_item_name_groups, _PROGUSEFUL_NAMES
 )
 from .locations import (
     LM2Location, AreaID, create_locations, LOCATION_DEFS, LocationType,
@@ -1073,6 +1073,14 @@ class LaMulana2World(World):
         """
         # Fix filler items with proper location type
         self.randomizer._fix_empty_locations()
+
+        # Make certain items proguseful for supported trackers and clients.
+        # (useful flag on a progression item does not change fill logic)
+        for item in self.multiworld.get_items():
+            if (item.player == self.player and item.advancement
+                    and (item.name in _PROGUSEFUL_NAMES
+                         or item.name.startswith("Ankh Jewel"))):
+                item.classification |= ItemClassification.useful
 
     def pre_output(self) -> None:
         # balance_multiworld_progression (Main.py) runs between post_fill

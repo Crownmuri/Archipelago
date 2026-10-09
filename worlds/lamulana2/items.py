@@ -1009,6 +1009,14 @@ _SOFTWARE_NAMES: frozenset[str] = frozenset({
     "La-Mulana", "La-Mulana 2",
 })
 
+# The items that unlock the most checks and gate the endgame. Tagged
+# progression + useful in post_fill so clients and trackers highlight them.
+# Ankh Jewels are matched by prefix to also cover "Ankh Jewel (Boss)".
+_PROGUSEFUL_NAMES: frozenset[str] = _MANTRA_NAMES | {
+    "Feather", "Holy Grail", "Djed Pillar", "Mantra",
+    "Beherit", "Progressive Beherit",
+}
+
 
 def build_item_name_groups() -> Dict[str, Set[str]]:
     """Build item_name_groups for AP hinting."""
