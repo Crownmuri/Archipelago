@@ -57,9 +57,9 @@ class TestERWithNonDefaultOptions(LM2TestBase):
 
 class TestRequireFDCWithER(LM2TestBase):
     """
-    Oannesanity + shuffled DLC/unique transitions + RequireFDC.
+    Oannesanity + shuffled DLC/unique transitions + RequireFDC + RequireTotem.
 
-    Exercises fix_fdc_logic_post_er: both RequireFDC gates describe the area you
+    Exercises fix_fdc_logic_post_er: both gates describe the area you
     ARRIVE in, so they have to land on the exits that actually reach a backside
     area / a Tower of Oannes checkpoint room once ER has moved the doors, not on
     whatever led there in an unshuffled seed.
@@ -70,6 +70,7 @@ class TestRequireFDCWithER(LM2TestBase):
         "unique_transitions": True,
         "gate_entrances": True,
         "require_fdc": True,
+        "require_totem": True,
     }
 
     def _live_exits(self):
@@ -87,7 +88,8 @@ class TestRequireFDCWithER(LM2TestBase):
         gate = "Totem Pole"
 
         for exit_, logic, dest, dest_area in self._live_exits():
-            expected = dest_area in checkpoints
+            expected = (bool(self.world.options.require_totem)
+                        and dest_area in checkpoints)
             with self.subTest(exit=exit_.name):
                 self.assertEqual(
                     expected, gate in logic,
@@ -115,18 +117,37 @@ class TestRequireFDCWithER(LM2TestBase):
                    for s in (ed.logic, ed.tricky_logic, ed.minimal_logic))
         }
 
+        require_fdc = bool(self.world.options.require_fdc)
+        require_totem = bool(self.world.options.require_totem)
+
         for exit_, logic, dest, dest_area in self._live_exits():
             if exit_.name in native:
                 continue
             area_def = AREA_DEFS.get(dest_area)
-            expected = (
+            expected = require_fdc and ((
                 exit_.exit_type != ExitType.Internal
                 and area_def is not None
                 and area_def.is_backside
-            ) or dest_area in checkpoints
+            ) or (require_totem and dest_area in checkpoints))
             with self.subTest(exit=exit_.name):
                 self.assertEqual(
                     expected, gate in logic,
                     f"{exit_.name} -> {dest.name}: gate present={gate in logic}, "
                     f"expected={expected}",
                 )
+
+
+class TestRequireFDCWithoutTotemWithER(TestRequireFDCWithER):
+    """Backside FDC gate only: the checkpoint rooms carry no Totem Pole gate."""
+    options = {**TestRequireFDCWithER.options, "require_totem": False}
+
+    def test_totem_pole_not_progression(self):
+        from BaseClasses import ItemClassification
+
+        item = self.world.create_item("Totem Pole")
+        self.assertFalse(item.classification & ItemClassification.progression)
+
+
+class TestRequireTotemWithoutFDCWithER(TestRequireFDCWithER):
+    """Checkpoint gate only: Hand Scanner + Totem Pole, no stamped FDC."""
+    options = {**TestRequireFDCWithER.options, "require_fdc": False}

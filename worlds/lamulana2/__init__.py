@@ -961,8 +961,8 @@ class LaMulana2World(World):
         if not ut_stamped:
             self.randomizer.fix_ankh_logic_post_er()
 
-        # RequireFDC gates: both the backside gate and the Tower of Oannes
-        # checkpoint describe the area you arrive in, so they can only be
+        # RequireFDC / RequireTotem gates: both the backside gate and the Tower
+        # of Oannes checkpoint describe the area you arrive in, so they can only be
         # stamped once each exit's live destination is known. This has to
         # precede the mantra fill -- it can gate the approach to a backside
         # mural, and a seating decided without it would not survive.
@@ -1207,7 +1207,7 @@ class LaMulana2World(World):
                 "glossanity_npc", "glossanity_enemy", "oannesanity", "costumesanity",
                 "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
                 "game_difficulty",
-                "echidna_difficulty", "costume_clip", "require_fdc",
+                "echidna_difficulty", "costume_clip", "require_fdc", "require_totem",
                 "dlc_item_logic", "life_sigil_to_awaken_hom",
                 "remove_icefire_treetop_statue", "random_cursed_chests", "cursed_chests",
                 "horizontal_entrances", "vertical_entrances", "gate_entrances",
@@ -1661,7 +1661,7 @@ class LaMulana2World(World):
 
         A real generation stamps these in _finalize_layout, which the UT regen
         only reaches through pre_fill -- and UT stops after generate_basic, so
-        without this its graph misses the RequireFDC / Oannes checkpoint gates
+        without this its graph misses the RequireFDC / RequireTotem gates
         and the ankh grouping, and shows those checks in logic too early.
 
         Only the logic stamps are replayed. Shop and mantra placement are left

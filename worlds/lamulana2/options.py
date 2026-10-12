@@ -356,6 +356,12 @@ class RequireFDC(DefaultOnToggle):
     (This does not include Icefire Treetop or Immortal Battlefield)."""
     display_name = "Future Development Company in Logic"
 
+class RequireTotem(DefaultOnToggle):
+    """Logically require Hand Scanner and Totem Pole for entering the Tower of Oannes
+    rooms that have no Holy Grail tablet, so a temporary save point can be set there.
+    Only has an effect when Oannesanity is enabled."""
+    display_name = "Totem Pole in Logic"
+
 class DLCItemLogic(Toggle):
     """Logically require making use of the DLC reward.
     When enabled, the DLC item is assumed as collected from the start, unless it is
@@ -595,6 +601,7 @@ class LM2Options(PerGameCommonOptions):
     echidna_difficulty: EchidnaDifficulty
     costume_clip: CostumeClip
     require_fdc: RequireFDC
+    require_totem: RequireTotem
     dlc_item_logic: DLCItemLogic
     life_sigil_to_awaken_hom: LifeSigilToAwakenHoM
     remove_icefire_treetop_statue: RemoveIcefireTreetopStatue

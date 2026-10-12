@@ -1109,16 +1109,20 @@ class LM2RandomizerCore:
         MainViewModel calls FixAnkhLogic() then FixFDCLogic()
         after PlaceEntrances(), which is the order pre_fill mirrors.
 
-        * backside      -> FDC, non-internal exits only.
-        * Oannes rooms  -> FDC + Hand Scanner + Totem Pole, ANY exit type.
+        * backside      -> FDC, non-internal exits only (require_fdc).
+        * Oannes rooms  -> Hand Scanner + Totem Pole, ANY exit type
+                           (require_totem), plus FDC when require_fdc is on too.
         """
-        if not self.options.require_fdc:
-            return
+        require_fdc = bool(self.options.require_fdc)
 
         # Without oannesanity the checkpoint rooms hold no checks and Totem Pole
         # stays filler -- Has() ignores non-progression items, so stamping that
         # gate would close those rooms permanently for nothing.
-        gate_checkpoints = bool(self.options.oannesanity)
+        gate_checkpoints = bool(self.options.oannesanity
+                                and self.options.require_totem)
+
+        if not (require_fdc or gate_checkpoints):
+            return
 
         for exit_ in self.multiworld.get_entrances(self.player):
             if not isinstance(exit_, LM2Entrance):
@@ -1134,18 +1138,22 @@ class LM2RandomizerCore:
             # C#: exit.ExitType != ExitType.Internal
             #     and GetArea(exit.ConnectingAreaID).IsBackside
             dest_area_def = AREA_DEFS.get(dest_area)
-            need_backside = (exit_.exit_type != ExitType.Internal
+            need_backside = (require_fdc
+                             and exit_.exit_type != ExitType.Internal
                              and dest_area_def is not None
                              and dest_area_def.is_backside)
 
             if not (need_checkpoint or need_backside):
                 continue
 
+            clauses = []
             # C#: exit.AppendLogicString(" and Has(Future Development Company)")
-            clause = "and Has(Future Development Company)"
+            if need_backside or (need_checkpoint and require_fdc):
+                clauses.append("Has(Future Development Company)")
             if need_checkpoint:
-                clause += " and Has(Hand Scanner) and Has(Totem Pole)"
-            exit_.append_logic_string(clause)
+                clauses.append("Has(Hand Scanner)")
+                clauses.append("Has(Totem Pole)")
+            exit_.append_logic_string("and " + " and ".join(clauses))
 
     def fix_ankh_logic_post_er(self) -> None:
         """

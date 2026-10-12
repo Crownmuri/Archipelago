@@ -223,7 +223,7 @@ def _apply_option_classification(world, item: Item) -> Item:
     elif item.name == "Rebirth Sigil" and world.options.oannesanity:
         item.classification = ItemClassification.progression
     elif (item.name == "Totem Pole"
-          and world.options.oannesanity and world.options.require_fdc):
+          and world.options.oannesanity and world.options.require_totem):
         item.classification = ItemClassification.progression
     elif (item.name in ("Harp", "Ganesha's Talisman")
           and getattr(world.options, "include_expensive_shop_item", False)):
@@ -745,11 +745,11 @@ def build_item_pool(world) -> List[Item]:
             # The Tower of Oannes is a backside areas with no Holy Grail tablet.
             # FDC alone can't return you there — fix_fdc_logic_post_er adds
             # Has(Hand Scanner) and Has(Totem Pole). That gate only exists when
-            # require_fdc is on, and only guards anything when oannesanity is
+            # require_totem is on, and only guards anything when oannesanity is
             # on, but Has() ignores non-progression items, so Totem Pole must
             # be bumped there or the DLC checkpoints are unreachable.
             elif (item_def.name == "Totem Pole"
-                  and world.options.oannesanity and world.options.require_fdc):
+                  and world.options.oannesanity and world.options.require_totem):
                 item.classification = ItemClassification.progression
             # Expensive item slot requirements:
             # Has(Harp) to reduce the price of the item to 50 or
