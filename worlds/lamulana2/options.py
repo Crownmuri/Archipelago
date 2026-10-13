@@ -353,12 +353,12 @@ class CostumeClip(Toggle):
 
 class RequireFDC(DefaultOnToggle):
     """Logically require Future Development Company for accessing backside regions.
-    (This does not include Icefire Treetop or Immortal Battlefield)."""
+    (This does not include Icefire Treetop or Immortal Battlefield backside grails)."""
     display_name = "Future Development Company in Logic"
 
 class RequireTotem(DefaultOnToggle):
-    """Logically require Hand Scanner and Totem Pole for entering the Tower of Oannes
-    rooms that have no Holy Grail tablet, so a temporary save point can be set there.
+    """Logically require Hand Scanner and Totem Pole for entering the DLC rooms 
+    that have no Holy Grail tablet, so a temporary save point can be set there.
     Only has an effect when Oannesanity is enabled."""
     display_name = "Totem Pole in Logic"
 

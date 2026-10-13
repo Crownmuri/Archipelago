@@ -2791,7 +2791,7 @@
             {
                 "ConnectionType": "Internal",
                 "ConnectingAreaID": "DFRight",
-                "Logic": "CanUse(Shuriken) or CanUse(Chakram) or Has(Claydoll Suit) or CanUse(Pistol)"
+                "Logic": "CanUse(Shuriken) or CanUse(Chakram) or Has(Claydoll Suit) or CanUse(Pistol) or Glitch(Costume Clip)"
             },
             {
                 "Name": "Divine Fortress Soul Gate (C-5)",
