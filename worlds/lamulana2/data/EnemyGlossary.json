@@ -99,10 +99,6 @@
             {
                 "Area": "DSLMMain",
                 "Logic": "True"
-            },
-            {
-                "Area": "DSLMPyramid",
-                "Logic": "True"
             }
         ]
     },
