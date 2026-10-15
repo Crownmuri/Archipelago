@@ -325,10 +325,8 @@ class LogicDifficulty(Choice):
     default = 0
 
 class GameDifficulty(Choice):
-    """In-game difficulty.
-    - normal: default game difficulty.
-    - hard: difficulty level +3 (normally toggled by scanning a specific tablet twice).
-    Note: Logic is unaffected — this is a QoL (?) feature for those wanting to play on Hard Mode."""
+    """Set the in-game difficulty without having to toggle a specific tablet.
+    Note: Affects logic related to Enemy Glossary due to different enemy spawns."""
     display_name = "Game Difficulty"
     option_normal = 0
     option_hard = 1

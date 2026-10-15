@@ -8,6 +8,7 @@ from ..ids import AreaID, LocationID, ItemID, get_item_name_from_id
 from .logic_data import (
     SETTING_OVERRIDES, EXPLICIT_SETTINGS,
     WHIP_LEVELS, SHIELD_LEVELS, BEHERIT_NAMES,
+    WORLD_LEVEL_TALLY, WORLD_LEVEL_THRESHOLDS, WORLD_LEVEL_WATCHER_AREAS, world_level_steps,
 )
 
 if TYPE_CHECKING:
@@ -599,6 +600,8 @@ class PlayerStateAdapter:
             return self._has_item(args[0])
         elif name == "Dissonance":
             return self._dissonance(int(args[0]) if args else 0)
+        elif name == "WorldLevel":
+            return self._world_level(int(args[0]))
         elif name == "True":
             return True
         elif name == "False":
@@ -752,6 +755,20 @@ class PlayerStateAdapter:
         if self._collected_items.get("Dissonance", 0) >= count:
             return True
         return self._beherit_count() >= (count + 1)
+
+    def _world_level(self, level: int) -> bool:
+        """G_Difficulty >= level; see WORLD_LEVEL_* in logic_data."""
+        steps = world_level_steps(level, int(self.options.game_difficulty))
+        if steps is None:
+            return False
+        if steps == 0:
+            return True
+        # _collected_items["Ankh Jewel"] already includes the guardian-specific
+        # ankhs (see _initialize_from_state), so skip their own keys here.
+        tally = sum(self._collected_items.get(i, 0) * v for i, v in WORLD_LEVEL_TALLY.items()
+                    if not i.startswith("Ankh Jewel ("))
+        return (tally >= WORLD_LEVEL_THRESHOLDS[steps - 1]
+                and any(self._can_reach_by_name(a) for a in WORLD_LEVEL_WATCHER_AREAS))
 
     def _beherit_count(self) -> int:
         """

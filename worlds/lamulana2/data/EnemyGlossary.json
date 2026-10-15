@@ -34,7 +34,15 @@
         "SpawnAreas": [
             {
                 "Area": "RoY",
-                "Logic": "HorizontalAttack and (IsDead(Ratatoskr 1) or IsDead(Nidhogg))"
+                "Logic": "HorizontalAttack and (IsDead(Ratatoskr 1) or IsDead(Nidhogg) or WorldLevel(5))"
+            },
+            {
+                "Area": "RoYBottom",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            },
+            {
+                "Area": "DFMain",
+                "Logic": "WorldLevel(5)"
             }
         ]
     },
@@ -44,7 +52,8 @@
         "SpawnAreas": [
             "IBMain",
             "IBRight",
-            "IBDinosaur"
+            "IBDinosaur",
+            "AltarRight"
         ]
     },
     "enemyC3": {
@@ -121,7 +130,47 @@
             "ACTablet",
             "ACWind",
             "ACMain",
-            "ACBlood"
+            "ACBlood",
+            {
+                "Area": "ITLeft",
+                "Logic": "Has(Perfume) and WorldLevel(2)"
+            },
+            {
+                "Area": "ITSinmara",
+                "Logic": "Has(Perfume) and HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "ITBottom",
+                "Logic": "Has(Perfume) and WorldLevel(2)"
+            },
+            {
+                "Area": "ITRight",
+                "Logic": "Has(Perfume) and HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "DSLMTop",
+                "Logic": "Has(Perfume) and HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "DSLMMain",
+                "Logic": "Has(Perfume) and WorldLevel(2)"
+            },
+            {
+                "Area": "IBTopLeft",
+                "Logic": "(Has(Glove) or Has(Feather) or (CanReach(IBTop) and CanWarp and (CanUse(Earth Spear) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Rolling Shuriken) or CanUse(Caltrops) or (Has(Gale Fibula) and HorizontalAttack)))) and Has(Perfume) and WorldLevel(5)"
+            },
+            {
+                "Area": "IBLeft",
+                "Logic": "Has(Perfume) and WorldLevel(5)"
+            },
+            {
+                "Area": "IBMain",
+                "Logic": "Has(Perfume) and WorldLevel(5)"
+            },
+            {
+                "Area": "IBBottom",
+                "Logic": "Has(Perfume) and WorldLevel(5)"
+            }
         ]
     },
     "enemyC8": {
@@ -138,7 +187,23 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "DSLMMain",
-            "DSLMTop"
+            "DSLMTop",
+            {
+                "Area": "IBLeft",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBBottom",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBRight",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyF00-1": {
@@ -198,6 +263,26 @@
             {
                 "Area": "IBMoon",
                 "Logic": "Has(Life Sigil) and HorizontalAttack"
+            },
+            {
+                "Area": "IBBottom",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "TSLeft",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "TSMain",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "TSEntrance",
+                "Logic": "((Has(Leather Whip) and (Has(Vajra) or Has(Spaulder))) or Has(Knife) or Has(Rapier) or Has(Axe) or Has(Katana) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or (CanReach(TSMain) and CanUse(Flare Gun) and HorizontalAttack)) and WorldLevel(2)"
+            },
+            {
+                "Area": "TSNeck",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
             }
         ]
     },
@@ -209,6 +294,10 @@
             {
                 "Area": "AnnwfnMain",
                 "Logic": "HorizontalAttack"
+            },
+            {
+                "Area": "RoYBottom",
+                "Logic": "(HorizontalAttack or Has(Origin Sigil)) and WorldLevel(2)"
             }
         ]
     },
@@ -245,9 +334,14 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "IBMain",
+            "IBTopLeft",
             "IBLeft",
             "IBDinosaur",
-            "IBBottom"
+            "IBBottom",
+            {
+                "Area": "RoY",
+                "Logic": "WorldLevel(2)"
+            }
         ]
     },
     "enemyF03-3": {
@@ -261,6 +355,14 @@
             {
                 "Area": "SotFGMain",
                 "Logic": "IsDead(Badhbh Cath) and Has(Grapple Claw) and ((Has(Feather) or Has(Life Sigil)) or CanUse(Flare Gun))"
+            },
+            {
+                "Area": "IBTop",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "IBMoon",
+                "Logic": "(HorizontalAttack and Has(Life Sigil) and (CanWarp or (CanReach(IBMain) and (Has(Anchor) or Has(Fish Suit) or Has(Claydoll Suit)) and (IsDead(Cetus) or Has(Feather) or CanWarp)) or ((Has(Grapple Claw) or Glitch(Costume Clip)) and Setting(Non Random Ladders)))) and WorldLevel(2)"
             }
         ]
     },
@@ -322,7 +424,15 @@
                 "TrickyLogic": "True"
             },
             "ITRight",
-            "ITRightLeftLadder"
+            "ITRightLeftLadder",
+            {
+                "Area": "ITBottom",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "AnnwfnMain",
+                "Logic": "WorldLevel(2)"
+            }
         ]
     },
     "enemyF05-1": {
@@ -348,7 +458,11 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "DFMain",
-            "DFTop"
+            "DFTop",
+            {
+                "Area": "RoY",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
+            }
         ]
     },
     "enemyF05-4": {
@@ -448,14 +562,34 @@
         "Name": "Enemy Glossary (Asp)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "GotD"
+            "GotD",
+            {
+                "Area": "IBMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBRight",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBDinosaur",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyF07-2": {
         "Name": "Enemy Glossary (Red Cap)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "GotD"
+            "GotD",
+            {
+                "Area": "IBMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBRight",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            }
         ]
     },
     "enemyF07-3": {
@@ -469,14 +603,23 @@
         "Name": "Enemy Glossary (Medjed)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "GotD"
+            "GotD",
+            {
+                "Area": "IBMain",
+                "Logic": "WorldLevel(2)"
+            }
         ]
     },
     "enemyF08-2": {
         "Name": "Enemy Glossary (Nurikabe)",
         "KillLogic": "(Has(Gauntlet) and (Has(Axe) or Has(Rapier) or Has(Katana))) or (Has(Vajra) and (Has(Rapier) or Has(Katana))) or (Has(Spaulder) and Has(Rapier)) or Has(Knife)",
         "SpawnAreas": [
-            "TSMain"
+            "TSMain",
+            "TSLeft",
+            {
+                "Area": "TSBottom",
+                "Logic": "WorldLevel(2)"
+            }
         ]
     },
     "enemyF08-3": {
@@ -499,7 +642,6 @@
                 "Area": "TSBottom",
                 "Logic": "HorizontalAttack"
             }
-
         ]
     },
     "enemyF08-5": {
@@ -625,7 +767,6 @@
                 "Area": "TowerOfOannesLeftB",
                 "Logic": "Has(Feather)"
             }
-
         ]
     },
     "enemyF12-1": {
@@ -641,6 +782,14 @@
             {
                 "Area": "TSBlood",
                 "Logic": "HorizontalAttack or OrbCount(3) or Has(Egg of Creation)"
+            },
+            {
+                "Area": "IBLeft",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBBottom",
+                "Logic": "WorldLevel(5)"
             }
         ]
     },
@@ -651,7 +800,15 @@
             "ACBottom",
             "ACTablet",
             "ACWind",
-            "ACMain"
+            "ACMain",
+            {
+                "Area": "TSMain",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "TSBottom",
+                "Logic": "WorldLevel(2)"
+            }
         ]
     },
     "enemyF12-3": {
@@ -768,42 +925,262 @@
         "Name": "Enemy Glossary (Dvergr)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "RoY",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            },
+            {
+                "Area": "RoYBottom",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "RoYTopRight",
+                "Logic": "(CanWarp or Has(Birth Sigil)) and WorldLevel(2)"
+            },
+            {
+                "Area": "AnnwfnMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DFMain",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "DFTop",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "DFRight",
+                "Logic": "WorldLevel(2)"
+            },
+            {
+                "Area": "HLStatue",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            },
+            {
+                "Area": "HL",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HLSpun",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ValhallaMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ValhallaTopRight",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "EPG",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyLast2": {
         "Name": "Enemy Glossary (Ginnungagap)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "RoY",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "RoYBottom",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "RoYMiddle",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DFMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DFTop",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DFRight",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "GotD",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "TSBlood",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "TSMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "TSNeck",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ValhallaMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ValhallaTopRight",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ACBottom",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ACMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ACWind",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyLast3": {
         "Name": "Enemy Glossary (Muspell)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "TSLeft",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "TSMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "TSBottom",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HL",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HLSpun",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HLCog",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HLStatue",
+                "Logic": "CanUse(Flare Gun) and WorldLevel(5)"
+            },
+            {
+                "Area": "ACTablet",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ACMain",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyLast4": {
         "Name": "Enemy Glossary (Managarmr)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "SotFGMain",
+                "Logic": "IsDead(Fenrir)"
+            },
+            {
+                "Area": "GotD",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "ValhallaMain",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyLast5": {
         "Name": "Enemy Glossary (Berserker)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "AnnwfnRight",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "AnnwfnMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "GotD",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DSLMMain",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DSLMTop",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            },
+            {
+                "Area": "EPDMain",
+                "Logic": "WorldLevel(5)"
+            }
         ]
     },
     "enemyLast6": {
         "Name": "Enemy Glossary (Fjalar)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "SpiralHell"
+            "SpiralHell",
+            {
+                "Area": "HLStatue",
+                "Logic": "HorizontalAttack and WorldLevel(2)"
+            },
+            {
+                "Area": "IBTopLeft",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "IBMain",
+                "Logic": "(HorizontalAttack or Has(Feather)) and WorldLevel(5)"
+            },
+            {
+                "Area": "IBRight",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DSLMTop",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "DSLMMain",
+                "Logic": "Has(Grapple Claw) and WorldLevel(5)"
+            },
+            {
+                "Area": "HoM",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "EPDTop",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "EPDMain",
+                "Logic": "HorizontalAttack and WorldLevel(5)"
+            }
         ]
     },
     "d237": {

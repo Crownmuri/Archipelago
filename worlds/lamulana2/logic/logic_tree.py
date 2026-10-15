@@ -11,6 +11,7 @@ from .logic_tokens import Token, TokenType, LogicTokeniser
 from .logic_data import (
     SETTING_OVERRIDES, EXPLICIT_SETTINGS,
     WHIP_LEVELS, SHIELD_LEVELS, BEHERIT_NAMES,
+    WORLD_LEVEL_TALLY, WORLD_LEVEL_THRESHOLDS, WORLD_LEVEL_WATCHER_AREAS, world_level_steps,
 )
 from .logic_shunting_yard import LogicShuntingYard
 
@@ -277,6 +278,21 @@ class RuleNode(LogicNode):
         if name == "CanReach":
             area_name = args[0] if args else ""
             return _can_reach_compiled(area_name, world)
+
+        if name == "WorldLevel":
+            # G_Difficulty >= n; see WORLD_LEVEL_* in logic_data. Uses CanReach,
+            # so an entrance rule using it needs indirect conditions registered.
+            steps = world_level_steps(int(args[0]), int(options.game_difficulty))
+            if steps is None:
+                return lambda state: False
+            if steps == 0:
+                return lambda state: True
+            required = WORLD_LEVEL_THRESHOLDS[steps - 1]
+            watchers = [_can_reach_compiled(a, world) for a in WORLD_LEVEL_WATCHER_AREAS]
+            return lambda state, r=required, w=watchers, p=player: (
+                sum(state.count(i, p) * v for i, v in WORLD_LEVEL_TALLY.items()) >= r
+                and any(reach(state) for reach in w)
+            )
 
         if name == "CanSpinCorridor":
             # Has(Progressive Beherit) and Dissonance(1)
