@@ -226,7 +226,8 @@ def _apply_option_classification(world, item: Item) -> Item:
           and world.options.oannesanity and world.options.require_totem):
         item.classification = ItemClassification.progression
     elif (item.name in ("Harp", "Ganesha's Talisman")
-          and getattr(world.options, "include_expensive_shop_item", False)):
+          and (getattr(world.options, "include_expensive_shop_item", False)
+               or world.options.glossanity_enemy)):
         item.classification = ItemClassification.progression
     elif (item.name in COSTUME_CLIP_ITEMS
           and world.options.costumesanity and world.options.costume_clip):
@@ -754,8 +755,11 @@ def build_item_pool(world) -> List[Item]:
             # Expensive item slot requirements:
             # Has(Harp) to reduce the price of the item to 50 or
             # Has(Ganesha's Talisman) to get 4 digit money
+            # Enemy glossary: both raise the storyChecker tally behind
+            # WorldLevel(n), so they must be counted by logic.
             elif (item_def.name in ("Harp", "Ganesha's Talisman")
-                  and getattr(world.options, "include_expensive_shop_item", False)):
+                  and (getattr(world.options, "include_expensive_shop_item", False)
+                       or world.options.glossanity_enemy)):
                 item.classification = ItemClassification.progression
             # Glitch(Costume Clip) item requirements when costumes are shuffled.
             # A costume needs to be found in order to do the clips
