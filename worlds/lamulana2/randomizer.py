@@ -284,7 +284,10 @@ class LM2RandomizerCore:
     })
 
     def _fix_spiral_gate_logic(self):
-        # Match Randomiser.cs behavior for SpiralGate exit
+        # Randomiser.cs hardcoded GuardianKills(5) here. With random_dissonance
+        # the final area is gated on RequiredGuardians instead: the seal no
+        # longer counts guardians and the Spiral Boat soul gate (the only way
+        # into IBBoat) costs exactly that many, so this mirrors that gate.
         entrances = self.multiworld.get_entrances(self.player)
         spiral_gates = [e for e in entrances if hasattr(e, "exit_type") and str(e.exit_type) == "ExitType.SpiralGate"]
 
@@ -295,7 +298,8 @@ class LM2RandomizerCore:
                 continue
 
             if self.options.random_dissonance:
-                e.append_logic_string(" and GuardianKills(5)")
+                req = int(self.options.required_guardians.value)
+                e.append_logic_string(f" and GuardianKills({req})")
             else:
                 e.append_logic_string(" and IsDead(Anu)")
 

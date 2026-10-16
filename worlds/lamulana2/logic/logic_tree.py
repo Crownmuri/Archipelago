@@ -303,32 +303,25 @@ class RuleNode(LogicNode):
             )
 
         if name == "CanSealCorridor":
-            # C# also checks CanReach(backside area), but that creates a
-            # BFS ordering deadlock: the SpiralGate exit uses this rule, and
-            # when AP's BFS reaches IBBoat it calls state.can_reach(ValhallaMain
-            # / HoM / ...) mid-BFS before those regions are in reachable_regions,
-            # making SpiralHell / Ninth Child permanently unreachable.
-            # Item requirements alone are sufficient for AP fill correctness.
-            if options.random_dissonance:
-                req = int(
-                    options.required_guardians.value
-                    if hasattr(options.required_guardians, "value")
-                    else options.required_guardians
-                )
-                _guardian_rule = _make_adapter_rule("GuardianKills", [str(req)], world)
-                return lambda state, r=_guardian_rule, p=player: (
-                    (state.count("Dissonance", p) >= 6
-                     or beherit_count(state, p) >= 7)
-                    and beherit_count(state, p) >= 1
-                    and r(state)
-                )
-            else:
-                return lambda state, p=player: (
-                    (state.count("Dissonance", p) >= 6
-                     or beherit_count(state, p) >= 7)
-                    and beherit_count(state, p) >= 1
-                    and state.has("Anu", p)
-                )
+            # The corridor seals at any of the backside sealer rooms once all
+            # six dissonance are held. The CanReach half is safe on entrance
+            # rules (the SpiralGate exit) because register_indirect_conditions
+            # re-queues the entrance when one of _CAN_SEAL_CORRIDOR_AREAS opens.
+            # With random_dissonance the guardian count is NOT part of the seal:
+            # RequiredGuardians lives on the Spiral Boat soul gate instead (see
+            # SoulGateRandomizer), so Heimdall opens as soon as the dissonance
+            # are in. Vanilla dissonance keeps the base game's Anu requirement.
+            from ..entrances import _CAN_SEAL_CORRIDOR_AREAS
+            reach_rules = [_can_reach_compiled(a, world)
+                           for a in _CAN_SEAL_CORRIDOR_AREAS]
+            need_anu = not options.random_dissonance
+            return lambda state, p=player, rr=reach_rules, anu=need_anu: (
+                (state.count("Dissonance", p) >= 6
+                 or beherit_count(state, p) >= 7)
+                and beherit_count(state, p) >= 1
+                and (not anu or state.has("Anu", p))
+                and any(r(state) for r in rr)
+            )
 
         # ── Everything else → cached adapter ─────────────────────────────────
 

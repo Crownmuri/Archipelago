@@ -703,11 +703,10 @@ class PlayerStateAdapter:
         if not any(self._can_reach_by_name(area) for area in ["ValhallaMain", "DSLMTop", "SotFGBlood", "ACBlood", "HoM", "EPDEntrance"]):
             return False
 
+        # random_dissonance moves the guardian requirement onto the Spiral Boat
+        # soul gate, so only vanilla dissonance still needs Anu here.
         if self.options.random_dissonance:
-            req = self.options.required_guardians
-            if hasattr(req, "value"):
-                req = req.value
-            return self._guardian_kills(int(req))
+            return True
 
         return self._has_item("Anu")
 
