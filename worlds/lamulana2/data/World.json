@@ -1613,7 +1613,7 @@
                 "Name": "[IB D-4] Left of Spiral Boat Coin Pot",
                 "ID": "field03D2-3",
                 "LocationType": "Pot",
-                "Logic": "HorizontalAttack and Has(Birth Sigil)"
+                "Logic": "HorizontalAttack and (Has(Birth Sigil) or (CanReach(IBBoat) and CanSealCorridor))"
             },
             {
                 "Name": "[IB D-5] Above Backside Grail Coin Pot",
