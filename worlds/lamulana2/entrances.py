@@ -12,7 +12,7 @@ from .regions import LM2Entrance, ExitType
 from .locations import LocationType
 from .logic.logic_tokens import LogicTokeniser
 from .logic.logic_tree import LogicTree
-from .options import RandomSoulGateValue, SoulGateValuePool
+from .options import RandomSoulGateValue, RandomSoulGateValuePool
 
 
 # ============================================================
@@ -188,13 +188,13 @@ _SOFT_DEAD_END_NO_LADDER_PAIRS: Dict[frozenset, int] = {
 }
 
 
-# Value pools for RandomSoulGateValue: Randomized, keyed by SoulGateValuePool.
+# Value pools for RandomSoulGateValue: Randomized, keyed by RandomSoulGateValuePool.
 # Drawn with replacement, so a seed can end up with several [9] gates — or
 # none at all. The client renders any cost 0-9 (a [0] gate starts open).
 _RANDOMIZED_SOUL_VALUES: Dict[int, Tuple[int, ...]] = {
-    SoulGateValuePool.option_classic: (1, 2, 3, 5, 9),
-    SoulGateValuePool.option_full: tuple(range(1, 10)),
-    SoulGateValuePool.option_full_with_zero: tuple(range(0, 10)),
+    RandomSoulGateValuePool.option_vanilla: (1, 2, 3, 5, 9),
+    RandomSoulGateValuePool.option_full: tuple(range(1, 10)),
+    RandomSoulGateValuePool.option_full_with_zero: tuple(range(0, 10)),
 }
 
 # Vanilla soul gate pairings used when soul_gate_entrances is OFF but
@@ -695,7 +695,7 @@ def _generate_pairings_reachable_first(
     starting_area = getattr(world, 'starting_area', None)
     if base_uf is None or starting_area is None:
         # Reachability tracking needs both — fall back to legacy algorithm
-        return _generate_pairings(candidates, rng, starting_exit_ids, base_uf)
+        return _generate_pairings(candidates, rng, world, starting_exit_ids, base_uf)
 
     pool = list(candidates)
     rng.shuffle(pool)
@@ -938,6 +938,7 @@ def _generate_pairings_reachable_first(
 def _generate_pairings(
     candidates: List[LM2Entrance],
     rng: random.Random,
+    world,
     starting_exit_ids: Optional[Set] = None,
     base_uf: Optional['_UnionFind'] = None,
 ) -> List[Tuple[LM2Entrance, LM2Entrance]]:
@@ -2687,38 +2688,38 @@ class SoulGateRandomizer:
     @property
     def _free_soul_values(self) -> bool:
         """
-        True when every pair draws independently from [1,2,3,5(,9)]
-        (Randomized).  False keeps the vanilla multiset, so the spread of
-        costs is preserved and each value is consumed as it is handed out
-        (Standard / Shuffled).
+        True when every pair draws independently from the Soul Gate Value
+        Pool (Randomized, any pool but Full Unique).  False deals from a
+        multiset instead, consuming each value as it is handed out: the
+        vanilla costs (Standard / Shuffled) or [1-9] (Full Unique).
         """
         return (self.options.random_soul_gate_value
                 == RandomSoulGateValue.option_randomized
-                and not self._all_soul_values)
+                and not self._unique_soul_values)
 
     @property
-    def _all_soul_values(self) -> bool:
+    def _unique_soul_values(self) -> bool:
         """
         True when every cost [1-9] is dealt exactly once (Randomized with the
         Full Unique pool).  Dealt like the vanilla multiset, not drawn freely.
         """
         return (self.options.random_soul_gate_value
                 == RandomSoulGateValue.option_randomized
-                and self.options.soul_gate_value_pool
-                == SoulGateValuePool.option_full_unique)
+                and self.options.random_soul_gate_value_pool
+                == RandomSoulGateValuePool.option_full_unique)
 
     def _initial_soul_amounts(self) -> List[int]:
         """
         The values to deal out: the Randomized pool, the [1-9] set (Full
-        Unique), or the vanilla multiset.  The [9] for an included nine pair
-        is appended by the callers for the multiset modes; Full Unique already
-        holds it, and with the nine pair held back drops whatever that pair
-        is fixed to so the other eight pairs cover the rest.
+        Unique), or the vanilla multiset.  Callers append the [9] for an
+        included nine pair when _appends_nine says so.  Full Unique already
+        holds it; with the nine pair held back, it drops whatever that pair
+        is fixed to so the other eight pairs share the rest.
         """
         if self._free_soul_values:
             return list(_RANDOMIZED_SOUL_VALUES[
-                self.options.soul_gate_value_pool.value])
-        if self._all_soul_values:
+                self.options.random_soul_gate_value_pool.value])
+        if self._unique_soul_values:
             amounts = list(range(1, 10))
             if not self.options.include_nine_soul_gates:
                 boat_amount = self._spiral_boat_amount
@@ -2733,8 +2734,9 @@ class SoulGateRandomizer:
 
     @property
     def _appends_nine(self) -> bool:
-        """Whether an included nine pair adds its [9] to the multiset."""
-        return not (self._free_soul_values or self._all_soul_values)
+        """Whether an included nine pair adds its [9] to the vanilla multiset.
+        The Randomized pools (Full Unique included) already hold a [9]."""
+        return not (self._free_soul_values or self._unique_soul_values)
 
     @property
     def _spiral_boat_amount(self) -> Optional[int]:
@@ -2749,9 +2751,14 @@ class SoulGateRandomizer:
             return None
         return int(self.options.required_guardians.value)
 
+    @staticmethod
+    def _is_spiral_boat_pair(gate1, gate2) -> bool:
+        """Whether this pair holds f03GateN9, the Spiral Boat side."""
+        return ExitID.f03GateN9 in (gate1.game_exit_id, gate2.game_exit_id)
+
     def _consume_amount(self, soul_amounts: List[int], amount: int) -> None:
         """
-        Take a committed cost out of the vanilla multiset (Standard/Shuffled).
+        Take a committed cost out of the multiset (no-op for free draws).
         A forced Spiral Boat cost that the multiset doesn't hold (4, 6, ...)
         displaces the [9] that pair would otherwise have drawn.
         """
@@ -3017,7 +3024,6 @@ class SoulGateRandomizer:
         priority_gates = []
         if self.options.include_nine_soul_gates:
             if self._appends_nine:
-                # Randomized / Full Unique already have [9] in their pool.
                 soul_amounts.append(9)
             priority_gates = [g for g in gates
                               if g.game_exit_id in (ExitID.f03GateN9,
@@ -3076,11 +3082,9 @@ class SoulGateRandomizer:
             tried = 0
             for gate2 in partners:
                 amounts = self._valid_amounts_for(gate1, gate2, soul_amounts)
-                is_nine_pair = (
-                    gate1.game_exit_id == ExitID.f03GateN9
-                    or gate2.game_exit_id == ExitID.f03GateN9
-                )
-                forced_amount = boat_amount if is_nine_pair else None
+                forced_amount = (boat_amount
+                                 if self._is_spiral_boat_pair(gate1, gate2)
+                                 else None)
 
                 if forced_amount is not None:
                     amount_order = [forced_amount]
@@ -3088,9 +3092,10 @@ class SoulGateRandomizer:
                     amount_order = list(amounts)
                     self.rng.shuffle(amount_order)
                 else:
-                    # Deterministic order: lowest first.  The current
-                    # value will be removed from the pool on success.
-                    amount_order = list(amounts)
+                    # Multiset: try each distinct value once, in the
+                    # (already shuffled) pool order; the committed value is
+                    # removed from the pool on success.
+                    amount_order = list(dict.fromkeys(amounts))
 
                 for soul_amount in amount_order:
                     snap = self._save_gate_pair_state(gate1, gate2, epd_hel_exit)
@@ -3321,7 +3326,6 @@ class SoulGateRandomizer:
             self.rng.shuffle(pairs_to_place)
         if self.options.include_nine_soul_gates and nine_pair is not None:
             if self._appends_nine:
-                # Randomized / Full Unique already have [9] in their pool.
                 soul_amounts.append(9)
             pairs_to_place.append(nine_pair)
             self.rng.shuffle(pairs_to_place)
@@ -3330,24 +3334,21 @@ class SoulGateRandomizer:
         # forced value leaves the multiset before the ordinary gates draw.
         if nine_forced is not None:
             pairs_to_place.sort(
-                key=lambda p: 0 if ExitID.f03GateN9 in (p[0].game_exit_id,
-                                                        p[1].game_exit_id) else 1)
+                key=lambda p: 0 if self._is_spiral_boat_pair(*p) else 1)
 
         # Random order for both modes -- see the note in the entrance-shuffle
         # path above.
         self.rng.shuffle(soul_amounts)
 
         for gate1, gate2 in pairs_to_place:
-            is_nine = (gate1.game_exit_id == ExitID.f03GateN9
-                        or gate2.game_exit_id == ExitID.f03GateN9)
-
-            if is_nine and nine_forced is not None:
+            if (nine_forced is not None
+                    and self._is_spiral_boat_pair(gate1, gate2)):
                 amount_order = [nine_forced]
             elif self._free_soul_values:
                 amount_order = list(soul_amounts)
                 self.rng.shuffle(amount_order)
             else:
-                amount_order = list(soul_amounts)
+                amount_order = list(dict.fromkeys(soul_amounts))
 
             placed = False
             for soul_amount in amount_order:

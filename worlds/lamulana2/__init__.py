@@ -1214,7 +1214,7 @@ class LaMulana2World(World):
                 "unique_transitions", "full_random_entrances", "prevent_area_loops",
                 "include_dlc_entrances",
                 "soul_gate_entrances", "include_nine_soul_gates", "random_soul_gate_value",
-                "soul_gate_value_pool",
+                "random_soul_gate_value_pool",
                 "auto_scan", "auto_skulls", "greedy_charon", "persistent_inventory",
                 "starting_money", "starting_weights",
                 "item_chest_color", "filler_chest_color", "ap_chest_color",
@@ -1888,7 +1888,7 @@ class LaMulana2World(World):
         _log(f"  Soul Gate Entrances: {opt('soul_gate_entrances')}")
         _log(f"  Include 9 Gates: {opt('include_nine_soul_gates')}")
         _log(f"  Random Soul Gate Values: {opts.random_soul_gate_value.current_key}")
-        _log(f"  Soul Gate Value Pool: {opts.soul_gate_value_pool.current_key}")
+        _log(f"  Random Soul Gate Value Pool: {opts.random_soul_gate_value_pool.current_key}")
         _log(f"  Full Random Entrances: {opt('full_random_entrances')}")
         _log(f"  Prevent Area Loops: {opt('prevent_area_loops')}")
 

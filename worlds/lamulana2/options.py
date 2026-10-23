@@ -195,7 +195,7 @@ class RandomDissonance(DefaultOnToggle):
 class GuardianKills(Range):
     """Only applies if RandomDissonance is on.
     Number of Guardians required to be defeated to reach the final area.
-    The soul gate linked to the Spiral Boat soul gate will match accordingly."""
+    The Spiral Boat soul gate's cost will match this value."""
     display_name = "Required Guardian Kills"
     range_start = 0
     range_end = 9
@@ -428,7 +428,7 @@ class PreventAreaLoops(Toggle):
 
 class SoulGateEntrances(Toggle):
     """Shuffle [1,2,3,5] soul gate entrances with each other.
-    Note: does not mix with regular the above regular entrances and transitions."""
+    Note: does not mix with the regular entrances and transitions above."""
     display_name = "Soul Gate Entrances"
 
 class RandomSoulGateValue(Choice):
@@ -452,26 +452,26 @@ class RandomSoulGateValue(Choice):
 class IncludeNineSoulGates(Toggle):
     """Include the two [9] soul gates (HoM to IB Boat) in the Soul Gate pool.
     Can work with Soul Gate Entrances and Random Soul Gate Values separately.
-    Note: the Spiral Boat soul gate value will match the RequiredGuardians value,
-    if RandomDissonance is enabled."""
+    Note: if RandomDissonance is enabled, the Spiral Boat soul gate value will
+    match the RequiredGuardians value."""
     display_name = "Include Nine Soul Gates"
 
-class SoulGateValuePool(Choice):
-    """Customize which values the Randomized Soul Gate Values setting can roll.
+class RandomSoulGateValuePool(Choice):
+    """Customize which values a Randomized Soul Gate can roll.
     Does nothing unless Random Soul Gate Value is set to Randomized.
 
-    Classic: [1,2,3,5,9], the costs used by the base game.
+    Vanilla: [1,2,3,5,9], the costs used by the base game.
     Full: any of [1-9].
-    Full With Zero: any of [0-9], where [0] gates starts open.
+    Full With Zero: any of [0-9], where [0] gates start open.
     Full Unique: every value [1-9] is used exactly once across the nine gate pairs.
 
     [Note]
     With Include Nine Soul Gates off, the HoM to IB Boat pair keeps its [9] and the
-    other eight pairs share [1-8]. 
+    other eight pairs share [1-8].
     With Random Dissonance on, the Spiral Boat pair's forced cost takes priority.
     """
     display_name = "Soul Gate Value Pool"
-    option_classic = 0
+    option_vanilla = 0
     option_full = 1
     option_full_with_zero = 2
     option_full_unique = 3
@@ -637,7 +637,7 @@ class LM2Options(PerGameCommonOptions):
     soul_gate_entrances: SoulGateEntrances
     include_nine_soul_gates: IncludeNineSoulGates
     random_soul_gate_value: RandomSoulGateValue
-    soul_gate_value_pool: SoulGateValuePool
+    random_soul_gate_value_pool: RandomSoulGateValuePool
 
     # Quality of Life
     auto_scan: AutoScan
