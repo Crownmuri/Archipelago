@@ -930,7 +930,7 @@
             {
                 "Name": "Crystal Skull Chest Annwfn",
                 "LocationType": "Chest",
-                "Logic": "Has(Birth Sigil) and HorizontalAttack"
+                "Logic": "Has(Birth Sigil) and (Has(Leather Whip) or Has(Knife) or Has(Rapier) or Has(Katana) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or CanUse(Pistol) or Has(Claydoll Suit) or (Has(Axe) and (Has(Anchor) or Has(Fish Suit) or Has(Gauntlet))))"
             },
             {
                 "Name": "Rolling Shuriken Puzzle Reward",
@@ -2619,7 +2619,7 @@
                 "Name": "Ratatoskr 3",
                 "LocationType": "Miniboss",
                 "Logic": "IsDead(Ratatoskr 1) and IsDead(Ratatoskr 2) and CanReach(IT Left) and (((Has(Leather Whip) or CanUse(Rolling Shuriken) or CanUse(Caltrops)) and OrbCount(3)) or ((Has(Chain Whip) or Has(Knife) or Has(Rapier) or Has(Axe) or Has(Katana) or CanUse(Shuriken) or CanUse(Earth Spear) or CanUse(Flare Gun) or CanUse(Bomb) or CanUse(Chakram)) and OrbCount(2)) or (CanUse(Pistol) and OrbCount(1)))",
-                "HardLogic": "IsDead(Ratatoskr 1) and IsDead(Ratatoskr 2)",
+                "HardLogic": "IsDead(Ratatoskr 1) and IsDead(Ratatoskr 2) and CanReach(IT Left)",
                 "Item": {
                     "Name": "Ratatoskr 3",
                     "IsRequired": true
@@ -4831,7 +4831,7 @@
                 "Name": "[VAL C-2] Near Second Trickster Coin Pot",
                 "ID": "field10C1",
                 "LocationType": "Pot",
-                "Logic": "((Has(Feather) or CanChant(Heaven)) and HorizontalAttack) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Pistol) or (CanUse(Caltrops) and Has(Ring))"
+                "Logic": "((Has(Feather) or CanChant(Heaven)) and HorizontalAttack) or Has(Rapier) or CanUse(Shuriken) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Pistol) or (CanUse(Caltrops) and Has(Ring))"
             },
             {
                 "Name": "[VAL C-4] Warrior's Aqueduct Item Pot",
@@ -6908,7 +6908,7 @@
                 "Logic": "@EnemyGlossary"
             },
             {
-                "Name": "[SH C-4] Glossary on the Escape Route (Scan)",
+                "Name": "[SH C-4] Glossary on the Escape Route",
                 "ID": "Guardian09",
                 "LocationType": "Glossary",
                 "Logic": "IsDead(Ninth Child)"
@@ -7128,7 +7128,7 @@
             },
             {
                 "Name": "[DLC C-3] Glossary at the Top of the First Tower",
-                "ID": "Guardian09",
+                "ID": "talk82",
                 "LocationType": "Glossary",
                 "Logic": "True"
             }

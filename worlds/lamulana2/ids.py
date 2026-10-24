@@ -3658,7 +3658,7 @@ AP_LOCATION_NAMES = {
     "[SH] Enemy Glossary (Managarmr)": LocationID.Glossary210,
     "[SH] Enemy Glossary (Berserker)": LocationID.Glossary211,
     "[SH] Enemy Glossary (Fjalar)": LocationID.Glossary212,
-    "[SH C-4] Glossary on the Escape Route (Scan)": LocationID.Glossary213,
+    "[SH C-4] Glossary on the Escape Route": LocationID.Glossary213,
     "[EPG C-7] Glossary in Izanami's Pillar (Scan)": LocationID.Glossary214,
     "[TS B-1] Glossary inside the Poison Lava (Scan)": LocationID.Glossary215,
     "[VOD C-4] Glossary Above Hot Spring (Scan)": LocationID.Glossary216,

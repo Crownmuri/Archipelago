@@ -260,12 +260,12 @@ class LocalPotsanityPercentage(Range):
 # Each toggle adds that subset of the 244 glossary chips as randomized checks.
 
 class GlossanityFreestanding(Toggle):
-    """Glossanity: add all Freestanding Glossary entries. (50+5 entries)
+    """Glossanity: add all Freestanding Glossary entries. (51+5 entries)
     Note: DLC Glossary is only shuffled if Oannesanity is turned on."""
     display_name = "Glossanity - Freestanding"
 
 class GlossanityScannable(Toggle):
-    """Glossanity: add all Scannable Glossary entries that require Hand Scanner. (27 entries)"""
+    """Glossanity: add all Scannable Glossary entries that require Hand Scanner. (26 entries)"""
     display_name = "Glossanity - Scannable"
 
 class GlossanityNPC(Toggle):
