@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, DefaultOnToggle, Range, ItemsAccessibility, PerGameCommonOptions, DeathLink
+from typing import List
+from Options import Choice, Toggle, DefaultOnToggle, Range, ItemsAccessibility, PerGameCommonOptions, DeathLink, OptionGroup
 
 # --- Choice Definitions ---
 
@@ -527,6 +528,13 @@ class PersistentInventory(Toggle):
     Note: Puzzle progression flags will not persist."""
     display_name = "Persistent Inventory"
 
+class InfiniteStartingAmmo(Toggle):
+    """If the starting weapon is a sub-weapon, firing it never uses up its ammo
+    (Pistol: never needs reloading). The ammo still has to be picked up once.
+    Other sub-weapons use ammo as normal. No effect on generation or logic.
+    Can be toggled in-game from the title screen. The value here is the default applied on connect."""
+    display_name = "Infinite Starting Sub-Weapon Ammo"
+
 class ItemChestColor(Choice):
     """Color for item chests."""
     display_name = "Item Chest Color"
@@ -556,6 +564,19 @@ class APChestColor(Choice):
     option_pink = 3
     option_yellow = 4
     default = 1
+
+class UncheckedPotIndicators(DefaultOnToggle):
+    """Potsanity: pots whose location hasn't been checked yet are tinted red and get a red outline.
+    Client-side only; no effect on generation or logic.
+    Can be toggled in-game from the title screen ("Pot Hints"). The value here is the default applied on connect."""
+    display_name = "Unchecked Pot Indicators"
+
+class UncheckedGlossaryIndicators(DefaultOnToggle):
+    """Glossanity: a small AP logo floats above enemies whose glossary drop hasn't been checked yet,
+    and sits in the doorway of NPCs/shops whose glossary entry hasn't been checked yet.
+    Client-side only; no effect on generation or logic.
+    Can be toggled in-game from the title screen ("Glossary Hints"). The value here is the default applied on connect."""
+    display_name = "Unchecked Glossary Indicators"
 
 # --- Other ---
 
@@ -655,12 +676,73 @@ class LM2Options(PerGameCommonOptions):
     auto_skulls: AutoSkulls
     greedy_charon: GreedyCharon
     persistent_inventory: PersistentInventory
+    infinite_starting_ammo: InfiniteStartingAmmo
     starting_money: StartingMoney
     starting_weights: StartingWeights
+
+    # Cosmetic
     item_chest_color: ItemChestColor
     filler_chest_color: FillerChestColor
     ap_chest_color: APChestColor
+    unchecked_pot_indicators: UncheckedPotIndicators
+    unchecked_glossary_indicators: UncheckedGlossaryIndicators
 
     # Other
     write_seed_file: WriteSeedFile
     death_link: DeathLink
+
+
+# Section banners in the generated template YAML (and option pages on the
+# website). AP's data/options.yaml renders each group as
+#   ####################
+#   # <Group Name> #
+#   ####################
+# Options not listed here fall into AP's default "Game Options" group.
+option_groups: List[OptionGroup] = [
+    OptionGroup("Goal", [
+        Goal, GlossaryHuntCount,
+    ]),
+    OptionGroup("Starting Location & Items", [
+        StartingArea, StartingWeapon,
+        RandomGrail, RandomScanner, RandomCodex, RandomFDC, RandomRing,
+        RandomShellHorn, RandomMapsSoftware,
+        MantraPlacement, ShopPlacement, IncludeExpensiveShopItem,
+    ]),
+    OptionGroup("Item Pool Adjustments", [
+        RandomResearch, RemoveResearch, ReplaceResearchWithOrbs, RemoveMaps,
+        RequiredSkulls, RemoveSkulls, RandomDissonance,
+    ]),
+    OptionGroup("Sanities", [
+        Costumesanity,
+        PotsanityLowValue, PotsanityHighValue, PotsanityShuriken,
+        PotsanityRollingShuriken, PotsanityEarthSpear, PotsanityFlare,
+        PotsanityCaltrops, PotsanityChakram, PotsanityBomb,
+        LocalPotsanityPercentage,
+        GlossanityFreestanding, GlossanityScannable, GlossanityNPC, GlossanityEnemy,
+        LocalGlossanityPercentage,
+        Oannesanity,
+    ]),
+    OptionGroup("Logic & Difficulty", [
+        GuardianKills, ShuffleGuardianSouls, GuardianSpecificAnkhJewels,
+        LogicDifficulty, GameDifficulty, EchidnaDifficulty, CostumeClip,
+        RequireFDC, RequireTotem, DLCItemLogic, LifeSigilToAwakenHoM,
+        RemoveIcefireTreetopStatue, RandomCursedChests, CursedChestCount,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        HorizontalEntrances, VerticalEntrances, GateEntrances, UniqueTransitions,
+        FullRandomEntrances, IncludeDLCEntrances, PreventAreaLoops,
+        SoulGateEntrances, IncludeNineSoulGates, RandomSoulGateValue,
+        RandomSoulGateValuePool,
+    ]),
+    OptionGroup("Quality of Life", [
+        AutoScan, AutoSkulls, GreedyCharon, PersistentInventory, InfiniteStartingAmmo,
+        StartingMoney, StartingWeights,
+    ]),
+    OptionGroup("Cosmetic", [
+        ItemChestColor, FillerChestColor, APChestColor,
+        UncheckedPotIndicators, UncheckedGlossaryIndicators,
+    ]),
+    OptionGroup("Other", [
+        WriteSeedFile, DeathLink,
+    ]),
+]

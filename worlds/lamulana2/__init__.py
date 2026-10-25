@@ -20,7 +20,7 @@ from BaseClasses import ItemClassification, LocationProgressType
 from worlds.AutoWorld import World, WebWorld
 
 from .options import (LM2Options, StartingArea, StartingWeapon, ShopPlacement,
-                      RandomSoulGateValue)
+                      RandomSoulGateValue, option_groups)
 from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, GUARDIAN_DEFEAT_LOCATION_IDS, GUARDIAN_SOUL_NAMES, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
@@ -47,6 +47,7 @@ class LaMulana2WebWorld(WebWorld):
     game = GAME_NAME
     theme = "ruins"
     tutorials = []
+    option_groups = option_groups
 
 
 # =============================================================================
@@ -1187,6 +1188,12 @@ class LaMulana2World(World):
             "filler_chest_color": int(self.options.filler_chest_color),
             "ap_chest_color": int(self.options.ap_chest_color),
 
+            # Client-side defaults (in-game title-screen buttons can override).
+            # Missing key: indicators default ON, infinite ammo OFF.
+            "unchecked_pot_indicators": int(self.options.unchecked_pot_indicators),
+            "unchecked_glossary_indicators": int(self.options.unchecked_glossary_indicators),
+            "infinite_starting_ammo": int(self.options.infinite_starting_ammo),
+
             # AP unique settings
             "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
             # Guardian Souls: soul gates count souls received (ItemID 610-618)
@@ -1240,6 +1247,8 @@ class LaMulana2World(World):
                 "auto_scan", "auto_skulls", "greedy_charon", "persistent_inventory",
                 "starting_money", "starting_weights",
                 "item_chest_color", "filler_chest_color", "ap_chest_color",
+                "unchecked_pot_indicators", "unchecked_glossary_indicators",
+                "infinite_starting_ammo",
                 "write_seed_file", "death_link",
             ),
         }

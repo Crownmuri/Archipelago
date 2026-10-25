@@ -33,6 +33,9 @@ LM2AP_MAGIC = b"LM2A"
 #     entrance-category toggles, and own_placeholder_items (the real
 #     own-world ItemID behind each per-location AP placeholder) --
 #     everything slot_data carries that v4 could not express.
+# v6: appended shuffle_guardian_souls bool, then the
+#     unchecked_pot_indicators / unchecked_glossary_indicators /
+#     infinite_starting_ammo bools (client-side defaults).
 LM2AP_VERSION = 6
 
 # Pot LocationIDs are written here, not in the legacy items section,
@@ -339,6 +342,10 @@ def write_ap_seed_file(
         [ location_id int32, item_game_id int32 ] * own_placeholder_count
         --- v6+ Guardian Souls ---
         shuffle_guardian_souls    bool
+        --- v6+ Client-side defaults ---
+        unchecked_pot_indicators       bool
+        unchecked_glossary_indicators  bool
+        infinite_starting_ammo         bool
     """
 
     pot_placements = [
@@ -478,3 +485,10 @@ def write_ap_seed_file(
         # Soul gates count souls received instead of kills, and each kill
         # sends its "<Guardian> Obliterated" check (LocationID 314-322).
         _write_bool(f, settings.shuffle_guardian_souls)
+
+        # --- Client-side defaults (v6+) ----------------------------------
+        # Defaults for the in-game "Pot Hints" / "Glossary Hints" /
+        # infinite starting ammo buttons.
+        _write_bool(f, settings.unchecked_pot_indicators)
+        _write_bool(f, settings.unchecked_glossary_indicators)
+        _write_bool(f, settings.infinite_starting_ammo)
