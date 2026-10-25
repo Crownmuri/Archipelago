@@ -525,12 +525,11 @@ class PersistentInventory(Toggle):
     Normally only AP items get regranted upon loading; this option extends to ALL items.
     In other words, turning this on keeps your inventory fully synced with AP's CollectionState.
     Own world items are silently recovered and checked locations remain checked.
-    Note: Puzzle progression flags will not persist."""
+    Note: In-game progression flags (puzzles, mini-bosses) will not persist."""
     display_name = "Persistent Inventory"
 
 class InfiniteStartingAmmo(Toggle):
     """If the starting weapon is a sub-weapon, firing it never uses up its ammo
-    (Pistol: never needs reloading). The ammo still has to be picked up once.
     Other sub-weapons use ammo as normal. No effect on generation or logic.
     Can be toggled in-game from the title screen. The value here is the default applied on connect."""
     display_name = "Infinite Starting Sub-Weapon Ammo"
@@ -546,7 +545,7 @@ class ItemChestColor(Choice):
     default = 0
 
 class FillerChestColor(Choice):
-    """Color for filler chests."""
+    """Color for filler (weights, ammo, glossary) chests."""
     display_name = "Filler Chest Color"
     option_blue = 0
     option_turquoise = 1
@@ -566,16 +565,15 @@ class APChestColor(Choice):
     default = 1
 
 class UncheckedPotIndicators(DefaultOnToggle):
-    """Potsanity: pots whose location hasn't been checked yet are tinted red and get a red outline.
-    Client-side only; no effect on generation or logic.
-    Can be toggled in-game from the title screen ("Pot Hints"). The value here is the default applied on connect."""
+    """Potsanity: unchecked pots are tinted red and get a red outline.
+    Can be toggled in-game from the title screen ("Pot Hints"). 
+    The value here is the default applied on connect."""
     display_name = "Unchecked Pot Indicators"
 
 class UncheckedGlossaryIndicators(DefaultOnToggle):
-    """Glossanity: a small AP logo floats above enemies whose glossary drop hasn't been checked yet,
-    and sits in the doorway of NPCs/shops whose glossary entry hasn't been checked yet.
-    Client-side only; no effect on generation or logic.
-    Can be toggled in-game from the title screen ("Glossary Hints"). The value here is the default applied on connect."""
+    """Glossanity: unchecked NPC / enemy glossary are indicated with a small AP logo.
+    Can be toggled in-game from the title screen ("Glossary Hints"). 
+    The value here is the default applied on connect."""
     display_name = "Unchecked Glossary Indicators"
 
 # --- Other ---
@@ -608,22 +606,20 @@ class LM2Options(PerGameCommonOptions):
     random_ring: RandomRing
     random_shell_horn: RandomShellHorn
     random_maps_software: RandomMapsSoftware
+
+    # Item Pool Adjustments
     mantra_placement: MantraPlacement
     shop_placement: ShopPlacement
     include_expensive_shop_item: IncludeExpensiveShopItem
-
-    # Item Pool Adjustments
     random_research: RandomResearch
     remove_research: RemoveResearch
     replace_research_with_orbs: ReplaceResearchWithOrbs
     remove_maps: RemoveMaps
     required_skulls: RequiredSkulls
     remove_excess_skulls: RemoveSkulls
-    random_dissonance: RandomDissonance
 
     # Sanities
     costumesanity: Costumesanity
-    # Potsanity is partitioned into per-content sub-pools (no single master toggle).
     potsanity_low_value: PotsanityLowValue
     potsanity_high_value: PotsanityHighValue
     potsanity_shuriken: PotsanityShuriken
@@ -634,7 +630,6 @@ class LM2Options(PerGameCommonOptions):
     potsanity_chakram: PotsanityChakram
     potsanity_bomb: PotsanityBomb
     local_potsanity_percentage: LocalPotsanityPercentage
-    # Glossanity is partitioned by entry type (no single master toggle).
     glossanity_freestanding: GlossanityFreestanding
     glossanity_scannable: GlossanityScannable
     glossanity_npc: GlossanityNPC
@@ -643,15 +638,16 @@ class LM2Options(PerGameCommonOptions):
     oannesanity: Oannesanity
 
     # Logic & Difficulty
+    random_dissonance: RandomDissonance
     required_guardians: GuardianKills
     shuffle_guardian_souls: ShuffleGuardianSouls
     guardian_specific_ankhs: GuardianSpecificAnkhJewels
     logic_difficulty: LogicDifficulty
     game_difficulty: GameDifficulty
     echidna_difficulty: EchidnaDifficulty
-    costume_clip: CostumeClip
     require_fdc: RequireFDC
     require_totem: RequireTotem
+    costume_clip: CostumeClip
     dlc_item_logic: DLCItemLogic
     life_sigil_to_awaken_hom: LifeSigilToAwakenHoM
     remove_icefire_treetop_statue: RemoveIcefireTreetopStatue
@@ -706,11 +702,11 @@ option_groups: List[OptionGroup] = [
         StartingArea, StartingWeapon,
         RandomGrail, RandomScanner, RandomCodex, RandomFDC, RandomRing,
         RandomShellHorn, RandomMapsSoftware,
-        MantraPlacement, ShopPlacement, IncludeExpensiveShopItem,
     ]),
     OptionGroup("Item Pool Adjustments", [
+        MantraPlacement, ShopPlacement, IncludeExpensiveShopItem,
         RandomResearch, RemoveResearch, ReplaceResearchWithOrbs, RemoveMaps,
-        RequiredSkulls, RemoveSkulls, RandomDissonance,
+        RequiredSkulls, RemoveSkulls, 
     ]),
     OptionGroup("Sanities", [
         Costumesanity,
@@ -723,9 +719,9 @@ option_groups: List[OptionGroup] = [
         Oannesanity,
     ]),
     OptionGroup("Logic & Difficulty", [
-        GuardianKills, ShuffleGuardianSouls, GuardianSpecificAnkhJewels,
-        LogicDifficulty, GameDifficulty, EchidnaDifficulty, CostumeClip,
-        RequireFDC, RequireTotem, DLCItemLogic, LifeSigilToAwakenHoM,
+        RandomDissonance, GuardianKills, ShuffleGuardianSouls, GuardianSpecificAnkhJewels,
+        LogicDifficulty, GameDifficulty, EchidnaDifficulty, 
+        RequireFDC, RequireTotem, CostumeClip, DLCItemLogic, LifeSigilToAwakenHoM,
         RemoveIcefireTreetopStatue, RandomCursedChests, CursedChestCount,
     ]),
     OptionGroup("Entrance Randomizer", [
