@@ -627,7 +627,8 @@ def build_location_name_groups() -> Dict[str, Set[str]]:
     Skips logic-flag locations (events, not registered as real AP locations).
     Empty groups (e.g. Cliff/Start, which have no locations) are dropped.
     """
-    from .ids import LOGIC_FLAG_LOCATION_IDS
+    from .ids import (LOGIC_FLAG_LOCATION_IDS, GUARDIAN_DEFEAT_LOCATION_IDS,
+                      GUARDIAN_CHECK_GROUPS)
 
     groups: Dict[str, Set[str]] = {
         "Dissonance": set(),
@@ -644,7 +645,8 @@ def build_location_name_groups() -> Dict[str, Set[str]]:
 
         if loc_def.location_type == LocationType.Dissonance:
             groups["Dissonance"].add(ap_name)
-        elif loc_def.location_type == LocationType.Guardian:
+        elif (loc_def.location_type == LocationType.Guardian
+              or loc_id in GUARDIAN_DEFEAT_LOCATION_IDS):
             groups["Bosses"].add(ap_name)
         elif loc_def.location_type == LocationType.Mural:
             groups["Murals"].add(ap_name)
@@ -663,6 +665,17 @@ def build_location_name_groups() -> Dict[str, Set[str]]:
         "[RANDO] Starting Shop 2",
         "[RANDO] Starting Shop 3",
     })
+
+    # "(Guardian) Checks": everything that needs that guardian dead, for
+    # exclude_locations (see GUARDIAN_CHECK_GROUPS / shuffle_guardian_souls).
+    # Members are World.json names; register their AP display names.
+    for group_name, members in GUARDIAN_CHECK_GROUPS.items():
+        unknown = [m for m in members if m not in LOCATION_DEFS_BY_NAME]
+        assert not unknown, f"{group_name} names unknown locations: {unknown}"
+        groups[group_name] = {
+            AP_LOCATION_DEFS.get(LOCATION_DEFS_BY_NAME[m].game_id, m)
+            for m in members
+        }
 
     # Mirror each area group under its abbreviated alias(es) so players
     # can hint with shorthand (e.g. !hint_location ANN == Annwfn).

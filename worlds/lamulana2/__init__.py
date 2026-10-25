@@ -21,7 +21,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .options import (LM2Options, StartingArea, StartingWeapon, ShopPlacement,
                       RandomSoulGateValue)
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, GUARDIAN_DEFEAT_LOCATION_IDS, GUARDIAN_SOUL_NAMES, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, FILLER_DISTRIBUTION,
@@ -259,6 +259,17 @@ class LaMulana2World(World):
                 f"Oannesanity, which is disabled. Disabling DLC entrance shuffling."
             )
             self.options.include_dlc_entrances.value = 0
+
+        # Guardian Souls replace the kill count on soul gates. Without
+        # random_dissonance the Corridor of Blood still needs the vanilla
+        # guardian kills (Anu + the boss-held dissonance), so the option only
+        # applies with random_dissonance on.
+        if self.options.shuffle_guardian_souls and not self.options.random_dissonance:
+            logging.warning(
+                f"[La-Mulana 2] {self.player_name}: 'Shuffle Guardian Souls' requires "
+                f"Random Dissonance, which is disabled. Disabling Guardian Souls."
+            )
+            self.options.shuffle_guardian_souls.value = 0
 
         # 'Standard' soul gate values mean "every gate keeps its vanilla cost",
         # which stops being achievable the moment the gates are shuffled.
@@ -1076,10 +1087,17 @@ class LaMulana2World(World):
 
         # Make certain items proguseful for supported trackers and clients.
         # (useful flag on a progression item does not change fill logic)
+        # Ankh Jewels get the label normally; with shuffle_guardian_souls the
+        # souls are what open the soul gates, so they take it instead.
+        souls = bool(self.options.shuffle_guardian_souls)
         for item in self.multiworld.get_items():
-            if (item.player == self.player and item.advancement
-                    and (item.name in _PROGUSEFUL_NAMES
-                         or item.name.startswith("Ankh Jewel"))):
+            if not (item.player == self.player and item.advancement):
+                continue
+            if souls:
+                key_item = item.name in GUARDIAN_SOUL_NAMES
+            else:
+                key_item = item.name.startswith("Ankh Jewel")
+            if item.name in _PROGUSEFUL_NAMES or key_item:
                 item.classification |= ItemClassification.useful
 
     def pre_output(self) -> None:
@@ -1171,6 +1189,10 @@ class LaMulana2World(World):
 
             # AP unique settings
             "guardian_specific_ankhs": int(self.options.guardian_specific_ankhs),
+            # Guardian Souls: soul gates count souls received (ItemID 610-618)
+            # instead of kills; a confirmed kill also sends its defeat check
+            # (LocationID 314-322, see GUARDIAN_DEFEAT_LOCATIONS).
+            "shuffle_guardian_souls": int(self.options.shuffle_guardian_souls),
 
             # Potsanity (partitioned) — mod just needs "active"; the pot_flag_map
             # is restricted to the pots whose pool is enabled.
@@ -1205,7 +1227,7 @@ class LaMulana2World(World):
                 "potsanity_caltrops", "potsanity_chakram", "potsanity_bomb",
                 "glossanity_freestanding", "glossanity_scannable",
                 "glossanity_npc", "glossanity_enemy", "oannesanity", "costumesanity",
-                "required_guardians", "guardian_specific_ankhs", "logic_difficulty",
+                "required_guardians", "shuffle_guardian_souls", "guardian_specific_ankhs", "logic_difficulty",
                 "game_difficulty",
                 "echidna_difficulty", "costume_clip", "require_fdc", "require_totem",
                 "dlc_item_logic", "life_sigil_to_awaken_hom",
@@ -1506,6 +1528,12 @@ class LaMulana2World(World):
         # (logic-flag events) and any chest/glossary in those areas. Without
         # the DLC there is no reachable path into these regions.
         if loc.parent_area in DLC_AREA_IDS and not self.options.oannesanity:
+            return False
+
+        # Guardian "Obliterated" checks only exist with shuffle_guardian_souls
+        # (one per soul in the pool).
+        if (loc.game_location_id in GUARDIAN_DEFEAT_LOCATION_IDS
+                and not self.options.shuffle_guardian_souls):
             return False
 
         # Skip costume closets unless costumesanity is on. (Fish Suit is also in
@@ -1877,6 +1905,7 @@ class LaMulana2World(World):
         _log(f"  Remove Maps: {opt('remove_maps')}")
         _log(f"  Random Dissonance: {opt('random_dissonance')}")
         _log(f"  Required Guardians: {opt('required_guardians')}")
+        _log(f"  Shuffle Guardian Souls: {opt('shuffle_guardian_souls')}")
         _log(f"  Required Skulls: {opt('required_skulls')}")
 
         # --- Entrance Randomization ---

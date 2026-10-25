@@ -6,7 +6,7 @@ from BaseClasses import Item, CollectionState, ItemClassification
 
 from . import _log
 
-from .ids import (
+from .ids import (GUARDIAN_DEFEAT_LOCATION_IDS, 
     AreaID, 
     ItemID, 
     LocationID,
@@ -1610,8 +1610,10 @@ class LM2RandomizerCore:
                 continue
             if loc.game_location_id == LocationID.None_:
                 continue
-            # Skip logic-flag/boss locations (253-399), allow sanities
-            if LocationID.Ratatoskr1 <= loc.game_location_id < 400:
+            # Skip logic-flag/boss locations (253-399), allow sanities and
+            # the Guardian Obliterated checks (314-322)
+            if (LocationID.Ratatoskr1 <= loc.game_location_id < 400
+                    and loc.game_location_id not in GUARDIAN_DEFEAT_LOCATION_IDS):
                 continue
             if loc.item.player != self.player:
                 continue
@@ -1640,8 +1642,10 @@ class LM2RandomizerCore:
                 continue
             if loc_id == LocationID.None_:
                 continue
-            # Skip logic-flag/boss locations (253-399), allow sanities
-            if LocationID.Ratatoskr1 <= loc_id < 400:
+            # Skip logic-flag/boss locations (253-399), allow sanities and
+            # the Guardian Obliterated checks (314-322)
+            if (LocationID.Ratatoskr1 <= loc_id < 400
+                    and loc_id not in GUARDIAN_DEFEAT_LOCATION_IDS):
                 continue
             if loc.item.player != self.player:
                 continue
@@ -1678,8 +1682,10 @@ class LM2RandomizerCore:
             if loc.game_location_id == LocationID.None_:
                 continue
 
-            # Skip logic-flag/boss locations (253-399), allow sanities
-            if LocationID.Ratatoskr1 <= loc.game_location_id < 400:
+            # Skip logic-flag/boss locations (253-399), allow sanities and
+            # the Guardian Obliterated checks (314-322)
+            if (LocationID.Ratatoskr1 <= loc.game_location_id < 400
+                    and loc.game_location_id not in GUARDIAN_DEFEAT_LOCATION_IDS):
                 continue
 
             # Get the game item ID — use unique AP placeholder for items belonging to other players
@@ -1738,8 +1744,10 @@ class LM2RandomizerCore:
             if loc_id == LocationID.None_:
                 continue
 
-            # Skip logic-flag/boss locations (253-399), allow sanities
-            if LocationID.Ratatoskr1 <= loc_id < 400:
+            # Skip logic-flag/boss locations (253-399), allow sanities and
+            # the Guardian Obliterated checks (314-322)
+            if (LocationID.Ratatoskr1 <= loc_id < 400
+                    and loc_id not in GUARDIAN_DEFEAT_LOCATION_IDS):
                 continue
 
             # Get item ID — use unique AP placeholder for items belonging to other players
@@ -1844,14 +1852,17 @@ class LM2RandomizerCore:
         return result
 
     def _is_glosspot_own(self, loc) -> bool:
-        """This player's glossary ROM (2000-2251) or pot filler (1001-1307), any location."""
+        """This player's glossary ROM (2000-2251), pot filler (1001-1307) or
+        Guardian Soul (610-618), any location. None of these has an in-game
+        item/flag, so they ride the per-location sheet-31 placeholder."""
         if loc.item is None or loc.item.player != self.player:
             return False
         code = getattr(loc.item, "code", None)
         if not isinstance(code, int):
             return False
         gid = code - BASE_ITEM_ID
-        return (2000 <= gid <= 2251) or (1001 <= gid <= 1307)
+        return ((2000 <= gid <= 2251) or (1001 <= gid <= 1307)
+                or (int(ItemID.FafnirSoul) <= gid <= int(ItemID.HelSoul)))
 
     def get_starting_items(self) -> List[ItemID]:
         """

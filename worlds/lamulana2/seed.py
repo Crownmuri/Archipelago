@@ -33,7 +33,7 @@ LM2AP_MAGIC = b"LM2A"
 #     entrance-category toggles, and own_placeholder_items (the real
 #     own-world ItemID behind each per-location AP placeholder) --
 #     everything slot_data carries that v4 could not express.
-LM2AP_VERSION = 5
+LM2AP_VERSION = 6
 
 # Pot LocationIDs are written here, not in the legacy items section,
 # so seed.lm2r stays compatible with the original LM2 randomizer mod.
@@ -337,6 +337,8 @@ def write_ap_seed_file(
         --- v5+ Own items hidden behind AP placeholders ---
         own_placeholder_count     int32
         [ location_id int32, item_game_id int32 ] * own_placeholder_count
+        --- v6+ Guardian Souls ---
+        shuffle_guardian_souls    bool
     """
 
     pot_placements = [
@@ -471,3 +473,8 @@ def write_ap_seed_file(
         for location_id, item_id in own_entries:
             _write_i32(f, location_id)
             _write_i32(f, item_id)
+
+        # --- Guardian Souls (v6+) ----------------------------------------
+        # Soul gates count souls received instead of kills, and each kill
+        # sends its "<Guardian> Obliterated" check (LocationID 314-322).
+        _write_bool(f, settings.shuffle_guardian_souls)

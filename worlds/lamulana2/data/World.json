@@ -581,6 +581,11 @@
                 }
             },
             {
+                "Name": "Fafnir Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Fafnir)"
+            },
+            {
                 "Name": "[ROY E-3] Second Room Weight Pot",
                 "ID": "field00E2w",
                 "LocationType": "Pot",
@@ -1275,6 +1280,11 @@
                 }
             },
             {
+                "Name": "Kujata Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Kujata)"
+            },
+            {
                 "Name": "Annwfn Right Shortcut",
                 "LocationType": "Puzzle",
                 "Logic": "IsDead(Ixtab)",
@@ -1590,6 +1600,11 @@
                     "Name": "Jormungand",
                     "IsRequired": true
                 }
+            },
+            {
+                "Name": "Jormungand Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Jormungand)"
             },
             {
                 "Name": "[IB D-2] Corridor of Wind Item Pot",
@@ -2425,6 +2440,11 @@
                 }
             },
             {
+                "Name": "Surtr Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Surtr)"
+            },
+            {
                 "Name": "[IT B-3] Below Frontside Grail Item Pot",
                 "ID": "field04B2",
                 "LocationType": "Pot",
@@ -2680,7 +2700,7 @@
                 "Logic": "Has(Life Sigil)"
             },
             {
-                "Name": "[IT E-1] NPC Glossary (Inanna)",
+                "Name": "[IT F-3] NPC Glossary (Inanna)",
                 "ID": "talk17",
                 "LocationType": "Glossary",
                 "Logic": "Has(Feather) or (Has(Grapple Claw) and CanReach(ITEntrance)) or CanReach(EPDMain) or CanReach(EPG)"
@@ -4781,6 +4801,11 @@
                 }
             },
             {
+                "Name": "Vritra Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Vritra)"
+            },
+            {
                 "Name": "Dissonance Valhalla",
                 "LocationType": "Dissonance",
                 "Logic": "Has(Progressive Beherit) and IsDead(Vritra)"
@@ -5141,6 +5166,11 @@
                     "Name": "Aten Ra",
                     "IsRequired": true
                 }
+            },
+            {
+                "Name": "Aten-Ra Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Aten Ra)"
             },
             {
                 "Name": "Dissonance DSLM",
@@ -5836,6 +5866,11 @@
                 }
             },
             {
+                "Name": "Anu Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Anu)"
+            },
+            {
                 "Name": "[AC D-3] Ziggurat of Destiny Item Pot",
                 "ID": "field12D2",
                 "LocationType": "Pot",
@@ -6234,6 +6269,11 @@
                 }
             },
             {
+                "Name": "Echidna Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Echidna)"
+            },
+            {
                 "Name": "[HOM A-4] Time Serdab Coin Pot",
                 "ID": "field13A3g",
                 "LocationType": "Pot",
@@ -6525,6 +6565,11 @@
                     "Name": "Hel",
                     "IsRequired": true
                 }
+            },
+            {
+                "Name": "Hel Obliterated",
+                "LocationType": "FreeStanding",
+                "Logic": "IsDead(Hel)"
             },
             {
                 "Name": "Book of the Dead Chest",

@@ -201,6 +201,16 @@ class GuardianKills(Range):
     range_end = 9
     default = 5
 
+class ShuffleGuardianSouls(Toggle):
+    """Only applies if RandomDissonance is on.
+    Shuffles the Guardians' Souls that are required for Soul Gates.
+    Defeating Guardians is no longer required; to open the Spiral Boat soul gate,
+    you will need to obtain the Required Guardians amount of Soul items instead.
+    Guardians will have one more additional check upon defeating them.
+    Use AP's native exclude_locations ["(Guardian) Checks"] to force Guardians
+    out of logic, e.g. exclude_locations: ["Hel Checks"]."""
+    display_name = "Shuffle Guardian Souls"
+
 # --- Potsanity (partitioned into per-content sub-pools) ------------------------
 # Each toggle adds that subset of the 307 item pots as randomized checks.
 
@@ -613,6 +623,7 @@ class LM2Options(PerGameCommonOptions):
 
     # Logic & Difficulty
     required_guardians: GuardianKills
+    shuffle_guardian_souls: ShuffleGuardianSouls
     guardian_specific_ankhs: GuardianSpecificAnkhJewels
     logic_difficulty: LogicDifficulty
     game_difficulty: GameDifficulty

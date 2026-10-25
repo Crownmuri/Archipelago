@@ -473,6 +473,18 @@ class ItemID(IntEnum):
     Echidna = 607
     Hel = 608
     NinthChild = 609
+
+    # Guardian Souls (shuffle_guardian_souls).
+    FafnirSoul = 610
+    VritraSoul = 611
+    KujataSoul = 612
+    AtenRaSoul = 613
+    JormungandSoul = 614
+    AnuSoul = 615
+    SurtrSoul = 616
+    EchidnaSoul = 617
+    HelSoul = 618
+
     Dissonance = 666
     WeaponFairy = 700
     MoneyFairy = 701
@@ -1438,6 +1450,23 @@ class LocationID(IntEnum):
     FishSlimeZero = 311
     EvilFishCrystal = 312
     FishGearmk2turboR = 313
+
+    # -------------------------------------------------------------------------
+    # Guardian "Obliterated" checks (shuffle_guardian_souls; real checks)
+    # One extra check per guardian, sent when the kill is confirmed. The kill
+    # event stays on Fafnir..Hel (290-298) so IsDead() logic is unchanged.
+    # This sits inside the 253-399 event band, so the placement writers
+    # exempt it explicitly (GUARDIAN_DEFEAT_LOCATION_IDS).
+    # -------------------------------------------------------------------------
+    FafnirObliterated = 314
+    VritraObliterated = 315
+    KujataObliterated = 316
+    AtenRaObliterated = 317
+    JormungandObliterated = 318
+    AnuObliterated = 319
+    SurtrObliterated = 320
+    EchidnaObliterated = 321
+    HelObliterated = 322
 
     # -------------------------------------------------------------------------
     # Pot Locations (potsanity)
@@ -2906,6 +2935,17 @@ class ExitID(IntEnum):
     fEx2_Rout2 = 96
 
 AP_LOCATION_NAMES = {
+    # Guardian "Obliterated" checks (shuffle_guardian_souls), same screen as the
+    # guardian's Reward location.
+    "[ROY F-3] Fafnir Obliterated": LocationID.FafnirObliterated,
+    "[VAL E-2] Vritra Obliterated": LocationID.VritraObliterated,
+    "[ANN F-2] Kujata Obliterated": LocationID.KujataObliterated,
+    "[DSLM C-8] Aten-Ra Obliterated": LocationID.AtenRaObliterated,
+    "[IB E-5] Jormungand Obliterated": LocationID.JormungandObliterated,
+    "[AC D-1] Anu Obliterated": LocationID.AnuObliterated,
+    "[IT C-2] Surtr Obliterated": LocationID.SurtrObliterated,
+    "[HOM C-5] Echidna Obliterated": LocationID.EchidnaObliterated,
+    "[EPD A-3] Hel Obliterated": LocationID.HelObliterated,
     # Costume closets (costumesanity)
     "[IT F-3] Kimono Cowgirl Costume Chest": LocationID.CostumeChestKimono,
     "[CAVERN] Valkyrie Costume Chest": LocationID.CostumeChestValkyrie,
@@ -3499,7 +3539,7 @@ AP_LOCATION_NAMES = {
     "[IT E-2] Glossary in the Hot Spring (Scan)": LocationID.Glossary051,
     "[IT C-3] NPC Glossary (Sinmara)": LocationID.Glossary052,
     "[IT F-3] NPC Glossary (Modgud)": LocationID.Glossary053,
-    "[IT E-1] NPC Glossary (Inanna)": LocationID.Glossary054,
+    "[IT F-3] NPC Glossary (Inanna)": LocationID.Glossary054,
     "[IT A-1] NPC Glossary (Porque Item Shop)": LocationID.Glossary055,
     "[IT C-4] NPC Glossary (Mino the Bomb Guy)": LocationID.Glossary056,
     "[IT E-2] NPC Glossary (Enimul)": LocationID.Glossary057,
@@ -3817,6 +3857,15 @@ ITEM_MAP = {
     "Ankh Jewel (Surtr)": ItemID.AnkhJewel7,
     "Ankh Jewel (Echidna)": ItemID.AnkhJewel8,
     "Ankh Jewel (Hel)": ItemID.AnkhJewel9,
+    "Fafnir's Soul": ItemID.FafnirSoul,
+    "Vritra's Soul": ItemID.VritraSoul,
+    "Kujata's Soul": ItemID.KujataSoul,
+    "Aten-Ra's Soul": ItemID.AtenRaSoul,
+    "Jormungand's Soul": ItemID.JormungandSoul,
+    "Anu's Soul": ItemID.AnuSoul,
+    "Surtr's Soul": ItemID.SurtrSoul,
+    "Echidna's Soul": ItemID.EchidnaSoul,
+    "Hel's Soul": ItemID.HelSoul,
     "Sacred Orb (VoD)": ItemID.SacredOrb0,              # Village of Departure
     "Sacred Orb (RoY)": ItemID.SacredOrb1,              # Roots of Yggdrasil
     "Sacred Orb (Annwfn)": ItemID.SacredOrb2,           # Annwfn
@@ -4891,6 +4940,56 @@ GUARDIAN_ANKHS_LOCATIONS: dict = {
     LocationID.Echidna:    "Ankh Jewel (Echidna)",
     LocationID.Hel:        "Ankh Jewel (Hel)",
 }
+# --- Guardian Souls (shuffle_guardian_souls) ---------------------------------
+# Soul item per guardian. With the option on, GuardianKills(N) counts these
+# instead of guardian kill events.
+GUARDIAN_SOUL_ITEMS: dict = {
+    ItemID.FafnirSoul:     "Fafnir's Soul",
+    ItemID.VritraSoul:     "Vritra's Soul",
+    ItemID.KujataSoul:     "Kujata's Soul",
+    ItemID.AtenRaSoul:     "Aten-Ra's Soul",
+    ItemID.JormungandSoul: "Jormungand's Soul",
+    ItemID.AnuSoul:        "Anu's Soul",
+    ItemID.SurtrSoul:      "Surtr's Soul",
+    ItemID.EchidnaSoul:    "Echidna's Soul",
+    ItemID.HelSoul:        "Hel's Soul",
+}
+GUARDIAN_SOUL_NAMES: frozenset = frozenset(GUARDIAN_SOUL_ITEMS.values())
+
+# Guardian kill event LocationID -> its extra defeat check LocationID.
+# The mod sends the defeat check when it confirms the kill.
+GUARDIAN_DEFEAT_LOCATIONS: dict = {
+    LocationID.Fafnir:     LocationID.FafnirObliterated,
+    LocationID.Vritra:     LocationID.VritraObliterated,
+    LocationID.Kujata:     LocationID.KujataObliterated,
+    LocationID.AtenRa:     LocationID.AtenRaObliterated,
+    LocationID.Jormungand: LocationID.JormungandObliterated,
+    LocationID.Anu:        LocationID.AnuObliterated,
+    LocationID.Surtr:      LocationID.SurtrObliterated,
+    LocationID.Echidna:    LocationID.EchidnaObliterated,
+    LocationID.Hel:        LocationID.HelObliterated,
+}
+GUARDIAN_DEFEAT_LOCATION_IDS: frozenset = frozenset(GUARDIAN_DEFEAT_LOCATIONS.values())
+
+# "(Guardian) Checks" location groups: every check that needs that guardian
+# dead. Putting a group in exclude_locations keeps progression off all of
+# them, so with shuffle_guardian_souls the guardian is never required.
+# Only hard IsDead() requirements are listed: Alsedana's item
+# ("IsDead(Vritra) or GuardianKills(6)") is reachable without the kill.
+GUARDIAN_CHECK_GROUPS: dict = {
+    "Fafnir Checks": ("Fafnir Obliterated", "Crystal Skull Chest RoY"),
+    "Vritra Checks": ("Vritra Obliterated", "Scalesphere Chest", "Dissonance Valhalla"),
+    "Kujata Checks": ("Kujata Obliterated", "Djed Pillar Chest"),
+    "Aten-Ra Checks": ("Aten-Ra Obliterated", "Crucifix Chest", "Dissonance DSLM",
+                       "[DSLM C-6] Glossary after Aten-Ra Defeated"),
+    "Jormungand Checks": ("Jormungand Obliterated", "Mjolnir Chest"),
+    "Anu Checks": ("Anu Obliterated", "Scriptures Chest"),
+    "Surtr Checks": ("Surtr Obliterated", "Flame Torc Chest"),
+    "Echidna Checks": ("Echidna Obliterated", "Giants Flute Chest", "Dissonance HL",
+                       "[HL C-4] Glossary After Destroying Typhon (Scan)"),
+    "Hel Checks": ("Hel Obliterated", "Book of the Dead Chest", "Dissonance EPG"),
+}
+
 LOGIC_FLAG_LOCATION_IDS = {
     # Minibosses
     LocationID.Ratatoskr1: "Ratatoskr 1",

@@ -187,6 +187,14 @@ class PlayerStateAdapter:
         self.softlock_check = False
         self.ignore_false_checks = False
         self.ignore_guardians = False
+        # Names that count toward GuardianKills(N): the guardian kill events,
+        # or the shuffled Guardian Souls when shuffle_guardian_souls is on.
+        from ..ids import GUARDIAN_SOUL_NAMES
+        self.guardian_count_names = (
+            GUARDIAN_SOUL_NAMES
+            if getattr(self.options, "shuffle_guardian_souls", False)
+            else self.BOSS_NAMES
+        )
         self.escape_check = False
         self.force_tree_eval = False
 
@@ -280,7 +288,7 @@ class PlayerStateAdapter:
                 )
 
             # Derived counter for GuardianKills (do NOT re-add the boss item again)
-            if (item_name in self.BOSS_NAMES) and (not self.ignore_guardians):
+            if (item_name in self.guardian_count_names) and (not self.ignore_guardians):
                 self._collected_items["Guardians"] = self._collected_items.get("Guardians", 0) + count
     
     def set_starting_area(self, area_id):
@@ -369,7 +377,7 @@ class PlayerStateAdapter:
             )
         
         # Track guardians
-        if not self.ignore_guardians and item_name in self.BOSS_NAMES:
+        if not self.ignore_guardians and item_name in self.guardian_count_names:
             if "Guardians" in self._collected_items:
                 self._collected_items["Guardians"] += 1
             else:

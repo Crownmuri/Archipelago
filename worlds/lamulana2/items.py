@@ -8,7 +8,7 @@ from typing import Dict, List, Set, Optional
 from BaseClasses import Item, ItemClassification
 
 from . import _log
-from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, ITEM_MAP, DLC_ITEM_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, glossary_is_shuffled, potsanity_pools_enabled
+from .ids import USELESS_ITEM_IDS, ItemID, BASE_ITEM_ID, SHOP_ITEM_IDS, FILLER_ITEM_IDS,TRAP_ITEM_IDS, GUARDIAN_ANKHS_ITEMS, GUARDIAN_SOUL_ITEMS, GLOSSARY_ITEM_IDS, LOGIC_FLAG_MAP, LOGIC_FLAG_ITEM_IDS, ITEM_MAP, DLC_ITEM_IDS, COSTUME_ITEM_IDS, COSTUME_CLIP_ITEMS, POT_POOL_BY_LOC, POT_REWARD_BY_LOC, glossary_is_shuffled, potsanity_pools_enabled
 from .locations import LocationType
 
 # ============================================================
@@ -773,6 +773,19 @@ def build_item_pool(world) -> List[Item]:
                 item.classification = ItemClassification.progression
             pool.append(item)
 
+    # Guardian Souls: one per guardian, matched by the 9 "<Guardian> Obliterated"
+    # checks that only exist with this option (see _should_include_location).
+    if getattr(world.options, "shuffle_guardian_souls", False):
+        for soul_id, soul_name in GUARDIAN_SOUL_ITEMS.items():
+            item = LM2Item(
+                name=soul_name,
+                classification=ItemClassification.progression,
+                code=BASE_ITEM_ID + soul_id.value,
+                player=world.player,
+            )
+            item.lm2_game_id = soul_id
+            pool.append(item)
+
     return pool
 
 
@@ -1059,6 +1072,8 @@ def build_item_name_groups() -> Dict[str, Set[str]]:
         "Ankh Jewels": ankh_jewels,
         "Ankhs": ankh_jewels,
         "Ankh": ankh_jewels,
+        "Guardian Souls": set(GUARDIAN_SOUL_ITEMS.values()),
+        "Souls": set(GUARDIAN_SOUL_ITEMS.values()),
         "Mantras": set(_MANTRA_NAMES),
         "Sacred Orbs": sacred_orbs,
         "Orb": sacred_orbs,

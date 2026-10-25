@@ -2130,6 +2130,10 @@ def _validate_starting_cluster(world, omniscient_base=None) -> Tuple[bool, str]:
         else:
             no_kills = _build_omniscient_state(world)
         no_kills.prog_items[player]["Guardians"] = 0
+        # Guardian Souls stand in for kills on soul gates, so they go too.
+        from .ids import GUARDIAN_SOUL_NAMES
+        for soul_name in GUARDIAN_SOUL_NAMES:
+            no_kills.prog_items[player][soul_name] = 0
         no_kills.stale[player] = True
 
         has_non_kill_exit = False
