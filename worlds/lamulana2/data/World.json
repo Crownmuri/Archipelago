@@ -4530,6 +4530,31 @@
                 "ID": "talk48",
                 "LocationType": "Glossary",
                 "Logic": "Has(Grapple Claw) and Has(Feather)"
+            },
+            {
+                "Name": "[HL C-2] Path to Chaos Item Pot",
+                "ID": "field09C1",
+                "LocationType": "Pot",
+                "Logic": "((CanReach(HLSpun) and IsDead(Glasya Labolas)) or CanReach(HLGate)) and HorizontalAttack"
+            },
+            {
+                "Name": "[HL C-2] Glossary along the Path to Chaos",
+                "ID": "field09RG3",
+                "LocationType": "Glossary",
+                "Logic": "(CanReach(HLSpun) and IsDead(Glasya Labolas)) or CanReach(HLGate)"
+            },
+            {
+                "Name": "Axe Puzzle Reward",
+                "LocationType": "FreeStanding",
+                "Logic": "CanReach(HLSpun) and (Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)",
+                "TrickyLogic": "(CanReach(HLSpun) and (Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)) or (CanReach(HLGate) and Has(Feather) and Has(Glove))"
+            },
+            {
+                "Name": "[HL B-1] Weapon Vault Coin Pot",
+                "ID": "field09B0g",
+                "LocationType": "Pot",
+                "Logic": "CanReach(HLSpun) and IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))",
+                "TrickyLogic": "(CanReach(HLSpun) and IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))) or (CanReach(HLGate) and Has(Feather))"
             }
         ],
         "Exits": [
