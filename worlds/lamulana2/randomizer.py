@@ -152,7 +152,6 @@ class LM2RandomizerCore:
     
         # Fix logic
         self._fix_nibiru_logic()
-        self._fix_spiral_gate_logic()
         # Branch A (guardian_specific_ankhs) is topology-independent — each
         # guardian just needs its own jewel — so it can run here. Branch B's
         # cumulative AnkhCount is derived from reachability and MUST wait until
@@ -282,26 +281,6 @@ class LM2RandomizerCore:
         AreaID.TowerOfOannesLeftC,
         AreaID.TowerOfOannesRightB,
     })
-
-    def _fix_spiral_gate_logic(self):
-        # Randomiser.cs hardcoded GuardianKills(5) here. With random_dissonance
-        # the final area is gated on RequiredGuardians instead: the seal no
-        # longer counts guardians and the Spiral Boat soul gate (the only way
-        # into IBBoat) costs exactly that many, so this mirrors that gate.
-        entrances = self.multiworld.get_entrances(self.player)
-        spiral_gates = [e for e in entrances if hasattr(e, "exit_type") and str(e.exit_type) == "ExitType.SpiralGate"]
-
-        for e in spiral_gates:
-            # Avoid double-appending if generation retries
-            s = getattr(e, "_original_logic", "")
-            if "GuardianKills(" in s or "IsDead(Anu)" in s:
-                continue
-
-            if self.options.random_dissonance:
-                req = int(self.options.required_guardians.value)
-                e.append_logic_string(f" and GuardianKills({req})")
-            else:
-                e.append_logic_string(" and IsDead(Anu)")
 
     def _fix_ankh_logic(self):
         """

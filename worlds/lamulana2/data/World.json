@@ -2160,6 +2160,11 @@
                 "ConnectionType": "SpiralGate",
                 "ConnectingAreaID": "SpiralHell",
                 "Logic": "CanSealCorridor and Has(Secret Treasure of Life) and CanChant(Mother) and CanChant(Child)"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "IBMain",
+                "Logic": "CanSealCorridor"
             }
         ]
     },
@@ -4592,12 +4597,6 @@
                 "Logic": "IsDead(Griffin)"
             },
             {
-                "Name": "Axe Puzzle Reward",
-                "LocationType": "FreeStanding",
-                "Logic": "(Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)",
-                "TrickyLogic": "((Has(Feather) or Has(Grapple Claw)) and Has(Glove) and IsDead(Glasya Labolas)) or (CanReach(HLGate) and Has(Feather) and Has(Glove))"
-            },
-            {
                 "Name": "Mobile Super X3 Item",
                 "LocationType": "FreeStanding",
                 "Logic": "(Has(Feather) or Has(Grapple Claw)) and IsDead(Griffin) and IsDead(Arachne) and IsDead(Scylla)"
@@ -4653,25 +4652,6 @@
                 "LocationType": "Pot",
                 "Logic": "IsDead(Glasya Labolas) and Has(Glove)",
                 "TrickyLogic": "IsDead(Glasya Labolas) and (Has(Glove) or (CanUse(Bomb) and Glitch(Costume Clip)))"
-            },
-            {
-                "Name": "[HL B-1] Weapon Vault Coin Pot",
-                "ID": "field09B0g",
-                "LocationType": "Pot",
-                "Logic": "IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))",
-                "TrickyLogic": "(IsDead(Glasya Labolas) and (Has(Feather) or Has(Grapple Claw))) or (CanReach(HLGate) and Has(Feather))"
-            },
-            {
-                "Name": "[HL C-2] Path to Chaos Item Pot",
-                "ID": "field09C1",
-                "LocationType": "Pot",
-                "Logic": "(IsDead(Glasya Labolas) or CanReach(HLGate)) and HorizontalAttack"
-            },
-            {
-                "Name": "[HL C-2] Glossary along the Path to Chaos",
-                "ID": "field09RG3",
-                "LocationType": "Glossary",
-                "Logic": "IsDead(Glasya Labolas) or CanReach(HLGate)"
             },
             {
                 "Name": "[HL E-3] Glossary behind Griffin's Statue (Scan)",
