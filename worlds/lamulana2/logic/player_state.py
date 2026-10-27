@@ -681,6 +681,9 @@ class PlayerStateAdapter:
         return get_item_name_from_id(self.starting_weapon) == item
 
     def _can_warp(self) -> bool:
+        # The escape sequence disables the Holy Grail (rules.can_escape).
+        if self.escape_check:
+            return False
         if self.starting_area is None:
             import warnings
             warnings.warn("[LM2] _can_warp called with starting_area=None; FDC check skipped")

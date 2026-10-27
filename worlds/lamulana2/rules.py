@@ -1,3 +1,17 @@
+from .ids import AreaID, DLC_AREA_IDS
+from .regions import ExitType, LM2Entrance
+
+# Areas that allow Holy Grail usage during escape, generally outside the ruins.
+# Base list from the original randomizer (PlayerState.cs).
+# The DLC areas except for Eden are also free-warp areas.
+# (Spring in the Sky, Tower of Oannes, Bailey)
+_ESCAPE_AREAS = (
+    {AreaID.Cliff, AreaID.GateofGuidance, AreaID.MausoleumofGiants,
+     AreaID.VoD, AreaID.VoDLadder, AreaID.GateofIllusion, AreaID.Nibiru}
+    | (DLC_AREA_IDS - {AreaID.Eden})
+)
+
+
 def set_rules(world):
     """
     Set access rules for all locations and define completion condition.
@@ -20,7 +34,7 @@ def set_rules(world):
         location.access_rule = lambda state, loc=location: loc.can_access(state)
     
     # Set the completion condition
-    # Player must have Ninth Child and be able to reach the Cliff area
+    # Beat the Game: Ninth Child + Cliff reachable
     world.multiworld.completion_condition[world.player] = lambda state: (
         can_complete_game(state, world.player, world)
     )
@@ -54,4 +68,71 @@ def can_complete_game(state, player: int, world) -> bool:
         required = getattr(world, "glossary_hunt_count", 0)
         return state.has_group("Glossary", player, required)
 
-    return state.has("Ninth Child", player)
+    return (state.has("Ninth Child", player)
+            and can_escape(state, player, world))
+
+
+def can_escape(state, player: int, world) -> bool:
+    """
+    Port of the original randomizer's CanBeatGame + escape check
+    (PlayerState.cs). Cliff must be reachable at all, and after the Ninth
+    Child the player must get from Immortal Battlefield to one of the
+    escape areas without using the Eternal Prison exits/gates. The Holy
+    Grail is disabled until an escape area is reached, so CanWarp is False
+    along the way.
+
+    Approximation: CanReach(X) tokens inside exit rules still use normal
+    reachability, where the original re-evaluated them from IBMain.
+    """
+    regions = getattr(world, "regions_by_area_id", None)
+    if not regions:
+        return True
+
+    cliff = regions.get(AreaID.Cliff)
+    if cliff is not None and not state.can_reach(cliff, "Region", player):
+        return False
+
+    escape_targets = {regions[a] for a in _ESCAPE_AREAS if a in regions}
+    start = regions.get(AreaID.IBMain)
+    if start is None or not escape_targets:
+        return True
+
+    adapter = None
+
+    def escape_adapter():
+        # Interpreted state with CanWarp switched off. Only built when an
+        # exit on the route actually mentions CanWarp.
+        nonlocal adapter
+        if adapter is None:
+            from .logic.player_state import PlayerStateAdapter
+            adapter = PlayerStateAdapter(state, player, world.multiworld, world.options)
+            adapter.starting_area = getattr(world, "starting_area", None)
+            adapter.escape_check = True
+        return adapter
+
+    seen = {start}
+    stack = [start]
+    while stack:
+        region = stack.pop()
+        if region in escape_targets:
+            return True
+        for exit_ in region.exits:
+            dest = exit_.connected_region
+            if dest is None or dest in seen:
+                continue
+            if isinstance(exit_, LM2Entrance):
+                if exit_.exit_type in (ExitType.PrisonExit, ExitType.PrisonGate):
+                    continue
+                # Skip the "parent reachable" precheck in can_access: during
+                # the escape the player is physically in this region.
+                if "CanWarp" in (exit_._original_logic or ""):
+                    ok = exit_._logic_tree.evaluate(escape_adapter())
+                else:
+                    rule = exit_._compiled_rule
+                    ok = rule(state) if rule is not None else exit_.access_rule(state)
+            else:
+                ok = exit_.access_rule(state)
+            if ok:
+                seen.add(dest)
+                stack.append(dest)
+    return False
