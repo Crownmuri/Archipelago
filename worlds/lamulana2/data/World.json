@@ -2349,7 +2349,7 @@
                 "Name": "[IT C-5] Bombable Wall Coin Pot",
                 "ID": "field04C4",
                 "LocationType": "Pot",
-                "Logic": "CanUse(Bomb) and Has(Feather)"
+                "Logic": "(CanUse(Bomb) and (Has(Feather) or Glitch(Costume Clip))) or (Glitch(Costume Clip) and CanWarp and (Has(Knife) or Has(Katana) or Has(Rapier) or CanUse(Earth Spear) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder)))))"
             },
             {
                 "Name": "[IT D-5] Above Vidofnir Item Pot",
@@ -2586,7 +2586,7 @@
                 "Name": "[IT B-1] Glossary in Left Breakable Floor",
                 "ID": "field04RG2",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder))))"
             },
             {
                 "Name": "[IT A-1] NPC Glossary (Porque Item Shop)",
@@ -3182,7 +3182,7 @@
                 "Name": "[SFG C-4] Weapon Fairy - Lower Weight Pot",
                 "ID": "field06C3",
                 "LocationType": "Pot",
-                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Feather))) or (Has(Feather) and CanUse(Flare Gun))"
+                "Logic": "Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Chakram) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder) or Has(Feather))) or (Has(Feather) and CanUse(Flare Gun))"
             },
             {
                 "Name": "[SFG D-5] Titanomachy Monument Item Pot",
@@ -5593,13 +5593,13 @@
                 "Name": "[AC D-7] Annunaki Hot Spring Item Pot",
                 "ID": "field12D6",
                 "LocationType": "Pot",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder)))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC D-7] Annunaki Hot Spring Coin Pot",
                 "ID": "field12D6g",
                 "LocationType": "Pot",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder)))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC B-6] Path to Inferno Coin Pot",
@@ -5671,7 +5671,7 @@
                 "Name": "[AC D-7] Glossary at the Bottom of Lava Funnel",
                 "ID": "field12RG1",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder)))) and (Has(Claydoll Suit) or (Has(Ice Cloak) and OrbCount(4)))"
             },
             {
                 "Name": "[AC A-6] Glossary in Wall Between The Eyes (Scan)",
@@ -5695,7 +5695,7 @@
                 "Name": "[AC D-7] NPC Glossary (Sykick)",
                 "ID": "talk64",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and Has(Vajra))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder)))) and (Has(Claydoll Suit) or Has(Feather) or (Has(Ice Cloak) and OrbCount(2)))"
             },
             {
                 "Name": "[AC C-6] Fish Glossary (Nodoguro)",
