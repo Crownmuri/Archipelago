@@ -21,7 +21,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .options import (LM2Options, StartingArea, StartingWeapon, ShopPlacement,
                       RandomSoulGateValue, option_groups)
-from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, ITEM_LABEL_BY_ID, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, GUARDIAN_DEFEAT_LOCATION_IDS, GUARDIAN_SOUL_NAMES, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
+from .ids import ItemID, LocationID, BASE_ITEM_ID, BASE_LOCATION_ID, ITEM_MAP, GUARDIAN_ANKHS_ITEMS, LOGIC_FLAG_LOCATION_IDS, POT_FLAG_MAP, GLOSSARY_FLAG_MAP, GLOSSARY_ITEM_IDS, DLC_LOCATION_IDS, GUARDIAN_DEFEAT_LOCATION_IDS, GUARDIAN_SOUL_NAMES, COSTUME_LOCATION_IDS, DLC_AREA_IDS, POT_POOL_BY_LOC, GLOSSARY_POOLS_BY_ID, potsanity_pools_enabled, glossanity_pools_enabled, glossary_is_shuffled, MISSABLE_LOCATION_IDS
 from .items import (
     create_item, build_item_pool, apply_starting_inventory,
     ITEM_DEFS, AP_FILLER, FILLER_DISTRIBUTION,
@@ -214,6 +214,11 @@ class LaMulana2World(World):
         Resolve options that affect world structure.
         """
         super().generate_early()
+
+        # Plando of a collapsed family ("Sacred Orb", "Crystal Skull (RoY)")
+        # must name the pool's item, or it mints a duplicate instance.
+        from .items import remap_plando_to_pool_names
+        remap_plando_to_pool_names(self)
 
         ut_data = self._ut_passthrough()
         if ut_data is not None:
@@ -1469,46 +1474,14 @@ class LaMulana2World(World):
         """
         Player-facing label for the item at this location.
 
-        Prefers the descriptive ITEM_MAP entry keyed by the underlying game
-        ItemID (so e.g. Maps carry their area-specific names rather than a
-        generic display name), and falls back to loc.item.name when the item
-        isn't registered there — that catches foreign-player items, AP filler
-        bundles, and any one-offs that don't have an ITEM_MAP entry.
-
-        Collapsed families are the exception: Sacred Orb, Sacred Orb (Bonus),
-        Crystal Skull, non-guardian Ankh Jewels and the Kosugi research papers
-        all ship on ONE AP id with the real game id on lm2_game_id, so the
-        server (and therefore online play) only ever says "Sacred Orb". Taking
-        the ITEM_MAP entry for the underlying game id would put the area suffix
-        back on — "Sacred Orb (IB)" — but only offline, where these labels are
-        the sole naming source. A collapsed item is exactly one whose AP code
-        is not its own game id's code, so that comparison keeps both modes
-        reading the same without a hand-maintained name list.
-
-        For LM2Items carrying lm2_game_id (Progressive Whip/Shield/Beherit and
-        the guardian-specific Ankh Jewels), we look up by the underlying
-        per-tier game ID first; ITEM_MAP doesn't have entries for the
-        intermediate progressive IDs, so the lookup naturally falls through
-        to loc.item.name (which is the AP-side label like "Progressive Whip"
-        or "Ankh Jewel (Vritra)").
+        The item's AP name. Own items all come from items.make_item, which
+        gives the name and code that belong together (area-specific Maps,
+        guardian-specific Ankh Jewels, collapsed "Sacred Orb"), so this is
+        exactly what the server prints online -- offline (where these labels
+        are the only naming source) reads the same. Foreign items carry their
+        own world's name. test_item_shape guards the name/code agreement.
         """
-        item = loc.item
-        code = getattr(item, "code", None)
-        # LM2Item-specific game ID (preserves progressives + guardian ankhs).
-        game_id = getattr(item, "lm2_game_id", None)
-        if game_id is not None:
-            if isinstance(code, int) and code != BASE_ITEM_ID + int(game_id):
-                return item.name          # collapsed family — keep the AP name
-        elif isinstance(code, int) and code >= BASE_ITEM_ID:
-            try:
-                game_id = ItemID(code - BASE_ITEM_ID)
-            except ValueError:
-                game_id = None
-        if game_id is not None:
-            label = ITEM_LABEL_BY_ID.get(game_id)
-            if label:
-                return label
-        return item.name
+        return loc.item.name
 
     def _should_include_location(self, loc) -> bool:
         """Determine if a location should be included in the pool."""

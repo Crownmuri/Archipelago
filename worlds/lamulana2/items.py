@@ -200,6 +200,66 @@ _GENERIC_FAMILY_CODE = {
     RESEARCH_LABEL:  BASE_ITEM_ID + ItemID.Research.value,
 }
 
+_BONUS_ORB_LABEL = "Sacred Orb (Bonus)"
+
+
+def _bonus_orbs_in_pool(world) -> bool:
+    # Mirrors build_item_pool: research papers become bonus orbs only when
+    # random_research is on and replace_research_with_orbs > 0.
+    return bool(world.options.random_research) and world.options.replace_research_with_orbs.value > 0
+
+
+def pool_name_for(world, name: str) -> str:
+    """The name build_item_pool gives the item a datapackage name refers to.
+
+    The datapackage carries per-source labels ("Sacred Orb (GotD)",
+    "Crystal Skull (RoY)", "Ankh Jewel (Fafnir)") but the pool collapses most of
+    them onto one generic name + AP id. Anything that matches pool items by
+    name (plando from_pool) must use the pool's name.
+    """
+    # Without converted research there are no bonus orbs in the pool, so a
+    # plando'd bonus label can only mean a regular orb.
+    if name.startswith("Sacred Orb (Bonus") and not _bonus_orbs_in_pool(world):
+        return "Sacred Orb"
+    try:
+        return create_item(world, name).name
+    except KeyError:
+        return name            # events and unknown names: leave for core to report
+
+
+def remap_plando_to_pool_names(world) -> None:
+    """Rewrite plando item names to the names the pool actually uses.
+
+    Core expands an item group ("Sacred Orb" shadows the item on purpose, see
+    build_item_name_groups) into its members before generation, so a plando of
+    "Sacred Orb" arrives as e.g. "Sacred Orb (GotD)". Plando's from_pool step
+    matches pool items by NAME; no pool orb carries that label, so it warned
+    "already missing", minted an extra orb via create_item, and that orb's game
+    id duplicated one the pool had already handed out (two locations on the
+    same client flag). Mapping back to "Sacred Orb" makes plando take a real
+    pool instance, keeping the orb count and every instance's game id unique.
+    """
+    try:
+        blocks = world.options.plando_items.value
+    except AttributeError:
+        return
+    for block in blocks or []:
+        items = block.items
+        if isinstance(items, dict):
+            remapped: Dict[str, int] = {}
+            for item_name, count in items.items():
+                key = pool_name_for(world, item_name)
+                if count is True or remapped.get(key) is True:
+                    remapped[key] = True
+                else:
+                    remapped[key] = remapped.get(key, 0) + count
+            # PlandoItem is a frozen dataclass: mutate the container in place.
+            items.clear()
+            items.update(remapped)
+        elif isinstance(items, list):
+            items[:] = [pool_name_for(world, n) for n in items]
+
+
 def _apply_option_classification(world, item: Item) -> Item:
     """Bump items that only gate logic under certain options to progression.
 
@@ -238,73 +298,162 @@ def _apply_option_classification(world, item: Item) -> Item:
     return item
 
 
+# First ItemDef per game id (Items.json lists some ids under shared names).
+_DEF_BY_GAME_ID: Dict[int, ItemDef] = {}
+for _d in ITEM_DEFS:
+    _DEF_BY_GAME_ID.setdefault(_d.game_id, _d)
+del _d
+
+_BEHERIT_IDS = {ItemID(ItemID.ProgressiveBeherit1.value + i) for i in range(7)}
+# Bonus orbs (replace_research_with_orbs) each get a DISTINCT game id so their
+# client flags never collide.
+BONUS_ORB_IDS = [getattr(ItemID, f"SacredOrb{n}") for n in range(10, 20)]
+_BONUS_ORB_ID_SET = set(BONUS_ORB_IDS)
+
+
+def _glossary_classification(world) -> ItemClassification:
+    # For the glossary_hunt goal the ROMs are MacGuffins, so they must be
+    # progression (collected into state -> has_group counts them).
+    from .options import Goal
+    if getattr(world, "goal", Goal.option_beat_the_game) == Goal.option_glossary_hunt:
+        return ItemClassification.progression_skip_balancing
+    return ItemClassification.filler
+
+
+def _instance(world, name: str, classification: ItemClassification,
+              code: int, game_id: ItemID) -> LM2Item:
+    item = LM2Item(name=name, classification=classification, code=code, player=world.player)
+    item.lm2_game_id = game_id
+    return item
+
+
+def make_item(world, game_id: int, generic_ankh: bool = False) -> Item:
+    """The single source of truth for how a game item instance looks in AP.
+
+    Returns exactly what build_item_pool puts in the pool for this game id:
+    AP name, AP code, classification, and (where several instances share one
+    AP item) the per-instance game id on lm2_game_id for the seed writer.
+    Every other creation path (create_item by name or game id, shops,
+    mantras, starting inventory) goes through here so they cannot drift.
+
+    generic_ankh forces the collapsed "Ankh Jewel" shape even when
+    guardian_specific_ankhs is on (for an explicit request of that name).
+    """
+    gid = ItemID(game_id)
+    item_def = _DEF_BY_GAME_ID.get(gid.value)
+
+    if gid in GUARDIAN_SOUL_ITEMS:
+        return _instance(world, GUARDIAN_SOUL_ITEMS[gid], ItemClassification.progression,
+                         BASE_ITEM_ID + gid.value, gid)
+
+    if item_def is not None and gid.value in GLOSSARY_ITEM_IDS:
+        return LM2Item(name=item_def.name, classification=_glossary_classification(world),
+                       code=item_def.ap_id, player=world.player)
+
+    # Progressive Whip / Shield: one AP id per family, tier on lm2_game_id.
+    if gid in PROGRESSIVE_BASE:
+        label, base = PROGRESSIVE_BASE[gid]
+        return _instance(world, label, ItemClassification.progression,
+                         BASE_ITEM_ID + base.value, gid)
+
+    # There is only ever one Beherit; it absorbs Dissonance rather than being
+    # upgraded. random_dissonance turns each absorption into its own trackable
+    # item, hence "Progressive"; with the option off a single plain "Beherit"
+    # is the honest name. Both labels satisfy Has(Progressive Beherit) (see
+    # BEHERIT_NAMES in logic/logic_tree.py).
+    if gid in _BEHERIT_IDS:
+        if world.options.random_dissonance:
+            label, base = "Progressive Beherit", ItemID.ProgressiveBeherit1
+        else:
+            label, base = "Beherit", ItemID.Beherit
+        return _instance(world, label, ItemClassification.progression,
+                         BASE_ITEM_ID + base.value, gid)
+
+    # Bonus orbs: one AP id for the family. "useful", and deliberately NOT
+    # counted by OrbCount, which reads the "Sacred Orb" label only.
+    if gid in _BONUS_ORB_ID_SET:
+        return _instance(world, _BONUS_ORB_LABEL, ItemClassification.useful,
+                         BASE_ITEM_ID + ItemID.SacredOrbBonus.value, gid)
+
+    if item_def is None:
+        raise KeyError(f"No item def found for game id: {gid!r}")
+
+    # guardian_specific_ankhs ON: each jewel keeps its boss name and own id so
+    # the Has("Ankh Jewel (Boss)") logic from _fix_ankh_logic can be met.
+    # Items.json calls all nine "Ankh Jewel", so the name is overridden here.
+    if (item_def.name == "Ankh Jewel" and not generic_ankh
+            and getattr(world.options, "guardian_specific_ankhs", False)
+            and gid in GUARDIAN_ANKHS_ITEMS):
+        return _instance(world, GUARDIAN_ANKHS_ITEMS[gid], ItemClassification.progression,
+                         BASE_ITEM_ID + gid.value, gid)
+
+    classification = _get_classification(item_def)
+
+    if gid in _RESEARCH_IDS:
+        item = _instance(world, RESEARCH_LABEL, classification,
+                         BASE_ITEM_ID + ItemID.Research.value, gid)
+    elif item_def.name == "Map" and gid in _MAP_NAME_BY_ID:
+        # Maps keep their per-area name and id: which map you found matters.
+        item = _instance(world, _MAP_NAME_BY_ID[gid], classification,
+                         BASE_ITEM_ID + gid.value, gid)
+    elif item_def.name in _GENERIC_FAMILY_CODE:
+        # Sacred Orb / Crystal Skull / Ankh Jewel (guardian ankhs off):
+        # one AP id for the family, instance on lm2_game_id.
+        item = _instance(world, item_def.name, classification,
+                         _GENERIC_FAMILY_CODE[item_def.name], gid)
+    else:
+        item = Item(name=item_def.name, classification=classification,
+                    code=item_def.ap_id, player=world.player)
+    return _apply_option_classification(world, item)
+
+
+def _game_id_for_name(name: str) -> Optional[ItemID]:
+    """A representative game id for a datapackage name (None if unknown).
+
+    Collapsed names resolve to one instance of their family; make_item then
+    returns the shared AP shape, so the instance chosen does not matter for
+    name/code. It only becomes the seed's game id for items made outside the
+    pool (UT rebuilds, plando from_pool: false).
+    """
+    if name in ITEM_DEFS_BY_NAME:
+        # First def, not ITEM_DEFS_BY_NAME (last wins: SacredOrb19 is a bonus id).
+        return ItemID(next(d.game_id for d in ITEM_DEFS if d.name == name))
+    mapped = ITEM_MAP.get(name)
+    if mapped is not None:
+        return mapped
+    if name == _BONUS_ORB_LABEL:
+        return BONUS_ORB_IDS[0]
+    if name == "Beherit":
+        return ItemID.ProgressiveBeherit1
+    if name == RESEARCH_LABEL:
+        return ItemID.Research1
+    return None
+
+
 def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
-    """Create an Archipelago Item from an item name."""
-    # If game_id is provided, use it directly
+    """Create an Archipelago Item by name, or by game id when given.
+
+    Both resolve to a game instance and defer to make_item, so the result is
+    always the shape the pool uses. Anything recreating items by datapackage
+    name (Universal Tracker, plando) therefore matches the compiled rules
+    (OrbCount -> state.count("Sacred Orb"), Has("Ankh Jewel (Boss)"), ...).
+    """
     if game_id is not None:
-        ap_id = BASE_ITEM_ID + game_id
-        # Find the item def
-        for item_def in ITEM_DEFS:
-            if item_def.game_id == game_id:
-                classification = _get_classification(item_def)
-                return _apply_option_classification(world, Item(
-                    name=item_def.name,
-                    classification=classification,
-                    code=ap_id,
-                    player=world.player,
-                ))
-        # If not found, create with default
-        return Item(
-            name=name,
-            classification=ItemClassification.progression if "Ankh Jewel" in name else ItemClassification.progression_skip_balancing,
-            code=ap_id,
-            player=world.player,
-        )
-    
+        try:
+            return make_item(world, game_id)
+        except (KeyError, ValueError):
+            return Item(
+                name=name,
+                classification=ItemClassification.progression if "Ankh Jewel" in name else ItemClassification.progression_skip_balancing,
+                code=BASE_ITEM_ID + int(game_id),
+                player=world.player,
+            )
+
     # Logic flags (boss kills, puzzles, ladders) are events: only
     # create_logic_flag_item may mint them, as code=None items at their flag
     # locations. Raise KeyError to make UT skip events in /next_progression sweep.
     if name in LOGIC_FLAG_MAP:
         raise KeyError(f"'{name}' is a logic flag event, not a creatable item")
-
-    # Area/boss-labeled names ("Sacred Orb (VoD)", "Crystal Skull (RoY)",
-    # "Map (Annwfn)", "Ankh Jewel (Fafnir)", ...) are the canonical datapackage
-    # names (item_name_to_id is built from ITEM_MAP), each tied to a distinct
-    # game id. The POOL builder, however, emits these items under their generic
-    # ItemDef name ("Sacred Orb", "Crystal Skull", "Map") — only guardian ankhs
-    # are renamed, and only when guardian_specific_ankhs is on. The logic
-    # follows the pool: OrbCount/SkullCount/AnkhCount compile to
-    # state.count("Sacred Orb"/"Crystal Skull"/"Ankh Jewel"), while guardian
-    # access compiles to Has("Ankh Jewel (Boss)").
-    #
-    # Anything recreating an item from the network by its datapackage name
-    # (Universal Tracker rebuilding received items) gets the labeled name, so
-    # we must map it back to the SAME name the pool used, or those items won't
-    # match the compiled rules and progression silently vanishes from logic.
-    if name not in ITEM_DEFS_BY_NAME:
-        mapped_id = ITEM_MAP.get(name)
-        if mapped_id is not None:
-            base_def = next(
-                (d for d in ITEM_DEFS if d.game_id == mapped_id.value), None)
-            if (mapped_id in GUARDIAN_ANKHS_ITEMS
-                    and getattr(world.options, "guardian_specific_ankhs", False)):
-                pool_name = name                      # keep "Ankh Jewel (Boss)"
-            elif base_def is not None:
-                pool_name = base_def.name             # generic "Sacred Orb" etc.
-            else:
-                pool_name = name
-            classification = (
-                _get_classification(base_def) if base_def is not None
-                else ItemClassification.progression
-            )
-            item = LM2Item(
-                name=pool_name,
-                classification=classification,
-                code=BASE_ITEM_ID + mapped_id.value,
-                player=world.player,
-            )
-            item.lm2_game_id = mapped_id
-            return _apply_option_classification(world, item)
 
     # Coin/Weight/ammo-bundle filler. These are registered in the datapackage
     # (item_name_to_id, see LaMulana2World) and are what get_filler_item_name()
@@ -324,45 +473,13 @@ def create_item(world, name: str, game_id: Optional[int] = None) -> Item:
             player=world.player,
         )
 
-    # Collapsed labels that build_item_pool mints inline under their own AP id
-    # rather than from an ItemDef. They are in the datapackage, so UT recreates
-    # them by name (received items, next_progression probe) and must get the
-    # same name/classification the pool used.
-    if name == "Sacred Orb (Bonus)":
-        item = LM2Item(name=name, classification=ItemClassification.useful,
-                       code=BASE_ITEM_ID + ItemID.SacredOrbBonus.value,
-                       player=world.player)
-        item.lm2_game_id = ItemID.SacredOrb10
-        return item
-    if name == "Beherit":
-        item = LM2Item(name=name, classification=ItemClassification.progression,
-                       code=BASE_ITEM_ID + ItemID.Beherit.value,
-                       player=world.player)
-        item.lm2_game_id = ItemID.ProgressiveBeherit1
-        return item
-    if name == RESEARCH_LABEL:
-        research_def = next(d for d in ITEM_DEFS if d.game_id == ItemID.Research1.value)
-        item = LM2Item(name=name, classification=_get_classification(research_def),
-                       code=BASE_ITEM_ID + ItemID.Research.value,
-                       player=world.player)
-        item.lm2_game_id = ItemID.Research1
-        return _apply_option_classification(world, item)
-
-    matching_defs = [d for d in ITEM_DEFS if d.name == name]
-
-    if not matching_defs:
+    gid = _game_id_for_name(name)
+    if gid is None:
         raise KeyError(f"No item def found for name: {name}")
-    
-    # Use the first definition
-    selected_def = matching_defs[0]
-    classification = _get_classification(selected_def)
+    # An explicit "Ankh Jewel" means the collapsed item even on a
+    # guardian-ankh seed (it is never in that pool, but must stay itself).
+    return make_item(world, gid, generic_ankh=(name == "Ankh Jewel"))
 
-    return _apply_option_classification(world, Item(
-        name=selected_def.name,
-        classification=classification,
-        code=selected_def.ap_id,
-        player=world.player,
-    ))
 
 def _get_classification(item_def: ItemDef) -> ItemClassification:
     """Get classification for an item definition."""
@@ -500,11 +617,6 @@ def build_item_pool(world) -> List[Item]:
     # replace_research_with_orbs: replace the first N research papers encountered with
     # bonus Sacred Orbs. Counter tracks how many are still to be converted.
     research_orbs_remaining = int(getattr(world.options, "replace_research_with_orbs", 0))
-    # Each bonus orb must use a DISTINCT game id (SacredOrb10..SacredOrb19) so its
-    # client flag is unique and the locations stay independently trackable — reusing
-    # SacredOrb0 made every bonus orb collide on flag (2,101). 10 ids for the max-10
-    # option; effect is identical (HP via total count).
-    EXTRA_ORB_IDS = [getattr(ItemID, f"SacredOrb{n}") for n in range(10, 20)]
     bonus_orbs_assigned = 0
 
     for item_def in ITEM_DEFS:
@@ -516,19 +628,7 @@ def build_item_pool(world) -> List[Item]:
         # with what actually lands in the pool.
         if item_def.game_id in GLOSSARY_ITEM_IDS:
             if glossary_is_shuffled(world.options, item_def.game_id):
-                # For the glossary_hunt goal the ROMs are MacGuffins, so they
-                # must be progression (collected into state → has_group counts
-                # them). Same pattern as ALTTP Triforce Piece / Celeste Strawberry. 
-                from .options import Goal
-                gloss_class = (
-                    ItemClassification.progression_skip_balancing
-                    if getattr(world, "goal", Goal.option_beat_the_game)
-                    == Goal.option_glossary_hunt
-                    else ItemClassification.filler
-                )
-                pool.append(LM2Item(name=item_def.name,
-                                    classification=gloss_class,
-                                    code=item_def.ap_id, player=world.player))
+                pool.append(make_item(world, item_def.game_id))
             continue
 
         game_item_id = ItemID(item_def.game_id)
@@ -559,44 +659,18 @@ def build_item_pool(world) -> List[Item]:
         if item_def.name == "Dissonance":
             continue
 
-        # Collapse Progressive Whip and Shield to base AP ID
+        # Progressive Whip and Shield collapse to one AP id (see make_item).
         if game_item_id in PROGRESSIVE_BASE:
-            display_name, base_id = PROGRESSIVE_BASE[game_item_id]
-            item = LM2Item(
-                name=display_name,
-                classification=ItemClassification.progression,
-                code=BASE_ITEM_ID + base_id.value,
-                player=world.player,
-            )
-            item.lm2_game_id = game_item_id
-            pool.append(item)
+            pool.append(make_item(world, game_item_id))
             continue
 
-        # Handle ProgressiveBeherit based on RandomDissonance setting
+        # One Beherit, or seven absorptions when random_dissonance is on.
         if game_item_id == ItemID.ProgressiveBeherit1:
-            # There is only ever one Beherit; it absorbs Dissonance rather than
-            # being upgraded. random_dissonance is what turns each absorption
-            # into its own trackable item, which is where the "Progressive"
-            # label comes from -- with the option off a single plain "Beherit"
-            # is the honest name. The game id stays ProgressiveBeherit1 either
-            # way, and both labels satisfy Has(Progressive Beherit) (see
-            # BEHERIT_NAMES in logic/logic_tree.py).
-            if world.options.random_dissonance:
-                count, label, base = 7, "Progressive Beherit", ItemID.ProgressiveBeherit1
-            else:
-                count, label, base = 1, "Beherit", ItemID.Beherit
+            count = 7 if world.options.random_dissonance else 1
             for i in range(count):
-                actual_id = ItemID(ItemID.ProgressiveBeherit1.value + i)
-                item = LM2Item(
-                    name=label,
-                    classification=ItemClassification.progression,
-                    code=BASE_ITEM_ID + base.value,
-                    player=world.player,
-                )
-                item.lm2_game_id = actual_id
-                pool.append(item)
-            continue              
-        
+                pool.append(make_item(world, ItemID.ProgressiveBeherit1.value + i))
+            continue
+
         # Skip logic flags (placed separately)
         if game_item_id in LOGIC_FLAG_ITEM_IDS:
             continue
@@ -639,152 +713,24 @@ def build_item_pool(world) -> List[Item]:
             # The game applies the +HP effect per pickup regardless.
             if research_orbs_remaining > 0:
                 research_orbs_remaining -= 1
-                orb_id = EXTRA_ORB_IDS[bonus_orbs_assigned % len(EXTRA_ORB_IDS)]
+                orb_id = BONUS_ORB_IDS[bonus_orbs_assigned % len(BONUS_ORB_IDS)]
                 bonus_orbs_assigned += 1
-                # One AP id for the whole bonus family, with the distinct game
-                # id on lm2_game_id so each keeps its own client flag. They stay
-                # "useful" rather than progression and are deliberately NOT
-                # counted by OrbCount, which reads the "Sacred Orb" label only.
-                bonus = LM2Item(
-                    name="Sacred Orb (Bonus)",
-                    classification=ItemClassification.useful,
-                    code=BASE_ITEM_ID + ItemID.SacredOrbBonus.value,
-                    player=world.player,
-                )
-                bonus.lm2_game_id = orb_id
-                pool.append(bonus)
+                pool.append(make_item(world, orb_id))
                 continue
             if world.options.remove_research:
                 continue
 
-        # Handle Ankh Jewels — when guardian_specific_ankhs is ON each of the
-        # 9 numbered game IDs (AnkhJewel1–9) must appear in the pool with its
-        # boss-specific AP name (e.g. "Ankh Jewel (Fafnir)") so that the
-        # Has("Ankh Jewel (Fafnir)") logic appended by _fix_ankh_logic can
-        # actually be satisfied by the fill algorithm.
-        #
-        # Items.json stores all 9 as plain "Ankh Jewel", so we must override
-        # the name here rather than rely on item_def.name.
-        if item_def.name == "Ankh Jewel" and getattr(world.options, "guardian_specific_ankhs", False):
-            specific_name = GUARDIAN_ANKHS_ITEMS.get(game_item_id)
-            if specific_name:
-                for _ in range(item_def.count):
-                    item = LM2Item(
-                        name=specific_name,
-                        classification=ItemClassification.progression,
-                        code=BASE_ITEM_ID + game_item_id.value,
-                        player=world.player,
-                    )
-                    item.lm2_game_id = game_item_id
-                    pool.append(item)
-                continue
-            # Unmapped ankh jewel (shouldn't happen) — fall through to generic
-
-        # Collapse generic items into a single AP ID
-        # Mod still needs unique IDs through get_game_item_id()
-        # guardian_specific_ankhs OFF: 9 jewels into ItemID.AnkhJewel
-        # Research papers collapse onto ItemID.Research
-        # Maps are not collapsed as it can help to label the area
-        if game_item_id in _RESEARCH_IDS:
-            for _ in range(item_def.count):
-                item = LM2Item(
-                    name=RESEARCH_LABEL,
-                    classification=_get_classification(item_def),
-                    code=BASE_ITEM_ID + ItemID.Research.value,
-                    player=world.player,
-                )
-                item.lm2_game_id = game_item_id
-                pool.append(_apply_option_classification(world, item))
-            continue
-
-        # Maps: give each its own per-area name so the label means something.
-        specific_map = (_MAP_NAME_BY_ID.get(game_item_id)
-                        if item_def.name == "Map" else None)
-        if specific_map is not None:
-            for _ in range(item_def.count):
-                item = LM2Item(
-                    name=specific_map,
-                    classification=_get_classification(item_def),
-                    code=BASE_ITEM_ID + game_item_id.value,
-                    player=world.player,
-                )
-                item.lm2_game_id = game_item_id
-                pool.append(_apply_option_classification(world, item))
-            continue
-
-        generic_code = _GENERIC_FAMILY_CODE.get(item_def.name)
-        if generic_code is not None:
-            for _ in range(item_def.count):
-                item = LM2Item(
-                    name=item_def.name,
-                    classification=_get_classification(item_def),
-                    code=generic_code,
-                    player=world.player,
-                )
-                item.lm2_game_id = game_item_id
-                pool.append(_apply_option_classification(world, item))
-            continue
-
-        # Add to pool
+        # Everything else: make_item decides the shape (guardian-specific
+        # ankhs, collapsed families, per-area maps, research papers, and the
+        # option-dependent progression bumps).
         for _ in range(item_def.count):
-            item = create_item(world, item_def.name, game_id=item_def.game_id)
-            # Glossary additional item requirements:
-            # Ruins Encyclopedia is required for pre Eg-Lana glossary checks.
-            # Perfume is required for killing Blue Skeletons.
-            if item_def.name == "Ruins Encyclopedia" and (world.options.glossanity_freestanding
-                                                          or world.options.glossanity_npc
-                                                          or world.options.glossanity_scannable):
-                item.classification = ItemClassification.progression
-            elif item_def.name == "Perfume" and world.options.glossanity_enemy:
-                item.classification = ItemClassification.progression
-            # DLC additional item requirements:
-            # Rebirth Sigil is required for the Fish-Gear mk-2 turboR reward.
-            # Aside from 1 item location, also required for vanilla SitS -> TOO.
-            elif item_def.name == "Rebirth Sigil" and world.options.oannesanity:
-                item.classification = ItemClassification.progression
-            # DLC warp gating:
-            # The Tower of Oannes is a backside areas with no Holy Grail tablet.
-            # FDC alone can't return you there — fix_fdc_logic_post_er adds
-            # Has(Hand Scanner) and Has(Totem Pole). That gate only exists when
-            # require_totem is on, and only guards anything when oannesanity is
-            # on, but Has() ignores non-progression items, so Totem Pole must
-            # be bumped there or the DLC checkpoints are unreachable.
-            elif (item_def.name == "Totem Pole"
-                  and world.options.oannesanity and world.options.require_totem):
-                item.classification = ItemClassification.progression
-            # Expensive item slot requirements:
-            # Has(Harp) to reduce the price of the item to 50 or
-            # Has(Ganesha's Talisman) to get 4 digit money
-            # Enemy glossary: both raise the storyChecker tally behind
-            # WorldLevel(n), so they must be counted by logic.
-            elif (item_def.name in ("Harp", "Ganesha's Talisman")
-                  and (getattr(world.options, "include_expensive_shop_item", False)
-                       or world.options.glossanity_enemy)):
-                item.classification = ItemClassification.progression
-            # Glitch(Costume Clip) item requirements when costumes are shuffled.
-            # A costume needs to be found in order to do the clips
-            elif (item_def.name in COSTUME_CLIP_ITEMS
-                  and world.options.costumesanity and world.options.costume_clip):
-                item.classification = ItemClassification.progression
-            # DLC Item Logic item requirements when costumes are shuffled.
-            # Fish Suit is no longer assumed in inventory, so now a shuffled progressive item.
-            elif (item_def.name == "Fish Suit" and world.options.costumesanity
-                  and world.options.oannesanity and world.options.dlc_item_logic):
-                item.classification = ItemClassification.progression
-            pool.append(item)
+            pool.append(make_item(world, game_item_id))
 
     # Guardian Souls: one per guardian, matched by the 9 "<Guardian> Obliterated"
     # checks that only exist with this option (see _should_include_location).
     if getattr(world.options, "shuffle_guardian_souls", False):
-        for soul_id, soul_name in GUARDIAN_SOUL_ITEMS.items():
-            item = LM2Item(
-                name=soul_name,
-                classification=ItemClassification.progression,
-                code=BASE_ITEM_ID + soul_id.value,
-                player=world.player,
-            )
-            item.lm2_game_id = soul_id
-            pool.append(item)
+        for soul_id in GUARDIAN_SOUL_ITEMS:
+            pool.append(make_item(world, soul_id))
 
     return pool
 

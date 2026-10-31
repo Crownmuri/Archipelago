@@ -20,7 +20,6 @@ from .ids import (GUARDIAN_DEFEAT_LOCATION_IDS,
     DISSONANCE_IDS,
     BASE_ITEM_ID,
     GUARDIAN_ANKHS_LOCATIONS,
-    GUARDIAN_ANKHS_ITEMS,
     LOGIC_FLAG_LOCATION_IDS,
     LOGIC_FLAG_ITEM_IDS,
     AP_ITEM_PLACEHOLDER,
@@ -35,7 +34,6 @@ from .items import (
     AP_FILLER,
     INTERNAL_POOL_BY_REWARD,
     INTERNAL_ID_TO_REWARD,
-    LM2Item,
 )
 from .locations import (
     LM2Location,
@@ -796,35 +794,16 @@ class LM2RandomizerCore:
                 _log(f"[ERROR] Failed to get name for ItemID {item_id}: {e}")
                 continue
 
-            # Ankh Jewels need the boss-specific name when guardian_specific_ankhs
-            # is on, otherwise the pool's "Ankh Jewel (Boss)" gets removed by ID
-            # and is replaced with a generic "Ankh Jewel"
-            if (item_name == "Ankh Jewel"
-                    and getattr(self.options, "guardian_specific_ankhs", False)):
-                specific = GUARDIAN_ANKHS_ITEMS.get(item_id)
-                if specific:
-                    ap_item = LM2Item(
-                        name=specific,
-                        classification=ItemClassification.progression,
-                        code=BASE_ITEM_ID + item_id.value,
-                        player=self.player,
-                    )
-                    ap_item.lm2_game_id = item_id
-                    mw.push_item(loc, ap_item, collect=False)
-                    loc.locked = True
-                    self.shop_entries.append(ShopEntry(loc_id, item_id, price_multiplier))
-                    placed_items_info.append((specific, loc.name))
-                    _log(f"[DEBUG] Placed {specific} (ID: {item_id}) at {loc.name}")
-                    continue
-
+            # create_item(game_id=...) returns the pool's shape for this
+            # instance (guardian-specific ankh names, collapsed families, ...).
             item = create_item(self.world, item_name, game_id=item_id)
 
             mw.push_item(loc, item, collect=False)
             loc.locked = True
 
             self.shop_entries.append(ShopEntry(loc_id, item_id, price_multiplier))
-            placed_items_info.append((item_name, loc.name))
-            _log(f"[DEBUG] Placed {item_name} (ID: {item_id}) at {loc.name}")
+            placed_items_info.append((item.name, loc.name))
+            _log(f"[DEBUG] Placed {item.name} (ID: {item_id}) at {loc.name}")
 
         # Intentional non-parity with original C# randomizer (PlaceOriginalShops)
         # StartingShop2 (melee only) and StartingShop3 no longer fixed to Weights.
