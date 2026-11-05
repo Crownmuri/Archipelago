@@ -485,7 +485,8 @@ _DUNGEON_GROUP: Dict[AreaID, str] = {
     AreaID.ACBottom: "AC", AreaID.ACWind: "AC",
     AreaID.ACTablet: "AC", AreaID.ACMain: "AC", AreaID.ACBlood: "AC",
     # Hall of Malice
-    AreaID.HoMTop: "HoM", AreaID.HoM: "HoM", AreaID.HoMAwoken: "HoM",
+    AreaID.HoMTop: "HoM", AreaID.HoMLeft: "HoM", AreaID.HoMRight: "HoM",
+    AreaID.HoMAwoken: "HoM",
     # Eternal Prison
     AreaID.EPDEntrance: "EPD", AreaID.EPDMain: "EPD",
     AreaID.EPDTop: "EPD", AreaID.EPDHel: "EPD",
@@ -1192,7 +1193,7 @@ def _generate_pairings(
 # so needs no entry.
 _CAN_STOP_TIME_AREAS = ("RoYBottom", "IBMain", "ITLeft", "DSLMMain")
 _CAN_SEAL_CORRIDOR_AREAS = ("ValhallaMain", "DSLMTop", "SotFGBlood",
-                            "ACBlood", "HoM", "EPDEntrance")
+                            "ACBlood", "HoMRight", "EPDEntrance")
 
 
 def _areas_referenced(logic: str, world) -> set:

@@ -2785,7 +2785,7 @@ class AreaID(IntEnum):
     ACMain = 82
     ACBlood = 83
     HoMTop = 84
-    HoM = 85
+    HoMLeft = 85
     HoMAwoken = 86
     EPDEntrance = 87
     EPDMain = 88
@@ -2815,6 +2815,7 @@ class AreaID(IntEnum):
     BaileyRight = 108
     # --- Pot / Glossary sub-region ---
     HLStatue = 112
+    HoMRight = 113
 
 
 

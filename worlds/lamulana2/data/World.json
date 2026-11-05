@@ -2153,7 +2153,7 @@
                 "Name": "Immortal Battlefield Spiral Boat Soul Gate(D-4)",
                 "ID": "f03GateN9",
                 "ConnectionType": "SoulGate",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMLeft",
                 "Logic": "False"
             },
             {
@@ -3577,7 +3577,7 @@
             },
             {
                 "ConnectionType": "Corridor",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMRight",
                 "Logic": "CanSpinCorridor"
             },
             {
@@ -5015,7 +5015,7 @@
             },
             {
                 "ConnectionType": "Corridor",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMRight",
                 "Logic": "CanSpinCorridor"
             },
             {
@@ -5507,7 +5507,7 @@
             },
             {
                 "ConnectionType": "Corridor",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMRight",
                 "Logic": "CanSpinCorridor"
             },
             {
@@ -5955,7 +5955,7 @@
             },
             {
                 "ConnectionType": "Corridor",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMRight",
                 "Logic": "CanWarp or CanSpinCorridor"
             },
             {
@@ -5999,7 +5999,7 @@
             },
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMLeft",
                 "Logic": "True"
             },
             {
@@ -6012,25 +6012,10 @@
         ]
     },
     {
-        "ID": "HoM",
-        "Name": "Hall of Malice",
+        "ID": "HoMLeft",
+        "Name": "Hall of Malice Left",
         "IsBackside": true,
         "Locations": [
-            {
-                "Name": "Fairylan Shop 1",
-                "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit)"
-            },
-            {
-                "Name": "Fairylan Shop 2",
-                "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit)"
-            },
-            {
-                "Name": "Fairylan Shop 3",
-                "LocationType": "Shop",
-                "Logic": "Has(Claydoll Suit)"
-            },
             {
                 "Name": "[HOM B-3] Lernaean Hydra Room Coin Pot",
                 "ID": "field13B22",
@@ -6074,24 +6059,6 @@
                 "LocationType": "Pot",
                 "TrickyLogic": "Has(Feather) or CanUse(Bomb) or (CanUse(Flare Gun) and MeleeAttack) or CanUse(Earth Spear)",
                 "Logic": "Has(Feather) or (CanUse(Bomb) and MeleeAttack) or (CanUse(Flare Gun) and MeleeAttack) or CanUse(Earth Spear)"
-            },
-            {
-                "Name": "[HOM F-5] Corridor of Blood Coin Pot",
-                "ID": "field13F4",
-                "LocationType": "Pot",
-                "Logic": "HorizontalAttack"
-            },
-            {
-                "Name": "[HOM G-4] Fairylan Left Coin Pot",
-                "ID": "field13G3g",
-                "LocationType": "Pot",
-                "Logic": "True"
-            },
-            {
-                "Name": "[HOM G-4] Fairylan Bottom Item Pot",
-                "ID": "field13G3",
-                "LocationType": "Pot",
-                "Logic": "True"
             },
             {
                 "Name": "[HOM] Enemy Glossary (Minotaur)",
@@ -6148,6 +6115,77 @@
                 "Logic": "Has(Hand Scanner) and CanWarp"
             },
             {
+                "Name": "[HOM E-2] NPC Glossary (Eurytus)",
+                "ID": "talk65",
+                "LocationType": "Glossary",
+                "Logic": "True"
+            },
+            {
+                "Name": "[HOM B-4] NPC Glossary (Porphyrion)",
+                "ID": "talk66",
+                "LocationType": "Glossary",
+                "Logic": "True"
+            }
+        ],
+        "Exits": [
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "HoMTop",
+                "Logic": "Has(HoM Ladder)"
+            },
+            {
+                "ConnectionType": "Internal",
+                "ConnectingAreaID": "HoMRight",
+                "Logic": "CanWarp or HorizontalAttack"
+            },
+            {
+                "Name": "Hall of Malice Soul Gate (D-3)",
+                "ID": "f13GateN9",
+                "ConnectionType": "SoulGate",
+                "ConnectingAreaID": "IBBoat",
+                "Logic": "Has(Death Sigil) and CanUse(Earth Spear) and (CanWarp or IsDead(HoM Middle Path)) and (GuardianKills(9) or Setting(Random Soul Gates))"
+            }
+        ]
+    },
+    {
+        "ID": "HoMRight",
+        "Name": "Hall of Malice Right",
+        "IsBackside": true,
+        "Locations": [
+            {
+                "Name": "Fairylan Shop 1",
+                "LocationType": "Shop",
+                "Logic": "Has(Claydoll Suit)"
+            },
+            {
+                "Name": "Fairylan Shop 2",
+                "LocationType": "Shop",
+                "Logic": "Has(Claydoll Suit)"
+            },
+            {
+                "Name": "Fairylan Shop 3",
+                "LocationType": "Shop",
+                "Logic": "Has(Claydoll Suit)"
+            },
+            {
+                "Name": "[HOM F-5] Corridor of Blood Coin Pot",
+                "ID": "field13F4",
+                "LocationType": "Pot",
+                "Logic": "HorizontalAttack"
+            },
+            {
+                "Name": "[HOM G-4] Fairylan Left Coin Pot",
+                "ID": "field13G3g",
+                "LocationType": "Pot",
+                "Logic": "True"
+            },
+            {
+                "Name": "[HOM G-4] Fairylan Bottom Item Pot",
+                "ID": "field13G3",
+                "LocationType": "Pot",
+                "Logic": "True"
+            },
+            {
                 "Name": "[HOM E-4] Glossary at Phaia Statue (Scan)",
                 "ID": "field13RG11",
                 "LocationType": "Glossary",
@@ -6160,18 +6198,6 @@
                 "Logic": "Has(Hand Scanner) and Has(Claydoll Suit)"
             },
             {
-                "Name": "[HOM E-2] NPC Glossary (Eurytus)",
-                "ID": "talk65",
-                "LocationType": "Glossary",
-                "Logic": "True"
-            },
-            {
-                "Name": "[HOM B-4] NPC Glossary (Porphyrion)",
-                "ID": "talk66",
-                "LocationType": "Glossary",
-                "Logic": "True"
-            },
-            {
                 "Name": "[HOM G-4] NPC Glossary (Fairylan)",
                 "ID": "talk68",
                 "LocationType": "Glossary",
@@ -6181,8 +6207,8 @@
         "Exits": [
             {
                 "ConnectionType": "Internal",
-                "ConnectingAreaID": "HoMTop",
-                "Logic": "Has(HoM Ladder)"
+                "ConnectingAreaID": "HoMLeft",
+                "Logic": "HorizontalAttack"
             },
             {
                 "ConnectionType": "Corridor",
@@ -6198,13 +6224,6 @@
                 "ConnectionType": "Corridor",
                 "ConnectingAreaID": "EPDEntrance",
                 "Logic": "CanSpinCorridor and CanChant(Sun) and CanChant(Moon) and CanChant(Sea) and CanWarp"
-            },
-            {
-                "Name": "Hall of Malice Soul Gate (D-3)",
-                "ID": "f13GateN9",
-                "ConnectionType": "SoulGate",
-                "ConnectingAreaID": "IBBoat",
-                "Logic": "Has(Death Sigil) and CanUse(Earth Spear) and (CanWarp or IsDead(HoM Middle Path)) and (GuardianKills(9) or Setting(Random Soul Gates))"
             }
         ]
     },
@@ -6383,7 +6402,7 @@
             },
             {
                 "ConnectionType": "Corridor",
-                "ConnectingAreaID": "HoM",
+                "ConnectingAreaID": "HoMRight",
                 "Logic": "CanSpinCorridor"
             }
         ]

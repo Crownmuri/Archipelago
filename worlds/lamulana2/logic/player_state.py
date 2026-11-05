@@ -142,7 +142,8 @@ _REGIONS_BY_ID = {
         "ACMain": "Ancient Chaos Main",
         "ACBlood": "Ancient Chaos Blood",
         "HoMTop": "Hall of Malice Top",
-        "HoM": "Hall of Malice",
+        "HoMLeft": "Hall of Malice Left",
+        "HoMRight": "Hall of Malice Right",
         "HoMAwoken": "Hall of Malice Awoken",
         "EPDEntrance": "Eternal Prison Doom Entrance",
         "EPDMain": "Eternal Prison Doom Main",
@@ -711,7 +712,7 @@ class PlayerStateAdapter:
     def _can_seal_corridor(self) -> bool:
         if not self._dissonance(6):
             return False
-        if not any(self._can_reach_by_name(area) for area in ["ValhallaMain", "DSLMTop", "SotFGBlood", "ACBlood", "HoM", "EPDEntrance"]):
+        if not any(self._can_reach_by_name(area) for area in ["ValhallaMain", "DSLMTop", "SotFGBlood", "ACBlood", "HoMRight", "EPDEntrance"]):
             return False
 
         # random_dissonance moves the guardian requirement onto the Spiral Boat

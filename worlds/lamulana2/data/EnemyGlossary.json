@@ -847,7 +847,8 @@
         "Name": "Enemy Glossary (Minotaur)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "HoM",
+            "HoMLeft",
+            "HoMRight",
             "HoMAwoken"
         ]
     },
@@ -856,7 +857,8 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "HoMTop",
-            "HoM",
+            "HoMLeft",
+            "HoMRight",
             "HoMAwoken"
         ]
     },
@@ -865,7 +867,8 @@
         "KillLogic": "True",
         "SpawnAreas": [
             "HoMTop",
-            "HoM",
+            "HoMLeft",
+            "HoMRight",
             "HoMAwoken"
         ]
     },
@@ -1170,7 +1173,11 @@
                 "Logic": "Has(Grapple Claw) and WorldLevel(5)"
             },
             {
-                "Area": "HoM",
+                "Area": "HoMLeft",
+                "Logic": "WorldLevel(5)"
+            },
+            {
+                "Area": "HoMRight",
                 "Logic": "WorldLevel(5)"
             },
             {
