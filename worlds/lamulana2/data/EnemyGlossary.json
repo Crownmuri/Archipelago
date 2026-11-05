@@ -535,7 +535,7 @@
         "KillLogic": "HorizontalAttack",
         "SpawnAreas": [
             {
-                "Area": "SotFGMain",
+                "Area": "SotFGGrail",
                 "Logic": "Has(Origin Sigil) and HorizontalAttack"
             },
             "SotFGLeft",
@@ -548,6 +548,10 @@
         "SpawnAreas": [
             "SotFGMain",
             "SotFGLeft",
+            {
+                "Area": "SotFGGrail",
+                "Logic": "True"
+            },
             {
                 "Area": "SotFGTop",
                 "Logic": "True"
@@ -815,7 +819,10 @@
         "Name": "Enemy Glossary (Zhulong)",
         "KillLogic": "True",
         "SpawnAreas": [
-            "ACBottom",
+            {
+                "Area": "ACBottom",
+                "Logic": "Has(Claydoll Suit) or OrbCount(5) or (Has(Ice Cloak) and OrbCount(1))"
+            },
             "ACTablet",
             {
                 "Area": "ACWind",
@@ -1200,7 +1207,7 @@
     },
     "d238": {
         "Name": "Enemy Glossary (Gyonin the Vogue)",
-        "KillLogic": "HorizontalAttack",
+        "KillLogic": "HorizontalAttack or OrbCount(1)",
         "SpawnAreas": [
             "TowerOfOannesLeftB",
             "TowerOfOannesRightB"

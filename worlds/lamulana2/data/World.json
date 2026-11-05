@@ -2065,7 +2065,7 @@
             {
                 "Name": "Dinosaur Figure Chest",
                 "LocationType": "Chest",
-                "Logic": "CanUse(Flare Gun) or CanUse(Earth Spear) or Has(Rapier)"
+                "Logic": "(CanUse(Flare Gun) and (HorizontalAttack or (CanReach(IBMoon) and Has(Life Sigil)))) or CanUse(Earth Spear) or Has(Rapier)"
             },
             {
                 "Name": "[IB G-7] Alviss Item Pot",
@@ -6143,7 +6143,7 @@
                 "ID": "f13GateN9",
                 "ConnectionType": "SoulGate",
                 "ConnectingAreaID": "IBBoat",
-                "Logic": "Has(Death Sigil) and CanUse(Earth Spear) and (CanWarp or IsDead(HoM Middle Path)) and (GuardianKills(9) or Setting(Random Soul Gates))"
+                "Logic": "Has(Death Sigil) and (CanUse(Earth Spear) or ((CanUse(Caltrops) or CanUse(Bomb) or (Has(Spaulder) and (Has(Knife) or Has(Leather Whip) or Has(Rapier) or Has(Katana)))) and Has(Feather))) and (CanWarp or IsDead(HoM Middle Path)) and (GuardianKills(9) or Setting(Random Soul Gates))"
             }
         ]
     },
