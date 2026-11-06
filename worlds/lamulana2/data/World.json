@@ -2586,7 +2586,7 @@
                 "Name": "[IT B-1] Glossary in Left Breakable Floor",
                 "ID": "field04RG2",
                 "LocationType": "Glossary",
-                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder))))"
+                "Logic": "(Has(Knife) or Has(Katana) or Has(Rapier) or Has(Axe) or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Caltrops) or CanUse(Bomb) or CanUse(Chakram) or (Has(Leather Whip) and (Has(Vajra) or Has(Spaulder))))"
             },
             {
                 "Name": "[IT A-1] NPC Glossary (Porque Item Shop)",
