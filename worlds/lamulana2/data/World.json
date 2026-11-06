@@ -3676,7 +3676,7 @@
             {
                 "Name": "Crystal Skull Chest GotD",
                 "LocationType": "Chest",
-                "Logic": "((Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Chakram) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime) and CanWarp) or MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb) or CanUse(Caltrops) or (CanUse(Flare Gun) and HorizontalAttack)"
+                "Logic": "((Has(Claydoll Suit) or CanUse(Shuriken) or CanUse(Pistol)) and (Has(Gale Fibula) or CanStopTime) and CanWarp) or MeleeAttack or CanUse(Rolling Shuriken) or CanUse(Earth Spear) or CanUse(Bomb) or CanUse(Caltrops) or CanUse(Chakram) or (CanUse(Flare Gun) and HorizontalAttack)"
             },
             {
                 "Name": "Katana Puzzle Reward",
