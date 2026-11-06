@@ -1157,6 +1157,8 @@ class LaMulana2World(World):
         }
 
         return {
+            # Client warns on connect when the mod is older than this.
+            "world_version": self.world_version.as_simple_string(),
             # Existing fields
             "starting_area": int(self.starting_area),
             "starting_weapon": int(self.starting_weapon),
